@@ -47,9 +47,9 @@
             </li>
             <li>
               <a
-                href="#gallery"
+                href="#vision"
                 class="nav-link inline-block px-3 py-1 hover:text-white transition-colors"
-                >GALLERY</a
+                >VISION</a
               >
             </li>
             <li>
@@ -84,6 +84,13 @@
         <ul class="mobile-more-list">
           <li>
             <a
+              href="#team"
+              class="text-yellow-50 uppercase font-['PolySans_Trial'] text-[11px]"
+              >Team</a
+            >
+          </li>
+          <li>
+            <a
               href="#partners"
               class="text-yellow-50 uppercase font-['PolySans_Trial'] text-[11px]"
               >Partners</a
@@ -91,16 +98,16 @@
           </li>
           <li>
             <a
-              href="#contact"
+              href="#gallery"
               class="text-yellow-50 uppercase font-['PolySans_Trial'] text-[11px]"
-              >Contact Us</a
+              >Gallery</a
             >
           </li>
           <li>
             <a
-              href="#team"
+              href="#contact"
               class="text-yellow-50 uppercase font-['PolySans_Trial'] text-[11px]"
-              >Team</a
+              >Contact Us</a
             >
           </li>
         </ul>
@@ -155,12 +162,13 @@
             {
               [
                 "about",
+                "vision",
                 "events",
                 "acm-w",
-                "gallery",
-                "partners",
-                "contact",
                 "team",
+                "partners",
+                "gallery",
+                "contact",
               ].map((item) => (
                 <li>
                   <a
@@ -311,6 +319,9 @@
   .more-menu.open .mobile-more-list li:nth-child(3) {
     transition-delay: 0.1s;
   }
+  .more-menu.open .mobile-more-list li:nth-child(4) {
+    transition-delay: 0.14s;
+  }
 
   @media (max-width: 952px) {
     body.partners-active .site-header {
@@ -458,9 +469,10 @@
 
     // IDs that live under the "MORE" dropdown
     const moreSectionIds = [
-      "partners",
-      "contact",
       "team",
+      "partners",
+      "gallery",
+      "contact",
     ];
     const idMapping = {
       work: "events",

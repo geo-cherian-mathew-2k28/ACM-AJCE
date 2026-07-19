@@ -83,14 +83,6 @@ const description =
     <div class="technical-grid acm-grid-surface" aria-hidden="true"></div>
     <div class="brand-logos" aria-label="ACM AJCE at Amal Jyothi College of Engineering">
       <img
-        src={getAssetUrl("/acm-logo-black.svg")}
-        alt="Association for Computing Machinery"
-        class="acm-site-logo"
-        loading="eager"
-        decoding="async"
-        fetchpriority="high"
-      />
-      <img
         src={acmAjceLogo.src}
         alt="ACM AJCE Student Chapter"
         class="acm-ajce-logo"
@@ -466,23 +458,9 @@ const description =
       transform 160ms ease;
   }
 
-  .acm-site-logo {
-    width: 42px;
-    height: 42px;
-    box-sizing: content-box;
-    padding: 7px;
-    border-radius: 4px;
-    background: #fbfaff;
-    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.32);
-  }
-
   .acm-ajce-logo {
     width: 116px;
     height: 56px;
-    box-sizing: content-box;
-    padding: 2px;
-    border-radius: 4px;
-    background: #fbfaff;
     object-fit: cover;
     object-position: center;
     filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.36));
@@ -492,11 +470,7 @@ const description =
     width: auto;
     height: 70px;
     object-fit: contain;
-    box-sizing: content-box;
-    padding: 3px;
-    border-radius: 4px;
-    background: rgba(251, 250, 255, 0.94);
-    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.32);
+    filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.36));
   }
 
   @media screen and (max-width: 952px) {
