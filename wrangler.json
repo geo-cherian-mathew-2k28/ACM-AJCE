@@ -1,0 +1,31 @@
+{
+  "name": "acmvit-website",
+  "compatibility_date": "2026-01-01",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "main": "dist/_worker.js/index.js",
+  "assets": {
+    "directory": "dist",
+    "binding": "ASSETS"
+  },
+  "vars": {
+    "KEYSTATIC_GITHUB_REPO_OWNER": "ACM-VIT",
+    "KEYSTATIC_GITHUB_REPO_NAME": "ACM-VIT"
+  },
+  "observability": {
+    "enabled": false,
+    "head_sampling_rate": 1,
+    "logs": {
+      "enabled": true,
+      "head_sampling_rate": 1,
+      "persist": true,
+      "invocation_logs": true
+    },
+    "traces": {
+      "enabled": false,
+      "persist": true,
+      "head_sampling_rate": 1
+    }
+  }
+}

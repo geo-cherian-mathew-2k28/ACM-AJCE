@@ -1,0 +1,160 @@
+@import "tailwindcss";
+
+@theme {
+    --color-primary-orange: #B8A7FF;
+    --color-primary-pink: #6A5ACD;
+}
+
+.acm-grid-surface {
+    --grid-size: 34px;
+    background-color: transparent;
+    background-image:
+        linear-gradient(rgba(230, 225, 255, 0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(230, 225, 255, 0.045) 1px, transparent 1px),
+        linear-gradient(rgba(184, 167, 255, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(184, 167, 255, 0.025) 1px, transparent 1px);
+    background-position: -1px -1px, -1px -1px, -1px -1px, -1px -1px;
+    background-size:
+        var(--grid-size) var(--grid-size),
+        var(--grid-size) var(--grid-size),
+        calc(var(--grid-size) * 4) calc(var(--grid-size) * 4),
+        calc(var(--grid-size) * 4) calc(var(--grid-size) * 4);
+}
+
+@media (max-width: 768px) {
+    .acm-grid-surface {
+        --grid-size: 24px;
+    }
+}
+
+/* Global smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+.page-section {
+    scroll-margin-top: 84px;
+}
+
+/* Events needs full-bleed alignment for the mask start state */
+#events.page-section {
+    scroll-margin-top: 0;
+}
+
+[data-scroll-video-container] .video-bg-section,
+[data-scroll-video-container] .radial-bg,
+[data-scroll-video-container] .about-section,
+[data-scroll-video-container] .about-container,
+[data-scroll-video-container] .hero-section,
+[data-scroll-video-container] .tech-hero-section {
+    background: transparent !important;
+    background-image: none !important;
+    background-color: transparent !important;
+}
+
+[data-scroll-video-container] .hero-section,
+[data-scroll-video-container] .tech-hero-section,
+[data-scroll-video-container] .about-section {
+    position: relative;
+}
+
+body.scroll-video-active .technical-grid {
+    opacity: 0 !important;
+    transition: opacity 0.15s ease;
+}
+
+/* Global Selection Style */
+::selection {
+    background: #B8A7FF;
+    color: white;
+}
+
+/* ACM-W Section Selection Style */
+#acm-w ::selection {
+    background: #6A5ACD;
+    color: white;
+}
+
+/* Font Definitions */
+/* Standard */
+@font-face {
+    font-family: "PolySans Trial";
+    src: url("../assets/fonts/PolySans-trial/PolySans-trial/Standard/PolySansTrial-Slim.otf")
+        format("opentype");
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "PolySans Trial";
+    src: url("../assets/fonts/PolySans-trial/PolySans-trial/Standard/PolySansTrial-Neutral.otf")
+        format("opentype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "PolySans Trial";
+    src: url("../assets/fonts/PolySans-trial/PolySans-trial/Standard/PolySansTrial-Median.otf")
+        format("opentype");
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "PolySans Trial";
+    src: url("../assets/fonts/PolySans-trial/PolySans-trial/Standard/PolySansTrial-Bulky.otf")
+        format("opentype");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Mono - used in Board/Cards */
+@font-face {
+    font-family: "PolySans Slim";
+    src: url("../assets/fonts/PolySans-trial/PolySans-trial/Mono/PolySansTrial-SlimMono.otf")
+        format("opentype");
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "PolySans Mono"; /* Renamed from Trial to distinguish or keep as is? Original was "PolySans Trial" locally which conflicts. Let's use specific names or keep local mappings global */
+    src: url("../assets/fonts/PolySans-trial/PolySans-trial/Mono/PolySansTrial-NeutralMono.otf")
+        format("opentype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "PolySans Medium";
+    src: url("../assets/fonts/PolySans-trial/PolySans-trial/Mono/PolySansTrial-MedianMono.otf")
+        format("opentype");
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "PolySans Bold";
+    src: url("../assets/fonts/PolySans-trial/PolySans-trial/Mono/PolySansTrial-BulkyMono.otf")
+        format("opentype");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "PolySans Bulky Wide";
+    src: url("../assets/fonts/PolySans-trial/PolySans-trial/Wide/PolySansTrial-BulkyWide.otf")
+        format("opentype");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}

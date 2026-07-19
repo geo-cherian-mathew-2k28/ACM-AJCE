@@ -1,0 +1,57 @@
+---
+interface Props {
+  title: string;
+  imageUrl?: string;
+  link: string;
+}
+
+import { getAssetUrl } from "../utils/cdn";
+const { title, imageUrl, link } = Astro.props;
+---
+
+<div
+  class="w-[80vw] h-[50vw] sm:w-[30vw] sm:h-[18.75vw] lg:w-[20vw] lg:h-[12.5vw] rounded-lg shadow-lg flex flex-col items-center justify-center relative"
+>
+  <div class="w-full h-[80%] z-0 absolute">
+    <img
+      src={getAssetUrl("/partner-casette.webp")}
+      alt="Partner Casette Boilerplate"
+      class="partner-cassette-art w-full h-auto object-cover absolute pointer-events-none rounded-lg mb-4"
+      loading="lazy"
+      decoding="async"
+    />
+  </div>
+  <div class="z-10 h-full w-full flex justify-center items-center px-8">
+    {
+      imageUrl ? (
+        <img
+          src={imageUrl}
+          alt={title}
+          class="object-contain h-[60%] w-[60%]"
+          loading="lazy"
+          decoding="async"
+        />
+      ) : (
+        <span class="partner-wordmark">{title}</span>
+      )
+    }
+  </div>
+</div>
+
+<style>
+  .partner-cassette-art {
+    filter: hue-rotate(285deg) saturate(0.72) brightness(0.94);
+  }
+
+  .partner-wordmark {
+    color: #e6e1ff;
+    font-family: "PolySans Trial", sans-serif;
+    font-size: clamp(1.05rem, 2.15vw, 2.1rem);
+    font-weight: 700;
+    letter-spacing: 0;
+    line-height: 1;
+    overflow-wrap: anywhere;
+    text-align: center;
+    text-transform: uppercase;
+  }
+</style>

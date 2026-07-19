@@ -1,0 +1,519 @@
+---
+import { getAssetUrl } from "../utils/cdn";
+---
+
+<div
+  id="proof-gallery-modal"
+  class="fixed inset-0 z-[100] hidden items-center justify-center opacity-0 transition-opacity duration-300 pointer-events-none"
+  aria-hidden="true"
+  role="dialog"
+>
+  <!-- Backdrop with warm tint -->
+  <div
+    class="absolute inset-0 bg-[#05060B]/95 backdrop-blur-md"
+    id="proof-gallery-backdrop"
+  >
+    <!-- Ambient Glow -->
+    <div class="absolute top-[-20%] right-[-10%] w-[600px] h-[600px] bg-[#B8A7FF]/20 blur-[120px] rounded-full pointer-events-none"></div>
+    <div class="absolute bottom-[-20%] left-[-10%] w-[600px] h-[600px] bg-[#B8A7FF]/10 blur-[120px] rounded-full pointer-events-none"></div>
+  </div>
+
+  <!-- Content Container -->
+  <div
+    class="relative w-full h-full max-w-7xl mx-auto p-4 md:p-8 pt-24 md:pt-32 flex flex-col z-10"
+  >
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-6 md:mb-10 px-2">
+      <div class="flex flex-col">
+        <h2
+          class="text-2xl md:text-5xl text-[#FBFAFF] font-['PolySans_Trial'] uppercase tracking-wider drop-shadow-lg"
+        >
+          <span class="text-[#B8A7FF]">Gallery</span>
+        </h2>
+        <div class="h-1 w-24 bg-[#B8A7FF] mt-2 rounded-full"></div>
+      </div>
+      
+      <button
+        id="proof-gallery-close"
+        class="group relative w-12 h-12 flex items-center justify-center rounded-full border border-[#FBFAFF]/30 hover:border-[#B8A7FF] hover:bg-[#B8A7FF]/10 transition-all duration-300"
+        aria-label="Close Gallery"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="text-[#FBFAFF] transition-transform duration-300 group-hover:rotate-90 group-hover:text-[#B8A7FF]"
+        >
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Gallery Grid -->
+    <div
+      class="flex-1 overflow-y-auto overflow-x-hidden px-2 custom-scrollbar"
+      id="proof-gallery-grid-container"
+    >
+      <!-- Grid Layout for Cassettes -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-20">
+        {
+          [
+            // ACM_25 Board pics
+            { src: "/gallery/ACM_25 Board pics/IMG-20250302-WA0001.webp", category: "ACM 25 Board", title: "Board Moment" },
+            { src: "/gallery/ACM_25 Board pics/IMG-20250302-WA0002.webp", category: "ACM 25 Board", title: "Board Moment" },
+            { src: "/gallery/ACM_25 Board pics/IMG_20250228_222031430.webp", category: "ACM 25 Board", title: "Board Moment" },
+            { src: "/gallery/ACM_25 Board pics/_DSC0054.webp", category: "ACM 25 Board", title: "Board Moment" },
+            { src: "/gallery/ACM_25 Board pics/WhatsApp Image 2025-12-11 at 12.24.44 AM.webp", category: "ACM 25 Board", title: "Board Moment" },
+            
+            // Reverse Coding
+            { src: "/gallery/Reverse Coding/20250207_111113.webp", category: "Reverse Coding", title: "Event Highlight" },
+            { src: "/gallery/Reverse Coding/20250207_114342.webp", category: "Reverse Coding", title: "Event Highlight" },
+            { src: "/gallery/Reverse Coding/DSC00924.webp", category: "Reverse Coding", title: "Event Highlight" },
+            { src: "/gallery/Reverse Coding/DSC_0254.webp", category: "Reverse Coding", title: "Event Highlight" },
+            
+            // Turf
+            { src: "/gallery/Turf/IMG_8061.webp", category: "Turf", title: "Turf Action" },
+            { src: "/gallery/Turf/IMG-20250414-WA0021.webp", category: "Turf", title: "Turf Action" },
+            { src: "/gallery/Turf/WhatsApp Image 2025-12-11 at 12.23.47 AM.webp", category: "Turf", title: "Turf Action" },
+
+            // Nightslip
+            { src: "/gallery/Nightslip/DSC00719.webp", category: "Nightslip", title: "Nightslip Vibes" },
+            { src: "/gallery/Nightslip/DSC00754.webp", category: "Nightslip", title: "Nightslip Vibes" },
+            { src: "/gallery/Nightslip/DSC00816.webp", category: "Nightslip", title: "Nightslip Vibes" },
+            
+            // Women's Day
+            { src: "/gallery/Women_s day/DSC00852.webp", category: "Women's Day", title: "Celebration" },
+            { src: "/gallery/Women_s day/DSC02199.webp", category: "Women's Day", title: "Celebration" },
+            { src: "/gallery/Women_s day/DSC02591.webp", category: "Women's Day", title: "Celebration" },
+
+            // ACM_26 Board
+            { src: "/gallery/ACM_26 Board/WhatsApp Image 2025-12-11 at 12.27.04 AM.webp", category: "ACM 26 Board", title: "New Board" },
+            { src: "/gallery/ACM_26 Board/WhatsApp Image 2025-12-11 at 12.27.05 AM.webp", category: "ACM 26 Board", title: "New Board" },
+          ].map((item, i) => {
+            return (
+            <div
+              class="gallery-item group relative w-full aspect-[1.6] rounded-lg bg-white overflow-hidden flex items-center justify-center transition-transform duration-300 hover:scale-[1.02] cursor-pointer"
+              data-gallery-src={getAssetUrl(item.src)}
+              data-gallery-title={item.title}
+              data-gallery-category={item.category}
+              role="button"
+              tabindex="0"
+              aria-label={`View ${item.title}`}
+            >
+              
+              <!-- Background Pattern -->
+              <div
+                class="absolute inset-0 pointer-events-none opacity-50 z-0"
+                style={`background-image: url('${getAssetUrl("/noise.webp")}'); background-size: cover;`}
+              >
+              </div>
+
+              <!-- Full Frame Image -->
+              <div class="absolute inset-0 z-10 p-[2%]">
+                 <img 
+                    src={getAssetUrl(item.src)} 
+                    alt={item.title} 
+                    class="w-full h-full object-cover rounded-sm transition-transform duration-700 group-hover:scale-110"
+                    loading="lazy"
+                    decoding="async"
+                  />
+              </div>
+
+              <!-- Cassette Overlay -->
+              <div
+                class="w-[97%] h-[96.5%] flex justify-center items-center absolute z-20 pointer-events-none"
+              >
+                <img
+                  src={getAssetUrl("/casette-layout-orange.svg")}
+                  alt="Cassette Frame"
+                  class="absolute w-full h-full object-cover"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+
+              <!-- ACM Logo at Bottom -->
+              <div
+                class="w-full flex justify-center items-center z-30 h-[20%] pb-1 absolute bottom-0 pointer-events-none"
+              >
+                <img
+                  src={getAssetUrl("/acm-logo-black.webp")}
+                  alt="ACM-VIT Logo"
+                  class="h-full object-cover"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+
+              <!-- Hover Overlay Content -->
+              <div class="absolute inset-0 z-40 bg-black/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center text-center p-6 backdrop-blur-sm">
+                  <h3
+                    style="font-family: 'PolySans Bold';"
+                    class="text-xl md:text-2xl text-[#FBFAFF] m-0 leading-tight uppercase translate-y-4 group-hover:translate-y-0 transition-transform duration-300"
+                  >
+                    {item.title}
+                  </h3>
+                  <p
+                    style="font-family: 'PolySans Slim';"
+                  class="text-sm md:text-base text-primary-orange m-0 uppercase mt-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-75"
+                  >
+                    {item.category}
+                  </p>
+                  <div class="mt-4 translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-100">
+                     <span class="text-xs text-white/80 font-['PolySans_Trial'] uppercase border-b border-white/50 pb-0.5">View Details</span>
+                  </div>
+              </div>
+            </div>
+          )})
+        }
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  id="gallery-lightbox"
+  class="fixed inset-0 z-[110] hidden items-center justify-center p-4 md:p-10"
+  aria-hidden="true"
+  role="dialog"
+  aria-label="Gallery image viewer"
+>
+  <div id="gallery-lightbox-backdrop" class="absolute inset-0 bg-[#05060B]/95 backdrop-blur-md"></div>
+  <button id="gallery-lightbox-close" class="gallery-lightbox-close" aria-label="Close image viewer">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <line x1="18" y1="6" x2="6" y2="18"></line>
+      <line x1="6" y1="6" x2="18" y2="18"></line>
+    </svg>
+  </button>
+  <button id="gallery-lightbox-previous" class="gallery-lightbox-control gallery-lightbox-previous" aria-label="Previous image">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="m15 18-6-6 6-6"></path>
+    </svg>
+  </button>
+  <figure class="gallery-lightbox-content relative z-10 m-0 flex max-h-full max-w-full flex-col items-center">
+    <img id="gallery-lightbox-image" class="gallery-lightbox-image" src="" alt="" />
+    <figcaption id="gallery-lightbox-caption" class="gallery-lightbox-caption"></figcaption>
+  </figure>
+  <button id="gallery-lightbox-next" class="gallery-lightbox-control gallery-lightbox-next" aria-label="Next image">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="m9 18 6-6-6-6"></path>
+    </svg>
+  </button>
+</div>
+
+<style>
+  #proof-gallery-modal,
+  #proof-gallery-modal * {
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+  }
+
+  #proof-gallery-modal img {
+    -webkit-user-drag: none;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: rgba(5, 5, 5, 0.5);
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(254, 252, 217, 0.2);
+    border-radius: 10px;
+    border: 1px solid transparent;
+    background-clip: content-box;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #B8A7FF;
+    border: none;
+  }
+
+  /* Animation classes controlled by JS */
+  .modal-open {
+    display: flex !important;
+    pointer-events: auto !important;
+    opacity: 1 !important;
+  }
+
+  .gallery-lightbox-open {
+    display: flex !important;
+  }
+
+  .gallery-lightbox-image {
+    border: 1px solid rgba(230, 225, 255, 0.5);
+    border-radius: 8px;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.55);
+    max-height: min(76vh, 760px);
+    max-width: min(82vw, 1120px);
+    object-fit: contain;
+  }
+
+  .gallery-lightbox-caption {
+    color: #e6e1ff;
+    font-family: "PolySans Trial", sans-serif;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    margin-top: 0.9rem;
+    text-align: center;
+  }
+
+  .gallery-lightbox-close,
+  .gallery-lightbox-control {
+    align-items: center;
+    background: rgba(5, 6, 11, 0.82);
+    border: 1px solid rgba(230, 225, 255, 0.55);
+    border-radius: 50%;
+    color: #fbfaff;
+    display: flex;
+    height: 3rem;
+    justify-content: center;
+    padding: 0;
+    position: absolute;
+    transition: border-color 180ms ease, background-color 180ms ease, transform 180ms ease;
+    width: 3rem;
+    z-index: 20;
+  }
+
+  .gallery-lightbox-close:hover,
+  .gallery-lightbox-control:hover {
+    background: #6a5acd;
+    border-color: #b8a7ff;
+    transform: scale(1.05);
+  }
+
+  .gallery-lightbox-close {
+    right: 1.5rem;
+    top: 1.5rem;
+  }
+
+  .gallery-lightbox-control {
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .gallery-lightbox-control:hover {
+    transform: translateY(-50%) scale(1.05);
+  }
+
+  .gallery-lightbox-previous {
+    left: 1.5rem;
+  }
+
+  .gallery-lightbox-next {
+    right: 1.5rem;
+  }
+
+  .gallery-lightbox-close svg,
+  .gallery-lightbox-control svg {
+    height: 1.4rem;
+    width: 1.4rem;
+  }
+
+  @media (max-width: 640px) {
+    .gallery-lightbox-image {
+      max-height: 70vh;
+      max-width: 88vw;
+    }
+
+    .gallery-lightbox-close {
+      right: 1rem;
+      top: 1rem;
+    }
+
+    .gallery-lightbox-control {
+      bottom: 1.5rem;
+      top: auto;
+      transform: none;
+    }
+
+    .gallery-lightbox-control:hover {
+      transform: scale(1.05);
+    }
+
+    .gallery-lightbox-previous {
+      left: calc(50% - 3.4rem);
+    }
+
+    .gallery-lightbox-next {
+      right: calc(50% - 3.4rem);
+    }
+  }
+</style>
+
+<script>
+  import { gsap } from "gsap";
+
+  const modal = document.getElementById("proof-gallery-modal");
+  const closeBtn = document.getElementById("proof-gallery-close");
+  const gridContainer = document.getElementById("proof-gallery-grid-container");
+  const galleryItems = Array.from(document.querySelectorAll<HTMLElement>(".gallery-item"));
+  const lightbox = document.getElementById("gallery-lightbox");
+  const lightboxImage = document.getElementById("gallery-lightbox-image") as HTMLImageElement | null;
+  const lightboxCaption = document.getElementById("gallery-lightbox-caption");
+  const lightboxClose = document.getElementById("gallery-lightbox-close");
+  const lightboxPrevious = document.getElementById("gallery-lightbox-previous");
+  const lightboxNext = document.getElementById("gallery-lightbox-next");
+  const lightboxBackdrop = document.getElementById("gallery-lightbox-backdrop");
+
+  let isOpen = false;
+  let isLightboxOpen = false;
+  let activeImageIndex = 0;
+
+  function updateLightbox() {
+    const item = galleryItems[activeImageIndex];
+    if (!item || !lightboxImage) return;
+
+    const title = item.dataset.galleryTitle || "Gallery image";
+    const category = item.dataset.galleryCategory || "";
+    lightboxImage.src = item.dataset.gallerySrc || "";
+    lightboxImage.alt = title;
+    if (lightboxCaption) {
+      lightboxCaption.textContent = category ? `${title} - ${category}` : title;
+    }
+  }
+
+  function openLightbox(index: number) {
+    if (!lightbox || !galleryItems.length) return;
+    activeImageIndex = (index + galleryItems.length) % galleryItems.length;
+    isLightboxOpen = true;
+    updateLightbox();
+    lightbox.classList.add("gallery-lightbox-open");
+    lightbox.setAttribute("aria-hidden", "false");
+    lightboxClose?.focus();
+  }
+
+  function closeLightbox() {
+    if (!lightbox) return;
+    isLightboxOpen = false;
+    lightbox.classList.remove("gallery-lightbox-open");
+    lightbox.setAttribute("aria-hidden", "true");
+  }
+
+  function moveLightbox(offset: number) {
+    if (!isLightboxOpen || !galleryItems.length) return;
+    activeImageIndex = (activeImageIndex + offset + galleryItems.length) % galleryItems.length;
+    updateLightbox();
+  }
+
+  function openGallery() {
+    if (isOpen) return;
+    isOpen = true;
+
+    // Push history state to handle back button
+    history.pushState({ galleryOpen: true }, "", "#gallery-view");
+
+    // Make visible
+    if (modal) {
+      modal.classList.add("modal-open");
+
+      // Animate entrance
+      const tl = gsap.timeline();
+
+      tl.fromTo(
+        modal,
+        { opacity: 0 },
+        { opacity: 1, duration: 0.3, ease: "power2.out" }
+      ).fromTo(
+        galleryItems,
+        { y: 50, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          stagger: 0.05,
+          duration: 0.5,
+          ease: "back.out(1.2)",
+        },
+        "-=0.1"
+      );
+    }
+
+    // Disable body scroll
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeGallery() {
+    if (!isOpen) return;
+    isOpen = false;
+    closeLightbox();
+
+    if (modal) {
+      // Animate exit
+      gsap.to(modal, {
+        opacity: 0,
+        duration: 0.3,
+        ease: "power2.in",
+        onComplete: () => {
+          modal.classList.remove("modal-open");
+          // Reset items for next open
+          gsap.set(galleryItems, { clearProps: "all" });
+        },
+      });
+    }
+
+    // Enable body scroll
+    document.body.style.overflow = "";
+  }
+
+  // Global expose for triggers
+  (window as any).openProofGallery = openGallery;
+
+  galleryItems.forEach((item, index) => {
+    item.addEventListener("click", () => openLightbox(index));
+    item.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        openLightbox(index);
+      }
+    });
+  });
+
+  lightboxClose?.addEventListener("click", closeLightbox);
+  lightboxPrevious?.addEventListener("click", () => moveLightbox(-1));
+  lightboxNext?.addEventListener("click", () => moveLightbox(1));
+  lightboxBackdrop?.addEventListener("click", closeLightbox);
+
+  // Event Listeners
+  if (closeBtn) {
+    closeBtn.addEventListener("click", () => {
+      // Use history.back() to trigger popstate and keep history clean
+      history.back();
+    });
+  }
+
+  // Handle escape key
+  document.addEventListener("keydown", (e) => {
+    if (isLightboxOpen && e.key === "Escape") {
+      closeLightbox();
+    } else if (isLightboxOpen && e.key === "ArrowLeft") {
+      moveLightbox(-1);
+    } else if (isLightboxOpen && e.key === "ArrowRight") {
+      moveLightbox(1);
+    } else if (e.key === "Escape" && isOpen) {
+      history.back();
+    }
+  });
+
+  // Handle back button
+  window.addEventListener("popstate", (event) => {
+    // If we pop state and we think we are open, we should likely close.
+    // However, if we just opened, we pushed state.
+    // So popping state usually means going back.
+    if (isOpen) {
+      closeGallery();
+    }
+  });
+
+  // Re-attach listeners on view transitions (optional safety)
+  document.addEventListener('astro:page-load', () => {
+      // Logic if needed for view transitions, but for now this is static
+  });
+</script>
