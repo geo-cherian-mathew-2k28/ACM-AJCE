@@ -5,6 +5,14 @@
 <header
   class="site-header fixed top-5 left-0 right-0 z-50 w-full px-4 py-2 pointer-events-none"
 >
+  <a
+    href="#contact"
+    class="membership-cta pointer-events-auto"
+    aria-label="Ask about ACM AJCE membership"
+  >
+    <span class="membership-cta__label">ACM Membership</span>
+    <span class="membership-cta__arrow" aria-hidden="true">&rarr;</span>
+  </a>
   <div
     class="header-inner relative max-w-4xl mx-auto flex justify-center pointer-events-auto"
   >
@@ -169,10 +177,11 @@
                 "partners",
                 "gallery",
                 "contact",
+                "membership",
               ].map((item) => (
                 <li>
                   <a
-                    href={`#${item}`}
+                    href={item === "membership" ? "#contact" : `#${item}`}
                     class="mobile-nav-link text-3xl font-light font-['PolySans_Trial'] uppercase text-[#FBFAFF] hover:text-[#B8A7FF] transition-colors"
                   >
                     {item.replace("-", " ")}
@@ -188,6 +197,68 @@
 </header>
 
 <style>
+  .membership-cta {
+    position: absolute;
+    top: 2px;
+    right: clamp(1rem, 2.2vw, 2.5rem);
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    min-height: 44px;
+    padding: 0 0.75rem 0 0.85rem;
+    border: 1px solid rgba(184, 167, 255, 0.82);
+    border-radius: 6px;
+    background: rgba(42, 36, 85, 0.8);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.26);
+    color: #fbfaff;
+    font-family: "PolySans Trial", monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition:
+      background-color 180ms ease,
+      border-color 180ms ease,
+      color 180ms ease,
+      transform 180ms ease;
+  }
+
+  .membership-cta::before {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #b8a7ff;
+    box-shadow: 0 0 10px rgba(184, 167, 255, 0.7);
+    content: "";
+  }
+
+  .membership-cta__arrow {
+    font-size: 1rem;
+    line-height: 1;
+    transition: transform 180ms ease;
+  }
+
+  .membership-cta:hover,
+  .membership-cta:focus-visible {
+    border-color: #e6e1ff;
+    background: #b8a7ff;
+    color: #2a2455;
+    transform: translateY(-2px);
+  }
+
+  .membership-cta:hover::before,
+  .membership-cta:focus-visible::before {
+    background: #2a2455;
+    box-shadow: none;
+  }
+
+  .membership-cta:hover .membership-cta__arrow,
+  .membership-cta:focus-visible .membership-cta__arrow {
+    transform: translateX(3px);
+  }
+
   .header-pill {
     display: flex;
     align-items: center;
@@ -324,6 +395,10 @@
   }
 
   @media (max-width: 952px) {
+    .membership-cta {
+      display: none;
+    }
+
     body.partners-active .site-header {
       z-index: 200;
     }
