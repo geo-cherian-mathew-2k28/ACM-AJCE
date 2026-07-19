@@ -2,7 +2,7 @@
 import Preloader from "../components/Preloader.astro";
 import Header from "../components/Header.astro";
 import { getAssetUrl } from "../utils/cdn";
-import ajceLogo from "../assets/images/ajcelogo.jpg";
+import ajceLogo from "../assets/images/ajce-logo.png";
 
 const site = Astro.site ?? new URL("https://www.ajce.in");
 const canonicalUrl = new URL(Astro.url.pathname, site);
@@ -465,9 +465,13 @@ const description =
 
   .ajce-logo {
     width: auto;
-    height: 50px;
+    height: 76px;
     object-fit: contain;
+    box-sizing: content-box;
+    padding: 3px;
     border-radius: 4px;
+    background: rgba(251, 250, 255, 0.94);
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.32);
   }
 
   @media screen and (max-width: 952px) {
@@ -478,21 +482,7 @@ const description =
 
   @media screen and (min-width: 769px) and (max-width: 952px) {
     .brand-logos {
-      right: 20px;
-      transform: none;
-      gap: 0;
-    }
-
-    .brand-logos .chapter-wordmark {
-      transform: scale(0.7);
-      transform-origin: top left;
-    }
-
-    .brand-logos .ajce-logo {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%) scale(0.7);
-      transform-origin: top center;
+      transform: scale(0.72);
     }
   }
 
@@ -512,24 +502,16 @@ const description =
     .brand-logos {
       top: 15px;
       left: 15px;
-      right: 15px;
-      width: auto;
-      justify-content: space-between;
-      gap: 0;
+      right: auto;
+      width: max-content;
+      justify-content: flex-start;
+      gap: 8px;
       transform: none;
     }
 
     .brand-logos .chapter-wordmark,
     .brand-logos .ajce-logo {
-      transform: scale(0.7);
-    }
-
-    .brand-logos .chapter-wordmark {
-      transform-origin: top left;
-    }
-
-    .brand-logos .ajce-logo {
-      transform-origin: top right;
+      transform: scale(0.68);
     }
 
     .technical-grid {
@@ -541,7 +523,6 @@ const description =
     .brand-logos {
       top: 10px;
       left: 10px;
-      right: 10px;
     }
 
     .technical-grid {
@@ -554,9 +535,9 @@ const description =
       transform: none;
     }
 
-    .brand-logos .chapter-wordmark,
-    .brand-logos .ajce-logo {
-      transform: scale(0.5);
+    .brand-logos {
+      transform: scale(0.82);
+      transform-origin: top left;
     }
   }
 
