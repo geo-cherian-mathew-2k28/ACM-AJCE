@@ -2,7 +2,7 @@
 import ArrowButton from "../../public/button_arrow.webp";
 import { getAssetUrl } from "../utils/cdn";
 
-const fallbackEmail = "hello@acmvit.in";
+const fallbackEmail = "info@ajce.in";
 const rawEndpoint = (import.meta.env.PUBLIC_CONTACT_ENDPOINT ?? "").trim();
 const formAction = rawEndpoint ? undefined : `mailto:${fallbackEmail}`;
 ---
@@ -330,7 +330,7 @@ const formAction = rawEndpoint ? undefined : `mailto:${fallbackEmail}`;
         }
       } catch (error) {
         if (status) {
-          status.textContent = "Unable to send. Please email hello@acmvit.in.";
+          status.textContent = "Unable to send. Please email info@ajce.in.";
           status.dataset.state = "error";
         }
       }

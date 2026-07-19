@@ -5,8 +5,8 @@ export default config({
     ? {
         kind: 'github',
         repo: {
-          owner: (process.env.KEYSTATIC_GITHUB_REPO_OWNER || 'ACM-VIT') as any,
-          name: (process.env.KEYSTATIC_GITHUB_REPO_NAME || 'ACM-VIT') as any,
+          owner: (process.env.KEYSTATIC_GITHUB_REPO_OWNER || 'geo-cherian-mathew-2k28') as any,
+          name: (process.env.KEYSTATIC_GITHUB_REPO_NAME || 'ACM-AJCE') as any,
         },
       }
     : {
@@ -15,7 +15,7 @@ export default config({
 
   ui: {
     brand: {
-      name: 'ACM VIT CMS',
+      name: 'ACM AJCE CMS',
     },
   },
 

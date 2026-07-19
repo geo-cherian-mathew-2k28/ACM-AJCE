@@ -2,10 +2,11 @@
 import Preloader from "../components/Preloader.astro";
 import Header from "../components/Header.astro";
 import { getAssetUrl } from "../utils/cdn";
+import ajceLogo from "../assets/images/ajcelogo.jpg";
 
-const site = Astro.site ?? new URL("https://www.acmvit.in");
+const site = Astro.site ?? new URL("https://www.ajce.in");
 const canonicalUrl = new URL(Astro.url.pathname, site);
-const ogImageUrl = new URL("/opengraph.webp", site);
+const ogImageUrl = new URL(ajceLogo.src, site);
 const cdnEnv = import.meta.env.PUBLIC_CDN_URL;
 let cdnOrigin: string | null = null;
 if (cdnEnv) {
@@ -16,9 +17,9 @@ if (cdnEnv) {
   }
 }
 
-const title = "ACM-VIT";
+const title = "ACM AJCE";
 const description =
-  "ACM-VIT is the official student chapter of the Association for Computing Machinery at VIT Vellore, focused on building impactful technology, encouraging innovation, and growing a collaborative student community.";
+  "ACM AJCE is a student community at Amal Jyothi College of Engineering for learning, building, and sharing ideas in computing.";
 ---
 
 <!doctype html>
@@ -26,23 +27,21 @@ const description =
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/webp" href={getAssetUrl("/favicon.webp")} />
+    <link rel="icon" type="image/jpeg" href={ajceLogo.src} />
 
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalUrl.toString()} />
 
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="ACM-VIT" />
+    <meta property="og:site_name" content="ACM AJCE" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalUrl.toString()} />
     <meta property="og:image" content={ogImageUrl.toString()} />
     <meta property="og:image:secure_url" content={ogImageUrl.toString()} />
-    <meta property="og:image:type" content="image/webp" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="ACM-VIT" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:alt" content="ACM AJCE" />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
@@ -54,13 +53,7 @@ const description =
     <link
       rel="preload"
       as="image"
-      href={getAssetUrl("/acm_topleft.webp")}
-      fetchpriority="high"
-    />
-    <link
-      rel="preload"
-      as="image"
-      href={getAssetUrl("/VIT.webp")}
+      href={ajceLogo.src}
       fetchpriority="high"
     />
     <link
@@ -81,19 +74,15 @@ const description =
   <body>
     <Preloader />
     <div class="technical-grid acm-grid-surface" aria-hidden="true"></div>
-    <div class="brand-logos" aria-label="ACM-VIT and VIT">
+    <div class="brand-logos" aria-label="ACM AJCE at Amal Jyothi College of Engineering">
+      <div class="chapter-wordmark" aria-hidden="true">
+        <span>ACM</span>
+        <span>AJCE</span>
+      </div>
       <img
-        src={getAssetUrl("/acm_topleft.webp")}
-        alt="ACM-VIT"
-        class="acm-logo"
-        loading="eager"
-        decoding="async"
-        fetchpriority="high"
-      />
-      <img
-        src={getAssetUrl("/VIT.webp")}
-        alt="VIT"
-        class="vit-logo"
+        src={ajceLogo.src}
+        alt="Amal Jyothi College of Engineering"
+        class="ajce-logo"
         loading="eager"
         decoding="async"
         fetchpriority="high"
@@ -458,15 +447,27 @@ const description =
       transform 160ms ease;
   }
 
-  .acm-logo {
-    width: auto;
-    height: 60px;
+  .chapter-wordmark {
+    display: flex;
+    flex-direction: column;
+    color: #fbfaff;
+    font-family: "PolySans Bulky Wide", "PolySans Trial", sans-serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    line-height: 0.82;
+    text-align: right;
   }
 
-  .vit-logo {
+  .chapter-wordmark span:last-child {
+    color: #b8a7ff;
+  }
+
+  .ajce-logo {
     width: auto;
-    height: 44px;
+    height: 50px;
     object-fit: contain;
+    border-radius: 4px;
   }
 
   @media screen and (max-width: 952px) {
@@ -482,12 +483,12 @@ const description =
       gap: 0;
     }
 
-    .brand-logos .acm-logo {
+    .brand-logos .chapter-wordmark {
       transform: scale(0.7);
       transform-origin: top left;
     }
 
-    .brand-logos .vit-logo {
+    .brand-logos .ajce-logo {
       position: absolute;
       left: 50%;
       transform: translateX(-50%) scale(0.7);
@@ -518,16 +519,16 @@ const description =
       transform: none;
     }
 
-    .brand-logos .acm-logo,
-    .brand-logos .vit-logo {
+    .brand-logos .chapter-wordmark,
+    .brand-logos .ajce-logo {
       transform: scale(0.7);
     }
 
-    .brand-logos .acm-logo {
+    .brand-logos .chapter-wordmark {
       transform-origin: top left;
     }
 
-    .brand-logos .vit-logo {
+    .brand-logos .ajce-logo {
       transform-origin: top right;
     }
 
@@ -553,8 +554,8 @@ const description =
       transform: none;
     }
 
-    .brand-logos .acm-logo,
-    .brand-logos .vit-logo {
+    .brand-logos .chapter-wordmark,
+    .brand-logos .ajce-logo {
       transform: scale(0.5);
     }
   }

@@ -3,6 +3,7 @@
 import { getAssetUrl } from "../utils/cdn";
 
 const footerBackgroundSrc = getAssetUrl("/footer/acm-ajce-footer.png");
+const ajceWebsite = "https://www.ajce.in/";
 ---
 
 <div data-variant-host>
@@ -44,24 +45,15 @@ const footerBackgroundSrc = getAssetUrl("/footer/acm-ajce-footer.png");
               </div>
             </div>
 
-            <div class="mt-6 relative w-48 h-32 lg:w-52 lg:h-36">
-              <a
-                href="https://w3w.co/static.grips.limelight"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img
-                  src={getAssetUrl("/footer/VIT-Map.webp")}
-                  alt="VIT Map"
-                  class="w-full h-full object-cover rounded-lg shadow-lg border border-zinc-700"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </a>
-              <div
-                class="absolute inset-0 opacity-30 bg-gradient-to-b from-white to-violet-400 rounded-lg pointer-events-none"
-              >
-              </div>
+            <a
+              href={ajceWebsite}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="mt-6 flex w-48 min-h-32 lg:w-52 lg:min-h-36 flex-col justify-end rounded-lg border border-violet-200/25 bg-[#2A2455]/45 p-4 shadow-lg transition-colors hover:border-[#B8A7FF]"
+            >
+              <span class="text-[10px] uppercase tracking-[0.2em] text-[#B8A7FF]">Amal Jyothi College of Engineering</span>
+              <span class="mt-2 text-sm text-white">Kanjirappally, Kerala</span>
+            </a>
             </div>
           </div>
 
@@ -291,7 +283,7 @@ const footerBackgroundSrc = getAssetUrl("/footer/acm-ajce-footer.png");
             class="flex flex-row items-center gap-4 mb-10 lg:mb-12 flex-wrap justify-center"
           >
             <a
-              href="https://www.facebook.com/acmvitvellore"
+              href={ajceWebsite}
               aria-label="Facebook"
               target="_blank"
               rel="noopener noreferrer"
@@ -317,7 +309,7 @@ const footerBackgroundSrc = getAssetUrl("/footer/acm-ajce-footer.png");
               /></a
             >
             <a
-              href="https://www.instagram.com/acmvit"
+              href={ajceWebsite}
               aria-label="Instagram"
               target="_blank"
               rel="noopener noreferrer"
@@ -330,7 +322,7 @@ const footerBackgroundSrc = getAssetUrl("/footer/acm-ajce-footer.png");
               /></a
             >
             <a
-              href="https://medium.com/acmvit"
+              href={ajceWebsite}
               aria-label="Medium"
               target="_blank"
               rel="noopener noreferrer"
@@ -343,7 +335,7 @@ const footerBackgroundSrc = getAssetUrl("/footer/acm-ajce-footer.png");
               /></a
             >
             <a
-              href="https://www.linkedin.com/company/acmvit"
+              href={ajceWebsite}
               aria-label="Linkedin"
               target="_blank"
               rel="noopener noreferrer"
@@ -621,7 +613,7 @@ const footerBackgroundSrc = getAssetUrl("/footer/acm-ajce-footer.png");
             class="flex flex-row items-center gap-4 mb-6 flex-wrap justify-center"
           >
             <a
-              href="https://www.facebook.com/acmvitvellore"
+              href={ajceWebsite}
               aria-label="Facebook"
               target="_blank"
               rel="noopener noreferrer"
@@ -647,7 +639,7 @@ const footerBackgroundSrc = getAssetUrl("/footer/acm-ajce-footer.png");
               /></a
             >
             <a
-              href="https://www.instagram.com/acmvit"
+              href={ajceWebsite}
               aria-label="Instagram"
               target="_blank"
               rel="noopener noreferrer"
@@ -660,7 +652,7 @@ const footerBackgroundSrc = getAssetUrl("/footer/acm-ajce-footer.png");
               /></a
             >
             <a
-              href="https://medium.com/acmvit"
+              href={ajceWebsite}
               aria-label="Medium"
               target="_blank"
               rel="noopener noreferrer"
@@ -673,7 +665,7 @@ const footerBackgroundSrc = getAssetUrl("/footer/acm-ajce-footer.png");
               /></a
             >
             <a
-              href="https://www.linkedin.com/company/acmvit"
+              href={ajceWebsite}
               aria-label="Linkedin"
               target="_blank"
               rel="noopener noreferrer"

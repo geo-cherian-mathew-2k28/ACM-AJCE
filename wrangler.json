@@ -1,5 +1,5 @@
 {
-  "name": "acmvit-website",
+  "name": "acm-ajce-website",
   "compatibility_date": "2026-01-01",
   "compatibility_flags": [
     "nodejs_compat"
@@ -10,8 +10,8 @@
     "binding": "ASSETS"
   },
   "vars": {
-    "KEYSTATIC_GITHUB_REPO_OWNER": "ACM-VIT",
-    "KEYSTATIC_GITHUB_REPO_NAME": "ACM-VIT"
+    "KEYSTATIC_GITHUB_REPO_OWNER": "geo-cherian-mathew-2k28",
+    "KEYSTATIC_GITHUB_REPO_NAME": "ACM-AJCE"
   },
   "observability": {
     "enabled": false,

@@ -40,7 +40,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
   const mailOptions = {
     from: resendFrom,
-    to: "outreach@acmvit.in",
+    to: runtimeEnv.CONTACT_TO_EMAIL ?? import.meta.env.CONTACT_TO_EMAIL ?? "info@ajce.in",
     reply_to: email,
     subject: `New Contact Form Submission from ${firstName} ${lastName || ""}`,
     text: `
