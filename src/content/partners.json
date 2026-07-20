@@ -1,8 +1,24 @@
 {
   "items": [
-    { "title": "Blankspace", "link": "#" },
-    { "title": "GDG AJCE", "link": "#" },
-    { "title": "IEEE AJCE", "link": "#" },
-    { "title": "IEDC AJCE", "link": "#" }
+    {
+      "title": "Blankspace",
+      "imageUrl": "/partners/blankspace.png",
+      "link": "https://blankspacecommunity.in"
+    },
+    {
+      "title": "GDG AJCE",
+      "imageUrl": "/partners/gdg-ajce.png",
+      "link": "https://gdg.community.dev/gdg-on-campus-amal-jyothi-college-of-engineering-kanjirappally-india/"
+    },
+    {
+      "title": "IEEE AJCE",
+      "imageUrl": "/partners/ieee-ajce.webp",
+      "link": "https://ieeeajce.org/"
+    },
+    {
+      "title": "IEDC AJCE",
+      "imageUrl": "/partners/iedc-ajce.png",
+      "link": "https://www.iedcajce.in/makerhub.php"
+    }
   ]
 }

@@ -13,7 +13,7 @@ const partners = partnersData?.items ?? [];
     class="sticky top-0 left-0 w-full h-screen flex items-center justify-center overflow-hidden"
   >
     <div
-      class="partner-laptop-heading absolute top-[18%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center z-10 pointer-events-none"
+      class="partner-laptop-heading absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center z-10 pointer-events-none"
     >
       <p
         class="m-0 text-white text-5xl font-semibold font-['PolySans_Trial'] uppercase"
@@ -32,12 +32,18 @@ const partners = partnersData?.items ?? [];
               style="background: url('/outputFolder/frame_0001.avif') center / contain no-repeat;"
               aria-label={`${partner.title} animated partner laptop`}
             ></canvas>
-            <div class="partner-mini-laptop__screen-content">
-              <span class="partner-mini-laptop__logo-slot" aria-hidden="true">
-                <span></span>
-              </span>
+            <a
+              class="partner-mini-laptop__screen-content"
+              href={partner.link}
+              target="_blank"
+              rel="noreferrer"
+              aria-label={`Visit ${partner.title}`}
+            >
+              {partner.imageUrl && (
+                <img src={partner.imageUrl} alt={`${partner.title} logo`} />
+              )}
               <p>{partner.title}</p>
-            </div>
+            </a>
           </article>
         ))
       }
@@ -47,11 +53,18 @@ const partners = partnersData?.items ?? [];
 
 <style>
   .partner-laptop-grid {
+    position: absolute;
+    top: 33%;
+    left: 50%;
     display: grid;
     width: min(68vw, 52rem);
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: clamp(0.75rem, 2vw, 1.75rem);
-    padding-top: clamp(4.5rem, 11vh, 7.25rem);
+    transform: translateX(-50%);
+  }
+
+  .partner-laptop-heading {
+    top: 25%;
   }
 
   .partner-mini-laptop {
@@ -78,8 +91,24 @@ const partners = partnersData?.items ?? [];
     justify-content: center;
     gap: clamp(0.2rem, 0.55vw, 0.45rem);
     opacity: 0;
-    pointer-events: none;
+    pointer-events: auto;
     text-align: center;
+    text-decoration: none;
+    transition: filter 180ms ease, transform 180ms ease;
+  }
+
+  .partner-mini-laptop__screen-content:hover,
+  .partner-mini-laptop__screen-content:focus-visible {
+    filter: drop-shadow(0 0 0.5rem rgba(106, 90, 205, 0.5));
+    outline: none;
+    transform: scale(1.04);
+  }
+
+  .partner-mini-laptop__screen-content img {
+    display: block;
+    width: clamp(1rem, 3vw, 2.2rem);
+    height: clamp(1rem, 3vw, 2.2rem);
+    object-fit: contain;
   }
 
   .partner-mini-laptop__screen-content p {
@@ -95,28 +124,16 @@ const partners = partnersData?.items ?? [];
     white-space: nowrap;
   }
 
-  .partner-mini-laptop__logo-slot {
-    display: grid;
-    width: clamp(0.8rem, 2.1vw, 1.65rem);
-    aspect-ratio: 1;
-    place-items: center;
-    border: 1px dashed rgba(42, 36, 85, 0.72);
-    border-radius: 0.2rem;
-  }
-
-  .partner-mini-laptop__logo-slot span {
-    width: 38%;
-    aspect-ratio: 1;
-    border: 1px solid #6A5ACD;
-    transform: rotate(45deg);
-  }
-
   @media (min-width: 1024px) {
     .partner-laptop-grid {
       width: min(80vw, 76rem);
       grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: clamp(0.85rem, 1.8vw, 1.5rem);
-      padding-top: clamp(4rem, 9vh, 6rem);
+      top: 33%;
+    }
+
+    .partner-laptop-heading {
+      top: 26%;
     }
   }
 
@@ -130,9 +147,9 @@ const partners = partnersData?.items ?? [];
     }
 
     .partner-laptop-grid {
-      width: 88vw;
+      top: 28%;
+      width: 84vw;
       gap: 0.35rem;
-      padding: 5rem 0 0;
     }
 
     .partner-mini-laptop__screen-content {
@@ -147,8 +164,9 @@ const partners = partnersData?.items ?? [];
       font-size: clamp(0.46rem, 2.5vw, 0.66rem);
     }
 
-    .partner-mini-laptop__logo-slot {
-      width: clamp(0.65rem, 3.4vw, 0.95rem);
+    .partner-mini-laptop__screen-content img {
+      width: clamp(0.8rem, 4vw, 1.2rem);
+      height: clamp(0.8rem, 4vw, 1.2rem);
     }
   }
 </style>

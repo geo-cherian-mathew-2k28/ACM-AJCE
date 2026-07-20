@@ -1,7 +1,20 @@
+---
+import acmAjceLogo from "../assets/images/acm-ajce-logo.png";
+---
 
 <div id="preloader" class="preloader">
   <div class="loader-content">
-    <div id="lottie-container" class="lottie-container"></div>
+    <div class="preloader-laptop" aria-label="Loading ACM AJCE">
+      <canvas
+        id="preloader-laptop-canvas"
+        class="preloader-laptop__canvas"
+        style="background: url('/outputFolder/frame_0001.avif') center / contain no-repeat;"
+      ></canvas>
+      <div id="preloader-laptop-screen" class="preloader-laptop__screen">
+        <span class="preloader-laptop__status">Loading</span>
+        <img src={acmAjceLogo.src} alt="ACM AJCE" />
+      </div>
+    </div>
     <div class="progress-bar">
       <div class="progress-fill"></div>
     </div>
@@ -11,26 +24,29 @@
 <script>
   const preloader = document.getElementById("preloader");
   const progressFill = document.querySelector(".progress-fill") as HTMLElement;
-  const lottieContainer = document.getElementById("lottie-container");
+  const preloaderLaptopCanvas = document.getElementById(
+    "preloader-laptop-canvas"
+  ) as HTMLCanvasElement | null;
+  const preloaderLaptopContext = preloaderLaptopCanvas?.getContext("2d", {
+    alpha: true,
+  });
+  const preloaderLaptopScreen = document.getElementById(
+    "preloader-laptop-screen"
+  );
   import { getAssetUrl } from "../utils/cdn";
 
-  let loadingAnimation: any = null;
-  let loadedAnimation: any = null;
   let progressTween: any = null;
   let gsapInstance: any = null;
-  let lottieInstance: any = null;
   let progressValue = 0;
   let hasStartedCompletion = false;
   let hasFinished = false;
   let fallbackTimeoutId = 0;
-  let loadedAnimationTimeoutId = 0;
   let fakeProgressTimer = 0;
   let remainingWarmupStarted = false;
   const preloadHintUrls = new Set<string>();
 
   const CRITICAL_WARMUP_TIMEOUT = 5000;
   const VARIANTS_WAIT_TIMEOUT = 1600;
-  const COMPLETION_ANIMATION_TIMEOUT = 4000;
   const CONTACT_LAPTOP_FRAME_COUNT = 125;
   const DESKTOP_CONTACT_QUERY = "(min-width: 769px) and (pointer: fine)";
 
@@ -39,13 +55,6 @@
     const mod = await import("gsap");
     gsapInstance = mod.gsap || mod.default || mod;
     return gsapInstance;
-  };
-
-  const getLottie = async () => {
-    if (lottieInstance) return lottieInstance;
-    const mod = await import("lottie-web/build/player/lottie_light");
-    lottieInstance = mod.default || mod;
-    return lottieInstance;
   };
 
   const setProgress = (gsap: any, nextValue: number, duration = 0.2) => {
@@ -564,82 +573,122 @@
     remainingWarmupStarted = true;
   };
 
-  // Lottie fetches JSON via XHR/fetch under the hood.
-  // Keep these on the same origin so CDN CORS cannot stall the preloader.
-  const loadingPath = "/loader/loading_state.json";
-  const loadedPath = "/loader/loaded_state.json";
+  const PRELOADER_FRAME_COUNT = 125;
+  const PRELOADER_OPEN_DURATION = 1150;
+  const preloaderFrameCache = new Map<number, HTMLImageElement>();
+  let preloaderAnimationFrame = 0;
+  let preloaderSequenceStarted = false;
 
-  const loadLoadingAnimation = async (lottie: any) => {
-    if (hasFinished || hasStartedCompletion || !lottieContainer) return;
-    try {
-      loadingAnimation = lottie.loadAnimation({
-        container: lottieContainer,
-        renderer: "svg",
-        loop: true,
-        autoplay: true,
-        path: loadingPath,
-      });
-    } catch (error) {
-      console.warn("Failed to load loading animation", error);
+  const preloaderFrameUrl = (index: number) =>
+    getAssetUrl(
+      `/outputFolder/frame_${(index + 1).toString().padStart(4, "0")}.avif`
+    );
+
+  const resizePreloaderLaptop = () => {
+    if (!preloaderLaptopCanvas || !preloaderLaptopContext) return;
+    const rect = preloaderLaptopCanvas.getBoundingClientRect();
+    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+    const width = Math.round(rect.width * dpr);
+    const height = Math.round(rect.height * dpr);
+    if (!width || !height) return;
+    if (preloaderLaptopCanvas.width !== width || preloaderLaptopCanvas.height !== height) {
+      preloaderLaptopCanvas.width = width;
+      preloaderLaptopCanvas.height = height;
     }
   };
 
-  const loadLoadedAnimation = async (lottie: any) => {
-    if (hasFinished || !lottieContainer) return null;
-    try {
-      return lottie.loadAnimation({
-        container: lottieContainer,
-        renderer: "svg",
-        loop: false,
-        autoplay: true,
-        path: loadedPath,
-      });
-    } catch (error) {
-      console.warn("Failed to load completion animation", error);
-      return null;
-    }
+  const drawPreloaderFrame = (image: HTMLImageElement) => {
+    if (!preloaderLaptopCanvas || !preloaderLaptopContext) return;
+    preloaderLaptopContext.clearRect(
+      0,
+      0,
+      preloaderLaptopCanvas.width,
+      preloaderLaptopCanvas.height
+    );
+    preloaderLaptopContext.drawImage(
+      image,
+      0,
+      0,
+      preloaderLaptopCanvas.width,
+      preloaderLaptopCanvas.height
+    );
   };
 
-  const proceedToCompletion = async (gsap: any, lottie: any) => {
+  const renderPreloaderFrame = async (frame: number) => {
+    const steppedFrame = Math.max(
+      0,
+      Math.min(
+        PRELOADER_FRAME_COUNT - 1,
+        Math.round(frame / 4) * 4
+      )
+    );
+    const cached = preloaderFrameCache.get(steppedFrame);
+    if (cached) {
+      drawPreloaderFrame(cached);
+      return;
+    }
+
+    const image = new Image();
+    image.decoding = "async";
+    image.src = preloaderFrameUrl(steppedFrame);
+    try {
+      await image.decode();
+    } catch {
+      await new Promise<void>((resolve) => {
+        image.onload = () => resolve();
+        image.onerror = () => resolve();
+      });
+    }
+    preloaderFrameCache.set(steppedFrame, image);
+    drawPreloaderFrame(image);
+  };
+
+  const startPreloaderLaptop = () => {
+    if (preloaderSequenceStarted || !preloaderLaptopCanvas) return;
+    preloaderSequenceStarted = true;
+    resizePreloaderLaptop();
+    const startedAt = performance.now();
+
+    const play = (now: number) => {
+      const progress = Math.min(1, (now - startedAt) / PRELOADER_OPEN_DURATION);
+      void renderPreloaderFrame(progress * (PRELOADER_FRAME_COUNT - 1));
+      if (progress > 0.56) {
+        preloaderLaptopScreen?.classList.add("is-visible");
+      }
+      if (progress < 1 && !hasFinished) {
+        preloaderAnimationFrame = window.requestAnimationFrame(play);
+      }
+    };
+
+    preloaderAnimationFrame = window.requestAnimationFrame(play);
+  };
+
+  const revealPreloaderLogo = () => {
+    preloaderLaptopScreen?.classList.add("is-visible", "is-ready");
+  };
+
+  const proceedToCompletion = async (gsap: any) => {
     if (hasStartedCompletion || hasFinished) return;
     hasStartedCompletion = true;
     stopFakeProgress();
     if (fallbackTimeoutId) window.clearTimeout(fallbackTimeoutId);
-    if (loadedAnimationTimeoutId) window.clearTimeout(loadedAnimationTimeoutId);
 
     if (progressTween) progressTween.kill();
     progressTween = gsap.to(progressFill, {
       width: "100%",
       duration: 0.45,
       ease: "power1.out",
-      onComplete: async () => {
-        if (loadingAnimation) {
-          loadingAnimation.destroy();
-          loadingAnimation = null;
-        }
-        if (lottieContainer) {
-          lottieContainer.innerHTML = "";
-        }
-
-        loadedAnimation = await loadLoadedAnimation(lottie);
-        if (loadedAnimation) {
-          loadedAnimation.addEventListener("complete", finishLoading);
-          loadedAnimation.addEventListener("data_failed", finishLoading);
-          loadedAnimationTimeoutId = window.setTimeout(
-            finishLoading,
-            COMPLETION_ANIMATION_TIMEOUT
-          );
-        } else {
-          finishLoading();
-        }
+      onComplete: () => {
+        revealPreloaderLogo();
+        window.setTimeout(finishLoading, 550);
       },
     });
   };
 
   const initPreloader = async () => {
-    if (!preloader || !progressFill || !lottieContainer) return;
+    if (!preloader || !progressFill) return;
 
-    const [gsap, lottie] = await Promise.all([getGsap(), getLottie()]);
+    const gsap = await getGsap();
 
     gsap.set(preloader, { autoAlpha: 1 });
     gsap.set(progressFill, { width: "0%" });
@@ -647,7 +696,7 @@
 
     const startTime = performance.now();
 
-    await loadLoadingAnimation(lottie);
+    startPreloaderLaptop();
     startFakeProgress(gsap);
 
     await waitForVariantsMounted();
@@ -665,11 +714,11 @@
     ]);
 
     const elapsed = performance.now() - startTime;
-    const minimumDisplay = 950;
+    const minimumDisplay = 1350;
     const delay = Math.max(0, minimumDisplay - elapsed);
 
     window.setTimeout(() => {
-      void proceedToCompletion(gsap, lottie);
+      void proceedToCompletion(gsap);
     }, delay);
   };
 
@@ -679,21 +728,11 @@
     hasFinished = true;
     hasStartedCompletion = true;
     if (fallbackTimeoutId) window.clearTimeout(fallbackTimeoutId);
-    if (loadedAnimationTimeoutId) {
-      window.clearTimeout(loadedAnimationTimeoutId);
-      loadedAnimationTimeoutId = 0;
-    }
-    if (loadedAnimation) {
-      loadedAnimation.removeEventListener("complete", finishLoading);
-      loadedAnimation.removeEventListener("data_failed", finishLoading);
-    }
+    if (preloaderAnimationFrame) window.cancelAnimationFrame(preloaderAnimationFrame);
 
     const tl = gsapInstance.timeline({
       onComplete: () => {
-        // Clean up animations
         if (progressTween) progressTween.kill();
-        if (loadingAnimation) loadingAnimation.destroy();
-        if (loadedAnimation) loadedAnimation.destroy();
         void warmRemainingAssets();
         (window as any).__preloaderDone = true;
         window.dispatchEvent(new CustomEvent("preloader:done"));
@@ -740,24 +779,73 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 2rem;
+    gap: clamp(1.1rem, 3vh, 1.75rem);
   }
 
-  .lottie-container {
-    width: 300px;
-    height: 300px;
+  .preloader-laptop {
+    position: relative;
+    width: min(72vw, 42rem);
+    aspect-ratio: 16 / 9;
+  }
+
+  .preloader-laptop__canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    filter: hue-rotate(230deg) saturate(0.82) brightness(1.12);
+  }
+
+  .preloader-laptop__screen {
+    position: absolute;
+    top: 20%;
+    left: 29%;
     display: flex;
-    justify-content: center;
+    width: 42%;
+    min-height: 27%;
+    flex-direction: column;
     align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 180ms ease;
   }
 
-  .lottie-container svg {
-    max-width: 100%;
-    max-height: 100%;
+  .preloader-laptop__screen.is-visible {
+    opacity: 1;
+  }
+
+  .preloader-laptop__status {
+    color: #2A2455;
+    font-family: "PolySans Bold", "PolySans Trial", sans-serif;
+    font-size: clamp(0.6rem, 1.5vw, 0.95rem);
+    font-weight: 700;
+    text-transform: uppercase;
+    transition: opacity 180ms ease, transform 180ms ease;
+  }
+
+  .preloader-laptop__screen img {
+    display: block;
+    width: clamp(2.5rem, 7vw, 4.7rem);
+    max-height: 3.25rem;
+    object-fit: contain;
+    opacity: 0;
+    transform: translateY(0.3rem) scale(0.94);
+    transition: opacity 220ms ease, transform 220ms ease;
+  }
+
+  .preloader-laptop__screen.is-ready .preloader-laptop__status {
+    opacity: 0;
+    transform: translateY(-0.25rem);
+  }
+
+  .preloader-laptop__screen.is-ready img {
+    opacity: 1;
+    transform: translateY(-0.4rem) scale(1);
   }
 
   .progress-bar {
-    width: 300px; /* Same width as lottie container */
+    width: min(60vw, 20rem);
     height: 3px;
     background-color: rgba(255, 255, 255, 0.1);
     border-radius: 2px;
@@ -794,26 +882,24 @@
     }
   }
 
-  /* Responsive adjustments */
   @media (max-width: 768px) {
-    .lottie-container {
-      width: 250px;
-      height: 250px;
+    .preloader-laptop {
+      width: min(90vw, 34rem);
     }
-    
+
     .progress-bar {
-      width: 250px;
+      width: min(72vw, 17rem);
     }
   }
 
   @media (max-width: 480px) {
-    .lottie-container {
-      width: 200px;
-      height: 200px;
+    .preloader-laptop__screen {
+      gap: 0.15rem;
     }
-    
-    .progress-bar {
-      width: 200px;
+
+    .preloader-laptop__screen img {
+      width: 2.25rem;
+      max-height: 2rem;
     }
   }
 </style>
