@@ -1,6 +1,5 @@
 ---
 import BoardMemberCardSingular from "../components/BoardMemberCardSingular.astro";
-import TeamNeonCardExperiment from "../components/TeamNeonCardExperiment.astro";
 
 import { reader } from "../utils/reader";
 import { getAssetUrl } from "../utils/cdn";
@@ -15,7 +14,6 @@ const acmwBoardMembers = boardMembers.filter((member) => member.isW);
 const facultyCoordinator = boardMembers.find(
   (member) => member.position === "Faculty Coordinator"
 );
-const neonExperimentMembers = mainBoardMembers.slice(0, 5);
 ---
 
 <section
@@ -105,12 +103,6 @@ const neonExperimentMembers = mainBoardMembers.slice(0, 5);
             </div>
           ))}
         </div>
-      )
-    }
-
-    {
-      neonExperimentMembers.length > 0 && (
-        <TeamNeonCardExperiment members={neonExperimentMembers} />
       )
     }
 
