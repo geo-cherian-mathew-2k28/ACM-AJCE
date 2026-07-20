@@ -82,9 +82,6 @@ const partners = partnersData?.items ?? [];
     width: 100%;
     height: 100%;
     filter:
-      hue-rotate(230deg)
-      saturate(0.82)
-      brightness(1.12)
       drop-shadow(0 0 0.45rem rgba(184, 167, 255, 0.44))
       drop-shadow(0 0 1.15rem rgba(106, 90, 205, 0.2));
     transition: filter 180ms ease, transform 180ms ease;
@@ -93,9 +90,6 @@ const partners = partnersData?.items ?? [];
   .partner-mini-laptop__link:hover .partner-mini-laptop__canvas,
   .partner-mini-laptop__link:focus-visible .partner-mini-laptop__canvas {
     filter:
-      hue-rotate(230deg)
-      saturate(0.82)
-      brightness(1.18)
       drop-shadow(0 0 0.6rem rgba(184, 167, 255, 0.62))
       drop-shadow(0 0 1.35rem rgba(106, 90, 205, 0.32));
     outline: none;
@@ -329,9 +323,6 @@ const partners = partnersData?.items ?? [];
     const screenCenterX = screenX + screenWidth / 2;
 
     context.save();
-    context.fillStyle = "#05060B";
-    context.fillRect(screenX, screenY, screenWidth, screenHeight);
-
     if (logo?.naturalWidth && logo.naturalHeight) {
       const maximumLogoWidth = screenWidth * 0.52;
       const maximumLogoHeight = screenHeight * 0.44;
@@ -350,7 +341,7 @@ const partners = partnersData?.items ?? [];
       );
     }
 
-    context.fillStyle = "#FBFAFF";
+    context.fillStyle = "#2A2455";
     context.textAlign = "center";
     context.textBaseline = "middle";
     context.font = `700 ${Math.max(11, canvas.height * 0.095)}px "PolySans Bold", monospace`;
