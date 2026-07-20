@@ -4,6 +4,8 @@ import { getAssetUrl } from "../utils/cdn";
 
 const footerBackgroundSrc = getAssetUrl("/footer/acm-ajce-footer.png");
 const ajceWebsite = "https://www.ajce.in/";
+const creatorLinkedIn = "https://in.linkedin.com/in/geo-cherian-mathew";
+const creatorPortfolio = "https://github.com/geo-cherian-mathew-2k28";
 ---
 
 <div data-variant-host>
@@ -361,18 +363,28 @@ const ajceWebsite = "https://www.ajce.in/";
               /></a
             >
           </div>
-          <div class="flex items-center gap-2">
-            <img
-              src={getAssetUrl("/footer/pixel-heart.webp")}
-              alt="pixel heart"
-              class="w-5 h-5 lg:w-6 lg:h-6"
-              loading="lazy"
-              decoding="async"
-            />
-            <span
-              class="text-neutral-400 text-sm lg:text-base text-white font-['PolySans_Trial']"
-              >crafted with love by ACM AJCE</span
-            >
+          <div class="flex flex-col items-center gap-2">
+            <div class="flex items-center gap-2">
+              <img
+                src={getAssetUrl("/footer/pixel-heart.webp")}
+                alt="pixel heart"
+                class="w-5 h-5 lg:w-6 lg:h-6"
+                loading="lazy"
+                decoding="async"
+              />
+              <span
+                class="text-neutral-400 text-sm lg:text-base text-white font-['PolySans_Trial']"
+                >crafted with love by Geo Cherian Mathew</span
+              >
+            </div>
+            <div class="flex items-center gap-3">
+              <a href={creatorLinkedIn} aria-label="Geo Cherian Mathew on LinkedIn" title="LinkedIn" target="_blank" rel="noopener noreferrer" class="footer-creator-link">
+                <img src={getAssetUrl("/footer/Linkedin.svg")} alt="" class="h-4 w-4" loading="lazy" decoding="async" />
+              </a>
+              <a href={creatorPortfolio} aria-label="Geo Cherian Mathew portfolio" title="Portfolio" target="_blank" rel="noopener noreferrer" class="footer-creator-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="h-4 w-4"><rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M8 2v4M16 2v4M7 10h10M8 14h3"></path></svg>
+              </a>
+            </div>
           </div>
         </div>
       </div>
@@ -691,18 +703,28 @@ const ajceWebsite = "https://www.ajce.in/";
               /></a
             >
           </div>
-          <div class="flex items-center gap-2">
-            <img
-              src={getAssetUrl("/footer/pixel-heart.webp")}
-              alt="pixel heart"
-              class="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7"
-              loading="lazy"
-              decoding="async"
-            />
-            <span
-              class="text-white text-xs sm:text-sm md:text-base font-['PolySans_Trial']"
-              >crafted with love by ACM AJCE</span
-            >
+          <div class="flex flex-col items-center gap-2">
+            <div class="flex items-center gap-2">
+              <img
+                src={getAssetUrl("/footer/pixel-heart.webp")}
+                alt="pixel heart"
+                class="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7"
+                loading="lazy"
+                decoding="async"
+              />
+              <span
+                class="text-white text-xs sm:text-sm md:text-base font-['PolySans_Trial']"
+                >crafted with love by Geo Cherian Mathew</span
+              >
+            </div>
+            <div class="flex items-center gap-3">
+              <a href={creatorLinkedIn} aria-label="Geo Cherian Mathew on LinkedIn" title="LinkedIn" target="_blank" rel="noopener noreferrer" class="footer-creator-link">
+                <img src={getAssetUrl("/footer/Linkedin.svg")} alt="" class="h-4 w-4" loading="lazy" decoding="async" />
+              </a>
+              <a href={creatorPortfolio} aria-label="Geo Cherian Mathew portfolio" title="Portfolio" target="_blank" rel="noopener noreferrer" class="footer-creator-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="h-4 w-4"><rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M8 2v4M16 2v4M7 10h10M8 14h3"></path></svg>
+              </a>
+            </div>
           </div>
         </div>
       </div>
@@ -1293,6 +1315,24 @@ const ajceWebsite = "https://www.ajce.in/";
     object-fit: cover;
     object-position: center center;
     filter: saturate(1.06) contrast(1.04);
+  }
+
+  .footer-creator-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border: 1px solid rgba(184, 167, 255, 0.48);
+    border-radius: 6px;
+    color: #FBFAFF;
+    transition: border-color 160ms ease, color 160ms ease, transform 160ms ease;
+  }
+
+  .footer-creator-link:hover {
+    border-color: #B8A7FF;
+    color: #B8A7FF;
+    transform: translateY(-2px);
   }
 
   .footer-acm-word {

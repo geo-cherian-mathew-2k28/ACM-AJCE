@@ -10,90 +10,90 @@ import { getAssetUrl } from "../utils/cdn";
     <span
       class="floating-word"
       style="--delay: 0s; --duration: 45s; --x: 5%; --y: 5%;"
-      >ACM AJCE</span
+      >UXPLORE</span
     >
     <span
       class="floating-word"
       style="--delay: 3s; --duration: 55s; --x: 80%; --y: 8%;"
-      >LEARN TOGETHER</span
+      >ASTERISK</span
     >
     <span
       class="floating-word"
       style="--delay: 6s; --duration: 50s; --x: 10%; --y: 25%;"
-      >BUILD WITH PURPOSE</span
+      >PIXIEART</span
     >
     <span
       class="floating-word"
-      style="--delay: 0s; --duration: 60s; --x: 70%; --y: 30%;">WORKSHOPS</span
+      style="--delay: 0s; --duration: 60s; --x: 70%; --y: 30%;">SHE CODES</span
     >
     <span
       class="floating-word"
-      style="--delay: 3s; --duration: 48s; --x: 25%; --y: 15%;">COMMUNITY</span
+      style="--delay: 3s; --duration: 48s; --x: 25%; --y: 15%;">DATA ALCHEMY</span
     >
     <span
       class="floating-word"
       style="--delay: 6s; --duration: 52s; --x: 85%; --y: 20%;"
-      >SKILL SESSIONS</span
+      >UXPLORE</span
     >
     <span
       class="floating-word"
       style="--delay: 0s; --duration: 58s; --x: 2%; --y: 35%;"
-      >OPEN LEARNING</span
+      >ASTERISK</span
     >
     <span
       class="floating-word"
-      style="--delay: 3s; --duration: 47s; --x: 60%; --y: 5%;">IDEAS INTO IMPACT</span
+      style="--delay: 3s; --duration: 47s; --x: 60%; --y: 5%;">PIXIEART</span
     >
     <span
       class="floating-word"
       style="--delay: 6s; --duration: 54s; --x: 40%; --y: 2%;"
-      >STUDENT MAKERS</span
+      >SHE CODES</span
     >
     <span
       class="floating-word"
-      style="--delay: 0s; --duration: 51s; --x: 90%; --y: 15%;">COMPUTING FOR ALL</span
+      style="--delay: 0s; --duration: 51s; --x: 90%; --y: 15%;">DATA ALCHEMY</span
     >
     <span
       class="floating-word"
-      style="--delay: 3s; --duration: 56s; --x: 15%; --y: 18%;">PEER LEARNING</span
+      style="--delay: 3s; --duration: 56s; --x: 15%; --y: 18%;">UXPLORE</span
     >
     <span
       class="floating-word"
-      style="--delay: 6s; --duration: 49s; --x: 75%; --y: 2%;">CREATE TOGETHER</span
+      style="--delay: 6s; --duration: 49s; --x: 75%; --y: 2%;">ASTERISK</span
     >
     <span
       class="floating-word"
       style="--delay: 0s; --duration: 53s; --x: 35%; --y: 30%;"
-      >EXPLORE MORE</span
+      >PIXIEART</span
     >
     <span
       class="floating-word"
       style="--delay: 3s; --duration: 57s; --x: 50%; --y: 22%;"
-      >TECH FOR GOOD</span
+      >SHE CODES</span
     >
     <span
       class="floating-word"
-      style="--delay: 6s; --duration: 46s; --x: 65%; --y: 12%;">INNOVATION</span
+      style="--delay: 6s; --duration: 46s; --x: 65%; --y: 12%;">DATA ALCHEMY</span
     >
     <span
       class="floating-word"
-      style="--delay: 0s; --duration: 59s; --x: 8%; --y: 10%;">COLLABORATION</span
+      style="--delay: 0s; --duration: 59s; --x: 8%; --y: 10%;">UXPLORE</span
     >
     <span
       class="floating-word"
-      style="--delay: 3s; --duration: 50s; --x: 82%; --y: 35%;">BUILD</span
+      style="--delay: 3s; --duration: 50s; --x: 82%; --y: 35%;">ASTERISK</span
     >
     <span
       class="floating-word"
-      style="--delay: 6s; --duration: 55s; --x: 45%; --y: 10%;">DISCOVER</span
+      style="--delay: 6s; --duration: 55s; --x: 45%; --y: 10%;">PIXIEART</span
     >
     <span
       class="floating-word"
-      style="--delay: 0s; --duration: 48s; --x: 20%; --y: 30%;">ACM COMMUNITY</span
+      style="--delay: 0s; --duration: 48s; --x: 20%; --y: 30%;">SHE CODES</span
     >
     <span
       class="floating-word"
-      style="--delay: 3s; --duration: 52s; --x: 55%; --y: 35%;">ACM</span
+      style="--delay: 3s; --duration: 52s; --x: 55%; --y: 35%;">DATA ALCHEMY</span
     >
   </div>
 
@@ -108,30 +108,18 @@ import { getAssetUrl } from "../utils/cdn";
       />
     </div>
 
-    <div class="px-4 w-full flex justify-center">
-      <div
-        onclick="window.openProofGallery()"
-        class="w-[90%] max-w-[280px] h-8 bg-[#B8A7FF] rounded-[41px] outline outline-1 outline-offset-[-1px] outline-yellow-50
-           flex items-center justify-center hover:scale-105 transition-transform duration-200 cursor-pointer"
-        role="button"
-        tabindex="0"
-      >
-        <span
-          class="text-white text-[8px] font-light font-['PolySans_Trial'] uppercase tracking-wider"
-        >
-          VIEW GALLERY
-        </span>
-      </div>
-    </div>
-
     <div class="gallery-frame relative w-full overflow-hidden mt-2">
       <img
-        src={getAssetUrl("/gallery/acm-ajce/collaborative-learning.jpg")}
-        alt="ACM AJCE collaborative learning session"
+        src={getAssetUrl("/full-core.webp")}
+        alt="ACM AJCE gallery preview"
         class="gallery-image w-full object-cover"
         loading="lazy"
         decoding="async"
       />
+      <button type="button" onclick="window.openProofGallery()" class="gallery-open-button">
+        <span>View gallery</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path><path d="m13 6 6 6-6 6"></path></svg>
+      </button>
     </div>
   </div>
   <ProofGallery />
@@ -167,12 +155,38 @@ import { getAssetUrl } from "../utils/cdn";
   }
 
   .gallery-image {
-    filter: saturate(0.82) contrast(1.04);
+    filter: grayscale(1);
     transition: filter 0.3s ease;
   }
 
   .gallery-frame:hover .gallery-image {
-    filter: saturate(1) contrast(1);
+    filter: grayscale(0.2);
+  }
+
+  .gallery-open-button {
+    position: absolute;
+    right: 1rem;
+    bottom: 1rem;
+    z-index: 10;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    min-height: 38px;
+    padding: 0 0.8rem;
+    border: 1px solid rgba(251, 250, 255, 0.76);
+    border-radius: 6px;
+    background: rgba(42, 36, 85, 0.92);
+    color: #FBFAFF;
+    font-family: "PolySans Trial", monospace;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .gallery-open-button svg {
+    width: 14px;
+    height: 14px;
   }
 
   /* Floating Words Background */
