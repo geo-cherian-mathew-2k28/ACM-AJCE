@@ -1,0 +1,134 @@
+---
+interface Props {
+  title: string;
+  imageUrl?: string;
+}
+
+const { title, imageUrl } = Astro.props;
+---
+
+<div class="partner-laptop" aria-label={`${title} partner`}>
+  <div class="partner-laptop__screen">
+    <div class="partner-laptop__grid" aria-hidden="true"></div>
+    <div class="partner-laptop__content">
+      {
+        imageUrl ? (
+          <img
+            src={imageUrl}
+            alt={title}
+            class="partner-laptop__logo"
+            loading="lazy"
+            decoding="async"
+          />
+        ) : (
+          <>
+            <span class="partner-laptop__eyebrow">Partner</span>
+            <span class="partner-laptop__wordmark">{title}</span>
+          </>
+        )
+      }
+    </div>
+  </div>
+  <div class="partner-laptop__base" aria-hidden="true"></div>
+</div>
+
+<style>
+  .partner-laptop {
+    position: relative;
+    width: 80vw;
+    color: #FBFAFF;
+  }
+
+  .partner-laptop__screen {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    border: 2px solid rgba(184, 167, 255, 0.72);
+    border-radius: 7px 7px 3px 3px;
+    background: #0C0D18;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
+  }
+
+  .partner-laptop__grid {
+    position: absolute;
+    inset: 0;
+    opacity: 0.44;
+    background-image:
+      linear-gradient(rgba(184, 167, 255, 0.2) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(184, 167, 255, 0.2) 1px, transparent 1px);
+    background-size: 18px 18px;
+  }
+
+  .partner-laptop__content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    padding: 1rem;
+    text-align: center;
+  }
+
+  .partner-laptop__eyebrow {
+    color: #B8A7FF;
+    font-family: "PolySans Trial", sans-serif;
+    font-size: 0.58rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .partner-laptop__wordmark {
+    color: #FBFAFF;
+    font-family: "PolySans Bold", "PolySans Trial", sans-serif;
+    font-size: clamp(1.25rem, 3vw, 2.65rem);
+    font-weight: 700;
+    line-height: 1;
+    overflow-wrap: anywhere;
+    text-transform: lowercase;
+  }
+
+  .partner-laptop__logo {
+    width: 62%;
+    height: 62%;
+    object-fit: contain;
+  }
+
+  .partner-laptop__base {
+    position: relative;
+    width: calc(100% + 12px);
+    height: 8px;
+    margin: -1px 0 0 -6px;
+    border: 1px solid rgba(184, 167, 255, 0.64);
+    border-radius: 0 0 8px 8px;
+    background: #2A2455;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.26);
+  }
+
+  .partner-laptop__base::after {
+    content: "";
+    position: absolute;
+    top: 1px;
+    left: 50%;
+    width: 28%;
+    height: 2px;
+    border-radius: 999px;
+    background: rgba(251, 250, 255, 0.58);
+    transform: translateX(-50%);
+  }
+
+  @media (min-width: 640px) {
+    .partner-laptop {
+      width: 30vw;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .partner-laptop {
+      width: 20vw;
+    }
+  }
+</style>

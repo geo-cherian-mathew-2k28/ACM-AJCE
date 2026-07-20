@@ -4,6 +4,8 @@ import { getAssetUrl } from "../utils/cdn";
 
 const footerBackgroundSrc = getAssetUrl("/footer/acm-ajce-footer.png");
 const ajceWebsite = "https://www.ajce.in/";
+const ajceDirections =
+  "https://www.google.com/maps/dir/?api=1&destination=Amal+Jyothi+College+of+Engineering%2C+Kanjirappally";
 const creatorLinkedIn = "https://in.linkedin.com/in/geo-cherian-mathew";
 const creatorPortfolio = "https://github.com/geo-cherian-mathew-2k28";
 ---
@@ -47,17 +49,27 @@ const creatorPortfolio = "https://github.com/geo-cherian-mathew-2k28";
               </div>
             </div>
 
-            <div class="footer-location-laptop">
+            <a
+              href={ajceDirections}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="footer-location-laptop"
+              aria-label="Get directions to Amal Jyothi College of Engineering in Google Maps"
+            >
               <div class="footer-location-laptop__screen">
-                <iframe
-                  src="https://maps.google.com/maps?q=Amal%20Jyothi%20College%20of%20Engineering&z=15&output=embed"
-                  title="Map showing Amal Jyothi College of Engineering"
-                  loading="lazy"
-                  tabindex="-1"
-                ></iframe>
+                <div class="footer-location-map" aria-hidden="true">
+                  <span class="footer-location-map__road footer-location-map__road--main"></span>
+                  <span class="footer-location-map__road footer-location-map__road--cross"></span>
+                  <span class="footer-location-map__block footer-location-map__block--one"></span>
+                  <span class="footer-location-map__block footer-location-map__block--two"></span>
+                  <span class="footer-location-map__block footer-location-map__block--three"></span>
+                  <span class="footer-location-map__pin">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>
+                  </span>
+                </div>
               </div>
               <div class="footer-location-laptop__base" aria-hidden="true"></div>
-            </div>
+            </a>
             <a
               href={ajceWebsite}
               target="_blank"
@@ -75,7 +87,7 @@ const creatorPortfolio = "https://github.com/geo-cherian-mathew-2k28";
           >
             <!-- About Section -->
             <div
-              class="w-16 inline-flex flex-col justify-start items-start gap-4"
+              class="w-24 inline-flex flex-col justify-start items-start gap-4"
             >
               <div
                 class="footer-section-title text-yellow-50 text-base font-light font-['PolySans_Trial'] uppercase"
@@ -89,13 +101,15 @@ const creatorPortfolio = "https://github.com/geo-cherian-mathew-2k28";
                   href="#about"
                   class="self-stretch text-white text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >
-                  ACM AJCE
+                  Our chapter
                 </a>
                 <a
-                  href="#about"
+                  href={ajceWebsite}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   class="self-stretch text-white text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >
-                  AJCE
+                  AJCE website
                 </a>
                 <a
                   href="https://www.acm.org"
@@ -182,7 +196,7 @@ const creatorPortfolio = "https://github.com/geo-cherian-mathew-2k28";
 
             <!-- ACM-W Section -->
             <div
-              class="w-16 inline-flex flex-col justify-start items-start gap-4"
+              class="w-24 inline-flex flex-col justify-start items-start gap-4"
             >
               <div
                 class="footer-section-title text-yellow-50 text-base font-light font-['PolySans_Trial'] uppercase"
@@ -196,7 +210,7 @@ const creatorPortfolio = "https://github.com/geo-cherian-mathew-2k28";
                   href="#acm-w"
                   class="self-stretch text-white text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >
-                  about w
+                  about
                 </a>
                 <a
                   href="#acm-w"
@@ -359,12 +373,14 @@ const creatorPortfolio = "https://github.com/geo-cherian-mathew-2k28";
               <a
                 href="#about"
                 class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
-                >ACM AJCE</a
+                >Our chapter</a
               >
               <a
-                href="#about"
+                href={ajceWebsite}
+                target="_blank"
+                rel="noopener noreferrer"
                 class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
-                >AJCE</a
+                >AJCE website</a
               >
               <a
                 href="https://www.acm.org"
@@ -450,7 +466,7 @@ const creatorPortfolio = "https://github.com/geo-cherian-mathew-2k28";
               <a
                 href="#acm-w"
                 class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
-                >about w</a
+                >about</a
               >
               <a
                 href="#acm-w"
@@ -1137,8 +1153,11 @@ const creatorPortfolio = "https://github.com/geo-cherian-mathew-2k28";
   }
 
   .footer-location-laptop {
+    display: block;
     width: 160px;
     margin-top: 1.5rem;
+    cursor: pointer;
+    transition: transform 180ms ease;
   }
 
   .footer-location-laptop__screen {
@@ -1160,13 +1179,100 @@ const creatorPortfolio = "https://github.com/geo-cherian-mathew-2k28";
     border-radius: 4px;
   }
 
-  .footer-location-laptop__screen iframe {
-    display: block;
+  .footer-location-map {
+    position: relative;
     width: 100%;
     height: 100%;
-    border: 0;
-    pointer-events: none;
-    filter: grayscale(0.24) saturate(0.72) contrast(1.05);
+    overflow: hidden;
+    background: #E6E1FF;
+  }
+
+  .footer-location-map__road,
+  .footer-location-map__block,
+  .footer-location-map__pin {
+    position: absolute;
+  }
+
+  .footer-location-map__road {
+    display: block;
+    border: 4px solid rgba(251, 250, 255, 0.96);
+    border-radius: 999px;
+    box-shadow: 0 0 0 1px rgba(106, 90, 205, 0.1);
+  }
+
+  .footer-location-map__road--main {
+    top: 42%;
+    left: -18%;
+    width: 138%;
+    height: 18px;
+    transform: rotate(-16deg);
+  }
+
+  .footer-location-map__road--cross {
+    top: -26%;
+    left: 59%;
+    width: 18px;
+    height: 135%;
+    transform: rotate(24deg);
+  }
+
+  .footer-location-map__block {
+    border: 1px solid rgba(42, 36, 85, 0.44);
+    border-radius: 2px;
+    background: rgba(184, 167, 255, 0.62);
+  }
+
+  .footer-location-map__block--one {
+    top: 15%;
+    left: 14%;
+    width: 25%;
+    height: 21%;
+  }
+
+  .footer-location-map__block--two {
+    right: 13%;
+    bottom: 14%;
+    width: 22%;
+    height: 25%;
+  }
+
+  .footer-location-map__block--three {
+    top: 22%;
+    right: 20%;
+    width: 14%;
+    height: 16%;
+  }
+
+  .footer-location-map__pin {
+    top: 50%;
+    left: 50%;
+    display: grid;
+    width: 28px;
+    height: 28px;
+    place-items: center;
+    border: 1px solid rgba(251, 250, 255, 0.9);
+    border-radius: 50%;
+    background: #6A5ACD;
+    box-shadow: 0 5px 10px rgba(42, 36, 85, 0.4);
+    color: #FBFAFF;
+    transform: translate(-50%, -50%);
+  }
+
+  .footer-location-map__pin svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .footer-location-laptop:hover {
+    transform: translateY(-3px);
+  }
+
+  .footer-location-laptop:hover .footer-location-laptop__screen {
+    border-color: #FBFAFF;
+  }
+
+  .footer-location-laptop:hover .footer-location-map__pin {
+    background: #2A2455;
   }
 
   .footer-location-laptop__base {
