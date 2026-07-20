@@ -6,14 +6,14 @@ const partners = partnersData?.items ?? [];
 ---
 
 <section
-  class="partner-laptop-section relative w-full h-[300vh]"
+  class="partner-laptop-section relative w-full"
   data-partner-laptop-scene
 >
   <div
     class="sticky top-0 left-0 w-full h-screen flex items-center justify-center overflow-hidden"
   >
     <div
-      class="partner-laptop-heading absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center z-10 pointer-events-none"
+      class="partner-laptop-heading absolute left-1/2 text-center z-10 pointer-events-none"
     >
       <p
         class="m-0 text-white text-5xl font-semibold font-['PolySans_Trial'] uppercase"
@@ -52,7 +52,7 @@ const partners = partnersData?.items ?? [];
 <style>
   .partner-laptop-grid {
     position: absolute;
-    top: 33%;
+    top: 30%;
     left: 50%;
     display: grid;
     width: min(68vw, 52rem);
@@ -62,7 +62,14 @@ const partners = partnersData?.items ?? [];
   }
 
   .partner-laptop-heading {
-    top: 25%;
+    top: 22%;
+    display: grid;
+    width: min(80vw, 76rem);
+    place-items: center;
+  }
+
+  .partner-laptop-section {
+    height: 185vh;
   }
 
   .partner-mini-laptop {
@@ -101,17 +108,21 @@ const partners = partnersData?.items ?? [];
       width: min(80vw, 76rem);
       grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: clamp(0.85rem, 1.8vw, 1.5rem);
-      top: 33%;
+      top: 30%;
     }
 
     .partner-laptop-heading {
-      top: 26%;
+      top: 22%;
     }
   }
 
   @media (max-width: 767px) {
+    .partner-laptop-section {
+      height: 210vh;
+    }
+
     .partner-laptop-heading {
-      top: 16%;
+      top: 15%;
     }
 
     .partner-laptop-heading p {
@@ -119,7 +130,7 @@ const partners = partnersData?.items ?? [];
     }
 
     .partner-laptop-grid {
-      top: 28%;
+      top: 25%;
       width: 84vw;
       gap: 0.35rem;
     }
@@ -324,8 +335,9 @@ const partners = partnersData?.items ?? [];
 
     context.save();
     if (logo?.naturalWidth && logo.naturalHeight) {
-      const maximumLogoWidth = screenWidth * 0.52;
-      const maximumLogoHeight = screenHeight * 0.44;
+      const isGdg = name.trim().toLowerCase() === "gdg ajce";
+      const maximumLogoWidth = screenWidth * (isGdg ? 0.66 : 0.52);
+      const maximumLogoHeight = screenHeight * (isGdg ? 0.54 : 0.44);
       const scale = Math.min(
         maximumLogoWidth / logo.naturalWidth,
         maximumLogoHeight / logo.naturalHeight
