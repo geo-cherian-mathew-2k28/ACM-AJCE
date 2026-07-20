@@ -492,7 +492,9 @@
     // BLOB NAVIGATION LOGIC
     const blob = document.getElementById("nav-blob");
     const navLinks = document.querySelectorAll(".nav-desktop .nav-link");
-    const sections = document.querySelectorAll("section[id], footer[id]"); // Include footer
+    const sections = Array.from(
+      document.querySelectorAll("section[id], footer[id]")
+    );
     const moreToggle = document.querySelector(".nav-desktop .more-toggle");
     const pill = document.querySelector(".header-pill");
     const dynamicTitle = document.querySelector("#dynamic-title div"); // Changed to div
@@ -553,18 +555,42 @@
       "gallery",
       "contact",
     ];
-    const idMapping = {
-      work: "events",
-      "igniting-minds-section": "about",
+    // Several visual sections sit inside broader page sections. Resolve each one
+    // to the nav state it represents, so nested layouts cannot make the blob flicker.
+    const navSectionMap = {
+      home: null,
+      about: "about",
+      "about-acm-ajce": "about",
+      "about-ajce": "about",
+      mission: "mission",
       "community-outreach": "about",
       "community-sdg": "about",
+      "community-chapter": "about",
       "community-conduct": "about",
       "community-speaker": "about",
+      events: "events",
+      work: "events",
+      "acm-w": "acm-w",
+      team: "team",
+      partners: "partners",
+      gallery: "gallery",
+      contact: "contact",
+      footer: null,
     };
     let currentSectionId = null;
     let rafPending = false;
-    let lastScrollY = window.scrollY || window.pageYOffset;
-    let scrollDirection = "down";
+
+    const getNavSectionId = (sectionId) =>
+      Object.hasOwn(navSectionMap, sectionId)
+        ? navSectionMap[sectionId]
+        : null;
+
+    const getNavStateId = (sectionId) => {
+      const navSectionId = getNavSectionId(sectionId);
+      return moreSectionIds.includes(sectionId)
+        ? sectionId
+        : navSectionId || "none";
+    };
 
     // Function to update blob position
     function updateBlob(targetLink) {
@@ -668,7 +694,9 @@
     function applyNavState(sectionId) {
       if (!sectionId) return;
 
-      if (sectionId === "footer") {
+      const navSectionId = getNavSectionId(sectionId);
+
+      if (!navSectionId) {
         setDynamicMode(false);
         hideBlob();
         return;
@@ -679,11 +707,10 @@
         return;
       }
 
-      const mappedId = idMapping[sectionId] || sectionId;
       setDynamicMode(false);
 
       const activeLink = document.querySelector(
-        `.nav-desktop .nav-link[href="#${mappedId}"]`
+        `.nav-desktop .nav-link[href="#${navSectionId}"]`
       );
       if (activeLink) {
         updateBlob(activeLink);
@@ -693,65 +720,60 @@
     }
 
     function getActiveSection() {
-      const focusLine = window.innerHeight * 0.3;
-      let activeSection = null;
-      let closestSection = null;
-      let closestDistance = Infinity;
-      let closestPosition = null;
+      // A fixed reading line keeps the active state stable while each section
+      // enters and leaves the viewport. Smaller nested sections win over their
+      // wrappers, which is important for About -> Mission and Events -> Work.
+      const focusLine = Math.min(
+        Math.max(window.innerHeight * 0.36, 170),
+        360
+      );
+      const measurements = sections
+        .map((section, index) => ({
+          section,
+          index,
+          rect: section.getBoundingClientRect(),
+        }))
+        .filter(({ section }) => Object.hasOwn(navSectionMap, section.id));
 
-      sections.forEach((section) => {
-        const rect = section.getBoundingClientRect();
-        if (rect.top <= focusLine && rect.bottom >= focusLine) {
-          activeSection = section;
-        }
-        let distance = 0;
-        let position = null;
-        if (rect.top > focusLine) {
-          distance = rect.top - focusLine;
-          position = "below";
-        } else if (rect.bottom < focusLine) {
-          distance = focusLine - rect.bottom;
-          position = "above";
-        }
+      const containingFocusLine = measurements.filter(
+        ({ rect }) => rect.top <= focusLine && rect.bottom > focusLine
+      );
 
-        if (distance < closestDistance) {
-          closestDistance = distance;
-          closestSection = section;
-          closestPosition = position;
-        } else if (distance === closestDistance && closestSection) {
-          if (
-            scrollDirection === "down" &&
-            position === "below" &&
-            closestPosition !== "below"
-          ) {
-            closestSection = section;
-            closestPosition = position;
-          } else if (
-            scrollDirection === "up" &&
-            position === "above" &&
-            closestPosition !== "above"
-          ) {
-            closestSection = section;
-            closestPosition = position;
-          }
-        }
-      });
+      if (containingFocusLine.length) {
+        containingFocusLine.sort(
+          (a, b) =>
+            a.rect.height - b.rect.height || b.index - a.index
+        );
+        return containingFocusLine[0].section;
+      }
 
-      return activeSection || closestSection;
+      // During intentional gaps between sections, keep the most recently
+      // passed section active instead of switching based on scroll direction.
+      const passedSections = measurements.filter(
+        ({ rect }) => rect.top <= focusLine
+      );
+      if (passedSections.length) {
+        passedSections.sort(
+          (a, b) => b.rect.top - a.rect.top || b.index - a.index
+        );
+        return passedSections[0].section;
+      }
+
+      measurements.sort(
+        (a, b) => a.rect.top - b.rect.top || a.index - b.index
+      );
+      return measurements[0]?.section || null;
     }
 
     function updateActiveSection() {
       rafPending = false;
-      const scrollY = window.scrollY || window.pageYOffset;
-      if (scrollY !== lastScrollY) {
-        scrollDirection = scrollY > lastScrollY ? "down" : "up";
-        lastScrollY = scrollY;
-      }
       const activeSection = getActiveSection();
       if (!activeSection) return;
       const id = activeSection.getAttribute("id");
-      if (!id || id === currentSectionId) return;
-      currentSectionId = id;
+      if (!id) return;
+      const nextStateId = getNavStateId(id);
+      if (nextStateId === currentSectionId) return;
+      currentSectionId = nextStateId;
       applyNavState(id);
     }
 
@@ -889,7 +911,7 @@
 
       // Manually update blob on click
       applyNavState(id);
-      currentSectionId = id;
+      currentSectionId = getNavStateId(id);
     });
     scheduleNavUpdate();
   });
