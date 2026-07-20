@@ -794,7 +794,12 @@ const preloaderLogo = "/brand/acm-ajce-light.png";
     display: block;
     width: 100%;
     height: 100%;
-    filter: hue-rotate(230deg) saturate(0.82) brightness(1.12);
+    filter:
+      hue-rotate(230deg)
+      saturate(0.82)
+      brightness(1.12)
+      drop-shadow(0 0 0.7rem rgba(184, 167, 255, 0.46))
+      drop-shadow(0 0 1.6rem rgba(106, 90, 205, 0.22));
   }
 
   .preloader-laptop__screen {
@@ -805,8 +810,6 @@ const preloaderLogo = "/brand/acm-ajce-light.png";
     width: 46%;
     height: 46%;
     overflow: hidden;
-    border: 1px solid rgba(251, 250, 255, 0.22);
-    border-radius: 0.25rem;
     background: #05060B;
     opacity: 0;
     pointer-events: none;

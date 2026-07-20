@@ -76,7 +76,12 @@ const partners = partnersData?.items ?? [];
     display: block;
     width: 100%;
     height: 100%;
-    filter: hue-rotate(230deg) saturate(0.82) brightness(1.12);
+    filter:
+      hue-rotate(230deg)
+      saturate(0.82)
+      brightness(1.12)
+      drop-shadow(0 0 0.45rem rgba(184, 167, 255, 0.44))
+      drop-shadow(0 0 1.15rem rgba(106, 90, 205, 0.2));
   }
 
   .partner-mini-laptop__screen-content {
@@ -91,11 +96,8 @@ const partners = partnersData?.items ?? [];
     align-items: center;
     justify-content: center;
     gap: clamp(0.2rem, 0.55vw, 0.45rem);
-    padding: clamp(0.12rem, 0.4vw, 0.3rem);
-    border: 1px solid rgba(42, 36, 85, 0.18);
-    border-radius: 0.22rem;
-    background: rgba(251, 250, 255, 0.72);
-    box-shadow: 0 0.25rem 0.75rem rgba(42, 36, 85, 0.14);
+    padding: clamp(0.2rem, 0.5vw, 0.35rem);
+    background: #05060B;
     opacity: 0;
     pointer-events: auto;
     text-align: center;
@@ -112,19 +114,16 @@ const partners = partnersData?.items ?? [];
 
   .partner-mini-laptop__screen-content img {
     display: block;
-    width: clamp(2rem, 4vw, 3.25rem);
-    height: clamp(2rem, 4vw, 3.25rem);
-    padding: clamp(0.1rem, 0.25vw, 0.22rem);
-    border-radius: 0.2rem;
-    background: #FBFAFF;
-    box-shadow: 0 0.12rem 0.35rem rgba(42, 36, 85, 0.16);
+    width: clamp(2.3rem, 4.6vw, 3.8rem);
+    height: clamp(2.3rem, 4.6vw, 3.8rem);
+    background: transparent;
     object-fit: contain;
   }
 
   .partner-mini-laptop__screen-content p {
     max-width: 100%;
     margin: 0;
-    color: #2A2455;
+    color: #FBFAFF;
     font-family: "PolySans Bold", "PolySans Trial", sans-serif;
     font-size: clamp(0.55rem, 1.25vw, 1rem);
     font-weight: 700;
@@ -168,7 +167,7 @@ const partners = partnersData?.items ?? [];
       width: 52%;
       min-height: 52%;
       gap: 0.12rem;
-      padding: 0.12rem;
+      padding: 0.16rem;
     }
 
     .partner-mini-laptop__screen-content p {
@@ -176,8 +175,8 @@ const partners = partnersData?.items ?? [];
     }
 
     .partner-mini-laptop__screen-content img {
-      width: clamp(1.2rem, 5.8vw, 1.65rem);
-      height: clamp(1.2rem, 5.8vw, 1.65rem);
+      width: clamp(1.5rem, 6.8vw, 2rem);
+      height: clamp(1.5rem, 6.8vw, 2rem);
     }
   }
 </style>
