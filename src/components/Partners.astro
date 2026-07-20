@@ -52,14 +52,14 @@ const partners = partnersData?.items ?? [];
 <style>
   .partner-laptop-grid {
     position: absolute;
-    top: 30%;
+    top: 38%;
     left: 50%;
     display: grid;
     width: min(68vw, 52rem);
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: clamp(0.75rem, 2vw, 1.75rem);
     transform: translateX(-50%);
-    transition: top 700ms cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform;
   }
 
   .partner-laptop-heading {
@@ -67,10 +67,12 @@ const partners = partnersData?.items ?? [];
     display: grid;
     width: min(80vw, 76rem);
     place-items: center;
+    transform: translate(-50%, -50%);
+    will-change: transform, opacity;
   }
 
   .partner-laptop-section {
-    height: 160vh;
+    height: 230vh;
   }
 
   .partner-mini-laptop {
@@ -109,11 +111,7 @@ const partners = partnersData?.items ?? [];
       width: min(80vw, 76rem);
       grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: clamp(0.85rem, 1.8vw, 1.5rem);
-      top: 36%;
-    }
-
-    .partner-laptop-grid.is-open {
-      top: 55%;
+      top: 40%;
     }
 
     .partner-laptop-heading {
@@ -123,7 +121,7 @@ const partners = partnersData?.items ?? [];
 
   @media (max-width: 767px) {
     .partner-laptop-section {
-      height: 190vh;
+      height: 240vh;
     }
 
     .partner-laptop-heading {
@@ -135,13 +133,9 @@ const partners = partnersData?.items ?? [];
     }
 
     .partner-laptop-grid {
-      top: 25%;
+      top: 29%;
       width: 84vw;
       gap: 0.35rem;
-    }
-
-    .partner-laptop-grid.is-open {
-      top: 32%;
     }
 
   }
@@ -171,12 +165,9 @@ const partners = partnersData?.items ?? [];
   const heading = document.querySelector(
     ".partner-laptop-heading"
   ) as HTMLElement | null;
-  const grid = document.querySelector(
-    ".partner-laptop-grid"
-  ) as HTMLElement | null;
 
   const frameCount = 125;
-  const narrowQuery = "(max-width: 1024px)";
+  const narrowQuery = "(max-width: 767px)";
   let maxCacheSize = frameCount;
   let preloadRadius = 8;
   const pendingFrames = new Set<number>();
@@ -186,11 +177,13 @@ const partners = partnersData?.items ?? [];
     "(prefers-reduced-motion: reduce)"
   ).matches;
   const laptop = { frame: 0 };
+  let targetFrame = 0;
+  let frameAnimation = 0;
 
   const updatePerfSettings = () => {
     const isNarrow = window.matchMedia(narrowQuery).matches;
-    maxCacheSize = isNarrow ? Math.min(12, frameCount) : frameCount;
-    preloadRadius = isNarrow ? 3 : 8;
+    maxCacheSize = frameCount;
+    preloadRadius = isNarrow ? 5 : 8;
   };
 
   const currentFrame = (index: number) =>
@@ -325,7 +318,6 @@ const partners = partnersData?.items ?? [];
 
   const schedulePreloadAll = () => {
     if (prefersReducedMotion || preloadAllScheduled) return;
-    if (window.matchMedia(narrowQuery).matches) return;
     preloadAllScheduled = true;
     window.setTimeout(() => {
       void preloadAllFrames();
@@ -335,7 +327,7 @@ const partners = partnersData?.items ?? [];
   let lastRenderedFrame = -1;
   let lastCanvasSignature = "";
 
-  const drawPartnerScreen = (partner: PartnerCanvas) => {
+  const drawPartnerScreen = (partner: PartnerCanvas, opacity: number) => {
     const { canvas, context, logo, name } = partner;
     if (!context || !canvas.width || !canvas.height) return;
 
@@ -346,6 +338,7 @@ const partners = partnersData?.items ?? [];
     const screenCenterX = screenX + screenWidth / 2;
 
     context.save();
+    context.globalAlpha = opacity;
     if (logo?.naturalWidth && logo.naturalHeight) {
       const isGdg = name.trim().toLowerCase() === "gdg ajce";
       const maximumLogoWidth = screenWidth * (isGdg ? 0.66 : 0.52);
@@ -388,40 +381,60 @@ const partners = partnersData?.items ?? [];
       return;
     }
 
-    const signature = canvases
+    const screenReveal = clampProgress(
+      (frame / (frameCount - 1) - 0.7) / 0.16
+    );
+    const signature = `${canvases
       .map(({ canvas }) => `${canvas.width}x${canvas.height}`)
-      .join("|");
+      .join("|")}|${screenReveal.toFixed(2)}`;
     if (frame === lastRenderedFrame && signature === lastCanvasSignature) return;
     lastRenderedFrame = frame;
     lastCanvasSignature = signature;
 
-    const isScreenVisible = frame >= Math.round(frameCount * 0.72);
-    grid?.classList.toggle("is-open", isScreenVisible);
     for (const partner of canvases) {
       const { canvas, context } = partner;
       if (!context || !canvas.width || !canvas.height) continue;
       context.clearRect(0, 0, canvas.width, canvas.height);
       context.drawImage(image, 0, 0, canvas.width, canvas.height);
-      if (isScreenVisible) drawPartnerScreen(partner);
+      if (screenReveal > 0.01) drawPartnerScreen(partner, screenReveal);
     }
     queueFrames(frame);
   };
 
   const clampProgress = (value: number) => Math.max(0, Math.min(1, value));
 
+  const animateFrame = () => {
+    const difference = targetFrame - laptop.frame;
+    if (Math.abs(difference) <= 0.15) {
+      laptop.frame = targetFrame;
+      render();
+      frameAnimation = 0;
+      return;
+    }
+
+    laptop.frame += Math.sign(difference) * Math.min(Math.abs(difference) * 0.28, 3.6);
+    render();
+    frameAnimation = window.requestAnimationFrame(animateFrame);
+  };
+
+  const queueFrameAnimation = () => {
+    if (!frameAnimation) frameAnimation = window.requestAnimationFrame(animateFrame);
+  };
+
   const updateSequenceFromScroll = () => {
     if (!section || prefersReducedMotion) return;
     const rect = section.getBoundingClientRect();
     const scrollRange = Math.max(section.clientHeight - window.innerHeight, 1);
     const sceneProgress = clampProgress(-rect.top / scrollRange);
-    const frameProgress = clampProgress((sceneProgress - 0.04) / 0.92);
-    const headingProgress = clampProgress((frameProgress - 0.28) / 0.22);
-    laptop.frame = frameProgress * (frameCount - 1);
+    const frameProgress = clampProgress((sceneProgress - 0.035) / 0.93);
+    const headingProgress = clampProgress((frameProgress - 0.1) / 0.76);
+
+    targetFrame = frameProgress * (frameCount - 1);
     if (heading) {
-      heading.style.opacity = String(1 - headingProgress * 0.35);
-      heading.style.transform = "translate(-50%, -50%)";
+      heading.style.opacity = String(1 - headingProgress * 0.28);
+      heading.style.transform = `translate(-50%, -50%) translateY(${-headingProgress * 14}px)`;
     }
-    render();
+    queueFrameAnimation();
   };
 
   let scrollAnimationFrame = 0;
@@ -431,6 +444,23 @@ const partners = partnersData?.items ?? [];
       scrollAnimationFrame = 0;
       updateSequenceFromScroll();
     });
+  };
+
+  let scenePollingFrame = 0;
+  let isSceneNearby = false;
+  const pollSequencePosition = () => {
+    if (!isSceneNearby) {
+      scenePollingFrame = 0;
+      return;
+    }
+    updateSequenceFromScroll();
+    scenePollingFrame = window.requestAnimationFrame(pollSequencePosition);
+  };
+
+  const startSequencePolling = () => {
+    if (!scenePollingFrame) {
+      scenePollingFrame = window.requestAnimationFrame(pollSequencePosition);
+    }
   };
 
   const initSequence = async () => {
@@ -470,11 +500,22 @@ const partners = partnersData?.items ?? [];
         startWhenVisible();
         observer.disconnect();
       },
-      { rootMargin: "200px" }
+      { rootMargin: "1800px 0px" }
     );
     observer.observe(section);
   } else {
     startWhenVisible();
+  }
+
+  if (section && "IntersectionObserver" in window) {
+    const sequenceObserver = new IntersectionObserver(
+      (entries) => {
+        isSceneNearby = entries.some((entry) => entry.isIntersecting);
+        if (isSceneNearby) startSequencePolling();
+      },
+      { rootMargin: "100% 0px" }
+    );
+    sequenceObserver.observe(section);
   }
 
   const updateOnScroll = () => queueScrollUpdate();
