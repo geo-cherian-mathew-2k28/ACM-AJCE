@@ -48,7 +48,7 @@ const partners = partnersData?.items ?? [];
 <style>
   .partner-laptop-grid {
     display: grid;
-    width: min(76vw, 68rem);
+    width: min(68vw, 52rem);
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: clamp(0.75rem, 2vw, 1.75rem);
     padding-top: clamp(4.5rem, 11vh, 7.25rem);
@@ -111,6 +111,15 @@ const partners = partnersData?.items ?? [];
     transform: rotate(45deg);
   }
 
+  @media (min-width: 1024px) {
+    .partner-laptop-grid {
+      width: min(80vw, 76rem);
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: clamp(0.85rem, 1.8vw, 1.5rem);
+      padding-top: clamp(4rem, 9vh, 6rem);
+    }
+  }
+
   @media (max-width: 767px) {
     .partner-laptop-heading {
       top: 16%;
@@ -121,9 +130,9 @@ const partners = partnersData?.items ?? [];
     }
 
     .partner-laptop-grid {
-      width: 100vw;
+      width: 88vw;
       gap: 0.35rem;
-      padding: 5rem 0.35rem 0;
+      padding: 5rem 0 0;
     }
 
     .partner-mini-laptop__screen-content {
