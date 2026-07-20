@@ -655,15 +655,14 @@ const preloaderLogo = "/brand/acm-ajce-light.png";
           (now - startedAt) / PRELOADER_OPEN_DURATION
         );
         void renderPreloaderFrame(progress * (PRELOADER_FRAME_COUNT - 1));
-        if (progress >= 0.82) {
-          preloaderLaptopScreen?.classList.add("is-visible");
-        }
         if (progress < 1) {
           window.requestAnimationFrame(advance);
           return;
         }
-        preloaderLaptopScreen?.classList.add("is-visible");
-        resolve();
+        void renderPreloaderFrame(PRELOADER_FRAME_COUNT - 1).then(() => {
+          preloaderLaptopScreen?.classList.add("is-visible");
+          resolve();
+        });
       };
 
       window.requestAnimationFrame(advance);
@@ -809,8 +808,6 @@ const preloaderLogo = "/brand/acm-ajce-light.png";
     box-sizing: border-box;
     width: 46%;
     height: 46%;
-    overflow: hidden;
-    background: #05060B;
     opacity: 0;
     pointer-events: none;
     transition: opacity 180ms ease;
@@ -824,7 +821,7 @@ const preloaderLogo = "/brand/acm-ajce-light.png";
     position: absolute;
     top: 34%;
     left: 50%;
-    color: #FBFAFF;
+    color: #2A2455;
     font-family: "PolySans Bold", "PolySans Trial", sans-serif;
     font-size: clamp(0.8rem, 1.7vw, 1.1rem);
     font-weight: 700;
@@ -842,6 +839,7 @@ const preloaderLogo = "/brand/acm-ajce-light.png";
     width: 88%;
     max-height: 72%;
     object-fit: contain;
+    filter: invert(1);
     opacity: 0;
     transform: translate(-50%, -50%) scale(0.94);
     transition: opacity 220ms ease, transform 220ms ease;
@@ -863,7 +861,7 @@ const preloaderLogo = "/brand/acm-ajce-light.png";
     left: 12%;
     width: 76%;
     height: 4px;
-    background-color: rgba(251, 250, 255, 0.22);
+    background-color: rgba(42, 36, 85, 0.18);
     border-radius: 2px;
     overflow: hidden;
     transition: opacity 180ms ease, transform 180ms ease;
@@ -876,7 +874,7 @@ const preloaderLogo = "/brand/acm-ajce-light.png";
 
   .progress-fill {
     height: 100%;
-    background: #B8A7FF;
+    background: #6A5ACD;
     position: relative;
     width: 0%;
     border-radius: 2px;
