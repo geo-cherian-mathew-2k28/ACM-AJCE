@@ -162,6 +162,9 @@ const partners = partnersData?.items ?? [];
   const heading = document.querySelector(
     ".partner-laptop-heading"
   ) as HTMLElement | null;
+  const grid = document.querySelector(
+    ".partner-laptop-grid"
+  ) as HTMLElement | null;
 
   const frameCount = 125;
   const narrowQuery = "(max-width: 1024px)";
@@ -403,12 +406,16 @@ const partners = partnersData?.items ?? [];
     const sceneProgress = clampProgress(-rect.top / scrollRange);
     const frameProgress = clampProgress((sceneProgress - 0.08) / 0.74);
     const headingProgress = clampProgress((frameProgress - 0.28) / 0.22);
+    const settleProgress = clampProgress((frameProgress - 0.18) / 0.82);
     laptop.frame = frameProgress * (frameCount - 1);
     if (heading) {
       heading.style.opacity = String(1 - headingProgress);
       heading.style.transform = `translate(-50%, calc(-50% - ${
         headingProgress * 50
       }px))`;
+    }
+    if (grid) {
+      grid.style.transform = `translate(-50%, ${settleProgress * 12}vh)`;
     }
     render();
   };

@@ -574,7 +574,7 @@ const preloaderLogo = "/brand/acm-ajce-light.png";
   };
 
   const PRELOADER_FRAME_COUNT = 125;
-  const PRELOADER_OPEN_DURATION = 1800;
+  const PRELOADER_OPEN_DURATION = 2200;
   const preloaderFrameCache = new Map<number, HTMLImageElement>();
   const pendingPreloaderFrames = new Map<number, Promise<HTMLImageElement>>();
   let requestedPreloaderFrame = 0;
@@ -704,11 +704,11 @@ const preloaderLogo = "/brand/acm-ajce-light.png";
     if (progressTween) progressTween.kill();
     progressTween = gsap.to(progressFill, {
       width: "100%",
-      duration: 0.45,
+      duration: 0.55,
       ease: "power1.out",
       onComplete: () => {
         revealPreloaderLogo();
-        window.setTimeout(finishLoading, 750);
+        window.setTimeout(finishLoading, 1200);
       },
     });
   };
@@ -743,7 +743,7 @@ const preloaderLogo = "/brand/acm-ajce-light.png";
     ]);
 
     const elapsed = performance.now() - startTime;
-    const minimumDisplay = 2700;
+    const minimumDisplay = 3300;
     const delay = Math.max(0, minimumDisplay - elapsed);
 
     window.setTimeout(() => {
@@ -768,7 +768,7 @@ const preloaderLogo = "/brand/acm-ajce-light.png";
 
     tl.to(preloader, {
       autoAlpha: 0,
-      duration: 0.65,
+      duration: 0.7,
       ease: "power2.out",
     })
       .set(preloader, { display: "none" });
@@ -832,7 +832,7 @@ const preloaderLogo = "/brand/acm-ajce-light.png";
     height: 46%;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 180ms ease;
+    transition: opacity 360ms ease;
   }
 
   .preloader-laptop__screen.is-visible {
@@ -849,7 +849,7 @@ const preloaderLogo = "/brand/acm-ajce-light.png";
     font-weight: 700;
     text-transform: uppercase;
     transform: translateX(-50%);
-    transition: opacity 180ms ease, transform 180ms ease;
+    transition: opacity 360ms ease, transform 360ms ease;
     white-space: nowrap;
   }
 
@@ -864,7 +864,8 @@ const preloaderLogo = "/brand/acm-ajce-light.png";
     filter: invert(1);
     opacity: 0;
     transform: translate(-50%, -50%) scale(0.94);
-    transition: opacity 220ms ease, transform 220ms ease;
+    transition: opacity 650ms cubic-bezier(0.22, 1, 0.36, 1),
+      transform 650ms cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   .preloader-laptop__screen.is-ready .preloader-laptop__status {
@@ -886,7 +887,7 @@ const preloaderLogo = "/brand/acm-ajce-light.png";
     background-color: rgba(42, 36, 85, 0.18);
     border-radius: 2px;
     overflow: hidden;
-    transition: opacity 180ms ease, transform 180ms ease;
+    transition: opacity 360ms ease, transform 360ms ease;
   }
 
   .preloader-laptop__screen.is-ready .progress-bar {
