@@ -1,5 +1,5 @@
 ---
-import acmAjceLogo from "../assets/images/acm-ajce-logo.png";
+const preloaderLogo = "/brand/acm-ajce-light.png";
 ---
 
 <div id="preloader" class="preloader">
@@ -12,7 +12,7 @@ import acmAjceLogo from "../assets/images/acm-ajce-logo.png";
       ></canvas>
       <div id="preloader-laptop-screen" class="preloader-laptop__screen">
         <span class="preloader-laptop__status">Loading</span>
-        <img src={acmAjceLogo.src} alt="ACM AJCE" />
+        <img src={preloaderLogo} alt="ACM AJCE" />
         <div class="progress-bar" aria-hidden="true">
           <div class="progress-fill"></div>
         </div>
@@ -574,7 +574,9 @@ import acmAjceLogo from "../assets/images/acm-ajce-logo.png";
   };
 
   const PRELOADER_FRAME_COUNT = 125;
+  const PRELOADER_OPEN_DURATION = 1650;
   const preloaderFrameCache = new Map<number, HTMLImageElement>();
+  let requestedPreloaderFrame = 0;
 
   const preloaderFrameUrl = (index: number) =>
     getAssetUrl(
@@ -619,9 +621,10 @@ import acmAjceLogo from "../assets/images/acm-ajce-logo.png";
         Math.round(frame / 4) * 4
       )
     );
+    requestedPreloaderFrame = steppedFrame;
     const cached = preloaderFrameCache.get(steppedFrame);
     if (cached) {
-      drawPreloaderFrame(cached);
+      if (steppedFrame === requestedPreloaderFrame) drawPreloaderFrame(cached);
       return;
     }
 
@@ -637,14 +640,34 @@ import acmAjceLogo from "../assets/images/acm-ajce-logo.png";
       });
     }
     preloaderFrameCache.set(steppedFrame, image);
-    drawPreloaderFrame(image);
+    if (steppedFrame === requestedPreloaderFrame) drawPreloaderFrame(image);
   };
 
-  const showPreloaderLaptop = () => {
-    if (!preloaderLaptopCanvas) return;
+  const playPreloaderLaptop = () => {
+    if (!preloaderLaptopCanvas) return Promise.resolve();
     resizePreloaderLaptop();
-    preloaderLaptopScreen?.classList.add("is-visible");
-    void renderPreloaderFrame(PRELOADER_FRAME_COUNT - 1);
+    const startedAt = performance.now();
+
+    return new Promise<void>((resolve) => {
+      const advance = (now: number) => {
+        const progress = Math.min(
+          1,
+          (now - startedAt) / PRELOADER_OPEN_DURATION
+        );
+        void renderPreloaderFrame(progress * (PRELOADER_FRAME_COUNT - 1));
+        if (progress >= 0.82) {
+          preloaderLaptopScreen?.classList.add("is-visible");
+        }
+        if (progress < 1) {
+          window.requestAnimationFrame(advance);
+          return;
+        }
+        preloaderLaptopScreen?.classList.add("is-visible");
+        resolve();
+      };
+
+      window.requestAnimationFrame(advance);
+    });
   };
 
   const revealPreloaderLogo = () => {
@@ -664,7 +687,7 @@ import acmAjceLogo from "../assets/images/acm-ajce-logo.png";
       ease: "power1.out",
       onComplete: () => {
         revealPreloaderLogo();
-        window.setTimeout(finishLoading, 550);
+        window.setTimeout(finishLoading, 750);
       },
     });
   };
@@ -680,7 +703,7 @@ import acmAjceLogo from "../assets/images/acm-ajce-logo.png";
 
     const startTime = performance.now();
 
-    showPreloaderLaptop();
+    const openingPromise = playPreloaderLaptop();
     startFakeProgress(gsap);
 
     await waitForVariantsMounted();
@@ -695,10 +718,11 @@ import acmAjceLogo from "../assets/images/acm-ajce-logo.png";
       waitForFonts(),
       warmRequiredAssets(gsap),
       criticalAssetPromise,
+      openingPromise,
     ]);
 
     const elapsed = performance.now() - startTime;
-    const minimumDisplay = 1350;
+    const minimumDisplay = 2700;
     const delay = Math.max(0, minimumDisplay - elapsed);
 
     window.setTimeout(() => {
@@ -721,15 +745,11 @@ import acmAjceLogo from "../assets/images/acm-ajce-logo.png";
       },
     });
 
-    tl.to(".progress-bar", {
-      opacity: 0,
-      duration: 0.3,
+    tl.to(preloader, {
+      autoAlpha: 0,
+      duration: 0.65,
+      ease: "power2.out",
     })
-      .to(preloader, {
-        yPercent: -100,
-        duration: 0.8,
-        ease: "power4.inOut",
-      })
       .set(preloader, { display: "none" });
   }
 
@@ -784,6 +804,10 @@ import acmAjceLogo from "../assets/images/acm-ajce-logo.png";
     box-sizing: border-box;
     width: 46%;
     height: 46%;
+    overflow: hidden;
+    border: 1px solid rgba(251, 250, 255, 0.22);
+    border-radius: 0.25rem;
+    background: #05060B;
     opacity: 0;
     pointer-events: none;
     transition: opacity 180ms ease;
@@ -797,7 +821,7 @@ import acmAjceLogo from "../assets/images/acm-ajce-logo.png";
     position: absolute;
     top: 34%;
     left: 50%;
-    color: #2A2455;
+    color: #FBFAFF;
     font-family: "PolySans Bold", "PolySans Trial", sans-serif;
     font-size: clamp(0.8rem, 1.7vw, 1.1rem);
     font-weight: 700;
@@ -812,8 +836,8 @@ import acmAjceLogo from "../assets/images/acm-ajce-logo.png";
     top: 50%;
     left: 50%;
     display: block;
-    width: clamp(4rem, 10vw, 7rem);
-    max-height: 4.8rem;
+    width: 88%;
+    max-height: 72%;
     object-fit: contain;
     opacity: 0;
     transform: translate(-50%, -50%) scale(0.94);
@@ -836,7 +860,7 @@ import acmAjceLogo from "../assets/images/acm-ajce-logo.png";
     left: 12%;
     width: 76%;
     height: 4px;
-    background-color: rgba(42, 36, 85, 0.18);
+    background-color: rgba(251, 250, 255, 0.22);
     border-radius: 2px;
     overflow: hidden;
     transition: opacity 180ms ease, transform 180ms ease;
@@ -849,7 +873,7 @@ import acmAjceLogo from "../assets/images/acm-ajce-logo.png";
 
   .progress-fill {
     height: 100%;
-    background: #6A5ACD;
+    background: #B8A7FF;
     position: relative;
     width: 0%;
     border-radius: 2px;

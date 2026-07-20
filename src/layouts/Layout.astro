@@ -83,7 +83,7 @@ const description =
     <div class="technical-grid acm-grid-surface" aria-hidden="true"></div>
     <div class="brand-logos" aria-label="ACM AJCE at Amal Jyothi College of Engineering">
       <img
-        src={acmAjceLogo.src}
+        src={getAssetUrl("/brand/acm-ajce-light.png")}
         alt="ACM AJCE Student Chapter"
         class="acm-ajce-logo"
         loading="eager"
@@ -459,10 +459,9 @@ const description =
   }
 
   .acm-ajce-logo {
-    width: 116px;
-    height: 56px;
-    object-fit: cover;
-    object-position: center;
+    width: 138px;
+    height: auto;
+    object-fit: contain;
     filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.36));
   }
 
