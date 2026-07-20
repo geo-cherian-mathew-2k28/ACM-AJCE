@@ -1,16 +1,14 @@
 ---
 interface Props {
   title: string;
-  index?: number;
 }
 
-const { title, index = 0 } = Astro.props;
+const { title } = Astro.props;
 ---
 
 <article
   class="partner-laptop"
   data-partner-laptop
-  style={`--partner-delay: ${index * 90}ms`}
   aria-label={`${title} partner`}
 >
   <div class="partner-laptop__device" aria-hidden="true">
@@ -18,6 +16,13 @@ const { title, index = 0 } = Astro.props;
       <div class="partner-laptop__screen">
         <div class="partner-laptop__grid"></div>
         <div class="partner-laptop__screen-glow"></div>
+        <div class="partner-laptop__screen-content">
+          <div class="partner-laptop__logo-slot">
+            <span class="partner-laptop__logo-mark"></span>
+          </div>
+          <p class="partner-laptop__screen-name">{title}</p>
+          <span class="partner-laptop__screen-rule"></span>
+        </div>
       </div>
     </div>
     <div class="partner-laptop__base">
@@ -25,7 +30,6 @@ const { title, index = 0 } = Astro.props;
       <div class="partner-laptop__trackpad"></div>
     </div>
   </div>
-  <p class="partner-laptop__label">{title}</p>
 </article>
 
 <style>
@@ -44,27 +48,22 @@ const { title, index = 0 } = Astro.props;
   }
 
   .partner-laptop__screen-shell {
+    --partner-screen-tilt: -86deg;
+    --partner-screen-shift: 12%;
+    --partner-screen-opacity: 0.56;
+    --partner-screen-brightness: 0.58;
     position: absolute;
     z-index: 1;
     bottom: 12%;
     left: 5%;
     width: 90%;
     aspect-ratio: 16 / 10;
-    transform: rotateX(-82deg) translateY(8%);
+    transform: rotateX(var(--partner-screen-tilt))
+      translateY(var(--partner-screen-shift));
     transform-origin: 50% 100%;
-    opacity: 0.54;
-    filter: brightness(0.62);
-    transition:
-      transform 900ms cubic-bezier(0.22, 1, 0.36, 1) var(--partner-delay),
-      opacity 360ms ease var(--partner-delay),
-      filter 540ms ease var(--partner-delay);
-    will-change: transform, opacity;
-  }
-
-  .partner-laptop.is-open .partner-laptop__screen-shell {
-    transform: rotateX(0deg) translateY(0);
-    opacity: 1;
-    filter: brightness(1);
+    opacity: var(--partner-screen-opacity);
+    filter: brightness(var(--partner-screen-brightness));
+    will-change: transform, opacity, filter;
   }
 
   .partner-laptop__screen {
@@ -97,6 +96,55 @@ const { title, index = 0 } = Astro.props;
       rgba(106, 90, 205, 0.34),
       transparent 62%
     );
+  }
+
+  .partner-laptop__screen-content {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    padding: 0.85rem;
+  }
+
+  .partner-laptop__logo-slot {
+    display: grid;
+    width: clamp(1.7rem, 22%, 3.1rem);
+    aspect-ratio: 1;
+    place-items: center;
+    border: 1px dashed rgba(251, 250, 255, 0.62);
+    border-radius: 5px;
+    background-color: rgba(106, 90, 205, 0.12);
+  }
+
+  .partner-laptop__logo-mark {
+    width: 34%;
+    aspect-ratio: 1;
+    border: 1px solid rgba(184, 167, 255, 0.92);
+    transform: rotate(45deg);
+  }
+
+  .partner-laptop__screen-name {
+    max-width: 100%;
+    margin: 0;
+    color: #FBFAFF;
+    font-family: "PolySans Bold", "PolySans Trial", sans-serif;
+    font-size: clamp(0.68rem, 1.15vw, 1.05rem);
+    font-weight: 700;
+    line-height: 1.1;
+    overflow-wrap: normal;
+    text-align: center;
+    text-wrap: nowrap;
+    white-space: nowrap;
+  }
+
+  .partner-laptop__screen-rule {
+    width: 30%;
+    height: 1px;
+    background-color: rgba(184, 167, 255, 0.72);
   }
 
   .partner-laptop__base {
@@ -137,18 +185,6 @@ const { title, index = 0 } = Astro.props;
     transform: translateX(-50%);
   }
 
-  .partner-laptop__label {
-    margin: 0.85rem 0 0;
-    color: #FBFAFF;
-    font-family: "PolySans Bold", "PolySans Trial", sans-serif;
-    font-size: clamp(0.85rem, 1.25vw, 1.1rem);
-    font-weight: 700;
-    line-height: 1.2;
-    overflow-wrap: normal;
-    text-wrap: nowrap;
-    white-space: nowrap;
-  }
-
   @media (min-width: 640px) {
     .partner-laptop {
       width: min(30vw, 17rem);
@@ -163,10 +199,10 @@ const { title, index = 0 } = Astro.props;
 
   @media (prefers-reduced-motion: reduce) {
     .partner-laptop__screen-shell {
-      transform: rotateX(0deg) translateY(0);
-      opacity: 1;
-      filter: brightness(1);
-      transition: none;
+      --partner-screen-tilt: 0deg;
+      --partner-screen-shift: 0%;
+      --partner-screen-opacity: 1;
+      --partner-screen-brightness: 1;
     }
   }
 </style>

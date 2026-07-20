@@ -19,63 +19,88 @@ const marqueeRows = [
 ];
 ---
 
-<div
-  id="partners-container"
-  class="relative flex flex-wrap gap-6 justify-center items-center w-full pt-18 pb-64 overflow-hidden"
->
-  <div
-    id="Cassette-pos-1"
-    class="partners-floating w-full flex justify-center mt-0 relative"
-  >
-    <img
-      id="partners-svg"
-      src={getAssetUrl("/partners-cassette.webp")}
-      alt="Partners Image"
-      class="partners-title-cassette max-w-[300px] md:max-w-[500px] w-auto object-contain"
-      loading="lazy"
-      decoding="async"
-    />
-  </div>
+<div id="partners-container" class="partners-scene">
+  <div class="partners-stage">
+    <div
+      id="Cassette-pos-1"
+      class="partners-floating w-full flex justify-center mt-0 relative"
+    >
+      <img
+        id="partners-svg"
+        src={getAssetUrl("/partners-cassette.webp")}
+        alt="Partners Image"
+        class="partners-title-cassette max-w-[300px] md:max-w-[500px] w-auto object-contain"
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
 
-  <div
-    class="partners-carousel w-[80vw] pb-24 flex flex-wrap gap-6 justify-center items-center relative z-10"
-  >
-    <div class="partners-track flex flex-wrap gap-6 justify-center items-center">
+    <div class="partners-carousel relative z-10">
+      <div class="partners-track">
       {
-        partners.map((partner, index) => (
+        partners.map((partner) => (
           <div class="partners-card">
-            <PartnerLaptopSingular title={partner.title} index={index} />
+            <PartnerLaptopSingular title={partner.title} />
           </div>
         ))
       }
-    </div>
-    <div class="partners-marquee">
-      {marqueeRows.map((row) => (
-        <div
-          class={`partners-marquee-row${row.reverse ? " is-reverse" : ""}`}
-        >
-          {Array.from({ length: marqueeRepeat }).map((_, index) => (
-            <div
-              class="partners-marquee-group"
-              aria-hidden={index === 0 ? undefined : "true"}
-            >
-              {row.items.map((partner, partnerIndex) => (
-                <div class="partners-card">
-                  <PartnerLaptopSingular
-                    title={partner.title}
-                    index={partnerIndex}
-                  />
-                </div>
-              ))}
-            </div>
-          ))}
-        </div>
-      ))}
+      </div>
+      <div class="partners-marquee">
+        {marqueeRows.map((row) => (
+          <div
+            class={`partners-marquee-row${row.reverse ? " is-reverse" : ""}`}
+          >
+            {Array.from({ length: marqueeRepeat }).map((_, index) => (
+              <div
+                class="partners-marquee-group"
+                aria-hidden={index === 0 ? undefined : "true"}
+              >
+                {row.items.map((partner) => (
+                  <div class="partners-card">
+                    <PartnerLaptopSingular title={partner.title} />
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
     </div>
   </div>
 </div>
 
 <style>
+  .partners-scene {
+    position: relative;
+    min-height: 220vh;
+  }
+
+  .partners-stage {
+    position: sticky;
+    top: 0;
+    display: flex;
+    min-height: 100vh;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .partners-carousel {
+    display: flex;
+    width: min(80vw, 72rem);
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 4.5rem;
+  }
+
+  .partners-track {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(1rem, 2.5vw, 2.5rem);
+  }
+
   .partners-floating {
     position: fixed;
     left: 0;
@@ -131,8 +156,13 @@ const marqueeRows = [
   }
 
   @media (max-width: 768px) {
-    #partners-container {
+    .partners-scene {
+      min-height: 180vh;
       overflow: visible;
+    }
+
+    .partners-stage {
+      min-height: 100svh;
     }
 
     .partners-floating {
@@ -164,33 +194,53 @@ const marqueeRows = [
 </style>
 
 <script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
   const initializePartners = () => {
     const container = document.getElementById("partners-container");
     const pos1 = document.getElementById("Cassette-pos-1");
     const section = document.getElementById("partners");
     const gallery = document.getElementById("gallery");
 
-    if (container && container.dataset.laptopRevealReady !== "true") {
-      container.dataset.laptopRevealReady = "true";
-      const laptops = Array.from(
-        container.querySelectorAll<HTMLElement>("[data-partner-laptop]")
-      );
-      const revealLaptops = () => {
-        laptops.forEach((laptop) => laptop.classList.add("is-open"));
-      };
+    if (container && container.dataset.laptopSceneReady !== "true") {
+      container.dataset.laptopSceneReady = "true";
+      const screens = Array.from(
+        container.querySelectorAll<HTMLElement>(
+          ".partner-laptop__screen-shell"
+        )
+      ).filter((screen) => screen.offsetParent !== null);
 
-      if ("IntersectionObserver" in window) {
-        const laptopObserver = new IntersectionObserver(
-          ([entry], observer) => {
-            if (!entry.isIntersecting) return;
-            revealLaptops();
-            observer.disconnect();
+      if (
+        screens.length &&
+        !window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      ) {
+        gsap.set(screens, {
+          "--partner-screen-tilt": "-86deg",
+          "--partner-screen-shift": "12%",
+          "--partner-screen-opacity": 0.56,
+          "--partner-screen-brightness": 0.58,
+        });
+
+        gsap.timeline({
+          scrollTrigger: {
+            trigger: container,
+            start: "top top",
+            end: "bottom bottom",
+            scrub: 0.65,
+            invalidateOnRefresh: true,
           },
-          { rootMargin: "-12% 0px -12% 0px", threshold: 0.18 }
-        );
-        laptopObserver.observe(container);
-      } else {
-        revealLaptops();
+        }).to(screens, {
+          "--partner-screen-tilt": "0deg",
+          "--partner-screen-shift": "0%",
+          "--partner-screen-opacity": 1,
+          "--partner-screen-brightness": 1,
+          duration: 1,
+          ease: "none",
+          stagger: 0.1,
+        });
       }
     }
 
