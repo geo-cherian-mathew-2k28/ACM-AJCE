@@ -1,5 +1,4 @@
 ---
-import PartnerCasetteSingular from "../components/PartnerCasetteSingular.astro";
 import PartnerLaptopSingular from "../components/PartnerLaptopSingular.astro";
 import { reader } from "../utils/reader";
 import { getAssetUrl } from "../utils/cdn";
@@ -43,22 +42,9 @@ const marqueeRows = [
   >
     <div class="partners-track flex flex-wrap gap-6 justify-center items-center">
       {
-        partners.map((partner) => (
+        partners.map((partner, index) => (
           <div class="partners-card">
-            {
-              partner.title === "Blankspace" ? (
-                <PartnerLaptopSingular
-                  title={partner.title}
-                  imageUrl={getAssetUrl(partner.imageUrl)}
-                />
-              ) : (
-                <PartnerCasetteSingular
-                  title={partner.title}
-                  imageUrl={getAssetUrl(partner.imageUrl)}
-                  link={partner.link}
-                />
-              )
-            }
+            <PartnerLaptopSingular title={partner.title} index={index} />
           </div>
         ))
       }
@@ -73,22 +59,12 @@ const marqueeRows = [
               class="partners-marquee-group"
               aria-hidden={index === 0 ? undefined : "true"}
             >
-              {row.items.map((partner) => (
+              {row.items.map((partner, partnerIndex) => (
                 <div class="partners-card">
-                  {
-                    partner.title === "Blankspace" ? (
-                      <PartnerLaptopSingular
-                        title={partner.title}
-                        imageUrl={getAssetUrl(partner.imageUrl)}
-                      />
-                    ) : (
-                      <PartnerCasetteSingular
-                        title={partner.title}
-                        imageUrl={getAssetUrl(partner.imageUrl)}
-                        link={partner.link}
-                      />
-                    )
-                  }
+                  <PartnerLaptopSingular
+                    title={partner.title}
+                    index={partnerIndex}
+                  />
                 </div>
               ))}
             </div>
@@ -188,12 +164,38 @@ const marqueeRows = [
 </style>
 
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
+  const initializePartners = () => {
+    const container = document.getElementById("partners-container");
     const pos1 = document.getElementById("Cassette-pos-1");
     const section = document.getElementById("partners");
     const gallery = document.getElementById("gallery");
 
-    if (!pos1 || !section) return;
+    if (container && container.dataset.laptopRevealReady !== "true") {
+      container.dataset.laptopRevealReady = "true";
+      const laptops = Array.from(
+        container.querySelectorAll<HTMLElement>("[data-partner-laptop]")
+      );
+      const revealLaptops = () => {
+        laptops.forEach((laptop) => laptop.classList.add("is-open"));
+      };
+
+      if ("IntersectionObserver" in window) {
+        const laptopObserver = new IntersectionObserver(
+          ([entry], observer) => {
+            if (!entry.isIntersecting) return;
+            revealLaptops();
+            observer.disconnect();
+          },
+          { rootMargin: "-12% 0px -12% 0px", threshold: 0.18 }
+        );
+        laptopObserver.observe(container);
+      } else {
+        revealLaptops();
+      }
+    }
+
+    if (!pos1 || !section || pos1.dataset.visibilityReady === "true") return;
+    pos1.dataset.visibilityReady = "true";
 
     let inPartners = false;
     let inGallery = false;
@@ -232,5 +234,15 @@ const marqueeRows = [
 
       galleryObserver.observe(gallery);
     }
-  });
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initializePartners, {
+      once: true,
+    });
+  } else {
+    initializePartners();
+  }
+
+  window.addEventListener("app:variants-mounted", initializePartners);
 </script>
