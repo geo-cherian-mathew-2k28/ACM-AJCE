@@ -214,7 +214,7 @@ import { getAssetUrl } from "../utils/cdn";
     letter-spacing: 0.1em;
     color: #FBFAFF;
     will-change: transform;
-    animation: float var(--duration, 50s) ease-in-out infinite;
+    animation: float 20s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
     animation-delay: var(--delay, 0s);
     left: clamp(20%, var(--x, 50%), 80%);
     top: var(--y, 50%);
@@ -232,6 +232,10 @@ import { getAssetUrl } from "../utils/cdn";
     display: none;
   }
 
+  .floating-word:nth-child(2n) { animation-duration: 24s; }
+  .floating-word:nth-child(3n) { animation-duration: 18s; }
+  .floating-word:nth-child(5n) { animation-duration: 26s; }
+
   .floating-word:nth-child(1) { --x: 24% !important; --y: 12% !important; }
   .floating-word:nth-child(2) { --x: 74% !important; --y: 18% !important; }
   .floating-word:nth-child(3) { --x: 22% !important; --y: 44% !important; }
@@ -248,13 +252,13 @@ import { getAssetUrl } from "../utils/cdn";
       transform: translate(-50%, 0) rotate(0deg);
     }
     25% {
-      transform: translate(-48%, -0.4rem) rotate(0.5deg);
+      transform: translate(-42%, -0.65rem) rotate(0.8deg);
     }
     50% {
-      transform: translate(-52%, 0.55rem) rotate(-0.45deg);
+      transform: translate(-58%, 0.85rem) rotate(-0.75deg);
     }
     75% {
-      transform: translate(-49%, 0.25rem) rotate(0.35deg);
+      transform: translate(-44%, 0.35rem) rotate(0.65deg);
     }
   }
 </style>
