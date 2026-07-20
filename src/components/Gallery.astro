@@ -219,43 +219,59 @@ import ProofGallery from "./ProofGallery.astro";
   .floating-word {
     position: absolute;
     font-family: "Inter", sans-serif;
-    font-size: 60.703px;
+    font-size: clamp(2rem, 4.2vw, 3.5rem);
     font-weight: 900;
     font-style: normal;
     line-height: normal;
     text-transform: uppercase;
-    opacity: 0.15;
+    opacity: 0.08;
     white-space: nowrap;
     letter-spacing: 0.1em;
     color: #FBFAFF;
     will-change: transform;
     animation: float var(--duration, 50s) ease-in-out infinite;
     animation-delay: var(--delay, 0s);
-    left: var(--x, 50%);
+    left: clamp(20%, var(--x, 50%), 80%);
     top: var(--y, 50%);
+    transform: translate(-50%, 0);
   }
 
   .floating-word:nth-child(even) {
     -webkit-text-stroke-width: 2.28px;
     -webkit-text-stroke-color: #FBFAFF;
     color: transparent;
-    opacity: 0.1;
+    opacity: 0.055;
   }
+
+  .floating-word:nth-child(n + 11) {
+    display: none;
+  }
+
+  .floating-word:nth-child(1) { --x: 22% !important; --y: 14% !important; }
+  .floating-word:nth-child(2) { --x: 76% !important; --y: 18% !important; }
+  .floating-word:nth-child(3) { --x: 22% !important; --y: 46% !important; }
+  .floating-word:nth-child(4) { --x: 72% !important; --y: 44% !important; }
+  .floating-word:nth-child(5) { --x: 48% !important; --y: 30% !important; }
+  .floating-word:nth-child(6) { --x: 76% !important; --y: 64% !important; }
+  .floating-word:nth-child(7) { --x: 22% !important; --y: 68% !important; }
+  .floating-word:nth-child(8) { --x: 54% !important; --y: 72% !important; }
+  .floating-word:nth-child(9) { --x: 44% !important; --y: 8% !important; }
+  .floating-word:nth-child(10) { --x: 70% !important; --y: 82% !important; }
 
 
   @keyframes float {
     0%,
     100% {
-      transform: translate3d(0, 0, 0) rotate(0deg);
+      transform: translate(-50%, 0) rotate(0deg);
     }
     25% {
-      transform: translate3d(15vw, -20vh, 0) rotate(2deg);
+      transform: translate(-48%, -0.45rem) rotate(0.5deg);
     }
     50% {
-      transform: translate3d(-10vw, 15vh, 0) rotate(-1deg);
+      transform: translate(-52%, 0.7rem) rotate(-0.45deg);
     }
     75% {
-      transform: translate(20vw, 10vh) rotate(1deg);
+      transform: translate(-49%, 0.3rem) rotate(0.35deg);
     }
   }
 

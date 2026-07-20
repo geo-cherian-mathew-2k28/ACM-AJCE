@@ -209,38 +209,52 @@ import { getAssetUrl } from "../utils/cdn";
     font-style: normal;
     line-height: normal;
     text-transform: uppercase;
-    opacity: 0.15;
+    opacity: 0.08;
     white-space: nowrap;
     letter-spacing: 0.1em;
     color: #FBFAFF;
     will-change: transform;
     animation: float var(--duration, 50s) ease-in-out infinite;
     animation-delay: var(--delay, 0s);
-    left: var(--x, 50%);
+    left: clamp(20%, var(--x, 50%), 80%);
     top: var(--y, 50%);
+    transform: translate(-50%, 0);
   }
 
   .floating-word:nth-child(even) {
     -webkit-text-stroke-width: 1.5px;
     -webkit-text-stroke-color: #FBFAFF;
     color: transparent;
-    opacity: 0.1;
+    opacity: 0.055;
   }
+
+  .floating-word:nth-child(n + 9) {
+    display: none;
+  }
+
+  .floating-word:nth-child(1) { --x: 24% !important; --y: 12% !important; }
+  .floating-word:nth-child(2) { --x: 74% !important; --y: 18% !important; }
+  .floating-word:nth-child(3) { --x: 22% !important; --y: 44% !important; }
+  .floating-word:nth-child(4) { --x: 72% !important; --y: 42% !important; }
+  .floating-word:nth-child(5) { --x: 48% !important; --y: 28% !important; }
+  .floating-word:nth-child(6) { --x: 74% !important; --y: 66% !important; }
+  .floating-word:nth-child(7) { --x: 24% !important; --y: 68% !important; }
+  .floating-word:nth-child(8) { --x: 54% !important; --y: 76% !important; }
 
 
   @keyframes float {
     0%,
     100% {
-      transform: translate3d(0, 0, 0) rotate(0deg);
+      transform: translate(-50%, 0) rotate(0deg);
     }
     25% {
-      transform: translate3d(10vw, -10vh, 0) rotate(2deg);
+      transform: translate(-48%, -0.4rem) rotate(0.5deg);
     }
     50% {
-      transform: translate3d(-5vw, 10vh, 0) rotate(-1deg);
+      transform: translate(-52%, 0.55rem) rotate(-0.45deg);
     }
     75% {
-      transform: translate3d(15vw, 5vh, 0) rotate(1deg);
+      transform: translate(-49%, 0.25rem) rotate(0.35deg);
     }
   }
 </style>
