@@ -574,8 +574,9 @@ const preloaderLogo = "/brand/acm-ajce-light.png";
   };
 
   const PRELOADER_FRAME_COUNT = 125;
-  const PRELOADER_OPEN_DURATION = 1650;
+  const PRELOADER_OPEN_DURATION = 1800;
   const preloaderFrameCache = new Map<number, HTMLImageElement>();
+  const pendingPreloaderFrames = new Map<number, Promise<HTMLImageElement>>();
   let requestedPreloaderFrame = 0;
 
   const preloaderFrameUrl = (index: number) =>
@@ -613,42 +614,66 @@ const preloaderLogo = "/brand/acm-ajce-light.png";
     );
   };
 
-  const renderPreloaderFrame = async (frame: number) => {
-    const steppedFrame = Math.max(
+  const loadPreloaderFrame = (frame: number) => {
+    const frameIndex = Math.max(
       0,
-      Math.min(
-        PRELOADER_FRAME_COUNT - 1,
-        Math.round(frame / 4) * 4
-      )
+      Math.min(PRELOADER_FRAME_COUNT - 1, Math.round(frame))
     );
-    requestedPreloaderFrame = steppedFrame;
-    const cached = preloaderFrameCache.get(steppedFrame);
-    if (cached) {
-      if (steppedFrame === requestedPreloaderFrame) drawPreloaderFrame(cached);
-      return;
-    }
+    const cached = preloaderFrameCache.get(frameIndex);
+    if (cached) return Promise.resolve(cached);
+    const pending = pendingPreloaderFrames.get(frameIndex);
+    if (pending) return pending;
 
-    const image = new Image();
-    image.decoding = "async";
-    image.src = preloaderFrameUrl(steppedFrame);
-    try {
-      await image.decode();
-    } catch {
-      await new Promise<void>((resolve) => {
-        image.onload = () => resolve();
-        image.onerror = () => resolve();
-      });
-    }
-    preloaderFrameCache.set(steppedFrame, image);
-    if (steppedFrame === requestedPreloaderFrame) drawPreloaderFrame(image);
+    const promise = new Promise<HTMLImageElement>((resolve) => {
+      const image = new Image();
+      image.decoding = "async";
+      image.src = preloaderFrameUrl(frameIndex);
+      const complete = () => {
+        preloaderFrameCache.set(frameIndex, image);
+        pendingPreloaderFrames.delete(frameIndex);
+        resolve(image);
+      };
+      if (image.complete) {
+        complete();
+      } else {
+        image.onload = complete;
+        image.onerror = complete;
+      }
+    });
+    pendingPreloaderFrames.set(frameIndex, promise);
+    return promise;
   };
 
-  const playPreloaderLaptop = () => {
-    if (!preloaderLaptopCanvas) return Promise.resolve();
+  const preloadPreloaderFrames = async () => {
+    const concurrency = 8;
+    let nextFrame = 0;
+    const worker = async () => {
+      while (nextFrame < PRELOADER_FRAME_COUNT) {
+        const frame = nextFrame;
+        nextFrame += 1;
+        await loadPreloaderFrame(frame);
+      }
+    };
+    await Promise.all(Array.from({ length: concurrency }, () => worker()));
+  };
+
+  const renderPreloaderFrame = async (frame: number) => {
+    const frameIndex = Math.max(
+      0,
+      Math.min(PRELOADER_FRAME_COUNT - 1, Math.round(frame))
+    );
+    requestedPreloaderFrame = frameIndex;
+    const image = await loadPreloaderFrame(frameIndex);
+    if (frameIndex === requestedPreloaderFrame) drawPreloaderFrame(image);
+  };
+
+  const playPreloaderLaptop = async () => {
+    if (!preloaderLaptopCanvas) return;
     resizePreloaderLaptop();
+    await preloadPreloaderFrames();
     const startedAt = performance.now();
 
-    return new Promise<void>((resolve) => {
+    await new Promise<void>((resolve) => {
       const advance = (now: number) => {
         const progress = Math.min(
           1,
@@ -659,14 +684,11 @@ const preloaderLogo = "/brand/acm-ajce-light.png";
           window.requestAnimationFrame(advance);
           return;
         }
-        void renderPreloaderFrame(PRELOADER_FRAME_COUNT - 1).then(() => {
-          preloaderLaptopScreen?.classList.add("is-visible");
-          resolve();
-        });
+        void renderPreloaderFrame(PRELOADER_FRAME_COUNT - 1).then(resolve);
       };
-
       window.requestAnimationFrame(advance);
     });
+    preloaderLaptopScreen?.classList.add("is-visible");
   };
 
   const revealPreloaderLogo = () => {

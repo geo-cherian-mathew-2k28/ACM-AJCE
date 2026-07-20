@@ -26,23 +26,21 @@ const partners = partnersData?.items ?? [];
       {
         partners.map((partner) => (
           <article class="partner-mini-laptop" role="listitem">
-            <canvas
-              class="partner-mini-laptop__canvas"
-              data-partner-laptop-canvas
-              style="background: url('/outputFolder/frame_0001.avif') center / contain no-repeat;"
-              aria-label={`${partner.title} animated partner laptop`}
-            ></canvas>
             <a
-              class="partner-mini-laptop__screen-content"
+              class="partner-mini-laptop__link"
               href={partner.link}
               target="_blank"
               rel="noreferrer"
               aria-label={`Visit ${partner.title}`}
             >
-              {partner.imageUrl && (
-                <img src={partner.imageUrl} alt={`${partner.title} logo`} />
-              )}
-              <p>{partner.title}</p>
+              <canvas
+                class="partner-mini-laptop__canvas"
+                data-partner-laptop-canvas
+                data-partner-logo={partner.imageUrl ?? ""}
+                data-partner-name={partner.title}
+                style="background: url('/outputFolder/frame_0001.avif') center / contain no-repeat;"
+                aria-label={`${partner.title} animated partner laptop`}
+              ></canvas>
             </a>
           </article>
         ))
@@ -72,6 +70,13 @@ const partners = partnersData?.items ?? [];
     aspect-ratio: 16 / 9;
   }
 
+  .partner-mini-laptop__link {
+    display: block;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+  }
+
   .partner-mini-laptop__canvas {
     display: block;
     width: 100%;
@@ -82,55 +87,19 @@ const partners = partnersData?.items ?? [];
       brightness(1.12)
       drop-shadow(0 0 0.45rem rgba(184, 167, 255, 0.44))
       drop-shadow(0 0 1.15rem rgba(106, 90, 205, 0.2));
-  }
-
-  .partner-mini-laptop__screen-content {
-    position: absolute;
-    top: 10%;
-    left: 17%;
-    display: flex;
-    box-sizing: border-box;
-    width: 66%;
-    min-height: 68%;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: clamp(0.2rem, 0.55vw, 0.45rem);
-    padding: clamp(0.25rem, 0.6vw, 0.45rem);
-    background: #05060B;
-    opacity: 0;
-    pointer-events: auto;
-    text-align: center;
-    text-decoration: none;
     transition: filter 180ms ease, transform 180ms ease;
   }
 
-  .partner-mini-laptop__screen-content:hover,
-  .partner-mini-laptop__screen-content:focus-visible {
-    filter: drop-shadow(0 0 0.5rem rgba(106, 90, 205, 0.5));
+  .partner-mini-laptop__link:hover .partner-mini-laptop__canvas,
+  .partner-mini-laptop__link:focus-visible .partner-mini-laptop__canvas {
+    filter:
+      hue-rotate(230deg)
+      saturate(0.82)
+      brightness(1.18)
+      drop-shadow(0 0 0.6rem rgba(184, 167, 255, 0.62))
+      drop-shadow(0 0 1.35rem rgba(106, 90, 205, 0.32));
     outline: none;
-    transform: scale(1.04);
-  }
-
-  .partner-mini-laptop__screen-content img {
-    display: block;
-    width: clamp(2.45rem, 5.2vw, 4.2rem);
-    height: clamp(2.45rem, 5.2vw, 4.2rem);
-    background: transparent;
-    object-fit: contain;
-  }
-
-  .partner-mini-laptop__screen-content p {
-    max-width: 100%;
-    margin: 0;
-    color: #FBFAFF;
-    font-family: "PolySans Bold", "PolySans Trial", sans-serif;
-    font-size: clamp(0.55rem, 1.25vw, 1rem);
-    font-weight: 700;
-    line-height: 1.08;
-    overflow-wrap: normal;
-    text-wrap: nowrap;
-    white-space: nowrap;
+    transform: translateY(-0.12rem);
   }
 
   @media (min-width: 1024px) {
@@ -161,37 +130,29 @@ const partners = partnersData?.items ?? [];
       gap: 0.35rem;
     }
 
-    .partner-mini-laptop__screen-content {
-      top: 9%;
-      left: 16%;
-      width: 68%;
-      min-height: 70%;
-      gap: 0.12rem;
-      padding: 0.16rem;
-    }
-
-    .partner-mini-laptop__screen-content p {
-      font-size: clamp(0.46rem, 2.5vw, 0.66rem);
-    }
-
-    .partner-mini-laptop__screen-content img {
-      width: clamp(1.7rem, 7.5vw, 2.25rem);
-      height: clamp(1.7rem, 7.5vw, 2.25rem);
-    }
   }
 </style>
 
 <script>
   import { getAssetUrl } from "../utils/cdn";
 
-  const canvases = Array.from(
+  type PartnerCanvas = {
+    canvas: HTMLCanvasElement;
+    context: CanvasRenderingContext2D | null;
+    logoUrl: string;
+    name: string;
+    logo: HTMLImageElement | null;
+  };
+
+  const canvases: PartnerCanvas[] = Array.from(
     document.querySelectorAll<HTMLCanvasElement>("[data-partner-laptop-canvas]")
-  ).map((canvas) => ({ canvas, context: canvas.getContext("2d", { alpha: true }) }));
-  const screenContents = Array.from(
-    document.querySelectorAll<HTMLElement>(
-      ".partner-mini-laptop__screen-content"
-    )
-  );
+  ).map((canvas) => ({
+    canvas,
+    context: canvas.getContext("2d", { alpha: true }),
+    logoUrl: canvas.dataset.partnerLogo ?? "",
+    name: canvas.dataset.partnerName ?? "",
+    logo: null,
+  }));
   const section = document.querySelector(".partner-laptop-section");
   const heading = document.querySelector(
     ".partner-laptop-heading"
@@ -203,6 +164,7 @@ const partners = partnersData?.items ?? [];
   let preloadRadius = 8;
   const pendingFrames = new Set<number>();
   const frameCache = new Map<number, HTMLImageElement>();
+  const partnerLogoCache = new Map<string, Promise<HTMLImageElement | null>>();
   const prefersReducedMotion = window.matchMedia(
     "(prefers-reduced-motion: reduce)"
   ).matches;
@@ -229,6 +191,22 @@ const partners = partnersData?.items ?? [];
 
   const clampFrame = (index: number) =>
     Math.max(0, Math.min(frameCount - 1, Math.round(index)));
+
+  const loadPartnerLogo = (url: string) => {
+    if (!url) return Promise.resolve(null);
+    const cached = partnerLogoCache.get(url);
+    if (cached) return cached;
+
+    const promise = new Promise<HTMLImageElement | null>((resolve) => {
+      const image = new Image();
+      image.decoding = "async";
+      image.onload = () => resolve(image);
+      image.onerror = () => resolve(null);
+      image.src = getAssetUrl(url);
+    });
+    partnerLogoCache.set(url, promise);
+    return promise;
+  };
 
   const resizeCanvases = () => {
     updatePerfSettings();
@@ -339,6 +317,52 @@ const partners = partnersData?.items ?? [];
 
   let lastRenderedFrame = -1;
   let lastCanvasSignature = "";
+
+  const drawPartnerScreen = (partner: PartnerCanvas) => {
+    const { canvas, context, logo, name } = partner;
+    if (!context || !canvas.width || !canvas.height) return;
+
+    const screenX = canvas.width * 0.17;
+    const screenY = canvas.height * 0.105;
+    const screenWidth = canvas.width * 0.66;
+    const screenHeight = canvas.height * 0.68;
+    const screenCenterX = screenX + screenWidth / 2;
+
+    context.save();
+    context.fillStyle = "#05060B";
+    context.fillRect(screenX, screenY, screenWidth, screenHeight);
+
+    if (logo?.naturalWidth && logo.naturalHeight) {
+      const maximumLogoWidth = screenWidth * 0.52;
+      const maximumLogoHeight = screenHeight * 0.44;
+      const scale = Math.min(
+        maximumLogoWidth / logo.naturalWidth,
+        maximumLogoHeight / logo.naturalHeight
+      );
+      const logoWidth = logo.naturalWidth * scale;
+      const logoHeight = logo.naturalHeight * scale;
+      context.drawImage(
+        logo,
+        screenCenterX - logoWidth / 2,
+        screenY + screenHeight * 0.12,
+        logoWidth,
+        logoHeight
+      );
+    }
+
+    context.fillStyle = "#FBFAFF";
+    context.textAlign = "center";
+    context.textBaseline = "middle";
+    context.font = `700 ${Math.max(11, canvas.height * 0.095)}px "PolySans Bold", monospace`;
+    context.fillText(
+      name,
+      screenCenterX,
+      screenY + screenHeight * 0.8,
+      screenWidth * 0.84
+    );
+    context.restore();
+  };
+
   const render = () => {
     const frame = clampFrame(laptop.frame);
     const image = frameCache.get(frame);
@@ -356,10 +380,13 @@ const partners = partnersData?.items ?? [];
     lastRenderedFrame = frame;
     lastCanvasSignature = signature;
 
-    for (const { canvas, context } of canvases) {
+    const isScreenVisible = frame >= Math.round(frameCount * 0.72);
+    for (const partner of canvases) {
+      const { canvas, context } = partner;
       if (!context || !canvas.width || !canvas.height) continue;
       context.clearRect(0, 0, canvas.width, canvas.height);
       context.drawImage(image, 0, 0, canvas.width, canvas.height);
+      if (isScreenVisible) drawPartnerScreen(partner);
     }
     queueFrames(frame);
   };
@@ -373,17 +400,12 @@ const partners = partnersData?.items ?? [];
     const sceneProgress = clampProgress(-rect.top / scrollRange);
     const frameProgress = clampProgress((sceneProgress - 0.08) / 0.74);
     const headingProgress = clampProgress((frameProgress - 0.28) / 0.22);
-    const contentProgress = clampProgress((frameProgress - 0.62) / 0.22);
-
     laptop.frame = frameProgress * (frameCount - 1);
     if (heading) {
       heading.style.opacity = String(1 - headingProgress);
       heading.style.transform = `translate(-50%, calc(-50% - ${
         headingProgress * 50
       }px))`;
-    }
-    for (const content of screenContents) {
-      content.style.opacity = String(contentProgress);
     }
     render();
   };
@@ -404,12 +426,17 @@ const partners = partnersData?.items ?? [];
     render();
     schedulePreloadAll();
 
+    for (const partner of canvases) {
+      void loadPartnerLogo(partner.logoUrl).then((logo) => {
+        partner.logo = logo;
+        lastRenderedFrame = -1;
+        render();
+      });
+    }
+
     if (prefersReducedMotion) {
       laptop.frame = frameCount - 1;
       render();
-      for (const content of screenContents) {
-        content.style.opacity = "1";
-      }
       return;
     }
     updateSequenceFromScroll();
