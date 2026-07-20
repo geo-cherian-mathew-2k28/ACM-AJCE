@@ -1,194 +1,154 @@
 ---
-import PartnerLaptopSingular from "../components/PartnerLaptopSingular.astro";
 import { reader } from "../utils/reader";
-import { getAssetUrl } from "../utils/cdn";
 
 const partnersData = await reader.singletons.partners.read();
 const partners = partnersData?.items ?? [];
-
-const marqueeRepeat = 4;
-const marqueeRows = [
-  {
-    items: partners.filter((_, index) => index % 2 === 0),
-    reverse: false,
-  },
-  {
-    items: partners.filter((_, index) => index % 2 === 1),
-    reverse: true,
-  },
-];
 ---
 
-<div id="partners-container" class="partners-scene">
-  <div class="partners-stage">
+<section class="partner-laptop-section relative w-full h-[300vh]">
+  <div
+    class="sticky top-0 left-0 w-full h-screen flex items-center justify-center overflow-hidden"
+  >
+    <canvas
+      id="partner-laptop-canvas"
+      class="partner-laptop-canvas w-[80%] h-[80%] object-contain"
+      style="background: url('/outputFolder/frame_0001.avif') center / contain no-repeat;"
+      aria-label="Animated partner laptop"
+    ></canvas>
+
     <div
-      id="Cassette-pos-1"
-      class="partners-floating w-full flex justify-center mt-0 relative"
+      class="partner-laptop-heading absolute top-[25%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center z-10 opacity-100 pointer-events-none"
     >
-      <img
-        id="partners-svg"
-        src={getAssetUrl("/partners-cassette.webp")}
-        alt="Partners Image"
-        class="partners-title-cassette max-w-[300px] md:max-w-[500px] w-auto object-contain"
-        loading="lazy"
-        decoding="async"
-      />
+      <p
+        class="m-0 text-white text-5xl font-semibold font-['PolySans_Trial'] uppercase"
+      >
+        Partners
+      </p>
     </div>
 
-    <div class="partners-carousel relative z-10">
-      <div class="partners-track">
-      {
-        partners.map((partner) => (
-          <div class="partners-card">
-            <PartnerLaptopSingular title={partner.title} />
-          </div>
-        ))
-      }
-      </div>
-      <div class="partners-marquee">
-        {marqueeRows.map((row) => (
-          <div
-            class={`partners-marquee-row${row.reverse ? " is-reverse" : ""}`}
-          >
-            {Array.from({ length: marqueeRepeat }).map((_, index) => (
-              <div
-                class="partners-marquee-group"
-                aria-hidden={index === 0 ? undefined : "true"}
-              >
-                {row.items.map((partner) => (
-                  <div class="partners-card">
-                    <PartnerLaptopSingular title={partner.title} />
-                  </div>
-                ))}
+    <div
+      class="partner-laptop-overlay absolute top-[8%] left-[11%] w-[78%] h-[72%] z-20 opacity-0 pointer-events-none flex items-center justify-center"
+    >
+      <div class="partner-laptop-panel">
+        <p class="partner-laptop-panel__eyebrow">Our Partners</p>
+        <div class="partner-laptop-panel__grid" role="list">
+          {
+            partners.map((partner) => (
+              <div class="partner-laptop-panel__partner" role="listitem">
+                <span class="partner-laptop-panel__logo-slot" aria-hidden="true">
+                  <span></span>
+                </span>
+                <p>{partner.title}</p>
               </div>
-            ))}
-          </div>
-        ))}
+            ))
+          }
+        </div>
       </div>
     </div>
   </div>
-</div>
+</section>
 
 <style>
-  .partners-scene {
-    position: relative;
-    min-height: 220vh;
+  .partner-laptop-canvas {
+    filter: hue-rotate(230deg) saturate(0.82) brightness(1.12);
   }
 
-  .partners-stage {
-    position: sticky;
-    top: 0;
+  .partner-laptop-panel {
+    width: min(58%, 38rem);
+    color: #2A2455;
+  }
+
+  .partner-laptop-panel__eyebrow {
+    margin: 0 0 clamp(0.4rem, 1vw, 0.75rem);
+    font-family: "PolySans Bold", "PolySans Trial", sans-serif;
+    font-size: clamp(0.75rem, 1.7vw, 1.55rem);
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  .partner-laptop-panel__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(0.35rem, 1vw, 0.85rem);
+  }
+
+  .partner-laptop-panel__partner {
     display: flex;
-    min-height: 100vh;
+    min-width: 0;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
+    gap: clamp(0.3rem, 0.8vw, 0.6rem);
+    border: 1px dashed rgba(42, 36, 85, 0.68);
+    border-radius: 0.45rem;
+    background-color: rgba(251, 250, 255, 0.12);
+    padding: clamp(0.35rem, 0.85vw, 0.65rem);
   }
 
-  .partners-carousel {
-    display: flex;
-    width: min(80vw, 72rem);
-    align-items: center;
-    justify-content: center;
-    padding-bottom: 4.5rem;
+  .partner-laptop-panel__partner p {
+    min-width: 0;
+    margin: 0;
+    color: #2A2455;
+    font-family: "PolySans Bold", "PolySans Trial", sans-serif;
+    font-size: clamp(0.5rem, 1.05vw, 0.92rem);
+    font-weight: 700;
+    line-height: 1.1;
+    overflow-wrap: normal;
+    text-wrap: nowrap;
+    white-space: nowrap;
   }
 
-  .partners-track {
-    display: flex;
-    width: 100%;
-    align-items: center;
-    justify-content: center;
-    gap: clamp(1rem, 2.5vw, 2.5rem);
+  .partner-laptop-panel__logo-slot {
+    display: grid;
+    flex: 0 0 auto;
+    width: clamp(1rem, 2.4vw, 2rem);
+    aspect-ratio: 1;
+    place-items: center;
+    border: 1px solid rgba(42, 36, 85, 0.64);
+    border-radius: 0.24rem;
   }
 
-  .partners-floating {
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: -140px;
-    z-index: 20;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s ease;
-    will-change: opacity;
+  .partner-laptop-panel__logo-slot span {
+    width: 36%;
+    aspect-ratio: 1;
+    border: 1px solid #6A5ACD;
+    transform: rotate(45deg);
   }
 
-  .partners-title-cassette {
-    filter: hue-rotate(285deg) saturate(0.72) brightness(0.94);
-  }
-
-  .partners-floating.is-fixed {
-    opacity: 1;
-  }
-
-  .partners-marquee {
-    display: none;
-  }
-
-  .partners-marquee-row {
-    display: flex;
-    flex-wrap: nowrap;
-    align-items: center;
-    gap: var(--gap);
-  }
-
-  .partners-marquee-row.is-reverse .partners-marquee-group {
-    animation-direction: reverse;
-  }
-
-  .partners-marquee-group {
-    display: flex;
-    flex-shrink: 0;
-    align-items: center;
-    flex-wrap: nowrap;
-    gap: var(--gap);
-    animation: partners-marquee var(--duration) linear infinite;
-    will-change: transform;
-  }
-
-  @keyframes partners-marquee {
-    from {
-      transform: translateX(0);
-    }
-    to {
-      transform: translateX(calc(-100% - var(--gap)));
-    }
-  }
-
-  @media (max-width: 768px) {
-    .partners-scene {
-      min-height: 180vh;
-      overflow: visible;
+  @media (max-width: 767px) {
+    .partner-laptop-canvas {
+      width: 122%;
+      height: 74%;
     }
 
-    .partners-stage {
-      min-height: 100svh;
+    .partner-laptop-overlay {
+      top: 12%;
+      left: 6%;
+      width: 88%;
+      height: 62%;
     }
 
-    .partners-floating {
-      bottom: -110px;
-    }
-    .partners-carousel {
-      width: 100vw;
-      padding: 0 6vw 5rem;
-      overflow: visible;
+    .partner-laptop-heading {
+      top: 22%;
     }
 
-    .partners-card {
-      flex: 0 0 auto;
+    .partner-laptop-heading p {
+      font-size: clamp(2rem, 9vw, 3rem);
     }
 
-    .partners-track {
-      display: none;
+    .partner-laptop-panel {
+      width: 68%;
     }
 
-    .partners-marquee {
-      display: flex;
+    .partner-laptop-panel__partner {
       flex-direction: column;
-      gap: var(--gap);
-      padding: 0.5rem 1vw;
-      --duration: 40s;
-      --gap: 1.25rem;
+      gap: 0.25rem;
+      padding: 0.35rem 0.2rem;
+    }
+
+    .partner-laptop-panel__partner p {
+      font-size: clamp(0.45rem, 2.25vw, 0.7rem);
     }
   }
 </style>
@@ -196,103 +156,272 @@ const marqueeRows = [
 <script>
   import { gsap } from "gsap";
   import { ScrollTrigger } from "gsap/ScrollTrigger";
+  import { getAssetUrl } from "../utils/cdn";
 
   gsap.registerPlugin(ScrollTrigger);
 
-  const initializePartners = () => {
-    const container = document.getElementById("partners-container");
-    const pos1 = document.getElementById("Cassette-pos-1");
-    const section = document.getElementById("partners");
-    const gallery = document.getElementById("gallery");
+  const canvas = document.querySelector(
+    "#partner-laptop-canvas"
+  ) as HTMLCanvasElement | null;
+  const context = canvas?.getContext("2d", { alpha: true });
+  const section = document.querySelector(".partner-laptop-section");
+  const heading = document.querySelector(".partner-laptop-heading");
+  const overlay = document.querySelector(
+    ".partner-laptop-overlay"
+  ) as HTMLElement | null;
 
-    if (container && container.dataset.laptopSceneReady !== "true") {
-      container.dataset.laptopSceneReady = "true";
-      const screens = Array.from(
-        container.querySelectorAll<HTMLElement>(
-          ".partner-laptop__screen-shell"
-        )
-      ).filter((screen) => screen.offsetParent !== null);
+  const frameCount = 125;
+  const narrowQuery = "(max-width: 1024px)";
+  let maxCacheSize = frameCount;
+  let preloadRadius = 8;
+  const pendingFrames = new Set<number>();
+  const frameCache = new Map<number, HTMLImageElement>();
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
+  const laptop = { frame: 0 };
 
-      if (
-        screens.length &&
-        !window.matchMedia("(prefers-reduced-motion: reduce)").matches
-      ) {
-        gsap.set(screens, {
-          "--partner-screen-tilt": "-86deg",
-          "--partner-screen-shift": "12%",
-          "--partner-screen-opacity": 0.56,
-          "--partner-screen-brightness": 0.58,
-        });
+  const updatePerfSettings = () => {
+    const isNarrow = window.matchMedia(narrowQuery).matches;
+    maxCacheSize = isNarrow ? Math.min(12, frameCount) : frameCount;
+    preloadRadius = isNarrow ? 3 : 8;
+  };
 
-        gsap.timeline({
-          scrollTrigger: {
-            trigger: container,
-            start: "top top",
-            end: "bottom bottom",
-            scrub: 0.65,
-            invalidateOnRefresh: true,
-          },
-        }).to(screens, {
-          "--partner-screen-tilt": "0deg",
-          "--partner-screen-shift": "0%",
-          "--partner-screen-opacity": 1,
-          "--partner-screen-brightness": 1,
-          duration: 1,
-          ease: "none",
-          stagger: 0.1,
-        });
-      }
-    }
-
-    if (!pos1 || !section || pos1.dataset.visibilityReady === "true") return;
-    pos1.dataset.visibilityReady = "true";
-
-    let inPartners = false;
-    let inGallery = false;
-    const updateVisibility = () => {
-      const isActive = inPartners && !inGallery;
-      pos1.classList.toggle("is-fixed", isActive);
-      document.body.classList.toggle("partners-active", isActive);
-    };
-
-    const partnersObserver = new IntersectionObserver(
-      ([entry]) => {
-        inPartners = entry.isIntersecting;
-        updateVisibility();
-      },
-      {
-        root: null,
-        rootMargin: "-15% 0px -15% 0px",
-        threshold: 0,
-      }
+  const currentFrame = (index: number) =>
+    getAssetUrl(
+      `/outputFolder/frame_${(index + 1).toString().padStart(4, "0")}.avif`
     );
 
-    partnersObserver.observe(section);
-
-    if (gallery) {
-      const galleryObserver = new IntersectionObserver(
-        ([entry]) => {
-          inGallery = entry.isIntersecting;
-          updateVisibility();
-        },
-        {
-          root: null,
-          rootMargin: "0px 0px 0px 0px",
-          threshold: 0,
-        }
-      );
-
-      galleryObserver.observe(gallery);
+  const normalizeFrameUrl = (url: string) => {
+    try {
+      return new URL(url, window.location.href).href;
+    } catch {
+      return url;
     }
   };
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initializePartners, {
-      once: true,
+  const clampFrame = (index: number) =>
+    Math.max(0, Math.min(frameCount - 1, Math.round(index)));
+
+  const resizeCanvas = () => {
+    if (!canvas || !context) return;
+    updatePerfSettings();
+    const rect = canvas.getBoundingClientRect();
+    if (!rect.width || !rect.height) return;
+    const maxDpr = window.matchMedia(narrowQuery).matches ? 1.25 : 1.5;
+    const dpr = Math.min(window.devicePixelRatio || 1, maxDpr);
+    const width = Math.round(rect.width * dpr);
+    const height = Math.round(rect.height * dpr);
+    if (canvas.width !== width || canvas.height !== height) {
+      canvas.width = width;
+      canvas.height = height;
+    }
+  };
+
+  const trimCache = (center: number) => {
+    if (maxCacheSize >= frameCount || frameCache.size <= maxCacheSize) return;
+    const keys = Array.from(frameCache.keys()).sort(
+      (a, b) => Math.abs(a - center) - Math.abs(b - center)
+    );
+    const keep = new Set(keys.slice(0, maxCacheSize));
+    for (const key of frameCache.keys()) {
+      if (!keep.has(key)) frameCache.delete(key);
+    }
+  };
+
+  const loadFrame = async (index: number) => {
+    const clampedIndex = clampFrame(index);
+    const cached = frameCache.get(clampedIndex);
+    if (cached) return cached;
+
+    const frameUrl = currentFrame(clampedIndex);
+    const frameKey = normalizeFrameUrl(frameUrl);
+    const sharedFrameCache = (window as any).__contactLaptopFrameCache as
+      | Map<string, HTMLImageElement>
+      | undefined;
+    const sharedFrame = sharedFrameCache?.get(frameKey);
+    if (sharedFrame) {
+      frameCache.set(clampedIndex, sharedFrame);
+      return sharedFrame;
+    }
+    if (pendingFrames.has(clampedIndex)) return null;
+    pendingFrames.add(clampedIndex);
+
+    const image = new Image();
+    image.decoding = "async";
+    image.src = frameUrl;
+    const awaitLoad = () =>
+      new Promise((resolve) => {
+        if (image.complete) {
+          resolve(null);
+          return;
+        }
+        image.onload = () => resolve(null);
+        image.onerror = () => resolve(null);
+      });
+
+    if (typeof image.decode === "function") {
+      try {
+        await image.decode();
+      } catch {
+        await awaitLoad();
+      }
+    } else {
+      await awaitLoad();
+    }
+
+    pendingFrames.delete(clampedIndex);
+    frameCache.set(clampedIndex, image);
+    sharedFrameCache?.set(frameKey, image);
+    trimCache(clampedIndex);
+    return image;
+  };
+
+  const queueFrames = (center: number) => {
+    const start = Math.max(0, center - preloadRadius);
+    const end = Math.min(frameCount - 1, center + preloadRadius);
+    for (let index = start; index <= end; index++) {
+      void loadFrame(index);
+    }
+  };
+
+  let preloadAllScheduled = false;
+  const preloadAllFrames = async () => {
+    const concurrency = Math.min(6, frameCount);
+    let nextIndex = 0;
+    const worker = async () => {
+      while (nextIndex < frameCount) {
+        const index = nextIndex;
+        nextIndex += 1;
+        await loadFrame(index);
+      }
+    };
+    await Promise.all(Array.from({ length: concurrency }, () => worker()));
+  };
+
+  const schedulePreloadAll = () => {
+    if (prefersReducedMotion || preloadAllScheduled) return;
+    if (window.matchMedia(narrowQuery).matches) return;
+    preloadAllScheduled = true;
+    window.setTimeout(() => {
+      void preloadAllFrames();
+    }, 200);
+  };
+
+  let lastRenderedFrame = -1;
+  let lastCanvasWidth = 0;
+  let lastCanvasHeight = 0;
+  const render = () => {
+    if (!context || !canvas) return;
+    const frame = clampFrame(laptop.frame);
+    const image = frameCache.get(frame);
+    if (!image) {
+      void loadFrame(frame).then((loaded) => {
+        if (loaded && frame === clampFrame(laptop.frame)) render();
+      });
+      return;
+    }
+    if (
+      frame === lastRenderedFrame &&
+      canvas.width === lastCanvasWidth &&
+      canvas.height === lastCanvasHeight
+    ) {
+      return;
+    }
+    lastRenderedFrame = frame;
+    lastCanvasWidth = canvas.width;
+    lastCanvasHeight = canvas.height;
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.drawImage(image, 0, 0, canvas.width, canvas.height);
+    queueFrames(frame);
+  };
+
+  const initSequence = async () => {
+    if (!canvas || !context || !section) return;
+    resizeCanvas();
+    await loadFrame(0);
+    render();
+    schedulePreloadAll();
+
+    if (prefersReducedMotion) {
+      if (overlay) {
+        overlay.style.opacity = "1";
+      }
+      if (heading instanceof HTMLElement) {
+        heading.style.opacity = "0";
+        heading.style.transform = "translateY(-50px)";
+      }
+      return;
+    }
+
+    const timeline = gsap.timeline({
+      scrollTrigger: {
+        trigger: section,
+        start: "top top",
+        end: "bottom bottom",
+        scrub: 0.5,
+      },
     });
+
+    timeline
+      .to(laptop, {
+        frame: 0,
+        duration: 0.5,
+        onUpdate: render,
+      })
+      .to(laptop, {
+        frame: frameCount - 1,
+        snap: "frame",
+        ease: "none",
+        duration: 2,
+        onUpdate: render,
+      })
+      .to(
+        heading,
+        {
+          opacity: 0,
+          y: -50,
+          duration: (20 / frameCount) * 2,
+          ease: "none",
+        },
+        `<+${(40 / frameCount) * 2}`
+      )
+      .to(
+        overlay,
+        {
+          opacity: 1,
+          pointerEvents: "auto",
+          duration: 0.5,
+          ease: "power2.inOut",
+        },
+        `<+${(40 / frameCount) * 2}`
+      );
+  };
+
+  let started = false;
+  const startWhenVisible = () => {
+    if (started) return;
+    started = true;
+    void initSequence();
+  };
+
+  if (section && "IntersectionObserver" in window) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        startWhenVisible();
+        observer.disconnect();
+      },
+      { rootMargin: "200px" }
+    );
+    observer.observe(section);
   } else {
-    initializePartners();
+    startWhenVisible();
   }
 
-  window.addEventListener("app:variants-mounted", initializePartners);
+  window.addEventListener("resize", () => {
+    resizeCanvas();
+    lastRenderedFrame = -1;
+    render();
+  });
 </script>
