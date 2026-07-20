@@ -47,16 +47,26 @@ const creatorPortfolio = "https://github.com/geo-cherian-mathew-2k28";
               </div>
             </div>
 
+            <div class="footer-location-laptop">
+              <div class="footer-location-laptop__screen">
+                <iframe
+                  src="https://maps.google.com/maps?q=Amal%20Jyothi%20College%20of%20Engineering&z=15&output=embed"
+                  title="Map showing Amal Jyothi College of Engineering"
+                  loading="lazy"
+                  tabindex="-1"
+                ></iframe>
+              </div>
+              <div class="footer-location-laptop__base" aria-hidden="true"></div>
+            </div>
             <a
               href={ajceWebsite}
               target="_blank"
               rel="noopener noreferrer"
-              class="mt-6 flex w-48 min-h-32 lg:w-52 lg:min-h-36 flex-col justify-end rounded-lg border border-violet-200/25 bg-[#2A2455]/45 p-4 shadow-lg transition-colors hover:border-[#B8A7FF]"
+              class="footer-location-link"
             >
-              <span class="text-[10px] uppercase tracking-[0.2em] text-[#B8A7FF]">Amal Jyothi College of Engineering</span>
-              <span class="mt-2 text-sm text-white">Kanjirappally, Kerala</span>
+              <span>AJCE campus</span>
+              <span>Kanjirappally, Kerala</span>
             </a>
-            </div>
           </div>
 
           <!-- Navigation Sections -->
@@ -153,43 +163,13 @@ const creatorPortfolio = "https://github.com/geo-cherian-mathew-2k28";
                   href="#events"
                   class="self-stretch text-white text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >
-                  Code2CREATE
+                  UXPLORE
                 </a>
                 <a
                   href="#events"
                   class="self-stretch text-white text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
                 >
-                  CRYPTIC HUNT
-                </a>
-                <a
-                  href="#events"
-                  class="self-stretch text-white text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
-                >
-                  REVERSE CODING
-                </a>
-                <a
-                  href="#events"
-                  class="self-stretch text-white text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
-                >
-                  CODEX CRYPTUM
-                </a>
-                <a
-                  href="#events"
-                  class="self-stretch text-white text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
-                >
-                  FORKTOBER
-                </a>
-                <a
-                  href="#events"
-                  class="self-stretch text-white text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
-                >
-                  THE TINY HACK
-                </a>
-                <a
-                  href="#events"
-                  class="self-stretch text-white text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
-                >
-                  APPTITUDE
+                  ASTERISK
                 </a>
                 <a
                   href="#events"
@@ -442,37 +422,12 @@ const creatorPortfolio = "https://github.com/geo-cherian-mathew-2k28";
               <a
                 href="#events"
                 class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
-                >Code2CREATE</a
+                >UXPLORE</a
               >
               <a
                 href="#events"
                 class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
-                >CRYPTIC HUNT</a
-              >
-              <a
-                href="#events"
-                class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
-                >REVERSE CODING</a
-              >
-              <a
-                href="#events"
-                class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
-                >CODEX CRYPTUM</a
-              >
-              <a
-                href="#events"
-                class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
-                >FORKTOBER</a
-              >
-              <a
-                href="#events"
-                class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
-                >THE TINY HACK</a
-              >
-              <a
-                href="#events"
-                class="text-white text-xs sm:text-sm md:text-base font-light font-['PolySans_Trial'] uppercase hover:text-yellow-50 transition-colors"
-                >APPTITUDE</a
+                >ASTERISK</a
               >
               <a
                 href="#events"
@@ -1179,6 +1134,86 @@ const creatorPortfolio = "https://github.com/geo-cherian-mathew-2k28";
     object-fit: cover;
     object-position: center center;
     filter: saturate(1.06) contrast(1.04);
+  }
+
+  .footer-location-laptop {
+    width: 160px;
+    margin-top: 1.5rem;
+  }
+
+  .footer-location-laptop__screen {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    border: 3px solid rgba(184, 167, 255, 0.72);
+    border-radius: 7px 7px 3px 3px;
+    background: #2A2455;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.28);
+  }
+
+  .footer-location-laptop__screen::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border: 1px solid rgba(251, 250, 255, 0.18);
+    border-radius: 4px;
+  }
+
+  .footer-location-laptop__screen iframe {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    pointer-events: none;
+    filter: grayscale(0.24) saturate(0.72) contrast(1.05);
+  }
+
+  .footer-location-laptop__base {
+    position: relative;
+    width: calc(100% + 14px);
+    height: 8px;
+    margin: -1px 0 0 -7px;
+    border: 1px solid rgba(184, 167, 255, 0.66);
+    border-radius: 0 0 8px 8px;
+    background: #2A2455;
+    box-shadow: 0 6px 13px rgba(0, 0, 0, 0.28);
+  }
+
+  .footer-location-laptop__base::after {
+    content: "";
+    position: absolute;
+    top: 1px;
+    left: 50%;
+    width: 34%;
+    height: 2px;
+    border-radius: 999px;
+    background: rgba(251, 250, 255, 0.65);
+    transform: translateX(-50%);
+  }
+
+  .footer-location-link {
+    display: flex;
+    flex-direction: column;
+    gap: 0.18rem;
+    width: fit-content;
+    margin-top: 0.9rem;
+    color: #FBFAFF;
+    font-family: "PolySans Trial", sans-serif;
+    font-size: 0.75rem;
+    line-height: 1.35;
+    transition: color 160ms ease;
+  }
+
+  .footer-location-link span:first-child {
+    color: #B8A7FF;
+    font-size: 0.62rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .footer-location-link:hover {
+    color: #B8A7FF;
   }
 
   .footer-social-links {
