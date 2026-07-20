@@ -20,20 +20,32 @@ const accents = [
   { color: "#F2C94C", offset: "8px" },
   { color: "#FF21C8", offset: "18px" },
 ];
+
+const cutoutPortraits = [
+  undefined,
+  "/board/team-neon/rohit-sakamuri.png",
+  "/board/team-neon/drashti-shukla.png",
+  "/board/team-neon/shaurya-garg.png",
+  undefined,
+];
 ---
 
 <div class="team-neon-experiment" aria-label="Team card design preview">
   {
     members.map((member, index) => {
       const accent = accents[index % accents.length];
+      const cutoutPortrait = cutoutPortraits[index];
       return (
         <article
-          class="team-neon-card"
+          class:list={[
+            "team-neon-card",
+            { "team-neon-card--cutout": Boolean(cutoutPortrait) },
+          ]}
           style={`--neon: ${accent.color}; --card-offset: ${accent.offset};`}
         >
           <img
             class="team-neon-card__portrait"
-            src={getAssetUrl(member.imageUrl)}
+            src={getAssetUrl(cutoutPortrait ?? member.imageUrl)}
             alt={member.fullName}
             loading="lazy"
             decoding="async"
@@ -96,6 +108,19 @@ const accents = [
     object-fit: cover;
     object-position: center top;
     filter: saturate(0.82) contrast(1.08);
+  }
+
+  .team-neon-card--cutout {
+    background:
+      radial-gradient(circle at 50% 30%, color-mix(in srgb, var(--neon) 30%, transparent), transparent 58%),
+      #090B12;
+  }
+
+  .team-neon-card--cutout .team-neon-card__portrait {
+    object-fit: contain;
+    object-position: center bottom;
+    padding: 0.65rem 0.4rem 1.65rem;
+    filter: grayscale(1) contrast(1.14) brightness(1.08);
   }
 
   .team-neon-card__wash {
