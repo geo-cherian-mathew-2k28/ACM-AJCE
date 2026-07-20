@@ -5,19 +5,15 @@ const partnersData = await reader.singletons.partners.read();
 const partners = partnersData?.items ?? [];
 ---
 
-<section class="partner-laptop-section relative w-full h-[300vh]">
+<section
+  class="partner-laptop-section relative w-full h-[300vh]"
+  data-partner-laptop-scene
+>
   <div
     class="sticky top-0 left-0 w-full h-screen flex items-center justify-center overflow-hidden"
   >
-    <canvas
-      id="partner-laptop-canvas"
-      class="partner-laptop-canvas w-[80%] h-[80%] object-contain"
-      style="background: url('/outputFolder/frame_0001.avif') center / contain no-repeat;"
-      aria-label="Animated partner laptop"
-    ></canvas>
-
     <div
-      class="partner-laptop-heading absolute top-[25%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center z-10 opacity-100 pointer-events-none"
+      class="partner-laptop-heading absolute top-[18%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center z-10 pointer-events-none"
     >
       <p
         class="m-0 text-white text-5xl font-semibold font-['PolySans_Trial'] uppercase"
@@ -26,148 +22,142 @@ const partners = partnersData?.items ?? [];
       </p>
     </div>
 
-    <div
-      class="partner-laptop-overlay absolute top-[8%] left-[11%] w-[78%] h-[72%] z-20 opacity-0 pointer-events-none flex items-center justify-center"
-    >
-      <div class="partner-laptop-panel">
-        <p class="partner-laptop-panel__eyebrow">Our Partners</p>
-        <div class="partner-laptop-panel__grid" role="list">
-          {
-            partners.map((partner) => (
-              <div class="partner-laptop-panel__partner" role="listitem">
-                <span class="partner-laptop-panel__logo-slot" aria-hidden="true">
-                  <span></span>
-                </span>
-                <p>{partner.title}</p>
-              </div>
-            ))
-          }
-        </div>
-      </div>
+    <div class="partner-laptop-grid" role="list">
+      {
+        partners.map((partner) => (
+          <article class="partner-mini-laptop" role="listitem">
+            <canvas
+              class="partner-mini-laptop__canvas"
+              data-partner-laptop-canvas
+              style="background: url('/outputFolder/frame_0001.avif') center / contain no-repeat;"
+              aria-label={`${partner.title} animated partner laptop`}
+            ></canvas>
+            <div class="partner-mini-laptop__screen-content">
+              <span class="partner-mini-laptop__logo-slot" aria-hidden="true">
+                <span></span>
+              </span>
+              <p>{partner.title}</p>
+            </div>
+          </article>
+        ))
+      }
     </div>
   </div>
 </section>
 
 <style>
-  .partner-laptop-canvas {
+  .partner-laptop-grid {
+    display: grid;
+    width: min(76vw, 68rem);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(0.75rem, 2vw, 1.75rem);
+    padding-top: clamp(4.5rem, 11vh, 7.25rem);
+  }
+
+  .partner-mini-laptop {
+    position: relative;
+    aspect-ratio: 16 / 9;
+  }
+
+  .partner-mini-laptop__canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
     filter: hue-rotate(230deg) saturate(0.82) brightness(1.12);
   }
 
-  .partner-laptop-panel {
-    width: min(58%, 38rem);
-    color: #2A2455;
-  }
-
-  .partner-laptop-panel__eyebrow {
-    margin: 0 0 clamp(0.4rem, 1vw, 0.75rem);
-    font-family: "PolySans Bold", "PolySans Trial", sans-serif;
-    font-size: clamp(0.75rem, 1.7vw, 1.55rem);
-    font-weight: 700;
-    line-height: 1;
-    text-align: center;
-    text-transform: uppercase;
-  }
-
-  .partner-laptop-panel__grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: clamp(0.35rem, 1vw, 0.85rem);
-  }
-
-  .partner-laptop-panel__partner {
+  .partner-mini-laptop__screen-content {
+    position: absolute;
+    top: 20%;
+    left: 29%;
     display: flex;
-    min-width: 0;
+    width: 42%;
+    min-height: 27%;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: clamp(0.3rem, 0.8vw, 0.6rem);
-    border: 1px dashed rgba(42, 36, 85, 0.68);
-    border-radius: 0.45rem;
-    background-color: rgba(251, 250, 255, 0.12);
-    padding: clamp(0.35rem, 0.85vw, 0.65rem);
+    gap: clamp(0.2rem, 0.55vw, 0.45rem);
+    opacity: 0;
+    pointer-events: none;
+    text-align: center;
   }
 
-  .partner-laptop-panel__partner p {
-    min-width: 0;
+  .partner-mini-laptop__screen-content p {
+    max-width: 100%;
     margin: 0;
     color: #2A2455;
     font-family: "PolySans Bold", "PolySans Trial", sans-serif;
-    font-size: clamp(0.5rem, 1.05vw, 0.92rem);
+    font-size: clamp(0.55rem, 1.25vw, 1rem);
     font-weight: 700;
-    line-height: 1.1;
+    line-height: 1.08;
     overflow-wrap: normal;
     text-wrap: nowrap;
     white-space: nowrap;
   }
 
-  .partner-laptop-panel__logo-slot {
+  .partner-mini-laptop__logo-slot {
     display: grid;
-    flex: 0 0 auto;
-    width: clamp(1rem, 2.4vw, 2rem);
+    width: clamp(0.8rem, 2.1vw, 1.65rem);
     aspect-ratio: 1;
     place-items: center;
-    border: 1px solid rgba(42, 36, 85, 0.64);
-    border-radius: 0.24rem;
+    border: 1px dashed rgba(42, 36, 85, 0.72);
+    border-radius: 0.2rem;
   }
 
-  .partner-laptop-panel__logo-slot span {
-    width: 36%;
+  .partner-mini-laptop__logo-slot span {
+    width: 38%;
     aspect-ratio: 1;
     border: 1px solid #6A5ACD;
     transform: rotate(45deg);
   }
 
   @media (max-width: 767px) {
-    .partner-laptop-canvas {
-      width: 122%;
-      height: 74%;
-    }
-
-    .partner-laptop-overlay {
-      top: 12%;
-      left: 6%;
-      width: 88%;
-      height: 62%;
-    }
-
     .partner-laptop-heading {
-      top: 22%;
+      top: 16%;
     }
 
     .partner-laptop-heading p {
       font-size: clamp(2rem, 9vw, 3rem);
     }
 
-    .partner-laptop-panel {
-      width: 68%;
+    .partner-laptop-grid {
+      width: 100vw;
+      gap: 0.35rem;
+      padding: 5rem 0.35rem 0;
     }
 
-    .partner-laptop-panel__partner {
-      flex-direction: column;
-      gap: 0.25rem;
-      padding: 0.35rem 0.2rem;
+    .partner-mini-laptop__screen-content {
+      top: 19%;
+      left: 27%;
+      width: 46%;
+      min-height: 29%;
+      gap: 0.12rem;
     }
 
-    .partner-laptop-panel__partner p {
-      font-size: clamp(0.45rem, 2.25vw, 0.7rem);
+    .partner-mini-laptop__screen-content p {
+      font-size: clamp(0.46rem, 2.5vw, 0.66rem);
+    }
+
+    .partner-mini-laptop__logo-slot {
+      width: clamp(0.65rem, 3.4vw, 0.95rem);
     }
   }
 </style>
 
 <script>
-  import { gsap } from "gsap";
-  import { ScrollTrigger } from "gsap/ScrollTrigger";
   import { getAssetUrl } from "../utils/cdn";
 
-  gsap.registerPlugin(ScrollTrigger);
-
-  const canvas = document.querySelector(
-    "#partner-laptop-canvas"
-  ) as HTMLCanvasElement | null;
-  const context = canvas?.getContext("2d", { alpha: true });
+  const canvases = Array.from(
+    document.querySelectorAll<HTMLCanvasElement>("[data-partner-laptop-canvas]")
+  ).map((canvas) => ({ canvas, context: canvas.getContext("2d", { alpha: true }) }));
+  const screenContents = Array.from(
+    document.querySelectorAll<HTMLElement>(
+      ".partner-mini-laptop__screen-content"
+    )
+  );
   const section = document.querySelector(".partner-laptop-section");
-  const heading = document.querySelector(".partner-laptop-heading");
-  const overlay = document.querySelector(
-    ".partner-laptop-overlay"
+  const heading = document.querySelector(
+    ".partner-laptop-heading"
   ) as HTMLElement | null;
 
   const frameCount = 125;
@@ -203,18 +193,20 @@ const partners = partnersData?.items ?? [];
   const clampFrame = (index: number) =>
     Math.max(0, Math.min(frameCount - 1, Math.round(index)));
 
-  const resizeCanvas = () => {
-    if (!canvas || !context) return;
+  const resizeCanvases = () => {
     updatePerfSettings();
-    const rect = canvas.getBoundingClientRect();
-    if (!rect.width || !rect.height) return;
     const maxDpr = window.matchMedia(narrowQuery).matches ? 1.25 : 1.5;
     const dpr = Math.min(window.devicePixelRatio || 1, maxDpr);
-    const width = Math.round(rect.width * dpr);
-    const height = Math.round(rect.height * dpr);
-    if (canvas.width !== width || canvas.height !== height) {
-      canvas.width = width;
-      canvas.height = height;
+    for (const { canvas, context } of canvases) {
+      if (!context) continue;
+      const rect = canvas.getBoundingClientRect();
+      if (!rect.width || !rect.height) continue;
+      const width = Math.round(rect.width * dpr);
+      const height = Math.round(rect.height * dpr);
+      if (canvas.width !== width || canvas.height !== height) {
+        canvas.width = width;
+        canvas.height = height;
+      }
     }
   };
 
@@ -309,10 +301,8 @@ const partners = partnersData?.items ?? [];
   };
 
   let lastRenderedFrame = -1;
-  let lastCanvasWidth = 0;
-  let lastCanvasHeight = 0;
+  let lastCanvasSignature = "";
   const render = () => {
-    if (!context || !canvas) return;
     const frame = clampFrame(laptop.frame);
     const image = frameCache.get(frame);
     if (!image) {
@@ -321,81 +311,71 @@ const partners = partnersData?.items ?? [];
       });
       return;
     }
-    if (
-      frame === lastRenderedFrame &&
-      canvas.width === lastCanvasWidth &&
-      canvas.height === lastCanvasHeight
-    ) {
-      return;
-    }
+
+    const signature = canvases
+      .map(({ canvas }) => `${canvas.width}x${canvas.height}`)
+      .join("|");
+    if (frame === lastRenderedFrame && signature === lastCanvasSignature) return;
     lastRenderedFrame = frame;
-    lastCanvasWidth = canvas.width;
-    lastCanvasHeight = canvas.height;
-    context.clearRect(0, 0, canvas.width, canvas.height);
-    context.drawImage(image, 0, 0, canvas.width, canvas.height);
+    lastCanvasSignature = signature;
+
+    for (const { canvas, context } of canvases) {
+      if (!context || !canvas.width || !canvas.height) continue;
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      context.drawImage(image, 0, 0, canvas.width, canvas.height);
+    }
     queueFrames(frame);
   };
 
+  const clampProgress = (value: number) => Math.max(0, Math.min(1, value));
+
+  const updateSequenceFromScroll = () => {
+    if (!section || prefersReducedMotion) return;
+    const rect = section.getBoundingClientRect();
+    const scrollRange = Math.max(section.clientHeight - window.innerHeight, 1);
+    const sceneProgress = clampProgress(-rect.top / scrollRange);
+    const frameProgress = clampProgress((sceneProgress - 0.08) / 0.74);
+    const headingProgress = clampProgress((frameProgress - 0.28) / 0.22);
+    const contentProgress = clampProgress((frameProgress - 0.62) / 0.22);
+
+    laptop.frame = frameProgress * (frameCount - 1);
+    if (heading) {
+      heading.style.opacity = String(1 - headingProgress);
+      heading.style.transform = `translate(-50%, calc(-50% - ${
+        headingProgress * 50
+      }px))`;
+    }
+    for (const content of screenContents) {
+      content.style.opacity = String(contentProgress);
+    }
+    render();
+  };
+
+  let scrollAnimationFrame = 0;
+  const queueScrollUpdate = () => {
+    if (scrollAnimationFrame) return;
+    scrollAnimationFrame = window.requestAnimationFrame(() => {
+      scrollAnimationFrame = 0;
+      updateSequenceFromScroll();
+    });
+  };
+
   const initSequence = async () => {
-    if (!canvas || !context || !section) return;
-    resizeCanvas();
+    if (!canvases.length || !section) return;
+    resizeCanvases();
     await loadFrame(0);
     render();
     schedulePreloadAll();
 
     if (prefersReducedMotion) {
-      if (overlay) {
-        overlay.style.opacity = "1";
-      }
-      if (heading instanceof HTMLElement) {
-        heading.style.opacity = "0";
-        heading.style.transform = "translateY(-50px)";
+      laptop.frame = frameCount - 1;
+      render();
+      for (const content of screenContents) {
+        content.style.opacity = "1";
       }
       return;
     }
-
-    const timeline = gsap.timeline({
-      scrollTrigger: {
-        trigger: section,
-        start: "top top",
-        end: "bottom bottom",
-        scrub: 0.5,
-      },
-    });
-
-    timeline
-      .to(laptop, {
-        frame: 0,
-        duration: 0.5,
-        onUpdate: render,
-      })
-      .to(laptop, {
-        frame: frameCount - 1,
-        snap: "frame",
-        ease: "none",
-        duration: 2,
-        onUpdate: render,
-      })
-      .to(
-        heading,
-        {
-          opacity: 0,
-          y: -50,
-          duration: (20 / frameCount) * 2,
-          ease: "none",
-        },
-        `<+${(40 / frameCount) * 2}`
-      )
-      .to(
-        overlay,
-        {
-          opacity: 1,
-          pointerEvents: "auto",
-          duration: 0.5,
-          ease: "power2.inOut",
-        },
-        `<+${(40 / frameCount) * 2}`
-      );
+    updateSequenceFromScroll();
   };
 
   let started = false;
@@ -419,9 +399,13 @@ const partners = partnersData?.items ?? [];
     startWhenVisible();
   }
 
+  const updateOnScroll = () => queueScrollUpdate();
+  window.addEventListener("scroll", updateOnScroll, { passive: true });
+  document.body.addEventListener("scroll", updateOnScroll, { passive: true });
+
   window.addEventListener("resize", () => {
-    resizeCanvas();
+    resizeCanvases();
     lastRenderedFrame = -1;
-    render();
+    queueScrollUpdate();
   });
 </script>
