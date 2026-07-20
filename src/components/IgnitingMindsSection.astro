@@ -15,15 +15,14 @@ import { getAssetUrl } from "../utils/cdn";
     >
       <!-- Horizontal Lines (Grid Row 3) - Visible on Left -->
       <div
-        class="hidden md:block col-start-1 col-end-11 row-start-3 row-end-4 border-t-2 border-b-2 border-dashed border-[#B8A7FF]/50 pointer-events-none z-20"
-        style="mask-image: linear-gradient(to right, black 50%, transparent 50%); -webkit-mask-image: linear-gradient(to right, black 50%, transparent 50%);"
+        class="community-divider hidden md:block col-start-1 col-end-11 row-start-3 row-end-4 pointer-events-none z-20"
       >
       </div>
 
       <!-- Left: Text Content -->
       <!-- Top Section - Title (Rows 1-2) -->
       <div
-        class="flex flex-col h-full md:col-start-1 md:col-end-6 md:row-start-1 md:row-end-3 md:border-r-2 md:border-dashed md:border-[#B8A7FF]/50"
+        class="community-rail flex flex-col h-full md:col-start-1 md:col-end-6 md:row-start-1 md:row-end-3"
       >
         <div class="p-6 md:p-10 flex items-start h-full">
           <h1
@@ -37,7 +36,7 @@ import { getAssetUrl } from "../utils/cdn";
 
       <!-- Middle Section - Beyond the Norm (Row 3) -->
       <div
-        class="flex flex-col h-full md:col-start-1 md:col-end-6 md:row-start-3 md:row-end-4 md:border-r-2 md:border-dashed md:border-[#B8A7FF]/50"
+        class="community-rail flex flex-col h-full md:col-start-1 md:col-end-6 md:row-start-3 md:row-end-4"
       >
         <div class="px-6 md:px-10 py-4 md:py-0 flex items-center h-full">
           <div class="relative">
@@ -58,7 +57,7 @@ import { getAssetUrl } from "../utils/cdn";
 
       <!-- Bottom Section - Empty/Mobile Desc (Rows 4-5) -->
       <div
-        class="flex flex-col h-full md:col-start-1 md:col-end-6 md:row-start-4 md:row-end-6 md:border-r-2 md:border-dashed md:border-[#B8A7FF]/50"
+        class="community-rail flex flex-col h-full md:col-start-1 md:col-end-6 md:row-start-4 md:row-end-6"
       >
         <div class="p-6 md:p-10 h-full block md:hidden">
           <div
@@ -120,22 +119,21 @@ import { getAssetUrl } from "../utils/cdn";
     >
       <!-- Horizontal Lines (Grid Row 3) - Visible on Left -->
       <div
-        class="hidden md:block col-start-1 col-end-11 row-start-3 row-end-4 border-t-2 border-b-2 border-dashed border-[#B8A7FF]/50 pointer-events-none z-20"
-        style="mask-image: linear-gradient(to right, black 50%, transparent 50%); -webkit-mask-image: linear-gradient(to right, black 50%, transparent 50%);"
+        class="community-divider hidden md:block col-start-1 col-end-11 row-start-3 row-end-4 pointer-events-none z-20"
       >
       </div>
 
       <!-- Left Side -->
       <!-- Top Section - Empty (Rows 1-2) -->
       <div
-        class="hidden md:flex flex-col h-full md:col-start-1 md:col-end-6 md:row-start-1 md:row-end-3 md:border-r-2 md:border-dashed md:border-[#B8A7FF]/50"
+        class="community-rail hidden md:flex flex-col h-full md:col-start-1 md:col-end-6 md:row-start-1 md:row-end-3"
       >
         <div class="hidden md:block h-full p-10"></div>
       </div>
 
       <!-- Middle Section - Educate Young Minds (Row 3) -->
       <div
-        class="flex flex-col h-full order-2 md:order-1 md:col-start-1 md:col-end-6 md:row-start-3 md:row-end-4 md:border-r-2 md:border-dashed md:border-[#B8A7FF]/50"
+        class="community-rail flex flex-col h-full order-2 md:order-1 md:col-start-1 md:col-end-6 md:row-start-3 md:row-end-4"
       >
         <div class="px-6 md:px-6 py-4 md:py-0 flex items-center h-full">
           <div class="relative">
@@ -156,7 +154,7 @@ import { getAssetUrl } from "../utils/cdn";
 
       <!-- Bottom Section - Description (Rows 4-5) -->
       <div
-        class="flex flex-col h-full order-3 md:order-1 md:col-start-1 md:col-end-6 md:row-start-4 md:row-end-6 md:border-r-2 md:border-dashed md:border-[#B8A7FF]/50"
+        class="community-rail flex flex-col h-full order-3 md:order-1 md:col-start-1 md:col-end-6 md:row-start-4 md:row-end-6"
       >
         <div class="p-6 md:p-2 h-full flex items-start md:items-end">
           <div
@@ -215,7 +213,7 @@ import { getAssetUrl } from "../utils/cdn";
             <p
               class="text-[#B8A7FF] text-xs sm:text-sm font-mono tracking-[0.28em] uppercase"
             >
-              Building Forward
+              ACM membership
             </p>
             <h1
               class="community-award-title text-5xl sm:text-6xl md:text-7xl lg:text-[6.75rem] leading-[0.86] font-bold text-[#FBFAFF] uppercase tracking-tighter"
@@ -229,28 +227,30 @@ import { getAssetUrl } from "../utils/cdn";
             <h2
               class="text-[#FBFAFF] text-xl sm:text-2xl md:text-3xl font-semibold leading-tight"
             >
-              Made to grow with us
+              Learn, build, and belong
             </h2>
             <p
               class="text-gray-300 text-xs sm:text-sm font-mono leading-relaxed uppercase"
             >
-              ACM AJCE is just getting started. This space will hold the
-              chapter's own milestones, initiatives, and celebrations as we
-              build them together.
+              ACM membership gives you access to a global computing community,
+              professional learning, and a stronger connection to the work we
+              build at ACM AJCE.
             </p>
             <p
               class="text-gray-400 text-xs sm:text-sm font-mono leading-relaxed"
             >
-              For now, our focus is on creating thoughtful experiences for
-              students who want to learn, contribute, and find their people in
-              technology.
+              Join as we begin this new chapter on campus and make more room
+              for students who want to learn, contribute, and find their
+              people in technology.
             </p>
             <a
-              href="#contact"
+              href="https://www.acm.org/membership/join"
+              target="_blank"
+              rel="noreferrer"
               class="inline-flex items-center gap-3 text-[#FBFAFF] text-xs sm:text-sm font-mono uppercase tracking-[0.18em] border border-white/12 px-4 py-3 transition-colors duration-300 hover:border-[#B8A7FF] hover:text-[#B8A7FF]"
             >
-              check out the awards and more 
-              <span aria-hidden="true" class="text-[#B8A7FF]">↗</span>
+              Join ACM
+              <span aria-hidden="true" class="text-[#B8A7FF]">&rarr;</span>
             </a>
           </div>
         </div>
@@ -264,7 +264,7 @@ import { getAssetUrl } from "../utils/cdn";
             class="relative h-full w-full flex items-center justify-center overflow-hidden"
           >
             <div class="flex h-full w-full items-center justify-center border border-[#B8A7FF]/35 bg-[#2A2455]/45">
-              <p class="font-mono text-4xl font-bold tracking-[0.2em] text-[#B8A7FF] sm:text-6xl">ACM AJCE</p>
+              <p class="font-mono text-3xl font-bold tracking-[0.18em] text-[#B8A7FF] sm:text-5xl">JOIN ACM</p>
             </div>
           </div>
         </div>
@@ -279,6 +279,41 @@ import { getAssetUrl } from "../utils/cdn";
       linear-gradient(rgba(184, 167, 255, 0.14) 1px, transparent 1px),
       linear-gradient(90deg, rgba(184, 167, 255, 0.14) 1px, transparent 1px);
     background-size: 24px 24px;
+  }
+
+  .community-divider {
+    background:
+      linear-gradient(90deg, rgba(184, 167, 255, 0.32), rgba(184, 167, 255, 0.08) 72%, transparent 72%) top / 100% 1px no-repeat,
+      linear-gradient(90deg, transparent 0 4%, rgba(184, 167, 255, 0.26) 4% 62%, transparent 62%) bottom / 100% 1px no-repeat;
+  }
+
+  .community-rail {
+    position: relative;
+  }
+
+  @media (min-width: 768px) {
+    .community-rail::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 1px;
+      height: 100%;
+      background: linear-gradient(180deg, rgba(184, 167, 255, 0.12), rgba(184, 167, 255, 0.5) 46%, rgba(184, 167, 255, 0.12));
+    }
+
+    .community-rail::before {
+      content: "";
+      position: absolute;
+      top: calc(50% - 3px);
+      right: -3px;
+      width: 5px;
+      height: 5px;
+      border: 1px solid rgba(184, 167, 255, 0.78);
+      background: #05060B;
+      transform: rotate(45deg);
+      z-index: 30;
+    }
   }
 
   @media (max-width: 399.98px) {

@@ -6,7 +6,9 @@
   class="site-header fixed top-5 left-0 right-0 z-50 w-full px-4 py-2 pointer-events-none"
 >
   <a
-    href="#contact"
+    href="https://www.acm.org/membership/join"
+    target="_blank"
+    rel="noreferrer"
     class="membership-cta pointer-events-auto"
     aria-label="Ask about ACM AJCE membership"
   >
@@ -55,9 +57,9 @@
             </li>
             <li>
               <a
-                href="#vision"
+                href="#mission"
                 class="nav-link inline-block px-3 py-1 hover:text-white transition-colors"
-                >VISION</a
+                >MISSION</a
               >
             </li>
             <li>
@@ -170,7 +172,7 @@
             {
               [
                 "about",
-                "vision",
+                "mission",
                 "events",
                 "acm-w",
                 "team",
@@ -181,7 +183,9 @@
               ].map((item) => (
                 <li>
                   <a
-                    href={item === "membership" ? "#contact" : `#${item}`}
+                    href={item === "membership" ? "https://www.acm.org/membership/join" : `#${item}`}
+                    target={item === "membership" ? "_blank" : undefined}
+                    rel={item === "membership" ? "noreferrer" : undefined}
                     class="mobile-nav-link text-3xl font-light font-['PolySans_Trial'] uppercase text-[#FBFAFF] hover:text-[#B8A7FF] transition-colors"
                   >
                     {item.replace("-", " ")}

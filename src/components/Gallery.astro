@@ -12,87 +12,87 @@ import ProofGallery from "./ProofGallery.astro";
     <span
       class="floating-word"
       style="--delay: 0s; --duration: 45s; --x: 5%; --y: 10%;"
-      >CODEX CRYPTUM</span
+      >ACM AJCE</span
     >
     <span
       class="floating-word"
       style="--delay: 3s; --duration: 55s; --x: 80%; --y: 15%;"
-      >THE NEURAL HACK</span
+      >LEARN TOGETHER</span
     >
     <span
       class="floating-word"
       style="--delay: 6s; --duration: 50s; --x: 10%; --y: 35%;"
-      >CRYPTIC HUNT</span
+      >BUILD WITH PURPOSE</span
     >
     <span
       class="floating-word"
-      style="--delay: 0s; --duration: 60s; --x: 70%; --y: 40%;">APPTITUDE</span
+      style="--delay: 0s; --duration: 60s; --x: 70%; --y: 40%;">WORKSHOPS</span
     >
     <span
       class="floating-word"
-      style="--delay: 3s; --duration: 48s; --x: 25%; --y: 20%;">CODART</span
+      style="--delay: 3s; --duration: 48s; --x: 25%; --y: 20%;">COMMUNITY</span
     >
     <span
       class="floating-word"
       style="--delay: 6s; --duration: 52s; --x: 85%; --y: 30%;"
-      >REVERSE CODING</span
+      >SKILL SESSIONS</span
     >
     <span
       class="floating-word"
       style="--delay: 0s; --duration: 58s; --x: 2%; --y: 45%;"
-      >HOUR OF CODE</span
+      >OPEN LEARNING</span
     >
     <span
       class="floating-word"
       style="--delay: 3s; --duration: 47s; --x: 60%; --y: 10%;"
-      >CODE2CREATE</span
+      >IDEAS INTO IMPACT</span
     >
     <span
       class="floating-word"
       style="--delay: 6s; --duration: 54s; --x: 40%; --y: 5%;"
-      >THE TINY HACK</span
+      >STUDENT MAKERS</span
     >
     <span
       class="floating-word"
-      style="--delay: 0s; --duration: 51s; --x: 90%; --y: 25%;">CODE++</span
+      style="--delay: 0s; --duration: 51s; --x: 90%; --y: 25%;">COMPUTING FOR ALL</span
     >
     <span
       class="floating-word"
-      style="--delay: 3s; --duration: 56s; --x: 15%; --y: 25%;">INSPIHER</span
+      style="--delay: 3s; --duration: 56s; --x: 15%; --y: 25%;">PEER LEARNING</span
     >
     <span
       class="floating-word"
-      style="--delay: 6s; --duration: 49s; --x: 75%; --y: 5%;">FORKTOBER</span
+      style="--delay: 6s; --duration: 49s; --x: 75%; --y: 5%;">CREATE TOGETHER</span
     >
     <span
       class="floating-word"
       style="--delay: 0s; --duration: 53s; --x: 35%; --y: 40%;"
-      >SUMMER BOOTCAMP</span
+      >EXPLORE MORE</span
     >
     <span
       class="floating-word"
       style="--delay: 3s; --duration: 57s; --x: 50%; --y: 30%;"
-      >LEARN2AUGMENT</span
+      >TECH FOR GOOD</span
     >
     <span
       class="floating-word"
-      style="--delay: 6s; --duration: 46s; --x: 65%; --y: 20%;">UNIPOOL</span
+      style="--delay: 6s; --duration: 46s; --x: 65%; --y: 20%;">INNOVATION</span
     >
     <span
       class="floating-word"
-      style="--delay: 0s; --duration: 59s; --x: 8%; --y: 15%;">CLI-TOP</span
+      style="--delay: 0s; --duration: 59s; --x: 8%; --y: 15%;">COLLABORATION</span
     >
     <span
       class="floating-word"
-      style="--delay: 3s; --duration: 50s; --x: 82%; --y: 45%;">CLI-RPG</span
+      style="--delay: 3s; --duration: 50s; --x: 82%; --y: 45%;">BUILD</span
     >
     <span
       class="floating-word"
-      style="--delay: 6s; --duration: 55s; --x: 45%; --y: 15%;">EXAMCOOKER</span
+      style="--delay: 6s; --duration: 55s; --x: 45%; --y: 15%;">DISCOVER</span
     >
     <span
       class="floating-word"
-      style="--delay: 0s; --duration: 48s; --x: 20%; --y: 40%;">LOCALHOST</span
+      style="--delay: 0s; --duration: 48s; --x: 20%; --y: 40%;">ACM COMMUNITY</span
     >
     <span
       class="floating-word"
@@ -129,8 +129,8 @@ import ProofGallery from "./ProofGallery.astro";
 
     <div class="gallery-frame relative w-full overflow-hidden">
       <img
-        src={getAssetUrl("/full-core.webp")}
-        alt="ACM AJCE gallery preview"
+        src={getAssetUrl("/gallery/acm-ajce/collaborative-learning.jpg")}
+        alt="ACM AJCE collaborative learning session"
         class="gallery-image w-full object-cover"
         loading="lazy"
         decoding="async"
@@ -175,12 +175,12 @@ import ProofGallery from "./ProofGallery.astro";
   }
 
   .gallery-image {
-    filter: grayscale(1);
+    filter: saturate(0.82) contrast(1.04);
     transition: filter 0.3s ease;
   }
 
   .gallery-frame:hover .gallery-image {
-    filter: grayscale(0.2);
+    filter: saturate(1) contrast(1);
   }
 
   /* Floating Words Background */
