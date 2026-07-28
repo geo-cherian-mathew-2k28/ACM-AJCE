@@ -11,6 +11,27 @@ import {
 
 export const prerender = false;
 
+export const GET: APIRoute = async ({ request, locals }) => {
+  try {
+    await requireAdmin(request, locals);
+    const coupons = await getDatabase(locals)
+      .prepare(
+        `SELECT coupons.id, coupons.discount_amount_paise, coupons.expires_at, coupons.used_at,
+                coupons.created_at, events.title AS event_title,
+                users.full_name AS member_name, users.email AS member_email
+         FROM coupons
+         INNER JOIN events ON events.id = coupons.event_id
+         INNER JOIN users ON users.id = coupons.assigned_user_id
+         ORDER BY coupons.created_at DESC
+         LIMIT 100`
+      )
+      .all();
+    return json({ coupons: coupons.results ?? [] });
+  } catch (error) {
+    return toApiError(error);
+  }
+};
+
 export const POST: APIRoute = async ({ request, locals }) => {
   try {
     const admin = await requireAdmin(request, locals);

@@ -1,5 +1,5 @@
 ---
-import MembershipLayout from "../../layouts/MembershipLayout.astro";
+import AdminConsoleLayout from "../../layouts/AdminConsoleLayout.astro";
 import { getCurrentUser, isAdminEmail } from "../../lib/membership";
 
 const isLocalPreviewHost = ["localhost", "127.0.0.1", "::1"].includes(
@@ -7,214 +7,316 @@ const isLocalPreviewHost = ["localhost", "127.0.0.1", "::1"].includes(
 );
 const isPreview = isLocalPreviewHost && Astro.url.searchParams.get("preview") === "admin";
 const user = isPreview
-  ? { email: "preview.admin@acm-ajce.local" }
+  ? { full_name: "ACM AJCE Admin", email: "preview.admin@acm-ajce.local" }
   : await getCurrentUser(Astro.request, Astro.locals);
-if (!isPreview && (!user || !isAdminEmail(user.email, Astro.locals))) return Astro.redirect("/membership");
+if (!isPreview && (!user || !isAdminEmail(user.email, Astro.locals))) {
+  return Astro.redirect("/membership");
+}
+
+const viewerName = user?.full_name ?? "ACM AJCE Admin";
+const viewerEmail = user?.email ?? "preview.admin@acm-ajce.local";
 ---
 
-<MembershipLayout title="ACM AJCE Member Operations" signedIn={!isPreview}>
-  <section class="admin-page" data-demo={isPreview ? "true" : "false"}>
-    <div class="admin-heading">
-      <div><p class="portal-eyebrow">Member operations</p><h1 class="portal-title">Chapter membership.</h1></div>
-      <a class="portal-button portal-button--subtle" href={isPreview ? "/membership?preview=admin" : "/membership"}>Member dashboard</a>
-    </div>
+<AdminConsoleLayout viewerName={viewerName} viewerEmail={viewerEmail} preview={isPreview}>
+  <section class="console-page" data-demo={isPreview ? "true" : "false"}>
+    <header class="console-page__heading">
+      <div>
+        <p>Membership overview</p>
+        <h1>Run the chapter with clarity.</h1>
+        <span>Members, event access, coupons, and membership funds in one workspace.</span>
+      </div>
+      <button class="console-primary" type="button" data-new-event>Create event</button>
+    </header>
 
-    <div id="admin-metrics" class="admin-metrics" aria-live="polite">
-      <article class="portal-panel metric"><span>Total users</span><strong>--</strong></article>
-      <article class="portal-panel metric"><span>Active members</span><strong>--</strong></article>
-      <article class="portal-panel metric"><span>Membership funds</span><strong>--</strong></article>
-      <article class="portal-panel metric"><span>Published events</span><strong>--</strong></article>
-    </div>
+    <section class="console-view" data-console-view="overview">
+      <div class="console-metrics">
+        <article class="console-metric"><span>Total people</span><strong data-metric="users">--</strong><small>Google accounts created</small></article>
+        <article class="console-metric"><span>Active members</span><strong data-metric="members">--</strong><small>Current local chapter plans</small></article>
+        <article class="console-metric"><span>Membership funds</span><strong data-metric="funds">--</strong><small>Verified Razorpay payments</small></article>
+        <article class="console-metric"><span>Open registrations</span><strong data-metric="events">--</strong><small>Published events accepting members</small></article>
+      </div>
 
-    <div class="admin-columns">
-      <section class="portal-panel admin-section">
-        <div class="admin-section__heading"><div><p class="portal-eyebrow">Events</p><h2 id="event-form-title">Create an event</h2></div><button id="reset-event" class="text-button" type="button" hidden>New event</button></div>
-        <form id="event-form" class="portal-form">
-          <div class="portal-field"><label for="event-title">Title</label><input id="event-title" name="title" required /></div>
-          <div class="portal-field"><label for="event-summary">Summary</label><textarea id="event-summary" name="summary" required></textarea></div>
-          <div class="form-two"><div class="portal-field"><label for="event-starts">Starts</label><input id="event-starts" name="startsAt" type="datetime-local" required /></div><div class="portal-field"><label for="event-ends">Ends</label><input id="event-ends" name="endsAt" type="datetime-local" /></div></div>
-          <div class="form-two"><div class="portal-field"><label for="event-venue">Venue</label><input id="event-venue" name="venue" /></div><div class="portal-field"><label for="event-capacity">Capacity</label><input id="event-capacity" name="capacity" type="number" min="1" /></div></div>
-          <div class="portal-field"><label for="event-deadline">Registration deadline</label><input id="event-deadline" name="registrationDeadline" type="datetime-local" /></div>
-          <div class="portal-field"><label for="event-details">Member details</label><textarea id="event-details" name="details"></textarea></div>
-          <div class="event-toggles"><label class="portal-checkbox"><input name="memberOnly" type="checkbox" checked /> Members only</label><label class="portal-checkbox"><input name="registrationOpen" type="checkbox" checked /> Registration open</label><label class="portal-checkbox"><input name="published" type="checkbox" /> Publish now</label></div>
-          <button id="save-event" class="portal-button" type="submit">Save event</button>
-          <p id="event-status" class="portal-status" aria-live="polite"></p>
-        </form>
+      <div class="console-overview-grid">
+        <section class="console-panel console-health">
+          <div class="console-panel__heading"><div><span class="console-kicker">Chapter pulse</span><h2>What needs attention</h2></div></div>
+          <div class="console-health__rows">
+            <div><span>Event registrations</span><strong data-health="registrations">--</strong></div>
+            <div><span>Issued coupons</span><strong data-health="coupons">--</strong></div>
+            <div><span>Membership renewal rate</span><strong data-health="rate">--</strong></div>
+          </div>
+          <p class="console-note">Use this as the chapter’s operating picture. Live values appear after D1 and Razorpay are connected.</p>
+        </section>
+        <section class="console-panel">
+          <div class="console-panel__heading"><div><span class="console-kicker">Coming up</span><h2>Event timeline</h2></div><button class="console-text-action" type="button" data-switch-view="events">Manage events</button></div>
+          <div id="overview-events" class="console-compact-list"><p class="console-empty">Loading events...</p></div>
+        </section>
+      </div>
+
+      <section class="console-panel">
+        <div class="console-panel__heading"><div><span class="console-kicker">Latest members</span><h2>Recently added to the chapter</h2></div><button class="console-text-action" type="button" data-switch-view="members">View members</button></div>
+        <div id="overview-members" class="console-member-strip"><p class="console-empty">Loading member records...</p></div>
       </section>
+    </section>
 
-      <section class="portal-panel admin-section coupon-panel">
-        <div class="admin-section__heading"><div><p class="portal-eyebrow">One-time coupons</p><h2>Assign a private code</h2></div></div>
-        <form id="coupon-form" class="portal-form">
-          <div class="portal-field"><label for="coupon-event">Event</label><select id="coupon-event" name="eventId" required><option value="">Choose event</option></select></div>
-          <div class="portal-field"><label for="coupon-member">Member</label><select id="coupon-member" name="userId" required><option value="">Choose member</option></select></div>
-          <div class="form-two"><div class="portal-field"><label for="coupon-discount">Discount (paise)</label><input id="coupon-discount" name="discountAmountPaise" type="number" min="0" value="0" /></div><div class="portal-field"><label for="coupon-expiry">Expires</label><input id="coupon-expiry" name="expiresAt" type="datetime-local" /></div></div>
-          <button class="portal-button portal-button--subtle" type="submit">Create one-time code</button>
-          <p id="coupon-status" class="portal-status" aria-live="polite"></p>
-        </form>
-      </section>
-    </div>
+    <section class="console-view" data-console-view="members" hidden>
+      <header class="console-section-heading"><div><span class="console-kicker">Member directory</span><h2>People and membership records</h2><p>Review contact, academic, membership, and payment information without leaving the console.</p></div><label class="console-search"><span>Search</span><input id="member-search" type="search" placeholder="Name, email, department" /></label></header>
+      <div id="members-table" class="console-table-wrap"><p class="console-empty">Loading member records...</p></div>
+    </section>
 
-    <section class="admin-records"><div class="records-heading"><div><p class="portal-eyebrow">Events</p><h2>Manage event records</h2></div></div><div id="admin-events" class="admin-events"></div></section>
-    <section class="admin-records"><div class="records-heading"><div><p class="portal-eyebrow">Members</p><h2>Member records and ID cards</h2></div></div><div id="admin-members" class="member-table-wrap"><p class="events-loading">Loading member records...</p></div></section>
+    <section class="console-view" data-console-view="events" hidden>
+      <header class="console-section-heading"><div><span class="console-kicker">Event operations</span><h2>Create and manage member events</h2><p>Publish events when the chapter is ready, then keep registrations and capacity in one place.</p></div></header>
+      <div class="console-events-workbench">
+        <div id="events-grid" class="console-events-grid"><p class="console-empty">Loading events...</p></div>
+        <aside class="console-panel console-editor">
+          <div class="console-panel__heading"><div><span class="console-kicker">Event editor</span><h2 id="event-editor-title">Create event</h2></div><button id="reset-event" class="console-text-action" type="button" hidden>New event</button></div>
+          <form id="event-form" class="console-form">
+            <label class="console-field"><span>Title</span><input name="title" required /></label>
+            <label class="console-field"><span>Short summary</span><textarea name="summary" required></textarea></label>
+            <div class="console-form__two"><label class="console-field"><span>Starts</span><input name="startsAt" type="datetime-local" required /></label><label class="console-field"><span>Ends</span><input name="endsAt" type="datetime-local" /></label></div>
+            <div class="console-form__two"><label class="console-field"><span>Venue</span><input name="venue" /></label><label class="console-field"><span>Capacity</span><input name="capacity" type="number" min="1" /></label></div>
+            <label class="console-field"><span>Registration deadline</span><input name="registrationDeadline" type="datetime-local" /></label>
+            <label class="console-field"><span>Member details</span><textarea name="details"></textarea></label>
+            <div class="console-checks"><label><input name="memberOnly" type="checkbox" checked /> Members only</label><label><input name="registrationOpen" type="checkbox" checked /> Registration open</label><label><input name="published" type="checkbox" /> Publish now</label></div>
+            <button class="console-primary" type="submit">Save event</button><p id="event-status" class="console-status" aria-live="polite"></p>
+          </form>
+        </aside>
+      </div>
+    </section>
+
+    <section class="console-view" data-console-view="coupons" hidden>
+      <header class="console-section-heading"><div><span class="console-kicker">Access codes</span><h2>Issue private one-time coupons</h2><p>Coupon values are shown once at creation, stored as hashes, and expire when a member uses them.</p></div></header>
+      <div class="console-coupon-layout">
+        <section class="console-panel console-editor">
+          <div class="console-panel__heading"><div><span class="console-kicker">New coupon</span><h2>Assign a member code</h2></div></div>
+          <form id="coupon-form" class="console-form">
+            <label class="console-field"><span>Event</span><select id="coupon-event" name="eventId" required><option value="">Choose event</option></select></label>
+            <label class="console-field"><span>Member</span><select id="coupon-member" name="userId" required><option value="">Choose member</option></select></label>
+            <div class="console-form__two"><label class="console-field"><span>Discount in paise</span><input name="discountAmountPaise" type="number" min="0" value="0" /></label><label class="console-field"><span>Expires</span><input name="expiresAt" type="datetime-local" /></label></div>
+            <button class="console-primary" type="submit">Generate one-time code</button><p id="coupon-status" class="console-status" aria-live="polite"></p>
+          </form>
+        </section>
+        <section class="console-panel">
+          <div class="console-panel__heading"><div><span class="console-kicker">Coupon history</span><h2>Issued codes</h2></div></div>
+          <div id="coupon-history" class="console-table-wrap console-table-wrap--inner"><p class="console-empty">Loading coupon history...</p></div>
+        </section>
+      </div>
+    </section>
+
+    <section class="console-view" data-console-view="funds" hidden>
+      <header class="console-section-heading"><div><span class="console-kicker">Membership funds</span><h2>Payments and chapter balance</h2><p>Totals include only server-verified Razorpay orders.</p></div></header>
+      <div class="console-fund-grid">
+        <article class="console-panel console-fund-card"><span>Collected</span><strong data-fund="collected">--</strong><small>Verified payments</small></article>
+        <article class="console-panel console-fund-card"><span>Paid memberships</span><strong data-fund="paid">--</strong><small>Members with a payment record</small></article>
+        <article class="console-panel console-fund-card"><span>Average plan value</span><strong data-fund="average">--</strong><small>Current local plan calculation</small></article>
+      </div>
+      <section class="console-panel"><div class="console-panel__heading"><div><span class="console-kicker">Payment trail</span><h2>Latest verified membership payments</h2></div></div><div id="funds-table" class="console-table-wrap console-table-wrap--inner"><p class="console-empty">Loading verified payments...</p></div></section>
+    </section>
   </section>
 
-  <dialog id="member-dialog" class="member-dialog">
-    <form id="member-form" class="portal-panel portal-form" method="dialog">
-      <div class="admin-section__heading"><div><p class="portal-eyebrow">Member record</p><h2>Edit member details</h2></div><button class="text-button" type="button" data-close-dialog>Close</button></div>
+  <dialog id="member-dialog" class="console-dialog">
+    <form id="member-form" class="console-panel console-form" method="dialog">
+      <div class="console-panel__heading"><div><span class="console-kicker">Member record</span><h2>Edit details</h2></div><button class="console-text-action" type="button" data-close-dialog>Close</button></div>
       <input name="id" type="hidden" />
-      <div class="portal-field"><label for="member-name">Full name</label><input id="member-name" name="fullName" required /></div>
-      <div class="portal-field"><label for="member-phone">Phone</label><input id="member-phone" name="phone" required /></div>
-      <div class="form-two"><div class="portal-field"><label for="member-department">Department</label><input id="member-department" name="department" required /></div><div class="portal-field"><label for="member-year">Year</label><input id="member-year" name="studyYear" required /></div></div>
-      <div class="portal-field"><label for="member-admission">Admission number</label><input id="member-admission" name="admissionNumber" required /></div>
-      <button class="portal-button" type="submit">Save member record</button><p id="member-status" class="portal-status" aria-live="polite"></p>
+      <label class="console-field"><span>Full name</span><input name="fullName" required /></label>
+      <label class="console-field"><span>Phone</span><input name="phone" required /></label>
+      <div class="console-form__two"><label class="console-field"><span>Department</span><input name="department" required /></label><label class="console-field"><span>Year</span><input name="studyYear" required /></label></div>
+      <label class="console-field"><span>Admission number</span><input name="admissionNumber" required /></label>
+      <button class="console-primary" type="submit">Save member record</button><p id="member-status" class="console-status" aria-live="polite"></p>
     </form>
   </dialog>
-</MembershipLayout>
+</AdminConsoleLayout>
 
-<style>
-  .admin-page { display: grid; gap: 42px; }
-  .admin-heading, .admin-section__heading, .records-heading { display: flex; align-items: end; justify-content: space-between; gap: 20px; }
-  .admin-metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
-  .metric { min-height: 126px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; }
-  .metric span { color: rgba(251, 250, 255, 0.56); font: 700 0.66rem/1.35 "Space Mono", monospace; letter-spacing: 0.06em; text-transform: uppercase; }
-  .metric strong { color: #e6e1ff; font-size: clamp(1.7rem, 3.6vw, 2.6rem); }
-  .admin-columns { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(310px, 0.9fr); gap: 14px; align-items: start; }
-  .admin-section { padding: 24px; }
-  .admin-section h2, .records-heading h2 { margin: 0; font-size: 1.38rem; }
-  .admin-section .portal-form { margin-top: 24px; }
-  .form-two { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-  .event-toggles { display: flex; gap: 14px; flex-wrap: wrap; }
-  .text-button { border: 0; background: transparent; color: #b8a7ff; padding: 5px 0; font-weight: 700; cursor: pointer; }
-  .text-button:hover, .text-button:focus-visible { color: #e6e1ff; outline: none; }
-  .admin-records { display: grid; gap: 18px; }
-  .admin-events { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
-  .admin-event { padding: 18px; display: grid; gap: 11px; }
-  .admin-event p { margin: 0; }
-  .admin-event__meta { color: #b8a7ff; font: 700 0.62rem/1.45 "Space Mono", monospace; text-transform: uppercase; }
-  .admin-event h3 { margin: 0; font-size: 1rem; }
-  .admin-event__summary { min-height: 3.1em; color: rgba(251, 250, 255, 0.61); font-size: 0.85rem; line-height: 1.45; }
-  .admin-event__actions { display: flex; gap: 10px; flex-wrap: wrap; }
-  .admin-event__actions button { min-height: 32px; padding: 0 10px; font-size: 0.72rem; }
-  .member-table-wrap { overflow-x: auto; border: 1px solid rgba(230, 225, 255, 0.18); border-radius: 8px; }
-  .member-table { width: 100%; min-width: 820px; border-collapse: collapse; background: rgba(11, 12, 22, 0.78); }
-  .member-table th, .member-table td { padding: 14px; border-bottom: 1px solid rgba(230, 225, 255, 0.1); text-align: left; vertical-align: top; }
-  .member-table th { color: #b8a7ff; font: 700 0.62rem/1.2 "Space Mono", monospace; letter-spacing: 0.06em; text-transform: uppercase; }
-  .member-table td { color: rgba(251, 250, 255, 0.79); font-size: 0.82rem; line-height: 1.45; }
-  .member-table td strong { color: #fbfaff; }
-  .table-actions { display: flex; gap: 9px; }
-  .table-actions a, .table-actions button { border: 0; background: transparent; color: #b8a7ff; padding: 0; font-weight: 700; text-decoration: none; cursor: pointer; }
-  .member-dialog { width: min(100% - 28px, 570px); padding: 0; border: 0; background: transparent; color: #fbfaff; }
-  .member-dialog::backdrop { background: rgba(0, 0, 0, 0.78); backdrop-filter: blur(4px); }
-  .member-dialog .portal-form { padding: 24px; }
-  @media (max-width: 980px) { .admin-metrics { grid-template-columns: repeat(2, 1fr); } .admin-columns { grid-template-columns: 1fr; } .admin-events { grid-template-columns: repeat(2, 1fr); } }
-  @media (max-width: 590px) { .admin-heading, .admin-section__heading, .records-heading { align-items: flex-start; flex-direction: column; } .admin-metrics, .admin-events, .form-two { grid-template-columns: 1fr; } .admin-section { padding: 20px; } }
+<style is:global>
+  .console-page { display: grid; gap: 30px; }
+  .console-page__heading, .console-section-heading { display: flex; align-items: end; justify-content: space-between; gap: 24px; }
+  .console-page__heading > div > p, .console-kicker { margin: 0 0 9px; color: #b8a7ff; font: 700 0.64rem/1 "Space Mono", monospace; letter-spacing: 0.1em; text-transform: uppercase; }
+  .console-page__heading h1 { max-width: 680px; margin: 0; color: #fbfaff; font-size: clamp(2rem, 4.2vw, 3.35rem); letter-spacing: 0; line-height: 1; }
+  .console-page__heading > div > span { display: block; max-width: 650px; margin-top: 12px; color: #a6a2b4; font-size: 0.93rem; line-height: 1.55; }
+  .console-primary { min-height: 40px; border: 1px solid #b8a7ff; border-radius: 5px; padding: 0 14px; background: #b8a7ff; color: #2a2455; font-size: 0.76rem; font-weight: 800; cursor: pointer; transition: background 150ms ease, transform 150ms ease; }
+  .console-primary:hover, .console-primary:focus-visible { background: #e6e1ff; transform: translateY(-1px); outline: none; }
+  .console-primary[disabled] { opacity: 0.55; cursor: wait; transform: none; }
+  .console-view { display: grid; gap: 20px; }
+  .console-view[hidden] { display: none; }
+  .console-metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+  .console-metric, .console-panel { border: 1px solid rgba(230, 225, 255, 0.14); border-radius: 7px; background: #101117; box-shadow: 0 16px 38px rgba(0, 0, 0, 0.13); }
+  .console-metric { min-height: 158px; padding: 20px; display: grid; align-content: space-between; gap: 16px; }
+  .console-metric span, .console-fund-card span { color: #aaa6b9; font: 700 0.61rem/1.2 "Space Mono", monospace; letter-spacing: 0.075em; text-transform: uppercase; }
+  .console-metric strong, .console-fund-card strong { color: #f8f7ff; font-size: clamp(1.9rem, 3vw, 2.65rem); line-height: 1; }
+  .console-metric small, .console-fund-card small { color: #777384; font-size: 0.72rem; line-height: 1.4; }
+  .console-overview-grid, .console-coupon-layout { display: grid; grid-template-columns: minmax(0, 0.86fr) minmax(0, 1.14fr); gap: 12px; }
+  .console-panel { padding: 21px; }
+  .console-panel__heading { display: flex; justify-content: space-between; gap: 16px; align-items: start; margin-bottom: 18px; }
+  .console-panel__heading h2, .console-section-heading h2 { margin: 0; color: #f8f7ff; font-size: 1.14rem; letter-spacing: 0; }
+  .console-section-heading p { max-width: 670px; margin: 10px 0 0; color: #9793a4; font-size: 0.88rem; line-height: 1.5; }
+  .console-text-action { padding: 0; border: 0; background: transparent; color: #b8a7ff; font-size: 0.72rem; font-weight: 800; cursor: pointer; }
+  .console-text-action:hover, .console-text-action:focus-visible { color: #e6e1ff; outline: none; }
+  .console-health__rows { display: grid; gap: 9px; }
+  .console-health__rows div { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 38px; padding-bottom: 9px; border-bottom: 1px solid rgba(230, 225, 255, 0.08); color: #aaa6b9; font-size: 0.81rem; }
+  .console-health__rows strong { color: #f5f3ff; font-family: "Space Mono", monospace; font-size: 0.78rem; }
+  .console-note { margin: 16px 0 0; color: #767182; font-size: 0.72rem; line-height: 1.5; }
+  .console-compact-list { display: grid; gap: 8px; }
+  .console-compact-item { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 12px; align-items: center; min-height: 54px; padding-bottom: 10px; border-bottom: 1px solid rgba(230, 225, 255, 0.08); }
+  .console-compact-item:last-child { border-bottom: 0; padding-bottom: 0; }
+  .console-date-box { width: 39px; padding: 5px 2px; border: 1px solid rgba(184, 167, 255, 0.42); border-radius: 4px; color: #d9d2ff; text-align: center; font: 700 0.63rem/1.1 "Space Mono", monospace; }
+  .console-compact-item strong, .console-compact-item span { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .console-compact-item strong { color: #eceaf4; font-size: 0.8rem; line-height: 1.25; }
+  .console-compact-item span { margin-top: 5px; color: #817d8d; font-size: 0.69rem; line-height: 1.25; }
+  .console-tag { padding: 4px 6px; border: 1px solid rgba(184, 167, 255, 0.33); border-radius: 4px; color: #b8a7ff; font: 700 0.58rem/1 "Space Mono", monospace; letter-spacing: 0.04em; text-transform: uppercase; }
+  .console-member-strip { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 9px; }
+  .console-member-chip { min-width: 0; padding: 12px; border: 1px solid rgba(230, 225, 255, 0.11); border-radius: 5px; background: rgba(42, 36, 85, 0.2); }
+  .console-member-chip strong, .console-member-chip span { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .console-member-chip strong { color: #eeecf6; font-size: 0.77rem; }
+  .console-member-chip span { margin-top: 5px; color: #8b8698; font-size: 0.67rem; }
+  .console-search { display: grid; gap: 6px; min-width: min(100%, 260px); }
+  .console-search span, .console-field > span { color: #a9a5b7; font: 700 0.6rem/1 "Space Mono", monospace; letter-spacing: 0.08em; text-transform: uppercase; }
+  .console-search input, .console-field input, .console-field textarea, .console-field select { width: 100%; min-height: 39px; border: 1px solid rgba(230, 225, 255, 0.18); border-radius: 4px; padding: 8px 10px; background: #0b0c11; color: #f5f3fb; outline: none; }
+  .console-field textarea { min-height: 79px; resize: vertical; }
+  .console-search input:focus, .console-field input:focus, .console-field textarea:focus, .console-field select:focus { border-color: #b8a7ff; }
+  .console-table-wrap { overflow-x: auto; border: 1px solid rgba(230, 225, 255, 0.13); border-radius: 7px; background: #101117; }
+  .console-table-wrap--inner { border: 0; border-radius: 0; background: transparent; }
+  .console-table { width: 100%; min-width: 780px; border-collapse: collapse; }
+  .console-table th, .console-table td { padding: 13px; border-bottom: 1px solid rgba(230, 225, 255, 0.08); text-align: left; vertical-align: top; }
+  .console-table th { color: #918c9f; font: 700 0.59rem/1 "Space Mono", monospace; letter-spacing: 0.075em; text-transform: uppercase; }
+  .console-table td { color: #bebac9; font-size: 0.75rem; line-height: 1.45; white-space: pre-line; }
+  .console-table td strong { color: #f3f1fa; }
+  .console-table__actions { display: flex; gap: 9px; }
+  .console-table__actions a, .console-table__actions button { border: 0; padding: 0; background: transparent; color: #b8a7ff; font-size: 0.72rem; font-weight: 800; text-decoration: none; cursor: pointer; }
+  .console-events-workbench { display: grid; grid-template-columns: minmax(0, 1fr) minmax(310px, 0.6fr); gap: 12px; align-items: start; }
+  .console-events-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .console-event-card { min-height: 210px; padding: 19px; display: flex; flex-direction: column; border: 1px solid rgba(230, 225, 255, 0.14); border-radius: 7px; background: #101117; }
+  .console-event-card__meta { margin: 0 0 13px; color: #b8a7ff; font: 700 0.59rem/1.4 "Space Mono", monospace; letter-spacing: 0.045em; text-transform: uppercase; }
+  .console-event-card h3 { margin: 0; color: #f5f3fb; font-size: 1rem; }
+  .console-event-card__summary { margin: 10px 0 16px; color: #9894a5; font-size: 0.78rem; line-height: 1.45; }
+  .console-event-card__footer { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: auto; }
+  .console-event-card__actions { display: flex; gap: 8px; }
+  .console-event-card__actions button { min-height: 31px; border: 1px solid rgba(184, 167, 255, 0.3); border-radius: 4px; padding: 0 8px; background: transparent; color: #d8d2f6; font-size: 0.68rem; font-weight: 800; cursor: pointer; }
+  .console-event-card__actions button:last-child { border-color: rgba(255, 160, 180, 0.32); color: #ffb6c4; }
+  .console-editor { position: sticky; top: 20px; }
+  .console-form { display: grid; gap: 13px; }
+  .console-field { display: grid; gap: 7px; }
+  .console-form__two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .console-checks { display: flex; flex-wrap: wrap; gap: 10px; color: #bbb7c5; font-size: 0.72rem; }
+  .console-checks label { display: inline-flex; gap: 6px; align-items: center; }
+  .console-checks input { accent-color: #b8a7ff; }
+  .console-status { min-height: 18px; margin: 0; color: #b8a7ff; font-size: 0.72rem; line-height: 1.45; }
+  .console-status[data-state="error"] { color: #ffb2c2; }
+  .console-status[data-state="success"] { color: #a3edc5; }
+  .console-fund-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+  .console-fund-card { min-height: 140px; display: grid; align-content: space-between; gap: 12px; }
+  .console-empty { margin: 0; color: #787383; font-size: 0.78rem; }
+  .console-dialog { width: min(100% - 28px, 560px); padding: 0; border: 0; background: transparent; color: #f8f7ff; }
+  .console-dialog::backdrop { background: rgba(0, 0, 0, 0.72); backdrop-filter: blur(4px); }
+  @media (max-width: 1120px) { .console-metrics { grid-template-columns: repeat(2, 1fr); } .console-events-workbench { grid-template-columns: 1fr; } .console-editor { position: static; } .console-member-strip { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 760px) { .console-page__heading, .console-section-heading { align-items: flex-start; flex-direction: column; } .console-overview-grid, .console-coupon-layout, .console-events-grid, .console-fund-grid { grid-template-columns: 1fr; } .console-search { width: 100%; } }
+  @media (max-width: 470px) { .console-metrics, .console-member-strip, .console-form__two { grid-template-columns: 1fr; } .console-page__heading h1 { font-size: 2rem; } }
 </style>
 
 <script>
   // @ts-nocheck
+  const page = document.querySelector(".console-page");
+  const demoMode = page?.dataset.demo === "true";
   const getJson = async (url, options = {}) => {
     const response = await fetch(url, options);
     const data = await response.json().catch(() => ({}));
     if (!response.ok) throw new Error(data.message || "Unable to complete this request.");
     return data;
   };
+  const formatMoney = (paise) => new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 }).format((paise || 0) / 100);
+  const formatDate = (value, withTime = false) => value ? new Intl.DateTimeFormat("en-IN", withTime ? { dateStyle: "medium", timeStyle: "short" } : { dateStyle: "medium" }).format(new Date(value)) : "--";
   const status = (element, message, state = "") => { element.textContent = message; element.dataset.state = state; };
   const dateInput = (value) => value ? new Date(value).toISOString().slice(0, 16) : "";
-  const formatDate = (value) => value ? new Intl.DateTimeFormat("en-IN", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value)) : "--";
+  const setText = (selector, value) => document.querySelectorAll(selector).forEach((element) => element.textContent = value);
   let events = [];
   let members = [];
+  let coupons = [];
+  let overview = {};
   let editingEventId = null;
 
-  const metrics = document.querySelector("#admin-metrics");
-  const eventForm = document.querySelector("#event-form");
-  const eventStatus = document.querySelector("#event-status");
-  const eventTitle = document.querySelector("#event-form-title");
-  const resetEvent = document.querySelector("#reset-event");
-  const eventsHost = document.querySelector("#admin-events");
-  const membersHost = document.querySelector("#admin-members");
-  const couponEvent = document.querySelector("#coupon-event");
-  const couponMember = document.querySelector("#coupon-member");
-  const couponForm = document.querySelector("#coupon-form");
-  const couponStatus = document.querySelector("#coupon-status");
-  const memberDialog = document.querySelector("#member-dialog");
-  const memberForm = document.querySelector("#member-form");
-  const memberStatus = document.querySelector("#member-status");
-  const demoMode = document.querySelector(".admin-page")?.dataset.demo === "true";
-  const demoOverview = { users: 38, activeMembers: 27, fundsPaise: 405000, publishedEvents: 2 };
+  const demoOverview = { users: 38, activeMembers: 27, fundsPaise: 405000, publishedEvents: 2, openEvents: 2, registrations: 96, couponsIssued: 14 };
   const demoEvents = [
     { id: "demo-uxplore", title: "UXplore 2026", summary: "A product and interface design challenge for campus teams.", details: "Member registration preview.", venue: "AJCE Main Block", starts_at: "2026-08-18T09:30:00.000Z", ends_at: "2026-08-18T16:30:00.000Z", registration_deadline: "2026-08-15T18:00:00.000Z", capacity: 80, member_only: 1, registration_open: 1, published: 1 },
     { id: "demo-data", title: "Data Alchemy", summary: "A hands-on session about building useful data stories.", details: "Member registration preview.", venue: "Innovation Lab", starts_at: "2026-09-05T10:00:00.000Z", ends_at: "2026-09-05T15:00:00.000Z", registration_deadline: "2026-09-03T18:00:00.000Z", capacity: 60, member_only: 1, registration_open: 1, published: 1 },
   ];
   const demoMembers = [
-    { id: "preview-member", full_name: "Ananya Thomas", email: "ananya.thomas@ajce.in", phone: "+91 98765 43210", department: "Computer Science and Engineering", study_year: "Third year", admission_number: "AJCE24CSE001", member_number: "AJCE-ACM-2026-DEMO01", membership_status: "active", expires_at: "2027-07-01T00:00:00.000Z", razorpay_payment_id: "pay_demo_001", amount_paise: 15000 },
-    { id: "preview-member-two", full_name: "Arjun Mathew", email: "arjun.mathew@ajce.in", phone: "+91 98765 43211", department: "Electronics and Communication Engineering", study_year: "Second year", admission_number: "AJCE25ECE014", member_number: "AJCE-ACM-2026-DEMO02", membership_status: "active", expires_at: "2027-07-01T00:00:00.000Z", razorpay_payment_id: "pay_demo_002", amount_paise: 15000 },
+    { id: "preview-member", full_name: "Ananya Thomas", email: "ananya.thomas@ajce.in", phone: "+91 98765 43210", department: "Computer Science and Engineering", study_year: "Third year", admission_number: "AJCE24CSE001", member_number: "AJCE-ACM-2026-DEMO01", membership_status: "active", expires_at: "2027-07-01T00:00:00.000Z", starts_at: "2026-07-01T00:00:00.000Z", razorpay_payment_id: "pay_demo_001", amount_paise: 15000 },
+    { id: "preview-member-two", full_name: "Arjun Mathew", email: "arjun.mathew@ajce.in", phone: "+91 98765 43211", department: "Electronics and Communication Engineering", study_year: "Second year", admission_number: "AJCE25ECE014", member_number: "AJCE-ACM-2026-DEMO02", membership_status: "active", expires_at: "2027-07-01T00:00:00.000Z", starts_at: "2026-07-02T00:00:00.000Z", razorpay_payment_id: "pay_demo_002", amount_paise: 15000 },
+    { id: "preview-member-three", full_name: "Maria Joseph", email: "maria.joseph@ajce.in", phone: "+91 98765 43212", department: "Artificial Intelligence and Data Science", study_year: "Third year", admission_number: "AJCE24AID025", member_number: "AJCE-ACM-2026-DEMO03", membership_status: "active", expires_at: "2027-07-01T00:00:00.000Z", starts_at: "2026-07-03T00:00:00.000Z", razorpay_payment_id: "pay_demo_003", amount_paise: 15000 },
+    { id: "preview-member-four", full_name: "Nikhil Raj", email: "nikhil.raj@ajce.in", phone: "+91 98765 43213", department: "Mechanical Engineering", study_year: "Second year", admission_number: "AJCE25MEC018", member_number: null, membership_status: null, expires_at: null, starts_at: null, razorpay_payment_id: null, amount_paise: null },
+  ];
+  const demoCoupons = [
+    { id: "coupon-one", event_title: "UXplore 2026", member_name: "Ananya Thomas", member_email: "ananya.thomas@ajce.in", discount_amount_paise: 0, expires_at: "2026-08-15T18:00:00.000Z", used_at: null, created_at: "2026-08-01T09:00:00.000Z" },
+    { id: "coupon-two", event_title: "Data Alchemy", member_name: "Arjun Mathew", member_email: "arjun.mathew@ajce.in", discount_amount_paise: 5000, expires_at: "2026-09-03T18:00:00.000Z", used_at: "2026-08-15T12:00:00.000Z", created_at: "2026-08-03T10:00:00.000Z" },
   ];
 
-  const resetEventForm = () => { editingEventId = null; eventForm.reset(); eventTitle.textContent = "Create an event"; resetEvent.hidden = true; status(eventStatus, ""); };
-  const setOptions = (select, values, label) => { select.replaceChildren(new Option(`Choose ${label}`, "")); values.forEach((item) => select.add(new Option(item.title || item.full_name, item.id))); };
-
-  const renderEvents = () => {
-    eventsHost.replaceChildren();
-    if (!events.length) { eventsHost.textContent = "No events have been created yet."; return; }
-    events.forEach((event) => {
-      const card = document.createElement("article"); card.className = "portal-panel admin-event";
-      const meta = document.createElement("p"); meta.className = "admin-event__meta"; meta.textContent = `${event.published ? "Published" : "Draft"} / ${formatDate(event.starts_at)}`;
-      const title = document.createElement("h3"); title.textContent = event.title;
-      const summary = document.createElement("p"); summary.className = "admin-event__summary"; summary.textContent = event.summary;
-      const actions = document.createElement("div"); actions.className = "admin-event__actions";
-      const edit = document.createElement("button"); edit.type = "button"; edit.className = "portal-button portal-button--subtle"; edit.textContent = "Edit";
-      edit.addEventListener("click", () => {
-        editingEventId = event.id; eventTitle.textContent = `Edit ${event.title}`; resetEvent.hidden = false;
-        eventForm.title.value = event.title; eventForm.summary.value = event.summary; eventForm.details.value = event.details || ""; eventForm.venue.value = event.venue || ""; eventForm.startsAt.value = dateInput(event.starts_at); eventForm.endsAt.value = dateInput(event.ends_at); eventForm.registrationDeadline.value = dateInput(event.registration_deadline); eventForm.capacity.value = event.capacity || ""; eventForm.memberOnly.checked = Boolean(event.member_only); eventForm.registrationOpen.checked = Boolean(event.registration_open); eventForm.published.checked = Boolean(event.published); eventForm.scrollIntoView({ behavior: "smooth", block: "start" });
-      });
-      const remove = document.createElement("button"); remove.type = "button"; remove.className = "portal-button portal-button--danger"; remove.textContent = "Delete";
-      remove.addEventListener("click", async () => { if (demoMode) { status(eventStatus, "Preview mode does not change saved events."); return; } if (!window.confirm(`Delete ${event.title}?`)) return; try { await getJson(`/api/admin/events/${event.id}`, { method: "DELETE" }); await loadRecords(); } catch (error) { window.alert(error.message); } });
-      actions.append(edit, remove); card.append(meta, title, summary, actions); eventsHost.append(card);
-    });
+  const views = [...document.querySelectorAll("[data-console-view]")];
+  const navItems = [...document.querySelectorAll("[data-console-nav]")];
+  const switchView = (view) => {
+    views.forEach((panel) => { panel.hidden = panel.dataset.consoleView !== view; });
+    navItems.forEach((item) => { const active = item.dataset.view === view; item.classList.toggle("is-active", active); if (active) item.setAttribute("aria-current", "page"); else item.removeAttribute("aria-current"); });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
+  navItems.forEach((item) => item.addEventListener("click", () => switchView(item.dataset.view)));
+  document.querySelectorAll("[data-switch-view]").forEach((button) => button.addEventListener("click", () => switchView(button.dataset.switchView)));
+  document.querySelector("[data-new-event]")?.addEventListener("click", () => { switchView("events"); resetEventForm(); });
 
-  const renderMembers = () => {
-    membersHost.replaceChildren();
-    const table = document.createElement("table"); table.className = "member-table";
+  const overviewEvents = document.querySelector("#overview-events");
+  const overviewMembers = document.querySelector("#overview-members");
+  const membersTable = document.querySelector("#members-table");
+  const eventsGrid = document.querySelector("#events-grid");
+  const couponHistory = document.querySelector("#coupon-history");
+  const fundsTable = document.querySelector("#funds-table");
+  const eventForm = document.querySelector("#event-form");
+  const eventStatus = document.querySelector("#event-status");
+  const eventEditorTitle = document.querySelector("#event-editor-title");
+  const resetEventButton = document.querySelector("#reset-event");
+  const couponForm = document.querySelector("#coupon-form");
+  const couponStatus = document.querySelector("#coupon-status");
+  const couponEvent = document.querySelector("#coupon-event");
+  const couponMember = document.querySelector("#coupon-member");
+  const memberSearch = document.querySelector("#member-search");
+  const memberDialog = document.querySelector("#member-dialog");
+  const memberForm = document.querySelector("#member-form");
+  const memberStatus = document.querySelector("#member-status");
+
+  const setOptions = (select, values, label) => { select.replaceChildren(new Option(`Choose ${label}`, "")); values.forEach((item) => select.add(new Option(item.title || item.full_name, item.id))); };
+  const renderOverview = () => {
+    setText('[data-metric="users"]', overview.users ?? 0);
+    setText('[data-metric="members"]', overview.activeMembers ?? 0);
+    setText('[data-metric="funds"]', formatMoney(overview.fundsPaise));
+    setText('[data-metric="events"]', overview.openEvents ?? 0);
+    setText('[data-health="registrations"]', overview.registrations ?? 0);
+    setText('[data-health="coupons"]', overview.couponsIssued ?? 0);
+    const rate = overview.users ? `${Math.round(((overview.activeMembers || 0) / overview.users) * 100)}%` : "--";
+    setText('[data-health="rate"]', rate);
+    overviewEvents.replaceChildren();
+    const visibleEvents = events.filter((event) => event.published).slice(0, 3);
+    if (!visibleEvents.length) { overviewEvents.textContent = "No published events yet."; return; }
+    visibleEvents.forEach((event) => { const row = document.createElement("div"); row.className = "console-compact-item"; const date = new Date(event.starts_at); const dateBox = document.createElement("span"); dateBox.className = "console-date-box"; dateBox.textContent = `${date.toLocaleDateString("en-IN", { day: "2-digit" })}\n${date.toLocaleDateString("en-IN", { month: "short" })}`; const copy = document.createElement("div"); const title = document.createElement("strong"); title.textContent = event.title; const meta = document.createElement("span"); meta.textContent = `${event.venue || "Venue pending"} / ${formatDate(event.starts_at)}`; copy.append(title, meta); const tag = document.createElement("span"); tag.className = "console-tag"; tag.textContent = event.registration_open ? "Open" : "Closed"; row.append(dateBox, copy, tag); overviewEvents.append(row); });
+    overviewMembers.replaceChildren();
+    members.slice(0, 4).forEach((member) => { const chip = document.createElement("div"); chip.className = "console-member-chip"; const name = document.createElement("strong"); name.textContent = member.full_name; const meta = document.createElement("span"); meta.textContent = member.member_number || "Profile created"; chip.append(name, meta); overviewMembers.append(chip); });
+  };
+  const renderMembers = (query = "") => {
+    membersTable.replaceChildren();
+    const normalized = query.trim().toLowerCase();
+    const filtered = members.filter((member) => [member.full_name, member.email, member.department, member.admission_number].join(" ").toLowerCase().includes(normalized));
+    if (!filtered.length) { membersTable.textContent = "No members match that search."; return; }
+    const table = document.createElement("table"); table.className = "console-table";
     const head = document.createElement("thead"); head.innerHTML = "<tr><th>Member</th><th>Academic details</th><th>Membership</th><th>Payment</th><th>Actions</th></tr>";
     const body = document.createElement("tbody");
-    members.forEach((member) => {
-      const row = document.createElement("tr");
-      const memberCell = document.createElement("td"); const name = document.createElement("strong"); name.textContent = member.full_name; memberCell.append(name, document.createElement("br"), document.createTextNode(member.email), document.createElement("br"), document.createTextNode(member.phone || "Profile incomplete"));
-      const academicCell = document.createElement("td"); academicCell.textContent = `${member.department || "--"} / ${member.study_year || "--"}\n${member.admission_number || "--"}`;
-      const membershipCell = document.createElement("td"); membershipCell.textContent = member.member_number ? `${member.membership_status}\n${member.member_number}\nUntil ${formatDate(member.expires_at)}` : "Not active";
-      const paymentCell = document.createElement("td"); paymentCell.textContent = member.razorpay_payment_id ? `Rs. ${((member.amount_paise || 0) / 100).toFixed(2)}\n${member.razorpay_payment_id}` : "--";
-      const actionCell = document.createElement("td"); const actions = document.createElement("div"); actions.className = "table-actions";
-      const edit = document.createElement("button"); edit.type = "button"; edit.textContent = "Edit"; edit.addEventListener("click", () => openMember(member));
-      const card = document.createElement("a"); card.href = demoMode ? "/membership/card?preview=member" : `/membership/card?member=${encodeURIComponent(member.id)}`; card.textContent = "ID card"; actions.append(edit, card); actionCell.append(actions);
-      row.append(memberCell, academicCell, membershipCell, paymentCell, actionCell); body.append(row);
-    });
-    table.append(head, body); membersHost.append(table);
-  };
-
+    filtered.forEach((member) => { const row = document.createElement("tr"); const person = document.createElement("td"); const name = document.createElement("strong"); name.textContent = member.full_name; person.append(name, document.createElement("br"), document.createTextNode(member.email), document.createElement("br"), document.createTextNode(member.phone || "Profile incomplete")); const academic = document.createElement("td"); academic.textContent = `${member.department || "--"} / ${member.study_year || "--"}\n${member.admission_number || "--"}`; const membership = document.createElement("td"); membership.textContent = member.member_number ? `${member.membership_status}\n${member.member_number}\nUntil ${formatDate(member.expires_at)}` : "Not active"; const payment = document.createElement("td"); payment.textContent = member.razorpay_payment_id ? `${formatMoney(member.amount_paise)}\n${member.razorpay_payment_id}` : "--"; const action = document.createElement("td"); const actions = document.createElement("div"); actions.className = "console-table__actions"; const edit = document.createElement("button"); edit.type = "button"; edit.textContent = "Edit"; edit.addEventListener("click", () => openMember(member)); const card = document.createElement("a"); card.textContent = "ID card"; card.href = demoMode ? "/membership/card?preview=member" : `/membership/card?member=${encodeURIComponent(member.id)}`; actions.append(edit, card); action.append(actions); row.append(person, academic, membership, payment, action); body.append(row); }); table.append(head, body); membersTable.append(table); };
+  const renderEvents = () => { eventsGrid.replaceChildren(); if (!events.length) { eventsGrid.textContent = "No events have been created yet."; return; } events.forEach((event) => { const card = document.createElement("article"); card.className = "console-event-card"; const meta = document.createElement("p"); meta.className = "console-event-card__meta"; meta.textContent = `${event.published ? "Published" : "Draft"} / ${formatDate(event.starts_at, true)}`; const title = document.createElement("h3"); title.textContent = event.title; const summary = document.createElement("p"); summary.className = "console-event-card__summary"; summary.textContent = event.summary; const footer = document.createElement("div"); footer.className = "console-event-card__footer"; const state = document.createElement("span"); state.className = "console-tag"; state.textContent = event.registration_open ? "Registration open" : "Registration closed"; const actions = document.createElement("div"); actions.className = "console-event-card__actions"; const edit = document.createElement("button"); edit.type = "button"; edit.textContent = "Edit"; edit.addEventListener("click", () => editEvent(event)); const remove = document.createElement("button"); remove.type = "button"; remove.textContent = "Delete"; remove.addEventListener("click", () => deleteEvent(event)); actions.append(edit, remove); footer.append(state, actions); card.append(meta, title, summary, footer); eventsGrid.append(card); }); };
+  const renderCoupons = () => { couponHistory.replaceChildren(); if (!coupons.length) { couponHistory.textContent = "No coupons have been issued yet."; return; } const table = document.createElement("table"); table.className = "console-table"; const head = document.createElement("thead"); head.innerHTML = "<tr><th>Member</th><th>Event</th><th>Value</th><th>Expiry</th><th>Status</th></tr>"; const body = document.createElement("tbody"); coupons.forEach((coupon) => { const row = document.createElement("tr"); const person = document.createElement("td"); const name = document.createElement("strong"); name.textContent = coupon.member_name; person.append(name, document.createElement("br"), document.createTextNode(coupon.member_email)); const event = document.createElement("td"); event.textContent = coupon.event_title; const discount = document.createElement("td"); discount.textContent = coupon.discount_amount_paise ? formatMoney(coupon.discount_amount_paise) : "Access code"; const expiry = document.createElement("td"); expiry.textContent = coupon.expires_at ? formatDate(coupon.expires_at, true) : "No expiry"; const state = document.createElement("td"); state.textContent = coupon.used_at ? `Used ${formatDate(coupon.used_at, true)}` : "Available"; row.append(person, event, discount, expiry, state); body.append(row); }); table.append(head, body); couponHistory.append(table); };
+  const renderFunds = () => { const paid = members.filter((member) => member.razorpay_payment_id); const total = paid.reduce((sum, member) => sum + (Number(member.amount_paise) || 0), 0); setText('[data-fund="collected"]', formatMoney(overview.fundsPaise ?? total)); setText('[data-fund="paid"]', paid.length); setText('[data-fund="average"]', paid.length ? formatMoney(total / paid.length) : "--"); fundsTable.replaceChildren(); if (!paid.length) { fundsTable.textContent = "No verified payments yet."; return; } const table = document.createElement("table"); table.className = "console-table"; const head = document.createElement("thead"); head.innerHTML = "<tr><th>Member</th><th>Member number</th><th>Amount</th><th>Razorpay payment</th></tr>"; const body = document.createElement("tbody"); paid.forEach((member) => { const row = document.createElement("tr"); [member.full_name, member.member_number || "--", formatMoney(member.amount_paise), member.razorpay_payment_id].forEach((value) => { const cell = document.createElement("td"); cell.textContent = value; row.append(cell); }); body.append(row); }); table.append(head, body); fundsTable.append(table); };
+  const resetEventForm = () => { editingEventId = null; eventForm.reset(); eventForm.memberOnly.checked = true; eventForm.registrationOpen.checked = true; eventEditorTitle.textContent = "Create event"; resetEventButton.hidden = true; status(eventStatus, ""); };
+  const editEvent = (event) => { editingEventId = event.id; eventEditorTitle.textContent = `Edit ${event.title}`; resetEventButton.hidden = false; eventForm.title.value = event.title; eventForm.summary.value = event.summary; eventForm.details.value = event.details || ""; eventForm.venue.value = event.venue || ""; eventForm.startsAt.value = dateInput(event.starts_at); eventForm.endsAt.value = dateInput(event.ends_at); eventForm.registrationDeadline.value = dateInput(event.registration_deadline); eventForm.capacity.value = event.capacity || ""; eventForm.memberOnly.checked = Boolean(event.member_only); eventForm.registrationOpen.checked = Boolean(event.registration_open); eventForm.published.checked = Boolean(event.published); window.scrollTo({ top: document.querySelector(".console-events-workbench").offsetTop - 18, behavior: "smooth" }); };
+  const deleteEvent = async (event) => { if (demoMode) { status(eventStatus, "Preview mode does not remove saved events."); return; } if (!window.confirm(`Delete ${event.title}?`)) return; try { await getJson(`/api/admin/events/${event.id}`, { method: "DELETE" }); await loadRecords(); } catch (error) { status(eventStatus, error.message, "error"); } };
   const openMember = (member) => { memberForm.id.value = member.id; memberForm.fullName.value = member.full_name || ""; memberForm.phone.value = member.phone || ""; memberForm.department.value = member.department || ""; memberForm.studyYear.value = member.study_year || ""; memberForm.admissionNumber.value = member.admission_number || ""; status(memberStatus, ""); memberDialog.showModal(); };
-
-  const loadRecords = async () => {
-    if (demoMode) {
-      const values = [demoOverview.users, demoOverview.activeMembers, `Rs. ${(demoOverview.fundsPaise / 100).toFixed(2)}`, demoOverview.publishedEvents];
-      metrics.querySelectorAll("strong").forEach((node, index) => node.textContent = values[index]);
-      events = demoEvents;
-      members = demoMembers;
-      setOptions(couponEvent, events, "event");
-      setOptions(couponMember, members, "member");
-      renderEvents();
-      renderMembers();
-      return;
-    }
-    const [overview, eventData, memberData] = await Promise.all([getJson("/api/admin/overview"), getJson("/api/admin/events"), getJson("/api/admin/members")]);
-    const values = [overview.users, overview.activeMembers, `Rs. ${(overview.fundsPaise / 100).toFixed(2)}`, overview.publishedEvents]; metrics.querySelectorAll("strong").forEach((node, index) => node.textContent = values[index]);
-    events = eventData.events; members = memberData.members; setOptions(couponEvent, events, "event"); setOptions(couponMember, members, "member"); renderEvents(); renderMembers();
-  };
-
-  eventForm.addEventListener("submit", async (event) => { event.preventDefault(); if (demoMode) { status(eventStatus, "Preview mode only. Events are not saved here."); return; } try { const values = Object.fromEntries(new FormData(eventForm)); values.memberOnly = eventForm.memberOnly.checked; values.registrationOpen = eventForm.registrationOpen.checked; values.published = eventForm.published.checked; const url = editingEventId ? `/api/admin/events/${editingEventId}` : "/api/admin/events"; await getJson(url, { method: editingEventId ? "PATCH" : "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(values) }); status(eventStatus, "Event saved.", "success"); resetEventForm(); await loadRecords(); } catch (error) { status(eventStatus, error.message, "error"); } });
-  resetEvent.addEventListener("click", resetEventForm);
-  couponForm.addEventListener("submit", async (event) => { event.preventDefault(); if (demoMode) { status(couponStatus, "Preview code: AJCE-DEMO-2026. No real coupon was created.", "success"); return; } try { const data = await getJson("/api/admin/coupons", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(Object.fromEntries(new FormData(couponForm))) }); status(couponStatus, `Code created: ${data.code}. Copy it now; it cannot be retrieved later.`, "success"); couponForm.reset(); } catch (error) { status(couponStatus, error.message, "error"); } });
-  memberForm.addEventListener("submit", async (event) => { event.preventDefault(); if (demoMode) { status(memberStatus, "Preview mode only. Member records are not changed."); return; } try { const data = Object.fromEntries(new FormData(memberForm)); const id = data.id; delete data.id; await getJson(`/api/admin/members/${id}`, { method: "PATCH", headers: { "content-type": "application/json" }, body: JSON.stringify(data) }); status(memberStatus, "Member record saved.", "success"); await loadRecords(); window.setTimeout(() => memberDialog.close(), 450); } catch (error) { status(memberStatus, error.message, "error"); } });
+  const loadRecords = async () => { if (demoMode) { overview = demoOverview; events = demoEvents; members = demoMembers; coupons = demoCoupons; } else { const [overviewResponse, eventResponse, memberResponse, couponResponse] = await Promise.all([getJson("/api/admin/overview"), getJson("/api/admin/events"), getJson("/api/admin/members"), getJson("/api/admin/coupons")]); overview = overviewResponse; events = eventResponse.events; members = memberResponse.members; coupons = couponResponse.coupons; } setOptions(couponEvent, events, "event"); setOptions(couponMember, members, "member"); renderOverview(); renderMembers(memberSearch.value); renderEvents(); renderCoupons(); renderFunds(); };
+  eventForm.addEventListener("submit", async (event) => { event.preventDefault(); if (demoMode) { status(eventStatus, "Preview mode only. This event is not saved."); return; } try { const values = Object.fromEntries(new FormData(eventForm)); values.memberOnly = eventForm.memberOnly.checked; values.registrationOpen = eventForm.registrationOpen.checked; values.published = eventForm.published.checked; const endpoint = editingEventId ? `/api/admin/events/${editingEventId}` : "/api/admin/events"; await getJson(endpoint, { method: editingEventId ? "PATCH" : "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(values) }); status(eventStatus, "Event saved.", "success"); resetEventForm(); await loadRecords(); } catch (error) { status(eventStatus, error.message, "error"); } });
+  resetEventButton.addEventListener("click", resetEventForm);
+  couponForm.addEventListener("submit", async (event) => { event.preventDefault(); if (demoMode) { status(couponStatus, "Preview code: AJCE-DEMO-2026. No real coupon was created.", "success"); return; } try { const data = await getJson("/api/admin/coupons", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(Object.fromEntries(new FormData(couponForm))) }); status(couponStatus, `Code created: ${data.code}. Copy it now; it cannot be retrieved later.`, "success"); couponForm.reset(); await loadRecords(); } catch (error) { status(couponStatus, error.message, "error"); } });
+  memberForm.addEventListener("submit", async (event) => { event.preventDefault(); if (demoMode) { status(memberStatus, "Preview mode only. Member records are unchanged."); return; } try { const data = Object.fromEntries(new FormData(memberForm)); const id = data.id; delete data.id; await getJson(`/api/admin/members/${id}`, { method: "PATCH", headers: { "content-type": "application/json" }, body: JSON.stringify(data) }); status(memberStatus, "Member record saved.", "success"); await loadRecords(); window.setTimeout(() => memberDialog.close(), 450); } catch (error) { status(memberStatus, error.message, "error"); } });
+  memberSearch.addEventListener("input", () => renderMembers(memberSearch.value));
   document.querySelector("[data-close-dialog]")?.addEventListener("click", () => memberDialog.close());
-  loadRecords().catch((error) => { membersHost.textContent = error.message; });
+  loadRecords().catch((error) => { overviewEvents.textContent = error.message; membersTable.textContent = error.message; });
 </script>
