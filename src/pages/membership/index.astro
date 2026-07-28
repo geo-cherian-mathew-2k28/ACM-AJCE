@@ -18,6 +18,9 @@ const isLocalPreviewHost = ["localhost", "127.0.0.1", "::1"].includes(
 const previewMode = isLocalPreviewHost
   ? Astro.url.searchParams.get("preview")
   : null;
+if (previewMode === "admin") {
+  return Astro.redirect("/membership/admin?preview=admin");
+}
 const isPreview = previewMode === "member" || previewMode === "admin";
 const previewUser: MemberUser = {
   id: "preview-member",
@@ -299,11 +302,14 @@ const isAdmin = isPreview ? previewMode === "admin" : user ? isAdminEmail(user.e
   const createEventCard = (event) => {
     const article = document.createElement("article");
     article.className = "member-event portal-panel";
+    if (event.poster_url) { const poster = document.createElement("img"); poster.className = "member-event__poster"; poster.src = event.poster_url; poster.alt = `${event.title} poster`; article.append(poster); }
     const meta = document.createElement("p"); meta.className = "member-event__meta";
     addText(meta, `${formatDate(event.starts_at)}${event.venue ? ` / ${event.venue}` : ""}`);
     const title = document.createElement("h3"); addText(title, event.title);
     const summary = document.createElement("p"); summary.className = "member-event__summary"; addText(summary, event.summary);
-    const detail = document.createElement("p"); detail.className = "member-event__details"; addText(detail, event.details || "Event details will be shared by ACM AJCE.");
+    const detail = document.createElement("p"); detail.className = "member-event__details"; addText(detail, event.registration_status && event.after_registration_content ? event.after_registration_content : event.details || "Event details will be shared by ACM AJCE.");
+    const resources = document.createElement("div"); resources.className = "member-event__resources";
+    [[event.event_url, "Event details"], [event.whatsapp_url, "WhatsApp group"]].forEach(([url, label]) => { if (!url) return; const link = document.createElement("a"); link.href = url; link.target = "_blank"; link.rel = "noreferrer"; addText(link, label); resources.append(link); });
     const row = document.createElement("div"); row.className = "member-event__action";
     const coupon = document.createElement("input"); coupon.placeholder = "Coupon code (optional)"; coupon.setAttribute("aria-label", `Coupon for ${event.title}`);
     const button = document.createElement("button"); button.className = "portal-button"; button.type = "button";
@@ -312,10 +318,10 @@ const isAdmin = isPreview ? previewMode === "admin" : user ? isAdminEmail(user.e
       button.disabled = true;
       try {
         await requestJson(`/api/events/${event.id}/register`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ couponCode: coupon.value }) });
-        addText(button, "Registered"); coupon.disabled = true;
+        addText(button, "Registered"); coupon.disabled = true; if (event.after_registration_content) addText(detail, event.after_registration_content);
       } catch (error) { button.disabled = false; window.alert(error.message); }
     });
-    row.append(coupon, button); article.append(meta, title, summary, detail, row); return article;
+    row.append(coupon, button); article.append(meta, title, summary, detail); if (resources.children.length) article.append(resources); article.append(row); return article;
   };
 
   if (eventsList && eventsList.dataset.demo !== "true") {
@@ -331,10 +337,14 @@ const isAdmin = isPreview ? previewMode === "admin" : user ? isAdminEmail(user.e
 
 <style is:global>
   .member-event { padding: 20px; }
+  .member-event__poster { width: calc(100% + 40px); height: 168px; display: block; margin: -20px -20px 18px; border-radius: 7px 7px 0 0; object-fit: cover; background: rgba(42, 36, 85, 0.45); }
   .member-event__meta { margin: 0 0 14px; color: #b8a7ff; font: 700 0.65rem/1.35 "Space Mono", monospace; letter-spacing: 0.05em; text-transform: uppercase; }
   .member-event h3 { margin: 0; font-size: 1.2rem; }
   .member-event__summary { margin: 11px 0 0; color: rgba(251, 250, 255, 0.75); line-height: 1.5; }
   .member-event__details { min-height: 2.8em; margin: 10px 0 18px; color: rgba(251, 250, 255, 0.48); font-size: 0.85rem; line-height: 1.45; }
+  .member-event__resources { display: flex; flex-wrap: wrap; gap: 10px; margin: -5px 0 17px; }
+  .member-event__resources a { color: #b8a7ff; font-size: 0.78rem; font-weight: 800; text-decoration: none; }
+  .member-event__resources a:hover, .member-event__resources a:focus-visible { color: #e6e1ff; outline: none; }
   .member-event__action { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 9px; }
   .member-event__action input { min-width: 0; border: 1px solid rgba(230, 225, 255, 0.26); border-radius: 5px; padding: 0 10px; background: rgba(42, 36, 85, 0.36); color: #fbfaff; outline: none; }
   .member-event__action input:focus { border-color: #b8a7ff; }

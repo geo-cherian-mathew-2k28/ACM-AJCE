@@ -7,7 +7,7 @@ type Props = {
 };
 
 const {
-  title = "ACM AJCE Member Operations",
+  title = "ACM AJCE Admin Console",
   viewerName,
   viewerEmail,
   preview = false,
@@ -20,47 +20,47 @@ const initial = viewerName.trim().charAt(0).toUpperCase() || "A";
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <meta name="theme-color" content="#08090e" />
+    <meta name="theme-color" content="#090a14" />
     <link rel="icon" type="image/png" href="/brand/acm-ajce-light.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
     <title>{title}</title>
   </head>
-  <body>
+  <body class="console-body">
     <div class="console-shell">
-      <aside class="console-sidebar">
-        <a class="console-brand" href="/" aria-label="Back to ACM AJCE home">
-          <img src="/brand/acm-ajce-light.png" alt="ACM AJCE" />
-          <span>Member operations</span>
-        </a>
+      <aside class="console-sidebar" data-console-sidebar>
+        <div class="console-sidebar__top">
+          <a class="console-brand" href="/" aria-label="Back to ACM AJCE home">
+            <img src="/brand/acm-ajce-light.png" alt="ACM AJCE" />
+            <span class="console-brand__copy"><strong>ACM AJCE</strong><small>Admin console</small></span>
+          </a>
+          <button class="console-sidebar-toggle" type="button" data-sidebar-toggle title="Collapse navigation" aria-label="Collapse navigation" aria-expanded="true"><span></span><span></span><span></span></button>
+        </div>
 
-        <nav class="console-nav" aria-label="Member operations sections">
-          <button class="console-nav__item is-active" type="button" data-console-nav data-view="overview" aria-current="page"><span class="console-nav__mark"></span>Overview</button>
-          <button class="console-nav__item" type="button" data-console-nav data-view="members"><span class="console-nav__mark"></span>Members</button>
-          <button class="console-nav__item" type="button" data-console-nav data-view="events"><span class="console-nav__mark"></span>Events</button>
-          <button class="console-nav__item" type="button" data-console-nav data-view="coupons"><span class="console-nav__mark"></span>Coupons</button>
-          <button class="console-nav__item" type="button" data-console-nav data-view="funds"><span class="console-nav__mark"></span>Funds</button>
+        <nav class="console-nav" aria-label="Admin console sections">
+          <button class="console-nav__item is-active" type="button" data-console-nav data-view="overview" aria-current="page"><span class="console-nav__mark console-nav__mark--overview"></span><span>Overview</span></button>
+          <button class="console-nav__item" type="button" data-console-nav data-view="members"><span class="console-nav__mark console-nav__mark--members"></span><span>Members</span></button>
+          <button class="console-nav__item" type="button" data-console-nav data-view="events"><span class="console-nav__mark console-nav__mark--events"></span><span>Events</span></button>
+          <button class="console-nav__item" type="button" data-console-nav data-view="coupons"><span class="console-nav__mark console-nav__mark--coupons"></span><span>Coupons</span></button>
+          <button class="console-nav__item" type="button" data-console-nav data-view="funds"><span class="console-nav__mark console-nav__mark--funds"></span><span>Funds</span></button>
         </nav>
 
         <div class="console-profile">
           <div class="console-avatar" aria-hidden="true">{initial}</div>
-          <div><strong>{viewerName}</strong><span>{preview ? "Preview workspace" : viewerEmail}</span></div>
+          <div class="console-profile__copy"><strong>{viewerName}</strong><span>{preview ? "Local preview" : viewerEmail}</span></div>
         </div>
         {preview ? (
-          <a class="console-signout" href="/membership">Exit preview</a>
+          <a class="console-signout" href="/membership?preview=member"><span>Exit preview</span></a>
         ) : (
-          <form method="post" action="/api/auth/logout"><button class="console-signout" type="submit">Sign out</button></form>
+          <form method="post" action="/api/auth/logout"><button class="console-signout" type="submit"><span>Sign out</span></button></form>
         )}
       </aside>
 
       <div class="console-main">
         <header class="console-topbar">
-          <div class="console-topbar__context"><span>ACM AJCE</span><strong>Local chapter console</strong></div>
-          <div class="console-topbar__actions"><a href="/" class="console-link">Public website</a><a href={preview ? "/membership?preview=member" : "/membership"} class="console-link">Member view</a></div>
+          <div class="console-topbar__context"><span class="console-status-dot" aria-hidden="true"></span><span>Chapter systems online</span></div>
+          <div class="console-topbar__actions"><a href="/" class="console-link">Website</a><a href={preview ? "/membership?preview=member" : "/membership"} class="console-link">Member view</a></div>
         </header>
         <main class="console-content"><slot /></main>
       </div>
@@ -68,38 +68,83 @@ const initial = viewerName.trim().charAt(0).toUpperCase() || "A";
   </body>
 </html>
 
-<style is:global>
-  :root { color-scheme: dark; font-family: Inter, Arial, sans-serif; background: #08090e; color: #f8f7ff; }
+<style>
+  :root { color-scheme: dark; font-family: Inter, Arial, sans-serif; background: #090a14; color: #f8f7ff; }
   * { box-sizing: border-box; }
-  html, body { min-height: 100%; margin: 0; background: #08090e; }
+  html, .console-body { min-height: 100%; margin: 0; background: #090a14; }
+  .console-body { overflow-x: hidden; }
+  .console-body::before { position: fixed; inset: 0; z-index: -1; background-image: linear-gradient(rgba(184, 167, 255, 0.042) 1px, transparent 1px), linear-gradient(90deg, rgba(184, 167, 255, 0.042) 1px, transparent 1px); background-size: 34px 34px; content: ""; pointer-events: none; }
   button, input, textarea, select { font: inherit; }
   button, a { -webkit-tap-highlight-color: transparent; }
-  .console-shell { min-height: 100vh; display: grid; grid-template-columns: 254px minmax(0, 1fr); background: #08090e; }
-  .console-sidebar { position: sticky; top: 0; display: flex; flex-direction: column; min-height: 100vh; padding: 26px 16px 20px; border-right: 1px solid rgba(230, 225, 255, 0.11); background: #0c0d13; }
-  .console-brand { display: grid; gap: 10px; padding: 0 7px 27px; color: #f8f7ff; text-decoration: none; }
-  .console-brand img { width: 122px; height: 44px; object-fit: contain; object-position: left center; }
-  .console-brand span { color: #9c98b1; font: 700 0.64rem/1 "Space Mono", monospace; letter-spacing: 0.085em; text-transform: uppercase; }
-  .console-nav { display: grid; gap: 5px; border-top: 1px solid rgba(230, 225, 255, 0.08); padding-top: 16px; }
-  .console-nav__item { width: 100%; display: flex; align-items: center; gap: 12px; min-height: 42px; padding: 0 10px; border: 1px solid transparent; border-radius: 5px; background: transparent; color: #a9a6b8; text-align: left; font-size: 0.84rem; font-weight: 700; cursor: pointer; transition: background 150ms ease, border-color 150ms ease, color 150ms ease; }
-  .console-nav__mark { width: 14px; height: 14px; position: relative; border: 1px solid currentColor; border-radius: 3px; opacity: 0.88; }
-  .console-nav__mark::after { content: ""; position: absolute; inset: 3px; border: 1px solid currentColor; border-radius: 1px; }
-  .console-nav__item:hover, .console-nav__item:focus-visible { color: #e6e1ff; background: rgba(184, 167, 255, 0.08); outline: none; }
-  .console-nav__item.is-active { border-color: rgba(184, 167, 255, 0.36); background: rgba(106, 90, 205, 0.25); color: #e6e1ff; }
-  .console-profile { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 10px; margin-top: auto; padding: 18px 7px 14px; border-top: 1px solid rgba(230, 225, 255, 0.1); }
-  .console-avatar { width: 33px; height: 33px; display: grid; place-items: center; border-radius: 50%; background: #b8a7ff; color: #2a2455; font-weight: 800; }
+  .console-shell { min-height: 100vh; display: grid; grid-template-columns: 246px minmax(0, 1fr); background: rgba(9, 10, 20, 0.88); transition: grid-template-columns 220ms ease; }
+  .console-sidebar { position: sticky; top: 0; align-self: start; height: 100vh; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; padding: 21px 15px 16px; border-right: 1px solid rgba(220, 216, 255, 0.12); background: rgba(12, 13, 28, 0.96); transition: padding 220ms ease; }
+  .console-sidebar__top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; padding: 0 4px 23px; border-bottom: 1px solid rgba(230, 225, 255, 0.09); }
+  .console-brand { min-width: 0; display: flex; align-items: center; gap: 9px; color: #f8f7ff; text-decoration: none; }
+  .console-brand img { width: 74px; height: 38px; object-fit: contain; object-position: left center; }
+  .console-brand__copy { display: grid; gap: 3px; white-space: nowrap; }
+  .console-brand__copy strong { font-size: 0.76rem; letter-spacing: 0.035em; }
+  .console-brand__copy small { color: #8e8a9c; font: 700 0.56rem/1 "Space Mono", monospace; letter-spacing: 0.08em; text-transform: uppercase; }
+  .console-sidebar-toggle { width: 33px; height: 33px; display: grid; align-content: center; gap: 4px; flex: 0 0 auto; padding: 0 8px; border: 1px solid rgba(230, 225, 255, 0.14); border-radius: 6px; background: #141526; cursor: pointer; }
+  .console-sidebar-toggle span { height: 1px; width: 100%; display: block; background: #dedaff; transition: transform 180ms ease, opacity 180ms ease; }
+  .console-sidebar-toggle:hover, .console-sidebar-toggle:focus-visible { border-color: #a99aff; outline: none; }
+  .console-nav { display: grid; gap: 6px; padding-top: 20px; }
+  .console-nav__item { width: 100%; min-height: 44px; display: flex; align-items: center; gap: 12px; overflow: hidden; padding: 0 10px; border: 1px solid transparent; border-radius: 7px; background: transparent; color: #a9a6ba; text-align: left; font-size: 0.8rem; font-weight: 700; white-space: nowrap; cursor: pointer; transition: background 170ms ease, border-color 170ms ease, color 170ms ease, transform 170ms ease; }
+  .console-nav__item:hover, .console-nav__item:focus-visible { color: #fbfaff; background: rgba(184, 167, 255, 0.09); outline: none; }
+  .console-nav__item.is-active { border-color: rgba(150, 129, 255, 0.62); background: linear-gradient(90deg, rgba(111, 92, 236, 0.94), rgba(128, 104, 235, 0.78)); color: #fff; box-shadow: 0 9px 23px rgba(78, 61, 193, 0.22); }
+  .console-nav__mark { width: 14px; height: 14px; position: relative; flex: 0 0 auto; border: 1.5px solid currentColor; border-radius: 3px; }
+  .console-nav__mark::before, .console-nav__mark::after { position: absolute; content: ""; background: currentColor; }
+  .console-nav__mark--overview::before { inset: 3px; border: 1px solid currentColor; background: transparent; }
+  .console-nav__mark--members::before { top: 2px; left: 4px; width: 4px; height: 4px; border-radius: 50%; }
+  .console-nav__mark--members::after { right: 2px; bottom: 2px; left: 2px; height: 4px; border-radius: 5px 5px 2px 2px; }
+  .console-nav__mark--events::before { top: 3px; right: 2px; left: 2px; height: 1.5px; }
+  .console-nav__mark--events::after { bottom: 2px; left: 3px; width: 2px; height: 2px; box-shadow: 4px 0 0 currentColor; }
+  .console-nav__mark--coupons::before { width: 5px; height: 5px; inset: 3px; transform: rotate(45deg); }
+  .console-nav__mark--funds::before { top: 2px; right: 2px; left: 2px; height: 3px; border: 1px solid currentColor; background: transparent; }
+  .console-nav__mark--funds::after { bottom: 2px; left: 3px; width: 6px; height: 1.5px; }
+  .console-profile { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 9px; margin-top: auto; padding: 19px 4px 12px; border-top: 1px solid rgba(230, 225, 255, 0.1); }
+  .console-avatar { width: 32px; height: 32px; display: grid; place-items: center; border-radius: 9px; background: #2a2759; color: #c2b6ff; font: 700 0.78rem/1 "Space Mono", monospace; }
+  .console-profile__copy { min-width: 0; }
   .console-profile strong, .console-profile span { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .console-profile strong { font-size: 0.77rem; }
-  .console-profile span { margin-top: 3px; color: #858194; font-size: 0.66rem; }
-  .console-signout { padding: 8px 7px 0; border: 0; background: transparent; color: #ffadbd; font-size: 0.75rem; font-weight: 700; text-decoration: none; cursor: pointer; }
+  .console-profile strong { font-size: 0.72rem; }
+  .console-profile span { margin-top: 3px; color: #858194; font-size: 0.62rem; }
+  .console-signout { width: 100%; display: inline-flex; padding: 8px 4px 0; border: 0; background: transparent; color: #d5a2ff; font-size: 0.71rem; font-weight: 700; text-align: left; text-decoration: none; cursor: pointer; }
+  .console-signout:hover, .console-signout:focus-visible { color: #f1dcff; outline: none; }
   .console-main { min-width: 0; }
-  .console-topbar { min-height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 0 clamp(22px, 4vw, 56px); border-bottom: 1px solid rgba(230, 225, 255, 0.1); background: rgba(8, 9, 14, 0.92); }
-  .console-topbar__context { display: flex; align-items: center; gap: 10px; }
-  .console-topbar__context span { color: #b8a7ff; font: 700 0.63rem/1 "Space Mono", monospace; letter-spacing: 0.08em; text-transform: uppercase; }
-  .console-topbar__context strong { padding-left: 10px; border-left: 1px solid rgba(230, 225, 255, 0.18); color: #d4d1df; font-size: 0.78rem; }
+  .console-topbar { min-height: 67px; display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 0 clamp(22px, 4vw, 52px); border-bottom: 1px solid rgba(230, 225, 255, 0.1); background: rgba(9, 10, 20, 0.79); backdrop-filter: blur(14px); }
+  .console-topbar__context { display: inline-flex; align-items: center; gap: 8px; color: #a7a3b5; font: 700 0.63rem/1 "Space Mono", monospace; letter-spacing: 0.035em; }
+  .console-status-dot { width: 7px; height: 7px; border-radius: 50%; background: #46dea2; box-shadow: 0 0 12px rgba(70, 222, 162, 0.68); }
   .console-topbar__actions { display: flex; gap: 8px; }
-  .console-link { min-height: 33px; display: inline-flex; align-items: center; padding: 0 10px; border: 1px solid rgba(230, 225, 255, 0.17); border-radius: 5px; color: #d8d5e4; font-size: 0.7rem; font-weight: 700; text-decoration: none; }
-  .console-link:hover, .console-link:focus-visible { border-color: #b8a7ff; color: #e6e1ff; outline: none; }
-  .console-content { width: min(1420px, 100%); padding: clamp(28px, 4vw, 52px); }
-  @media (max-width: 860px) { .console-shell { grid-template-columns: 1fr; } .console-sidebar { position: relative; min-height: auto; padding: 16px 16px 0; border-right: 0; border-bottom: 1px solid rgba(230, 225, 255, 0.1); } .console-brand { display: flex; align-items: center; gap: 10px; padding: 0 0 14px; } .console-brand img { width: 100px; height: 34px; } .console-brand span { padding-left: 10px; border-left: 1px solid rgba(230, 225, 255, 0.16); } .console-nav { display: flex; overflow-x: auto; gap: 7px; padding: 12px 0 14px; } .console-nav__item { width: auto; min-width: max-content; min-height: 35px; padding: 0 9px; } .console-nav__mark { width: 11px; height: 11px; } .console-nav__mark::after { inset: 2px; } .console-profile, .console-sidebar > form, .console-sidebar > .console-signout { display: none; } .console-topbar { min-height: 59px; padding: 0 18px; } .console-topbar__context strong { display: none; } .console-content { padding: 28px 18px 48px; } }
-  @media (max-width: 510px) { .console-topbar__actions .console-link:first-child { display: none; } .console-topbar__actions { gap: 0; } }
+  .console-link { min-height: 33px; display: inline-flex; align-items: center; padding: 0 10px; border: 1px solid rgba(230, 225, 255, 0.16); border-radius: 6px; background: rgba(19, 20, 37, 0.82); color: #d8d5e4; font-size: 0.68rem; font-weight: 700; text-decoration: none; transition: border-color 160ms ease, color 160ms ease, background 160ms ease; }
+  .console-link:hover, .console-link:focus-visible { border-color: #b8a7ff; background: rgba(72, 62, 142, 0.42); color: #fff; outline: none; }
+  .console-content { width: min(1480px, 100%); padding: clamp(24px, 3.8vw, 46px); }
+  .console-shell.is-collapsed { grid-template-columns: 78px minmax(0, 1fr); }
+  .console-shell.is-collapsed .console-sidebar { padding-right: 13px; padding-left: 13px; }
+  .console-shell.is-collapsed .console-sidebar__top { justify-content: center; padding-right: 0; padding-left: 0; }
+  .console-shell.is-collapsed .console-brand { display: none; }
+  .console-shell.is-collapsed .console-sidebar-toggle { width: 38px; }
+  .console-shell.is-collapsed .console-nav__item { justify-content: center; padding: 0; }
+  .console-shell.is-collapsed .console-nav__item > span:last-child, .console-shell.is-collapsed .console-profile__copy, .console-shell.is-collapsed .console-signout span { display: none; }
+  .console-shell.is-collapsed .console-profile { grid-template-columns: 1fr; justify-items: center; padding-right: 0; padding-left: 0; }
+  .console-shell.is-collapsed .console-signout { justify-content: center; min-height: 28px; padding: 0; }
+  .console-shell.is-collapsed .console-signout::before { content: "×"; font-size: 1rem; }
+  @media (max-width: 860px) { .console-shell, .console-shell.is-collapsed { grid-template-columns: 1fr; } .console-sidebar { position: relative; height: auto; overflow: visible; padding: 14px 16px 0; border-right: 0; border-bottom: 1px solid rgba(230, 225, 255, 0.1); } .console-sidebar__top { padding-bottom: 13px; } .console-brand img { width: 74px; } .console-sidebar-toggle { display: none; } .console-nav { display: flex; overflow-x: auto; gap: 7px; padding: 11px 0 14px; } .console-nav__item, .console-shell.is-collapsed .console-nav__item { width: auto; min-width: max-content; justify-content: flex-start; min-height: 36px; padding: 0 9px; } .console-profile, .console-sidebar > form, .console-sidebar > .console-signout { display: none; } .console-topbar { min-height: 56px; padding: 0 18px; } .console-content { padding: 26px 18px 46px; } }
+  @media (max-width: 510px) { .console-brand__copy { display: none; } .console-topbar__context { font-size: 0.57rem; } .console-topbar__actions .console-link:first-child { display: none; } }
 </style>
+
+<script>
+  const sidebarToggle = document.querySelector("[data-sidebar-toggle]");
+  const consoleShell = document.querySelector(".console-shell");
+  const collapsedKey = "acm-ajce-admin-sidebar-collapsed";
+  const applySidebarState = (collapsed) => {
+    consoleShell?.classList.toggle("is-collapsed", collapsed);
+    sidebarToggle?.setAttribute("aria-expanded", String(!collapsed));
+    sidebarToggle?.setAttribute("title", collapsed ? "Expand navigation" : "Collapse navigation");
+    sidebarToggle?.setAttribute("aria-label", collapsed ? "Expand navigation" : "Collapse navigation");
+  };
+  try { applySidebarState(window.localStorage.getItem(collapsedKey) === "true"); } catch { applySidebarState(false); }
+  sidebarToggle?.addEventListener("click", () => {
+    const collapsed = !consoleShell?.classList.contains("is-collapsed");
+    applySidebarState(collapsed);
+    try { window.localStorage.setItem(collapsedKey, String(collapsed)); } catch { /* Ignore unavailable storage. */ }
+  });
+</script>

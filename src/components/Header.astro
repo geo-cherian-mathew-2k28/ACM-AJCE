@@ -1,12 +1,13 @@
 ---
-// Header.astro
+const isLocalPreviewHost = ["localhost", "127.0.0.1", "::1"].includes(Astro.url.hostname);
+const membershipHref = isLocalPreviewHost ? "/membership/admin?preview=admin" : "/membership";
 ---
 
 <header
   class="site-header fixed top-5 left-0 right-0 z-50 w-full px-4 py-2 pointer-events-none"
 >
   <a
-    href="/membership"
+    href={membershipHref}
     class="membership-cta pointer-events-auto"
     aria-label="Open ACM AJCE membership"
   >
@@ -181,7 +182,7 @@
               ].map((item) => (
                 <li>
                   <a
-                    href={item === "membership" ? "/membership" : `#${item}`}
+                    href={item === "membership" ? membershipHref : `#${item}`}
                     class="mobile-nav-link text-3xl font-light font-['PolySans_Trial'] uppercase text-[#FBFAFF] hover:text-[#B8A7FF] transition-colors"
                   >
                     {item.replace("-", " ")}

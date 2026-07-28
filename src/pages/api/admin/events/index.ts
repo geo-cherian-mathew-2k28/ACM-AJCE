@@ -20,6 +20,18 @@ const asDate = (value: unknown, label: string, required = false) => {
   return date.toISOString();
 };
 
+const asUrl = (value: unknown, label: string) => {
+  const input = asText(value);
+  if (!input) return null;
+  try {
+    const url = new URL(input);
+    if (url.protocol !== "https:" && url.protocol !== "http:") throw new Error();
+    return url.toString();
+  } catch {
+    throw new MembershipError(`${label} must be a valid http(s) URL.`, 400);
+  }
+};
+
 const eventValues = (body: Record<string, unknown>) => {
   const title = asText(body.title);
   const summary = asText(body.summary);
@@ -39,6 +51,10 @@ const eventValues = (body: Record<string, unknown>) => {
     summary,
     details: asText(body.details) || null,
     venue: asText(body.venue) || null,
+    posterUrl: asUrl(body.posterUrl, "Poster URL"),
+    eventUrl: asUrl(body.eventUrl, "Event link"),
+    whatsappUrl: asUrl(body.whatsappUrl, "WhatsApp link"),
+    afterRegistrationContent: asText(body.afterRegistrationContent) || null,
     startsAt: asDate(body.startsAt, "Start time", true),
     endsAt: asDate(body.endsAt, "End time"),
     registrationDeadline: asDate(body.registrationDeadline, "Registration deadline"),
@@ -69,9 +85,10 @@ export const POST: APIRoute = async ({ request, locals }) => {
     await getDatabase(locals)
       .prepare(
         `INSERT INTO events
-         (id, title, slug, summary, details, venue, starts_at, ends_at,
-          registration_deadline, capacity, member_only, registration_open, published, created_by)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+         (id, title, slug, summary, details, venue, poster_url, event_url, whatsapp_url,
+          after_registration_content, starts_at, ends_at, registration_deadline, capacity,
+          member_only, registration_open, published, created_by)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
       )
       .bind(
         id,
@@ -80,6 +97,10 @@ export const POST: APIRoute = async ({ request, locals }) => {
         values.summary,
         values.details,
         values.venue,
+        values.posterUrl,
+        values.eventUrl,
+        values.whatsappUrl,
+        values.afterRegistrationContent,
         values.startsAt,
         values.endsAt,
         values.registrationDeadline,

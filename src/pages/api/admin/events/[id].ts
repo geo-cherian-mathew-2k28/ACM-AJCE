@@ -16,6 +16,18 @@ const toIso = (value: unknown, label: string, required = false) => {
   return date.toISOString();
 };
 
+const toUrl = (value: unknown, label: string) => {
+  const input = asText(value);
+  if (!input) return null;
+  try {
+    const url = new URL(input);
+    if (url.protocol !== "https:" && url.protocol !== "http:") throw new Error();
+    return url.toString();
+  } catch {
+    throw new MembershipError(`${label} must be a valid http(s) URL.`, 400);
+  }
+};
+
 export const PATCH: APIRoute = async ({ request, params, locals }) => {
   try {
     await requireAdmin(request, locals);
@@ -39,7 +51,8 @@ export const PATCH: APIRoute = async ({ request, params, locals }) => {
     await database
       .prepare(
         `UPDATE events
-         SET title = ?, slug = ?, summary = ?, details = ?, venue = ?, starts_at = ?, ends_at = ?,
+         SET title = ?, slug = ?, summary = ?, details = ?, venue = ?, poster_url = ?, event_url = ?,
+             whatsapp_url = ?, after_registration_content = ?, starts_at = ?, ends_at = ?,
              registration_deadline = ?, capacity = ?, member_only = ?, registration_open = ?,
              published = ?, updated_at = CURRENT_TIMESTAMP
          WHERE id = ?`
@@ -50,6 +63,10 @@ export const PATCH: APIRoute = async ({ request, params, locals }) => {
         summary,
         asText(body.details ?? current.details) || null,
         asText(body.venue ?? current.venue) || null,
+        toUrl(body.posterUrl ?? current.poster_url, "Poster URL"),
+        toUrl(body.eventUrl ?? current.event_url, "Event link"),
+        toUrl(body.whatsappUrl ?? current.whatsapp_url, "WhatsApp link"),
+        asText(body.afterRegistrationContent ?? current.after_registration_content) || null,
         toIso(body.startsAt ?? current.starts_at, "Start time", true),
         toIso(body.endsAt ?? current.ends_at, "End time"),
         toIso(body.registrationDeadline ?? current.registration_deadline, "Registration deadline"),

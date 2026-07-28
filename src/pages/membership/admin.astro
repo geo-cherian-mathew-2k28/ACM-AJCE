@@ -15,25 +15,37 @@ if (!isPreview && (!user || !isAdminEmail(user.email, Astro.locals))) {
 
 const viewerName = user?.full_name ?? "ACM AJCE Admin";
 const viewerEmail = user?.email ?? "preview.admin@acm-ajce.local";
+const greetingName = viewerName === "ACM AJCE Admin" ? "ACM AJCE" : viewerName.split(" ")[0];
 ---
 
 <AdminConsoleLayout viewerName={viewerName} viewerEmail={viewerEmail} preview={isPreview}>
   <section class="console-page" data-demo={isPreview ? "true" : "false"}>
     <header class="console-page__heading">
       <div>
-        <p>Membership overview</p>
-        <h1>Run the chapter with clarity.</h1>
-        <span>Members, event access, coupons, and membership funds in one workspace.</span>
+        <p>Chapter control center</p>
+        <h1>Good evening, {greetingName}.</h1>
+        <span>Members, events, and funds at a glance.</span>
       </div>
-      <button class="console-primary" type="button" data-new-event>Create event</button>
+      <div class="console-heading-actions"><button class="console-primary console-primary--violet" type="button" data-new-event>New event</button><button class="console-primary console-primary--mint" type="button" data-add-fund>Record funds</button></div>
     </header>
 
     <section class="console-view" data-console-view="overview">
+      <div class="console-signalbar">
+        <span><i class="console-signalbar__dot"></i>Chapter systems online</span>
+        <span><strong data-signal="events">--</strong> active registrations</span>
+        <span><strong data-signal="members">--</strong> local members</span>
+        <span><strong data-signal="funds">--</strong> current funds</span>
+      </div>
+      <div class="console-quick-actions" aria-label="Quick actions">
+        <button type="button" data-new-event><span class="console-quick-actions__icon console-quick-actions__icon--violet">+</span><span><strong>Create event</strong><small>Set up registrations</small></span></button>
+        <button type="button" data-switch-view="coupons"><span class="console-quick-actions__icon console-quick-actions__icon--amber">#</span><span><strong>Issue code</strong><small>Assign one-time access</small></span></button>
+        <button type="button" data-add-fund><span class="console-quick-actions__icon console-quick-actions__icon--mint">+</span><span><strong>Record funds</strong><small>Keep the balance current</small></span></button>
+      </div>
       <div class="console-metrics">
-        <article class="console-metric"><span>Total people</span><strong data-metric="users">--</strong><small>Google accounts created</small></article>
-        <article class="console-metric"><span>Active members</span><strong data-metric="members">--</strong><small>Current local chapter plans</small></article>
-        <article class="console-metric"><span>Membership funds</span><strong data-metric="funds">--</strong><small>Verified Razorpay payments</small></article>
-        <article class="console-metric"><span>Open registrations</span><strong data-metric="events">--</strong><small>Published events accepting members</small></article>
+        <article class="console-metric console-metric--violet"><span>Total people</span><strong data-metric="users">--</strong><small>Accounts in the chapter</small></article>
+        <article class="console-metric console-metric--cyan"><span>Active members</span><strong data-metric="members">--</strong><small>Current local plans</small></article>
+        <article class="console-metric console-metric--amber"><span>Current funds</span><strong data-metric="funds">--</strong><small>Membership and manual entries</small></article>
+        <article class="console-metric console-metric--mint"><span>Open registrations</span><strong data-metric="events">--</strong><small>Events currently accepting members</small></article>
       </div>
 
       <div class="console-overview-grid">
@@ -44,7 +56,7 @@ const viewerEmail = user?.email ?? "preview.admin@acm-ajce.local";
             <div><span>Issued coupons</span><strong data-health="coupons">--</strong></div>
             <div><span>Membership renewal rate</span><strong data-health="rate">--</strong></div>
           </div>
-          <p class="console-note">Use this as the chapter’s operating picture. Live values appear after D1 and Razorpay are connected.</p>
+          <p class="console-note">A compact read of registrations, member activity, and current balance.</p>
         </section>
         <section class="console-panel">
           <div class="console-panel__heading"><div><span class="console-kicker">Coming up</span><h2>Event timeline</h2></div><button class="console-text-action" type="button" data-switch-view="events">Manage events</button></div>
@@ -76,6 +88,9 @@ const viewerEmail = user?.email ?? "preview.admin@acm-ajce.local";
             <div class="console-form__two"><label class="console-field"><span>Venue</span><input name="venue" /></label><label class="console-field"><span>Capacity</span><input name="capacity" type="number" min="1" /></label></div>
             <label class="console-field"><span>Registration deadline</span><input name="registrationDeadline" type="datetime-local" /></label>
             <label class="console-field"><span>Member details</span><textarea name="details"></textarea></label>
+            <label class="console-field"><span>Poster image URL</span><input name="posterUrl" type="url" placeholder="https://..." /></label>
+            <div class="console-form__two"><label class="console-field"><span>Event link</span><input name="eventUrl" type="url" placeholder="https://..." /></label><label class="console-field"><span>WhatsApp link</span><input name="whatsappUrl" type="url" placeholder="https://chat.whatsapp.com/..." /></label></div>
+            <label class="console-field"><span>After registration message</span><textarea name="afterRegistrationContent" placeholder="What a registered member should know next"></textarea></label>
             <div class="console-checks"><label><input name="memberOnly" type="checkbox" checked /> Members only</label><label><input name="registrationOpen" type="checkbox" checked /> Registration open</label><label><input name="published" type="checkbox" /> Publish now</label></div>
             <button class="console-primary" type="submit">Save event</button><p id="event-status" class="console-status" aria-live="polite"></p>
           </form>
@@ -103,13 +118,25 @@ const viewerEmail = user?.email ?? "preview.admin@acm-ajce.local";
     </section>
 
     <section class="console-view" data-console-view="funds" hidden>
-      <header class="console-section-heading"><div><span class="console-kicker">Membership funds</span><h2>Payments and chapter balance</h2><p>Totals include only server-verified Razorpay orders.</p></div></header>
+      <header class="console-section-heading"><div><span class="console-kicker">Chapter funds</span><h2>Balance and fund activity</h2><p>Record opening balances, income, and expenses alongside verified membership payments.</p></div></header>
       <div class="console-fund-grid">
-        <article class="console-panel console-fund-card"><span>Collected</span><strong data-fund="collected">--</strong><small>Verified payments</small></article>
-        <article class="console-panel console-fund-card"><span>Paid memberships</span><strong data-fund="paid">--</strong><small>Members with a payment record</small></article>
-        <article class="console-panel console-fund-card"><span>Average plan value</span><strong data-fund="average">--</strong><small>Current local plan calculation</small></article>
+        <article class="console-panel console-fund-card console-fund-card--balance"><span>Current balance</span><strong data-fund="current">--</strong><small>After manual income and expenses</small></article>
+        <article class="console-panel console-fund-card"><span>Membership income</span><strong data-fund="membership">--</strong><small>Verified Razorpay payments</small></article>
+        <article class="console-panel console-fund-card"><span>Manual movement</span><strong data-fund="manual">--</strong><small>Cash, sponsorships, and expenses</small></article>
       </div>
-      <section class="console-panel"><div class="console-panel__heading"><div><span class="console-kicker">Payment trail</span><h2>Latest verified membership payments</h2></div></div><div id="funds-table" class="console-table-wrap console-table-wrap--inner"><p class="console-empty">Loading verified payments...</p></div></section>
+      <div class="console-fund-layout">
+        <section class="console-panel console-fund-entry">
+          <div class="console-panel__heading"><div><span class="console-kicker">New entry</span><h2>Record current funds</h2></div></div>
+          <form id="fund-form" class="console-form">
+            <div class="console-form__two"><label class="console-field"><span>Type</span><select name="entryType"><option value="credit">Income / balance added</option><option value="debit">Expense / balance used</option></select></label><label class="console-field"><span>Amount in rupees</span><input name="amountRupees" type="number" min="1" step="0.01" required /></label></div>
+            <label class="console-field"><span>Entry title</span><input name="title" placeholder="Opening balance, sponsor support, venue expense" required /></label>
+            <div class="console-form__two"><label class="console-field"><span>Category</span><input name="category" placeholder="Operations" /></label><label class="console-field"><span>Recorded on</span><input name="recordedAt" type="date" /></label></div>
+            <label class="console-field"><span>Notes</span><textarea name="notes" placeholder="Optional reference or payment note"></textarea></label>
+            <button class="console-primary console-primary--mint" type="submit">Save fund entry</button><p id="fund-status" class="console-status" aria-live="polite"></p>
+          </form>
+        </section>
+        <section class="console-panel"><div class="console-panel__heading"><div><span class="console-kicker">Fund ledger</span><h2>Recent entries</h2></div></div><div id="funds-table" class="console-table-wrap console-table-wrap--inner"><p class="console-empty">Loading fund activity...</p></div></section>
+      </div>
     </section>
   </section>
 
@@ -209,6 +236,65 @@ const viewerEmail = user?.email ?? "preview.admin@acm-ajce.local";
   @media (max-width: 1120px) { .console-metrics { grid-template-columns: repeat(2, 1fr); } .console-events-workbench { grid-template-columns: 1fr; } .console-editor { position: static; } .console-member-strip { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 760px) { .console-page__heading, .console-section-heading { align-items: flex-start; flex-direction: column; } .console-overview-grid, .console-coupon-layout, .console-events-grid, .console-fund-grid { grid-template-columns: 1fr; } .console-search { width: 100%; } }
   @media (max-width: 470px) { .console-metrics, .console-member-strip, .console-form__two { grid-template-columns: 1fr; } .console-page__heading h1 { font-size: 2rem; } }
+
+  .console-page { gap: 22px; }
+  .console-page__heading { align-items: center; padding: 2px 1px 3px; }
+  .console-page__heading > div > p { margin-bottom: 7px; }
+  .console-page__heading h1 { max-width: none; font-size: clamp(2rem, 3.3vw, 2.9rem); }
+  .console-page__heading > div > span { margin-top: 8px; font-size: 0.82rem; }
+  .console-heading-actions { display: flex; flex-wrap: wrap; gap: 9px; justify-content: flex-end; }
+  .console-primary { min-height: 39px; border-radius: 7px; box-shadow: 0 9px 20px rgba(0, 0, 0, 0.18); }
+  .console-primary--violet { border-color: #9182ff; background: #7666ea; color: #fff; }
+  .console-primary--mint { border-color: #47d7a5; background: #164e49; color: #baf8df; }
+  .console-primary--mint:hover, .console-primary--mint:focus-visible { background: #1d6b61; color: #f2fffb; }
+  .console-signalbar { min-height: 48px; display: flex; align-items: center; gap: 0; overflow: hidden; border: 1px solid rgba(210, 204, 255, 0.13); border-radius: 9px; background: rgba(20, 21, 40, 0.78); }
+  .console-signalbar span { min-height: 23px; display: inline-flex; align-items: center; gap: 7px; padding: 0 17px; border-right: 1px solid rgba(226, 221, 255, 0.09); color: #9b97ad; font-size: 0.7rem; white-space: nowrap; }
+  .console-signalbar span:last-child { border-right: 0; }
+  .console-signalbar strong { color: #f2efff; font-family: "Space Mono", monospace; font-size: 0.71rem; }
+  .console-signalbar__dot { width: 7px; height: 7px; display: inline-block; border-radius: 50%; background: #49dca6; box-shadow: 0 0 12px rgba(73, 220, 166, 0.78); }
+  .console-quick-actions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 11px; }
+  .console-quick-actions button { min-height: 75px; display: flex; align-items: center; gap: 11px; padding: 12px; border: 1px solid rgba(226, 221, 255, 0.12); border-radius: 9px; background: rgba(18, 19, 34, 0.84); color: #f5f3fc; text-align: left; cursor: pointer; transition: transform 170ms ease, border-color 170ms ease, background 170ms ease; }
+  .console-quick-actions button:hover, .console-quick-actions button:focus-visible { border-color: rgba(184, 167, 255, 0.62); background: #1a1b31; outline: none; transform: translateY(-2px); }
+  .console-quick-actions button > span:last-child { display: grid; gap: 4px; }
+  .console-quick-actions strong { font-size: 0.76rem; }
+  .console-quick-actions small { color: #9894a6; font-size: 0.64rem; }
+  .console-quick-actions__icon { width: 33px; height: 33px; display: grid; place-items: center; flex: 0 0 auto; border-radius: 8px; font: 700 1.05rem/1 "Space Mono", monospace; }
+  .console-quick-actions__icon--violet { background: rgba(116, 102, 234, 0.18); color: #b6abff; }
+  .console-quick-actions__icon--amber { background: rgba(233, 169, 60, 0.15); color: #ffc45b; }
+  .console-quick-actions__icon--mint { background: rgba(73, 220, 166, 0.13); color: #62e9ba; }
+  .console-metrics { gap: 13px; }
+  .console-metric, .console-panel { border-radius: 9px; background: rgba(17, 18, 31, 0.88); }
+  .console-metric { position: relative; min-height: 150px; overflow: hidden; padding: 18px; border-color: rgba(220, 216, 255, 0.13); }
+  .console-metric::after { position: absolute; width: 64px; height: 64px; right: -22px; top: -22px; border: 1px solid currentColor; border-radius: 5px; content: ""; opacity: 0.16; transform: rotate(28deg); }
+  .console-metric--violet { color: #a99aff; box-shadow: inset 3px 0 0 #7666ea, 0 14px 32px rgba(0, 0, 0, 0.16); }
+  .console-metric--cyan { color: #67d9f1; box-shadow: inset 3px 0 0 #32b9d9, 0 14px 32px rgba(0, 0, 0, 0.16); }
+  .console-metric--amber { color: #ffc45b; box-shadow: inset 3px 0 0 #e9a93c, 0 14px 32px rgba(0, 0, 0, 0.16); }
+  .console-metric--mint { color: #62e9ba; box-shadow: inset 3px 0 0 #3dc88f, 0 14px 32px rgba(0, 0, 0, 0.16); }
+  .console-metric span { color: currentColor; opacity: 0.8; }
+  .console-metric strong { position: relative; z-index: 1; font-size: clamp(2rem, 3vw, 2.45rem); }
+  .console-metric small { position: relative; z-index: 1; }
+  .console-overview-grid { gap: 13px; }
+  .console-panel { border-color: rgba(220, 216, 255, 0.13); box-shadow: 0 15px 34px rgba(0, 0, 0, 0.15); }
+  .console-panel__heading { margin-bottom: 16px; }
+  .console-health { background-image: linear-gradient(135deg, rgba(118, 102, 234, 0.12), transparent 45%); }
+  .console-health__rows div { min-height: 34px; }
+  .console-member-chip { border-radius: 7px; background: rgba(26, 27, 51, 0.7); }
+  .console-event-card { border-radius: 9px; background: rgba(18, 19, 34, 0.92); }
+  .console-event-card__poster { width: 100%; height: 124px; margin: -19px -19px 16px; width: calc(100% + 38px); border-radius: 8px 8px 0 0; object-fit: cover; background: #16172a; }
+  .console-event-card__links { display: flex; flex-wrap: wrap; gap: 7px; margin: 0 0 13px; }
+  .console-event-card__links a { color: #a99aff; font-size: 0.67rem; font-weight: 800; text-decoration: none; }
+  .console-event-card__links span { color: #64e5b5; font-size: 0.67rem; font-weight: 800; }
+  .console-event-card__links a:hover, .console-event-card__links a:focus-visible { color: #e8e3ff; outline: none; }
+  .console-fund-grid { gap: 13px; }
+  .console-fund-card { min-height: 132px; }
+  .console-fund-card--balance { border-color: rgba(98, 233, 186, 0.38); background-image: linear-gradient(135deg, rgba(61, 200, 143, 0.17), rgba(17, 18, 31, 0.88) 62%); }
+  .console-fund-layout { display: grid; grid-template-columns: minmax(290px, 0.62fr) minmax(0, 1.38fr); gap: 13px; align-items: start; }
+  .console-fund-entry { position: sticky; top: 20px; }
+  .console-table-wrap { background: rgba(14, 15, 27, 0.72); }
+  .console-table td[data-movement="credit"] { color: #63e9ba; font-weight: 800; }
+  .console-table td[data-movement="debit"] { color: #ffb178; font-weight: 800; }
+  @media (max-width: 1120px) { .console-quick-actions { grid-template-columns: 1fr 1fr; } .console-fund-layout { grid-template-columns: 1fr; } .console-fund-entry { position: static; } }
+  @media (max-width: 760px) { .console-page__heading { align-items: flex-start; flex-direction: column; } .console-heading-actions { justify-content: flex-start; } .console-signalbar { overflow-x: auto; } .console-quick-actions { grid-template-columns: 1fr; } .console-fund-layout { grid-template-columns: 1fr; } }
 </style>
 
 <script>
@@ -230,9 +316,11 @@ const viewerEmail = user?.email ?? "preview.admin@acm-ajce.local";
   let members = [];
   let coupons = [];
   let overview = {};
+  let fundData = { membershipPaise: 0, adjustmentPaise: 0, currentFundsPaise: 0 };
+  let fundEntries = [];
   let editingEventId = null;
 
-  const demoOverview = { users: 38, activeMembers: 27, fundsPaise: 405000, publishedEvents: 2, openEvents: 2, registrations: 96, couponsIssued: 14 };
+  const demoOverview = { users: 38, activeMembers: 27, fundsPaise: 490000, publishedEvents: 2, openEvents: 2, registrations: 96, couponsIssued: 14 };
   const demoEvents = [
     { id: "demo-uxplore", title: "UXplore 2026", summary: "A product and interface design challenge for campus teams.", details: "Member registration preview.", venue: "AJCE Main Block", starts_at: "2026-08-18T09:30:00.000Z", ends_at: "2026-08-18T16:30:00.000Z", registration_deadline: "2026-08-15T18:00:00.000Z", capacity: 80, member_only: 1, registration_open: 1, published: 1 },
     { id: "demo-data", title: "Data Alchemy", summary: "A hands-on session about building useful data stories.", details: "Member registration preview.", venue: "Innovation Lab", starts_at: "2026-09-05T10:00:00.000Z", ends_at: "2026-09-05T15:00:00.000Z", registration_deadline: "2026-09-03T18:00:00.000Z", capacity: 60, member_only: 1, registration_open: 1, published: 1 },
@@ -247,6 +335,12 @@ const viewerEmail = user?.email ?? "preview.admin@acm-ajce.local";
     { id: "coupon-one", event_title: "UXplore 2026", member_name: "Ananya Thomas", member_email: "ananya.thomas@ajce.in", discount_amount_paise: 0, expires_at: "2026-08-15T18:00:00.000Z", used_at: null, created_at: "2026-08-01T09:00:00.000Z" },
     { id: "coupon-two", event_title: "Data Alchemy", member_name: "Arjun Mathew", member_email: "arjun.mathew@ajce.in", discount_amount_paise: 5000, expires_at: "2026-09-03T18:00:00.000Z", used_at: "2026-08-15T12:00:00.000Z", created_at: "2026-08-03T10:00:00.000Z" },
   ];
+  const demoFundData = { membershipPaise: 405000, adjustmentPaise: 85000, currentFundsPaise: 490000 };
+  const demoFundEntries = [
+    { id: "fund-opening", entry_type: "credit", amount_paise: 100000, title: "Opening chapter balance", category: "Opening balance", notes: "Recorded for the 2026 chapter year.", recorded_at: "2026-07-01T00:00:00.000Z", recorded_by_name: "ACM AJCE Admin" },
+    { id: "fund-sponsor", entry_type: "credit", amount_paise: 25000, title: "Workshop support", category: "Sponsorship", notes: "Partner contribution for student events.", recorded_at: "2026-07-18T00:00:00.000Z", recorded_by_name: "ACM AJCE Admin" },
+    { id: "fund-material", entry_type: "debit", amount_paise: 40000, title: "Event materials", category: "Operations", notes: "Printing and participant materials.", recorded_at: "2026-07-21T00:00:00.000Z", recorded_by_name: "ACM AJCE Admin" },
+  ];
 
   const views = [...document.querySelectorAll("[data-console-view]")];
   const navItems = [...document.querySelectorAll("[data-console-nav]")];
@@ -257,7 +351,8 @@ const viewerEmail = user?.email ?? "preview.admin@acm-ajce.local";
   };
   navItems.forEach((item) => item.addEventListener("click", () => switchView(item.dataset.view)));
   document.querySelectorAll("[data-switch-view]").forEach((button) => button.addEventListener("click", () => switchView(button.dataset.switchView)));
-  document.querySelector("[data-new-event]")?.addEventListener("click", () => { switchView("events"); resetEventForm(); });
+  document.querySelectorAll("[data-new-event]").forEach((button) => button.addEventListener("click", () => { switchView("events"); resetEventForm(); }));
+  document.querySelectorAll("[data-add-fund]").forEach((button) => button.addEventListener("click", () => { switchView("funds"); fundForm?.title.focus(); }));
 
   const overviewEvents = document.querySelector("#overview-events");
   const overviewMembers = document.querySelector("#overview-members");
@@ -265,6 +360,8 @@ const viewerEmail = user?.email ?? "preview.admin@acm-ajce.local";
   const eventsGrid = document.querySelector("#events-grid");
   const couponHistory = document.querySelector("#coupon-history");
   const fundsTable = document.querySelector("#funds-table");
+  const fundForm = document.querySelector("#fund-form");
+  const fundStatus = document.querySelector("#fund-status");
   const eventForm = document.querySelector("#event-form");
   const eventStatus = document.querySelector("#event-status");
   const eventEditorTitle = document.querySelector("#event-editor-title");
@@ -282,12 +379,15 @@ const viewerEmail = user?.email ?? "preview.admin@acm-ajce.local";
   const renderOverview = () => {
     setText('[data-metric="users"]', overview.users ?? 0);
     setText('[data-metric="members"]', overview.activeMembers ?? 0);
-    setText('[data-metric="funds"]', formatMoney(overview.fundsPaise));
+    setText('[data-metric="funds"]', formatMoney(fundData.currentFundsPaise ?? overview.fundsPaise));
     setText('[data-metric="events"]', overview.openEvents ?? 0);
     setText('[data-health="registrations"]', overview.registrations ?? 0);
     setText('[data-health="coupons"]', overview.couponsIssued ?? 0);
     const rate = overview.users ? `${Math.round(((overview.activeMembers || 0) / overview.users) * 100)}%` : "--";
     setText('[data-health="rate"]', rate);
+    setText('[data-signal="events"]', overview.openEvents ?? 0);
+    setText('[data-signal="members"]', overview.activeMembers ?? 0);
+    setText('[data-signal="funds"]', formatMoney(fundData.currentFundsPaise ?? overview.fundsPaise));
     overviewEvents.replaceChildren();
     const visibleEvents = events.filter((event) => event.published).slice(0, 3);
     if (!visibleEvents.length) { overviewEvents.textContent = "No published events yet."; return; }
@@ -304,17 +404,106 @@ const viewerEmail = user?.email ?? "preview.admin@acm-ajce.local";
     const head = document.createElement("thead"); head.innerHTML = "<tr><th>Member</th><th>Academic details</th><th>Membership</th><th>Payment</th><th>Actions</th></tr>";
     const body = document.createElement("tbody");
     filtered.forEach((member) => { const row = document.createElement("tr"); const person = document.createElement("td"); const name = document.createElement("strong"); name.textContent = member.full_name; person.append(name, document.createElement("br"), document.createTextNode(member.email), document.createElement("br"), document.createTextNode(member.phone || "Profile incomplete")); const academic = document.createElement("td"); academic.textContent = `${member.department || "--"} / ${member.study_year || "--"}\n${member.admission_number || "--"}`; const membership = document.createElement("td"); membership.textContent = member.member_number ? `${member.membership_status}\n${member.member_number}\nUntil ${formatDate(member.expires_at)}` : "Not active"; const payment = document.createElement("td"); payment.textContent = member.razorpay_payment_id ? `${formatMoney(member.amount_paise)}\n${member.razorpay_payment_id}` : "--"; const action = document.createElement("td"); const actions = document.createElement("div"); actions.className = "console-table__actions"; const edit = document.createElement("button"); edit.type = "button"; edit.textContent = "Edit"; edit.addEventListener("click", () => openMember(member)); const card = document.createElement("a"); card.textContent = "ID card"; card.href = demoMode ? "/membership/card?preview=member" : `/membership/card?member=${encodeURIComponent(member.id)}`; actions.append(edit, card); action.append(actions); row.append(person, academic, membership, payment, action); body.append(row); }); table.append(head, body); membersTable.append(table); };
-  const renderEvents = () => { eventsGrid.replaceChildren(); if (!events.length) { eventsGrid.textContent = "No events have been created yet."; return; } events.forEach((event) => { const card = document.createElement("article"); card.className = "console-event-card"; const meta = document.createElement("p"); meta.className = "console-event-card__meta"; meta.textContent = `${event.published ? "Published" : "Draft"} / ${formatDate(event.starts_at, true)}`; const title = document.createElement("h3"); title.textContent = event.title; const summary = document.createElement("p"); summary.className = "console-event-card__summary"; summary.textContent = event.summary; const footer = document.createElement("div"); footer.className = "console-event-card__footer"; const state = document.createElement("span"); state.className = "console-tag"; state.textContent = event.registration_open ? "Registration open" : "Registration closed"; const actions = document.createElement("div"); actions.className = "console-event-card__actions"; const edit = document.createElement("button"); edit.type = "button"; edit.textContent = "Edit"; edit.addEventListener("click", () => editEvent(event)); const remove = document.createElement("button"); remove.type = "button"; remove.textContent = "Delete"; remove.addEventListener("click", () => deleteEvent(event)); actions.append(edit, remove); footer.append(state, actions); card.append(meta, title, summary, footer); eventsGrid.append(card); }); };
+  const renderEvents = () => {
+    eventsGrid.replaceChildren();
+    if (!events.length) { eventsGrid.textContent = "No events have been created yet."; return; }
+    events.forEach((event) => {
+      const card = document.createElement("article");
+      card.className = "console-event-card";
+      if (event.poster_url) {
+        const poster = document.createElement("img");
+        poster.className = "console-event-card__poster";
+        poster.src = event.poster_url;
+        poster.alt = `${event.title} poster`;
+        card.append(poster);
+      }
+      const meta = document.createElement("p");
+      meta.className = "console-event-card__meta";
+      meta.textContent = `${event.published ? "Published" : "Draft"} / ${formatDate(event.starts_at, true)}`;
+      const title = document.createElement("h3");
+      title.textContent = event.title;
+      const summary = document.createElement("p");
+      summary.className = "console-event-card__summary";
+      summary.textContent = event.summary;
+      const links = document.createElement("div");
+      links.className = "console-event-card__links";
+      [[event.event_url, "Event link"], [event.whatsapp_url, "WhatsApp"], [event.after_registration_content, "Member follow-up"]].forEach(([url, label]) => {
+        if (!url) return;
+        if (label === "Member follow-up") {
+          const item = document.createElement("span");
+          item.textContent = label;
+          links.append(item);
+          return;
+        }
+        const link = document.createElement("a");
+        link.href = url;
+        link.target = "_blank";
+        link.rel = "noreferrer";
+        link.textContent = label;
+        links.append(link);
+      });
+      const footer = document.createElement("div");
+      footer.className = "console-event-card__footer";
+      const state = document.createElement("span");
+      state.className = "console-tag";
+      state.textContent = event.registration_open ? "Registration open" : "Registration closed";
+      const actions = document.createElement("div");
+      actions.className = "console-event-card__actions";
+      const edit = document.createElement("button");
+      edit.type = "button";
+      edit.textContent = "Edit";
+      edit.addEventListener("click", () => editEvent(event));
+      const remove = document.createElement("button");
+      remove.type = "button";
+      remove.textContent = "Delete";
+      remove.addEventListener("click", () => deleteEvent(event));
+      actions.append(edit, remove);
+      footer.append(state, actions);
+      card.append(meta, title, summary);
+      if (links.children.length) card.append(links);
+      card.append(footer);
+      eventsGrid.append(card);
+    });
+  };
   const renderCoupons = () => { couponHistory.replaceChildren(); if (!coupons.length) { couponHistory.textContent = "No coupons have been issued yet."; return; } const table = document.createElement("table"); table.className = "console-table"; const head = document.createElement("thead"); head.innerHTML = "<tr><th>Member</th><th>Event</th><th>Value</th><th>Expiry</th><th>Status</th></tr>"; const body = document.createElement("tbody"); coupons.forEach((coupon) => { const row = document.createElement("tr"); const person = document.createElement("td"); const name = document.createElement("strong"); name.textContent = coupon.member_name; person.append(name, document.createElement("br"), document.createTextNode(coupon.member_email)); const event = document.createElement("td"); event.textContent = coupon.event_title; const discount = document.createElement("td"); discount.textContent = coupon.discount_amount_paise ? formatMoney(coupon.discount_amount_paise) : "Access code"; const expiry = document.createElement("td"); expiry.textContent = coupon.expires_at ? formatDate(coupon.expires_at, true) : "No expiry"; const state = document.createElement("td"); state.textContent = coupon.used_at ? `Used ${formatDate(coupon.used_at, true)}` : "Available"; row.append(person, event, discount, expiry, state); body.append(row); }); table.append(head, body); couponHistory.append(table); };
-  const renderFunds = () => { const paid = members.filter((member) => member.razorpay_payment_id); const total = paid.reduce((sum, member) => sum + (Number(member.amount_paise) || 0), 0); setText('[data-fund="collected"]', formatMoney(overview.fundsPaise ?? total)); setText('[data-fund="paid"]', paid.length); setText('[data-fund="average"]', paid.length ? formatMoney(total / paid.length) : "--"); fundsTable.replaceChildren(); if (!paid.length) { fundsTable.textContent = "No verified payments yet."; return; } const table = document.createElement("table"); table.className = "console-table"; const head = document.createElement("thead"); head.innerHTML = "<tr><th>Member</th><th>Member number</th><th>Amount</th><th>Razorpay payment</th></tr>"; const body = document.createElement("tbody"); paid.forEach((member) => { const row = document.createElement("tr"); [member.full_name, member.member_number || "--", formatMoney(member.amount_paise), member.razorpay_payment_id].forEach((value) => { const cell = document.createElement("td"); cell.textContent = value; row.append(cell); }); body.append(row); }); table.append(head, body); fundsTable.append(table); };
+  const renderFunds = () => {
+    setText('[data-fund="current"]', formatMoney(fundData.currentFundsPaise));
+    setText('[data-fund="membership"]', formatMoney(fundData.membershipPaise));
+    const manualLabel = fundData.adjustmentPaise < 0 ? `-${formatMoney(Math.abs(fundData.adjustmentPaise))}` : formatMoney(fundData.adjustmentPaise);
+    setText('[data-fund="manual"]', manualLabel);
+    fundsTable.replaceChildren();
+    if (!fundEntries.length) { fundsTable.textContent = "No manual fund entries yet."; return; }
+    const table = document.createElement("table");
+    table.className = "console-table";
+    const head = document.createElement("thead");
+    head.innerHTML = "<tr><th>Date</th><th>Entry</th><th>Category</th><th>Movement</th><th>Recorded by</th></tr>";
+    const body = document.createElement("tbody");
+    fundEntries.forEach((entry) => {
+      const row = document.createElement("tr");
+      const date = document.createElement("td"); date.textContent = formatDate(entry.recorded_at);
+      const entryCell = document.createElement("td");
+      const title = document.createElement("strong"); title.textContent = entry.title;
+      entryCell.append(title);
+      if (entry.notes) { entryCell.append(document.createElement("br"), document.createTextNode(entry.notes)); }
+      const category = document.createElement("td"); category.textContent = entry.category || "--";
+      const movement = document.createElement("td"); movement.textContent = `${entry.entry_type === "debit" ? "-" : "+"}${formatMoney(entry.amount_paise)}`;
+      movement.dataset.movement = entry.entry_type;
+      const recordedBy = document.createElement("td"); recordedBy.textContent = entry.recorded_by_name || "Admin";
+      row.append(date, entryCell, category, movement, recordedBy);
+      body.append(row);
+    });
+    table.append(head, body);
+    fundsTable.append(table);
+  };
   const resetEventForm = () => { editingEventId = null; eventForm.reset(); eventForm.memberOnly.checked = true; eventForm.registrationOpen.checked = true; eventEditorTitle.textContent = "Create event"; resetEventButton.hidden = true; status(eventStatus, ""); };
-  const editEvent = (event) => { editingEventId = event.id; eventEditorTitle.textContent = `Edit ${event.title}`; resetEventButton.hidden = false; eventForm.title.value = event.title; eventForm.summary.value = event.summary; eventForm.details.value = event.details || ""; eventForm.venue.value = event.venue || ""; eventForm.startsAt.value = dateInput(event.starts_at); eventForm.endsAt.value = dateInput(event.ends_at); eventForm.registrationDeadline.value = dateInput(event.registration_deadline); eventForm.capacity.value = event.capacity || ""; eventForm.memberOnly.checked = Boolean(event.member_only); eventForm.registrationOpen.checked = Boolean(event.registration_open); eventForm.published.checked = Boolean(event.published); window.scrollTo({ top: document.querySelector(".console-events-workbench").offsetTop - 18, behavior: "smooth" }); };
+  const editEvent = (event) => { editingEventId = event.id; eventEditorTitle.textContent = `Edit ${event.title}`; resetEventButton.hidden = false; eventForm.title.value = event.title; eventForm.summary.value = event.summary; eventForm.details.value = event.details || ""; eventForm.venue.value = event.venue || ""; eventForm.posterUrl.value = event.poster_url || ""; eventForm.eventUrl.value = event.event_url || ""; eventForm.whatsappUrl.value = event.whatsapp_url || ""; eventForm.afterRegistrationContent.value = event.after_registration_content || ""; eventForm.startsAt.value = dateInput(event.starts_at); eventForm.endsAt.value = dateInput(event.ends_at); eventForm.registrationDeadline.value = dateInput(event.registration_deadline); eventForm.capacity.value = event.capacity || ""; eventForm.memberOnly.checked = Boolean(event.member_only); eventForm.registrationOpen.checked = Boolean(event.registration_open); eventForm.published.checked = Boolean(event.published); window.scrollTo({ top: document.querySelector(".console-events-workbench").offsetTop - 18, behavior: "smooth" }); };
   const deleteEvent = async (event) => { if (demoMode) { status(eventStatus, "Preview mode does not remove saved events."); return; } if (!window.confirm(`Delete ${event.title}?`)) return; try { await getJson(`/api/admin/events/${event.id}`, { method: "DELETE" }); await loadRecords(); } catch (error) { status(eventStatus, error.message, "error"); } };
   const openMember = (member) => { memberForm.id.value = member.id; memberForm.fullName.value = member.full_name || ""; memberForm.phone.value = member.phone || ""; memberForm.department.value = member.department || ""; memberForm.studyYear.value = member.study_year || ""; memberForm.admissionNumber.value = member.admission_number || ""; status(memberStatus, ""); memberDialog.showModal(); };
-  const loadRecords = async () => { if (demoMode) { overview = demoOverview; events = demoEvents; members = demoMembers; coupons = demoCoupons; } else { const [overviewResponse, eventResponse, memberResponse, couponResponse] = await Promise.all([getJson("/api/admin/overview"), getJson("/api/admin/events"), getJson("/api/admin/members"), getJson("/api/admin/coupons")]); overview = overviewResponse; events = eventResponse.events; members = memberResponse.members; coupons = couponResponse.coupons; } setOptions(couponEvent, events, "event"); setOptions(couponMember, members, "member"); renderOverview(); renderMembers(memberSearch.value); renderEvents(); renderCoupons(); renderFunds(); };
+  const loadRecords = async () => { if (demoMode) { overview = demoOverview; events = demoEvents; members = demoMembers; coupons = demoCoupons; fundData = { ...demoFundData }; fundEntries = [...demoFundEntries]; } else { const [overviewResponse, eventResponse, memberResponse, couponResponse, fundResponse] = await Promise.all([getJson("/api/admin/overview"), getJson("/api/admin/events"), getJson("/api/admin/members"), getJson("/api/admin/coupons"), getJson("/api/admin/funds")]); overview = overviewResponse; events = eventResponse.events; members = memberResponse.members; coupons = couponResponse.coupons; fundData = fundResponse; fundEntries = fundResponse.entries; } setOptions(couponEvent, events, "event"); setOptions(couponMember, members, "member"); renderOverview(); renderMembers(memberSearch.value); renderEvents(); renderCoupons(); renderFunds(); };
   eventForm.addEventListener("submit", async (event) => { event.preventDefault(); if (demoMode) { status(eventStatus, "Preview mode only. This event is not saved."); return; } try { const values = Object.fromEntries(new FormData(eventForm)); values.memberOnly = eventForm.memberOnly.checked; values.registrationOpen = eventForm.registrationOpen.checked; values.published = eventForm.published.checked; const endpoint = editingEventId ? `/api/admin/events/${editingEventId}` : "/api/admin/events"; await getJson(endpoint, { method: editingEventId ? "PATCH" : "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(values) }); status(eventStatus, "Event saved.", "success"); resetEventForm(); await loadRecords(); } catch (error) { status(eventStatus, error.message, "error"); } });
   resetEventButton.addEventListener("click", resetEventForm);
   couponForm.addEventListener("submit", async (event) => { event.preventDefault(); if (demoMode) { status(couponStatus, "Preview code: AJCE-DEMO-2026. No real coupon was created.", "success"); return; } try { const data = await getJson("/api/admin/coupons", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(Object.fromEntries(new FormData(couponForm))) }); status(couponStatus, `Code created: ${data.code}. Copy it now; it cannot be retrieved later.`, "success"); couponForm.reset(); await loadRecords(); } catch (error) { status(couponStatus, error.message, "error"); } });
+  fundForm?.addEventListener("submit", async (event) => { event.preventDefault(); const values = Object.fromEntries(new FormData(fundForm)); const amountPaise = Math.round(Number(values.amountRupees) * 100); if (!Number.isFinite(amountPaise) || amountPaise <= 0) { status(fundStatus, "Enter a valid amount in rupees.", "error"); return; } if (demoMode) { const entry = { id: crypto.randomUUID(), entry_type: values.entryType, amount_paise: amountPaise, title: String(values.title), category: String(values.category || ""), notes: String(values.notes || ""), recorded_at: values.recordedAt ? new Date(String(values.recordedAt)).toISOString() : new Date().toISOString(), recorded_by_name: "ACM AJCE Admin" }; fundEntries.unshift(entry); const movement = entry.entry_type === "debit" ? -entry.amount_paise : entry.amount_paise; fundData = { ...fundData, adjustmentPaise: fundData.adjustmentPaise + movement, currentFundsPaise: fundData.currentFundsPaise + movement }; overview = { ...overview, fundsPaise: fundData.currentFundsPaise }; fundForm.reset(); renderOverview(); renderFunds(); status(fundStatus, "Preview fund entry added to this session.", "success"); return; } try { await getJson("/api/admin/funds", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ entryType: values.entryType, amountPaise, title: values.title, category: values.category, notes: values.notes, recordedAt: values.recordedAt }) }); fundForm.reset(); await loadRecords(); status(fundStatus, "Fund entry saved.", "success"); } catch (error) { status(fundStatus, error.message, "error"); } });
   memberForm.addEventListener("submit", async (event) => { event.preventDefault(); if (demoMode) { status(memberStatus, "Preview mode only. Member records are unchanged."); return; } try { const data = Object.fromEntries(new FormData(memberForm)); const id = data.id; delete data.id; await getJson(`/api/admin/members/${id}`, { method: "PATCH", headers: { "content-type": "application/json" }, body: JSON.stringify(data) }); status(memberStatus, "Member record saved.", "success"); await loadRecords(); window.setTimeout(() => memberDialog.close(), 450); } catch (error) { status(memberStatus, error.message, "error"); } });
   memberSearch.addEventListener("input", () => renderMembers(memberSearch.value));
   document.querySelector("[data-close-dialog]")?.addEventListener("click", () => memberDialog.close());
