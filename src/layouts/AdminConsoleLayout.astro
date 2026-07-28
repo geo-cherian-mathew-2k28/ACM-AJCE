@@ -42,6 +42,7 @@ const initial = viewerName.trim().charAt(0).toUpperCase() || "A";
           <button class="console-nav__item is-active" type="button" data-console-nav data-view="overview" aria-current="page"><span class="console-nav__mark console-nav__mark--overview"></span><span>Overview</span></button>
           <button class="console-nav__item" type="button" data-console-nav data-view="members"><span class="console-nav__mark console-nav__mark--members"></span><span>Members</span></button>
           <button class="console-nav__item" type="button" data-console-nav data-view="events"><span class="console-nav__mark console-nav__mark--events"></span><span>Events</span></button>
+          <button class="console-nav__item" type="button" data-console-nav data-view="certificates"><span class="console-nav__mark console-nav__mark--certificates"></span><span>Certificates</span></button>
           <button class="console-nav__item" type="button" data-console-nav data-view="coupons"><span class="console-nav__mark console-nav__mark--coupons"></span><span>Coupons</span></button>
           <button class="console-nav__item" type="button" data-console-nav data-view="funds"><span class="console-nav__mark console-nav__mark--funds"></span><span>Funds</span></button>
         </nav>
@@ -101,6 +102,8 @@ const initial = viewerName.trim().charAt(0).toUpperCase() || "A";
   .console-nav__mark--coupons::before { width: 5px; height: 5px; inset: 3px; transform: rotate(45deg); }
   .console-nav__mark--funds::before { top: 2px; right: 2px; left: 2px; height: 3px; border: 1px solid currentColor; background: transparent; }
   .console-nav__mark--funds::after { bottom: 2px; left: 3px; width: 6px; height: 1.5px; }
+  .console-nav__mark--certificates::before { top: 2px; right: 3px; left: 3px; height: 5px; border-bottom: 1px solid currentColor; background: transparent; }
+  .console-nav__mark--certificates::after { bottom: 2px; left: 4px; width: 4px; height: 4px; border: 1px solid currentColor; background: transparent; transform: rotate(45deg); }
   .console-profile { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 9px; margin-top: auto; padding: 19px 4px 12px; border-top: 1px solid rgba(230, 225, 255, 0.1); }
   .console-avatar { width: 32px; height: 32px; display: grid; place-items: center; border-radius: 9px; background: #2a2759; color: #c2b6ff; font: 700 0.78rem/1 "Space Mono", monospace; }
   .console-profile__copy { min-width: 0; }

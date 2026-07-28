@@ -8,7 +8,7 @@ export const GET: APIRoute = async ({ request, locals }) => {
     await requireAdmin(request, locals);
     const database = getDatabase(locals);
     const now = new Date().toISOString();
-    const [users, members, membershipFunds, manualFunds, events, openEvents, registrations, coupons] = await database.batch([
+    const [users, members, membershipFunds, manualFunds, events, openEvents, registrations, coupons, certificates] = await database.batch([
       database.prepare("SELECT COUNT(*) AS total FROM users"),
       database.prepare(
         "SELECT COUNT(*) AS total FROM memberships WHERE status = 'active' AND expires_at > ?"
@@ -28,6 +28,7 @@ export const GET: APIRoute = async ({ request, locals }) => {
         "SELECT COUNT(*) AS total FROM event_registrations WHERE status = 'registered'"
       ),
       database.prepare("SELECT COUNT(*) AS total FROM coupons"),
+      database.prepare("SELECT COUNT(*) AS total FROM certificates WHERE status = 'issued'"),
     ]);
     return json({
       users: users.results?.[0]?.total ?? 0,
@@ -39,6 +40,7 @@ export const GET: APIRoute = async ({ request, locals }) => {
       openEvents: openEvents.results?.[0]?.total ?? 0,
       registrations: registrations.results?.[0]?.total ?? 0,
       couponsIssued: coupons.results?.[0]?.total ?? 0,
+      certificatesIssued: certificates.results?.[0]?.total ?? 0,
     });
   } catch (error) {
     return toApiError(error);
