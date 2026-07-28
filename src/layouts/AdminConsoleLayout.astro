@@ -16,7 +16,7 @@ const initial = viewerName.trim().charAt(0).toUpperCase() || "A";
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="light">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
@@ -61,7 +61,7 @@ const initial = viewerName.trim().charAt(0).toUpperCase() || "A";
       <div class="console-main">
         <header class="console-topbar">
           <div class="console-topbar__context"><span class="console-status-dot" aria-hidden="true"></span><span>Chapter systems online</span></div>
-          <div class="console-topbar__actions"><a href="/" class="console-link">Website</a><a href={preview ? "/membership?preview=member" : "/membership"} class="console-link">Member view</a></div>
+          <div class="console-topbar__actions"><a href="/" class="console-link">Website</a><a href={preview ? "/membership?preview=member" : "/membership"} class="console-link">Member view</a><button class="console-theme-toggle" type="button" data-console-theme-toggle aria-label="Switch to dark theme" title="Switch to dark theme"><span></span></button></div>
         </header>
         <main class="console-content"><slot /></main>
       </div>
@@ -132,6 +132,20 @@ const initial = viewerName.trim().charAt(0).toUpperCase() || "A";
   .console-shell.is-collapsed .console-signout::before { content: "×"; font-size: 1rem; }
   @media (max-width: 860px) { .console-shell, .console-shell.is-collapsed { grid-template-columns: 1fr; } .console-sidebar { position: relative; height: auto; overflow: visible; padding: 14px 16px 0; border-right: 0; border-bottom: 1px solid rgba(230, 225, 255, 0.1); } .console-sidebar__top { padding-bottom: 13px; } .console-brand img { width: 74px; } .console-sidebar-toggle { display: none; } .console-nav { display: flex; overflow-x: auto; gap: 7px; padding: 11px 0 14px; } .console-nav__item, .console-shell.is-collapsed .console-nav__item { width: auto; min-width: max-content; justify-content: flex-start; min-height: 36px; padding: 0 9px; } .console-profile, .console-sidebar > form, .console-sidebar > .console-signout { display: none; } .console-topbar { min-height: 56px; padding: 0 18px; } .console-content { padding: 26px 18px 46px; } }
   @media (max-width: 510px) { .console-brand__copy { display: none; } .console-topbar__context { font-size: 0.57rem; } .console-topbar__actions .console-link:first-child { display: none; } }
+  .console-theme-toggle { width: 42px; height: 28px; position: relative; padding: 0; border: 1px solid rgba(230, 225, 255, 0.16); border-radius: 999px; background: #141526; cursor: pointer; }
+  .console-theme-toggle span { width: 20px; height: 20px; position: absolute; top: 3px; right: 3px; border-radius: 50%; background: #b8a7ff; transition: transform 180ms ease, background 180ms ease; }
+  :global(html[data-theme="light"]) { color-scheme: light; }
+  :global(html[data-theme="light"]) .console-body { background: #f4f6fc; color: #171b2d; }
+  :global(html[data-theme="light"]) .console-body::before { background-image: radial-gradient(circle, rgba(90, 72, 232, 0.14) 1px, transparent 1.5px); background-size: 24px 24px; opacity: 0.6; }
+  :global(html[data-theme="light"]) .console-shell { background: transparent; }
+  :global(html[data-theme="light"]) .console-sidebar { border-color: #e2e6f0; background: rgba(255, 255, 255, 0.9); }
+  :global(html[data-theme="light"]) .console-sidebar__top, :global(html[data-theme="light"]) .console-profile { border-color: #e2e6f0; }
+  :global(html[data-theme="light"]) .console-brand { color: #171b2d; }:global(html[data-theme="light"]) .console-brand img { filter: invert(1); }:global(html[data-theme="light"]) .console-brand__copy small, :global(html[data-theme="light"]) .console-profile span { color: #76839b; }
+  :global(html[data-theme="light"]) .console-sidebar-toggle { border-color: #dfe4ee; background: #f7f8fc; }:global(html[data-theme="light"]) .console-sidebar-toggle span { background: #28314a; }
+  :global(html[data-theme="light"]) .console-nav__item { color: #74819a; }:global(html[data-theme="light"]) .console-nav__item:hover, :global(html[data-theme="light"]) .console-nav__item:focus-visible { background: #eeebff; color: #5a48e8; }:global(html[data-theme="light"]) .console-nav__item.is-active { border-color: #5a48e8; background: linear-gradient(135deg, #604df0, #4b39dd); box-shadow: 0 10px 20px rgba(90, 72, 232, 0.22); }
+  :global(html[data-theme="light"]) .console-avatar { background: #eeeaff; color: #5a48e8; }:global(html[data-theme="light"]) .console-signout { color: #b23d59; }
+  :global(html[data-theme="light"]) .console-topbar { border-color: #e2e6f0; background: rgba(255, 255, 255, 0.7); }:global(html[data-theme="light"]) .console-topbar__context { color: #75819a; }:global(html[data-theme="light"]) .console-link, :global(html[data-theme="light"]) .console-theme-toggle { border-color: #dfe4ee; background: #fff; color: #66748c; }:global(html[data-theme="light"]) .console-link:hover, :global(html[data-theme="light"]) .console-link:focus-visible { border-color: #6a57eb; background: #f1efff; color: #5140d2; }:global(html[data-theme="light"]) .console-theme-toggle span { background: #5a48e8; }
+  :global(html[data-theme="dark"]) .console-theme-toggle span { transform: translateX(-14px); background: #f2c45c; }
 </style>
 
 <script>
@@ -150,4 +164,13 @@ const initial = viewerName.trim().charAt(0).toUpperCase() || "A";
     applySidebarState(collapsed);
     try { window.localStorage.setItem(collapsedKey, String(collapsed)); } catch { /* Ignore unavailable storage. */ }
   });
+  const consoleThemeToggle = document.querySelector("[data-console-theme-toggle]");
+  const consoleThemeKey = "acm-ajce-dashboard-theme";
+  const applyConsoleTheme = (theme) => {
+    document.documentElement.dataset.theme = theme;
+    consoleThemeToggle?.setAttribute("aria-label", theme === "light" ? "Switch to dark theme" : "Switch to light theme");
+    consoleThemeToggle?.setAttribute("title", theme === "light" ? "Switch to dark theme" : "Switch to light theme");
+  };
+  try { applyConsoleTheme(window.localStorage.getItem(consoleThemeKey) || "light"); } catch { applyConsoleTheme("light"); }
+  consoleThemeToggle?.addEventListener("click", () => { const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark"; applyConsoleTheme(next); try { window.localStorage.setItem(consoleThemeKey, next); } catch { /* Storage is optional. */ } });
 </script>

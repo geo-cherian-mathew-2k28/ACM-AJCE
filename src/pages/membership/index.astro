@@ -1,5 +1,6 @@
 ---
 import MembershipLayout from "../../layouts/MembershipLayout.astro";
+import MemberConsoleLayout from "../../layouts/MemberConsoleLayout.astro";
 import {
   getActiveMembership,
   getCurrentUser,
@@ -65,6 +66,11 @@ if (isPreview) {
 const isAdmin = isPreview ? previewMode === "admin" : user ? isAdminEmail(user.email, Astro.locals) : false;
 ---
 
+{user && membership ? (
+  <MemberConsoleLayout viewerName={user.full_name} viewerEmail={user.email} preview={isPreview} admin={isAdmin}>
+    <MemberWorkspace user={user} membership={membership} preview={isPreview} admin={isAdmin} />
+  </MemberConsoleLayout>
+) : (
 <MembershipLayout signedIn={Boolean(user) && !isPreview}>
   {!user ? (
     <section class="login-layout">
@@ -124,8 +130,9 @@ const isAdmin = isPreview ? previewMode === "admin" : user ? isAdminEmail(user.e
         </aside>
       </div>
     </section>
-  ) : <MemberWorkspace user={user} membership={membership} preview={isPreview} admin={isAdmin} />}
+  ) : null}
 </MembershipLayout>
+)}
 
 <style>
   .login-layout, .join-layout { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(315px, 0.8fr); gap: clamp(28px, 7vw, 96px); align-items: center; min-height: calc(100vh - 212px); }

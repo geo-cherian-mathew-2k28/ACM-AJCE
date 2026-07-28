@@ -316,6 +316,33 @@ const greetingName = viewerName === "ACM AJCE Admin" ? "ACM AJCE" : viewerName.s
   .console-events-workbench .console-editor { position: static; }
   .console-form-note { margin: -2px 0 1px; color: #8f8b9c; font-size: 0.7rem; line-height: 1.5; }
   .console-field.is-disabled { opacity: 0.42; }
+  html[data-theme="light"] .console-page { gap: 22px; }
+  html[data-theme="light"] .console-page__heading > div > p, html[data-theme="light"] .console-kicker { color: #6550e7; }
+  html[data-theme="light"] .console-page__heading h1, html[data-theme="light"] .console-panel__heading h2, html[data-theme="light"] .console-section-heading h2 { color: #171b2d; }
+  html[data-theme="light"] .console-page__heading > div > span, html[data-theme="light"] .console-section-heading p, html[data-theme="light"] .console-note, html[data-theme="light"] .console-empty { color: #72809a; }
+  html[data-theme="light"] .console-primary { border-radius: 12px; border-color: #5a48e8; background: #5a48e8; color: #fff; box-shadow: 0 9px 18px rgba(90, 72, 232, 0.18); }
+  html[data-theme="light"] .console-primary--mint { border-color: #1e9f73; background: #e3f8ef; color: #137d58; box-shadow: none; }
+  html[data-theme="light"] .console-signalbar, html[data-theme="light"] .console-metric, html[data-theme="light"] .console-panel, html[data-theme="light"] .console-table-wrap { border-color: #e1e6f0; border-radius: 18px; background: rgba(255, 255, 255, 0.94); box-shadow: 0 14px 34px rgba(45, 61, 98, 0.07); }
+  html[data-theme="light"] .console-signalbar span { border-color: #e8ecf3; color: #72809a; }
+  html[data-theme="light"] .console-signalbar strong, html[data-theme="light"] .console-metric strong, html[data-theme="light"] .console-fund-card strong { color: #1a2033; }
+  html[data-theme="light"] .console-metric { min-height: 146px; border-radius: 18px; }
+  html[data-theme="light"] .console-metric span:not(.console-metric__glyph), html[data-theme="light"] .console-fund-card span { color: #7c899f; }
+  html[data-theme="light"] .console-metric small, html[data-theme="light"] .console-fund-card small { color: #71809a; }
+  html[data-theme="light"] .console-health__rows div, html[data-theme="light"] .console-compact-item, html[data-theme="light"] .console-certificate-event { border-color: #edf0f5; color: #617089; }
+  html[data-theme="light"] .console-health__rows strong, html[data-theme="light"] .console-compact-item strong, html[data-theme="light"] .console-member-chip strong, html[data-theme="light"] .console-certificate-event strong { color: #242b40; }
+  html[data-theme="light"] .console-compact-item span, html[data-theme="light"] .console-member-chip span, html[data-theme="light"] .console-certificate-event span { color: #78849a; }
+  html[data-theme="light"] .console-date-box, html[data-theme="light"] .console-tag { border-color: #d8d0ff; color: #5f4bdc; background: #f4f1ff; }
+  html[data-theme="light"] .console-member-chip { border-color: #e6eaf1; border-radius: 14px; background: #fafbfe; }
+  html[data-theme="light"] .console-event-card { border-color: #e1e6f0; border-radius: 18px; background: rgba(255, 255, 255, 0.94); box-shadow: 0 12px 28px rgba(45, 61, 98, 0.06); }
+  html[data-theme="light"] .console-event-card h3 { color: #20263a; } html[data-theme="light"] .console-event-card__summary { color: #71809a; } html[data-theme="light"] .console-event-card__links a { color: #5a48e8; } html[data-theme="light"] .console-event-card__links span { color: #19845f; }
+  html[data-theme="light"] .console-event-card__actions button { border-color: #ddd8ff; border-radius: 10px; background: #fbfaff; color: #5745d5; } html[data-theme="light"] .console-event-card__actions button:last-child { border-color: #f6ced7; color: #b3435b; }
+  html[data-theme="light"] .console-field > span, html[data-theme="light"] .console-search span { color: #647189; }
+  html[data-theme="light"] .console-search input, html[data-theme="light"] .console-field input, html[data-theme="light"] .console-field textarea, html[data-theme="light"] .console-field select { border-color: #dbe1ec; border-radius: 12px; background: #f9faff; color: #20283d; }
+  html[data-theme="light"] .console-search input:focus, html[data-theme="light"] .console-field input:focus, html[data-theme="light"] .console-field textarea:focus, html[data-theme="light"] .console-field select:focus { border-color: #6b58ed; background: #fff; box-shadow: 0 0 0 3px rgba(107, 88, 237, 0.1); }
+  html[data-theme="light"] .console-form-note { color: #71809a; } html[data-theme="light"] .console-checks { color: #59667d; }
+  html[data-theme="light"] .console-table-wrap { background: #fff; } html[data-theme="light"] .console-table th, html[data-theme="light"] .console-table td { border-color: #edf0f5; } html[data-theme="light"] .console-table th { color: #758199; } html[data-theme="light"] .console-table td { color: #526078; } html[data-theme="light"] .console-table td strong { color: #222a3e; }
+  html[data-theme="light"] .console-fund-card--balance { border-color: #bcebd7; background-image: linear-gradient(135deg, #ecfcf4, #fff 62%); }
+  html[data-theme="light"] .console-certificate-event button { border-color: #d6ceff; border-radius: 10px; background: #f1efff; color: #5846d9; }
   @media (max-width: 1120px) { .console-quick-actions { grid-template-columns: 1fr 1fr; } .console-fund-layout { grid-template-columns: 1fr; } .console-fund-entry { position: static; } }
   @media (max-width: 1000px) { .console-events-workbench .console-events-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   @media (max-width: 760px) { .console-page__heading { align-items: flex-start; flex-direction: column; } .console-heading-actions { justify-content: flex-start; } .console-signalbar { overflow-x: auto; } .console-quick-actions { grid-template-columns: 1fr; } .console-fund-layout { grid-template-columns: 1fr; } .console-events-workbench .console-events-grid { grid-template-columns: 1fr; } .console-certificate-event { grid-template-columns: 1fr; gap: 8px; } .console-certificate-event__count { text-align: left; } }
