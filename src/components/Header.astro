@@ -6,11 +6,9 @@
   class="site-header fixed top-5 left-0 right-0 z-50 w-full px-4 py-2 pointer-events-none"
 >
   <a
-    href="https://www.acm.org/membership/join"
-    target="_blank"
-    rel="noreferrer"
+    href="/membership"
     class="membership-cta pointer-events-auto"
-    aria-label="Ask about ACM AJCE membership"
+    aria-label="Open ACM AJCE membership"
   >
     <span class="membership-cta__label">ACM Membership</span>
     <span class="membership-cta__arrow" aria-hidden="true">&rarr;</span>
@@ -183,9 +181,7 @@
               ].map((item) => (
                 <li>
                   <a
-                    href={item === "membership" ? "https://www.acm.org/membership/join" : `#${item}`}
-                    target={item === "membership" ? "_blank" : undefined}
-                    rel={item === "membership" ? "noreferrer" : undefined}
+                    href={item === "membership" ? "/membership" : `#${item}`}
                     class="mobile-nav-link text-3xl font-light font-['PolySans_Trial'] uppercase text-[#FBFAFF] hover:text-[#B8A7FF] transition-colors"
                   >
                     {item.replace("-", " ")}

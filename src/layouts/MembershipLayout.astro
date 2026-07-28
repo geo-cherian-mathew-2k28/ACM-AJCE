@@ -1,0 +1,176 @@
+---
+type Props = {
+  title?: string;
+  signedIn?: boolean;
+};
+
+const { title = "ACM AJCE Membership", signedIn = false } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="theme-color" content="#05060b" />
+    <meta name="description" content="ACM AJCE Local Chapter Membership" />
+    <link rel="icon" type="image/png" href="/brand/acm-ajce-light.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <title>{title}</title>
+  </head>
+  <body>
+    <div class="portal-grid" aria-hidden="true"></div>
+    <div class="portal-shell">
+      <header class="portal-header">
+        <a class="portal-brand" href="/" aria-label="Back to ACM AJCE home">
+          <img src="/brand/acm-ajce-light.png" alt="ACM AJCE" />
+          <span>Membership</span>
+        </a>
+        <nav class="portal-links" aria-label="Membership navigation">
+          <a href="/">Website</a>
+          {signedIn && (
+            <form method="post" action="/api/auth/logout">
+              <button type="submit">Sign out</button>
+            </form>
+          )}
+        </nav>
+      </header>
+      <main class="portal-main">
+        <slot />
+      </main>
+    </div>
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    color-scheme: dark;
+    font-family: Inter, Arial, sans-serif;
+    background: #05060b;
+    color: #fbfaff;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body { min-height: 100%; margin: 0; }
+
+  body {
+    background: #05060b;
+    overflow-x: hidden;
+  }
+
+  button, input, textarea, select { font: inherit; }
+
+  button, a { -webkit-tap-highlight-color: transparent; }
+
+  .portal-grid {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.34;
+    background-image:
+      linear-gradient(rgba(184, 167, 255, 0.052) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(184, 167, 255, 0.052) 1px, transparent 1px);
+    background-size: 34px 34px;
+    mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.62) 74%, transparent 100%);
+  }
+
+  .portal-shell { position: relative; min-height: 100vh; }
+
+  .portal-header {
+    position: relative;
+    z-index: 1;
+    width: min(1180px, calc(100% - 40px));
+    margin: 0 auto;
+    min-height: 82px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    border-bottom: 1px solid rgba(230, 225, 255, 0.16);
+  }
+
+  .portal-brand { display: inline-flex; align-items: center; gap: 13px; color: #fbfaff; text-decoration: none; }
+  .portal-brand img { width: 104px; max-height: 42px; object-fit: contain; object-position: left center; }
+  .portal-brand span { padding-left: 13px; border-left: 1px solid rgba(230, 225, 255, 0.24); font: 700 0.68rem/1 "Space Mono", monospace; letter-spacing: 0.08em; text-transform: uppercase; }
+
+  .portal-links { display: flex; align-items: center; gap: 9px; }
+  .portal-links a, .portal-links button {
+    display: inline-flex;
+    align-items: center;
+    min-height: 35px;
+    padding: 0 12px;
+    border: 1px solid rgba(184, 167, 255, 0.38);
+    border-radius: 6px;
+    background: rgba(42, 36, 85, 0.5);
+    color: #fbfaff;
+    font: 700 0.68rem/1 "Space Mono", monospace;
+    letter-spacing: 0.025em;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 160ms ease, border-color 160ms ease, color 160ms ease;
+  }
+  .portal-links a:hover, .portal-links a:focus-visible, .portal-links button:hover, .portal-links button:focus-visible {
+    border-color: #b8a7ff;
+    background: #b8a7ff;
+    color: #2a2455;
+    outline: none;
+  }
+
+  .portal-main { width: min(1180px, calc(100% - 40px)); margin: 0 auto; padding: 58px 0 72px; }
+
+  .portal-eyebrow { margin: 0 0 14px; color: #b8a7ff; font: 700 0.72rem/1 "Space Mono", monospace; letter-spacing: 0.11em; text-transform: uppercase; }
+  .portal-title { max-width: 760px; margin: 0; color: #fbfaff; font-size: clamp(2rem, 4.7vw, 4.6rem); line-height: 0.98; letter-spacing: 0; }
+  .portal-copy { max-width: 600px; margin: 18px 0 0; color: rgba(251, 250, 255, 0.74); font-size: 0.98rem; line-height: 1.65; }
+
+  .portal-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 45px;
+    padding: 0 18px;
+    border: 1px solid #b8a7ff;
+    border-radius: 6px;
+    background: #b8a7ff;
+    color: #2a2455;
+    font-weight: 800;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+  }
+  .portal-button:hover, .portal-button:focus-visible { transform: translateY(-2px); background: #e6e1ff; box-shadow: 0 8px 24px rgba(106, 90, 205, 0.28); outline: none; }
+  .portal-button[disabled] { cursor: wait; opacity: 0.62; transform: none; }
+  .portal-button--subtle { background: transparent; color: #e6e1ff; }
+  .portal-button--danger { border-color: rgba(255, 125, 150, 0.72); background: transparent; color: #ffc1cd; }
+
+  .portal-panel { border: 1px solid rgba(230, 225, 255, 0.18); border-radius: 8px; background: rgba(11, 12, 22, 0.82); box-shadow: 0 18px 48px rgba(0, 0, 0, 0.25); }
+  .portal-status { min-height: 20px; margin: 14px 0 0; color: #b8a7ff; font-size: 0.88rem; line-height: 1.45; }
+  .portal-status[data-state="error"] { color: #ffb3c3; }
+  .portal-status[data-state="success"] { color: #a5f1c8; }
+
+  .portal-form { display: grid; gap: 16px; }
+  .portal-field { display: grid; gap: 7px; }
+  .portal-field label, .portal-checkbox { color: rgba(251, 250, 255, 0.68); font: 700 0.67rem/1.2 "Space Mono", monospace; letter-spacing: 0.08em; text-transform: uppercase; }
+  .portal-field input, .portal-field textarea, .portal-field select {
+    width: 100%; min-height: 43px; border: 1px solid rgba(230, 225, 255, 0.28); border-radius: 5px;
+    padding: 10px 12px; background: rgba(42, 36, 85, 0.36); color: #fbfaff; outline: none;
+    transition: border-color 150ms ease, background 150ms ease;
+  }
+  .portal-field textarea { min-height: 106px; resize: vertical; }
+  .portal-field input:focus, .portal-field textarea:focus, .portal-field select:focus { border-color: #b8a7ff; background: rgba(42, 36, 85, 0.68); }
+  .portal-checkbox { display: flex; align-items: center; gap: 8px; font-family: Inter, Arial, sans-serif; font-size: 0.78rem; letter-spacing: 0; text-transform: none; }
+  .portal-checkbox input { accent-color: #b8a7ff; }
+
+  @media (max-width: 700px) {
+    .portal-header, .portal-main { width: min(100% - 28px, 1180px); }
+    .portal-header { min-height: 70px; }
+    .portal-brand img { width: 87px; }
+    .portal-brand span { display: none; }
+    .portal-main { padding-top: 40px; }
+  }
+</style>

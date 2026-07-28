@@ -1,0 +1,9 @@
+# Copy this file to .dev.vars for local membership testing. Never commit real values.
+GOOGLE_OAUTH_CLIENT_ID=""
+GOOGLE_OAUTH_CLIENT_SECRET=""
+MEMBERSHIP_SESSION_SECRET="replace-with-a-random-32-plus-character-secret"
+RAZORPAY_KEY_ID="rzp_test_..."
+RAZORPAY_KEY_SECRET=""
+RAZORPAY_WEBHOOK_SECRET=""
+COUPON_HASH_SECRET="replace-with-a-second-random-32-plus-character-secret"
+ADMIN_EMAILS="chapter-admin@ajce.in"

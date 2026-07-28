@@ -1,0 +1,277 @@
+---
+import MembershipLayout from "../../layouts/MembershipLayout.astro";
+import {
+  getActiveMembership,
+  getCurrentUser,
+  getDatabase,
+  isAdminEmail,
+  type MemberUser,
+  type MembershipRecord,
+} from "../../lib/membership";
+
+let user: MemberUser | null = null;
+let membership: MembershipRecord | null = null;
+let portalIssue = "";
+
+try {
+  user = await getCurrentUser(Astro.request, Astro.locals);
+  if (user) membership = await getActiveMembership(getDatabase(Astro.locals), user.id);
+} catch (error) {
+  portalIssue = error instanceof Error ? error.message : "Membership services are not available yet.";
+}
+
+const isAdmin = user ? isAdminEmail(user.email, Astro.locals) : false;
+---
+
+<MembershipLayout signedIn={Boolean(user)}>
+  {!user ? (
+    <section class="login-layout">
+      <div class="login-copy">
+        <p class="portal-eyebrow">ACM AJCE local chapter</p>
+        <h1 class="portal-title">Make your chapter membership official.</h1>
+        <p class="portal-copy">
+          Join the ACM AJCE local chapter, keep your membership card in one place,
+          and register for member events without a separate form each time.
+        </p>
+        {portalIssue ? <p class="portal-status" data-state="error">{portalIssue}</p> : null}
+      </div>
+      <div class="login-panel portal-panel">
+        <p class="login-panel__label">Member access</p>
+        <h2>Continue with your Google account.</h2>
+        <p>We use your Google sign-in only to create and secure your ACM AJCE membership account.</p>
+        <a class="portal-button" href="/api/auth/google">Continue with Google</a>
+      </div>
+    </section>
+  ) : !membership ? (
+    <section>
+      <p class="portal-eyebrow">Welcome, {user.full_name.split(" ")[0]}</p>
+      <h1 class="portal-title">Join ACM AJCE for one year.</h1>
+      <p class="portal-copy">Complete your profile, then activate your local chapter membership for Rs. 150.</p>
+      <div class="join-layout">
+        <form id="membership-profile" class="portal-panel profile-panel portal-form">
+          <div class="panel-heading">
+            <h2>Member details</h2>
+            <p>These details appear on your downloadable ACM AJCE ID card.</p>
+          </div>
+          <div class="profile-fields">
+            <div class="portal-field"><label for="fullName">Full name</label><input id="fullName" name="fullName" value={user.full_name} required /></div>
+            <div class="portal-field"><label for="phone">Phone</label><input id="phone" name="phone" inputmode="tel" value={user.phone ?? ""} required /></div>
+            <div class="portal-field"><label for="department">Department</label><input id="department" name="department" value={user.department ?? ""} placeholder="Computer Science and Engineering" required /></div>
+            <div class="portal-field"><label for="studyYear">Year of study</label><input id="studyYear" name="studyYear" value={user.study_year ?? ""} placeholder="First year" required /></div>
+            <div class="portal-field profile-fields__wide"><label for="admissionNumber">Admission number</label><input id="admissionNumber" name="admissionNumber" value={user.admission_number ?? ""} required /></div>
+          </div>
+        </form>
+        <aside class="portal-panel join-plan">
+          <p class="join-plan__tag">Local chapter plan</p>
+          <p class="join-plan__price">Rs. 150 <span>/ one year</span></p>
+          <ul>
+            <li>Digital ACM AJCE membership card</li>
+            <li>Downloadable chapter ID card</li>
+            <li>Member event registration</li>
+            <li>Personal one-time event coupons</li>
+          </ul>
+          <button id="join-membership" class="portal-button" type="button">Join ACM AJCE</button>
+          <p id="join-status" class="portal-status" aria-live="polite"></p>
+        </aside>
+      </div>
+    </section>
+  ) : (
+    <section class="member-dashboard">
+      <div class="dashboard-heading">
+        <div>
+          <p class="portal-eyebrow">Member dashboard</p>
+          <h1 class="portal-title">Hello, {user.full_name.split(" ")[0]}.</h1>
+        </div>
+        <div class="dashboard-actions">
+          <a class="portal-button portal-button--subtle" href="/membership/card">View ID card</a>
+          {isAdmin && <a class="portal-button" href="/membership/admin">Member operations</a>}
+        </div>
+      </div>
+
+      <div class="membership-card" aria-label="Your active ACM AJCE membership">
+        <div class="membership-card__top"><span>ACM AJCE</span><span>LOCAL MEMBER</span></div>
+        <strong>{user.full_name}</strong>
+        <div class="membership-card__meta"><span>{membership.member_number}</span><span>Valid until {new Date(membership.expires_at).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })}</span></div>
+      </div>
+
+      <section class="member-events" aria-labelledby="member-events-heading">
+        <div class="section-heading">
+          <div><p class="portal-eyebrow">Events</p><h2 id="member-events-heading">Apply with your member account.</h2></div>
+          <p>Any coupon assigned to you is valid for one registration only and expires immediately after use.</p>
+        </div>
+        <div id="member-events-list" class="events-list" aria-live="polite"><p class="events-loading">Loading upcoming events...</p></div>
+      </section>
+    </section>
+  )}
+</MembershipLayout>
+
+<style>
+  .login-layout, .join-layout { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(315px, 0.8fr); gap: clamp(28px, 7vw, 96px); align-items: center; min-height: calc(100vh - 212px); }
+  .login-panel { padding: 30px; }
+  .login-panel__label, .join-plan__tag { margin: 0 0 13px; color: #b8a7ff; font: 700 0.67rem/1 "Space Mono", monospace; letter-spacing: 0.1em; text-transform: uppercase; }
+  .login-panel h2 { margin: 0; font-size: clamp(1.35rem, 2vw, 1.8rem); }
+  .login-panel p:not(.login-panel__label) { margin: 13px 0 24px; color: rgba(251, 250, 255, 0.67); line-height: 1.55; }
+
+  .join-layout { margin-top: 40px; align-items: start; min-height: auto; }
+  .profile-panel, .join-plan { padding: 28px; }
+  .panel-heading h2, .section-heading h2 { margin: 0; font-size: clamp(1.3rem, 2.2vw, 2rem); }
+  .panel-heading p { margin: 9px 0 0; color: rgba(251, 250, 255, 0.64); font-size: 0.9rem; line-height: 1.5; }
+  .profile-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 20px; }
+  .profile-fields__wide { grid-column: 1 / -1; }
+  .join-plan { position: sticky; top: 22px; }
+  .join-plan__price { margin: 0; font-size: clamp(2rem, 3.5vw, 3.1rem); font-weight: 800; color: #e6e1ff; }
+  .join-plan__price span { color: rgba(251, 250, 255, 0.55); font-size: 0.85rem; font-weight: 500; }
+  .join-plan ul { margin: 24px 0; padding: 0; list-style: none; display: grid; gap: 11px; color: rgba(251, 250, 255, 0.76); font-size: 0.9rem; }
+  .join-plan li { display: flex; gap: 9px; align-items: flex-start; }
+  .join-plan li::before { content: ""; width: 7px; height: 7px; flex: 0 0 auto; margin-top: 0.4em; border-radius: 50%; background: #b8a7ff; box-shadow: 0 0 12px rgba(184, 167, 255, 0.8); }
+  .join-plan .portal-button { width: 100%; }
+
+  .member-dashboard { display: grid; gap: 48px; }
+  .dashboard-heading { display: flex; align-items: end; justify-content: space-between; gap: 24px; }
+  .dashboard-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+  .membership-card { overflow: hidden; padding: 25px; border: 1px solid rgba(230, 225, 255, 0.38); border-radius: 8px; background: linear-gradient(128deg, rgba(42, 36, 85, 0.98), rgba(106, 90, 205, 0.74)); box-shadow: 0 18px 40px rgba(67, 52, 137, 0.26); }
+  .membership-card__top, .membership-card__meta { display: flex; align-items: center; justify-content: space-between; gap: 18px; font: 700 0.68rem/1.3 "Space Mono", monospace; letter-spacing: 0.075em; }
+  .membership-card__top { color: #e6e1ff; }
+  .membership-card strong { display: block; margin: 44px 0 27px; font-size: clamp(1.8rem, 4vw, 3.5rem); letter-spacing: 0; }
+  .membership-card__meta { color: rgba(251, 250, 255, 0.8); flex-wrap: wrap; }
+  .member-events { display: grid; gap: 21px; }
+  .section-heading { display: flex; justify-content: space-between; gap: 28px; align-items: end; }
+  .section-heading > p { max-width: 360px; margin: 0; color: rgba(251, 250, 255, 0.59); font-size: 0.88rem; line-height: 1.55; }
+  .events-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+  .events-loading { color: rgba(251, 250, 255, 0.58); }
+
+  @media (max-width: 800px) { .login-layout, .join-layout { grid-template-columns: 1fr; min-height: auto; } .login-layout { padding-top: 36px; } .join-plan { position: static; } }
+  @media (max-width: 600px) { .profile-fields, .events-list { grid-template-columns: 1fr; } .profile-fields__wide { grid-column: auto; } .dashboard-heading, .section-heading { align-items: flex-start; flex-direction: column; } .membership-card__meta { align-items: flex-start; flex-direction: column; } .profile-panel, .join-plan, .login-panel { padding: 21px; } }
+</style>
+
+<script>
+  // @ts-nocheck
+  const requestJson = async (url, options = {}) => {
+    const response = await fetch(url, options);
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(data.message || "Something went wrong.");
+    return data;
+  };
+
+  const loadRazorpay = () => new Promise((resolve, reject) => {
+    if (window.Razorpay) return resolve(window.Razorpay);
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.onload = () => resolve(window.Razorpay);
+    script.onerror = () => reject(new Error("Unable to load the payment window."));
+    document.head.appendChild(script);
+  });
+
+  const profileForm = document.querySelector("#membership-profile");
+  const joinButton = document.querySelector("#join-membership");
+  const joinStatus = document.querySelector("#join-status");
+
+  const setStatus = (element, message, state = "") => {
+    if (!element) return;
+    element.textContent = message;
+    element.dataset.state = state;
+  };
+
+  const saveProfile = async () => {
+    if (!profileForm) return;
+    const form = new FormData(profileForm);
+    await requestJson("/api/membership/profile", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(Object.fromEntries(form)),
+    });
+  };
+
+  if (joinButton) {
+    joinButton.addEventListener("click", async () => {
+      try {
+        if (!profileForm.reportValidity()) return;
+        joinButton.disabled = true;
+        setStatus(joinStatus, "Saving your profile...");
+        await saveProfile();
+        setStatus(joinStatus, "Opening secure payment...");
+        const order = await requestJson("/api/payments/order", { method: "POST" });
+        const Razorpay = await loadRazorpay();
+        const payment = new Razorpay({
+          key: order.keyId,
+          amount: order.amount,
+          currency: order.currency,
+          name: order.name,
+          description: order.description,
+          order_id: order.orderId,
+          prefill: order.prefill,
+          theme: { color: "#6A5ACD" },
+          handler: async (response) => {
+            try {
+              setStatus(joinStatus, "Confirming your membership...");
+              await requestJson("/api/payments/verify", {
+                method: "POST",
+                headers: { "content-type": "application/json" },
+                body: JSON.stringify(response),
+              });
+              setStatus(joinStatus, "Membership active. Opening your dashboard...", "success");
+              window.setTimeout(() => window.location.reload(), 700);
+            } catch (error) {
+              setStatus(joinStatus, error.message, "error");
+              joinButton.disabled = false;
+            }
+          },
+          modal: { ondismiss: () => { joinButton.disabled = false; setStatus(joinStatus, "Payment cancelled. Your profile is saved."); } },
+        });
+        payment.open();
+      } catch (error) {
+        setStatus(joinStatus, error.message, "error");
+        joinButton.disabled = false;
+      }
+    });
+  }
+
+  const eventsList = document.querySelector("#member-events-list");
+  const formatDate = (value) => new Intl.DateTimeFormat("en-IN", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value));
+  const addText = (element, value) => { element.textContent = value; return element; };
+
+  const createEventCard = (event) => {
+    const article = document.createElement("article");
+    article.className = "member-event portal-panel";
+    const meta = document.createElement("p"); meta.className = "member-event__meta";
+    addText(meta, `${formatDate(event.starts_at)}${event.venue ? ` / ${event.venue}` : ""}`);
+    const title = document.createElement("h3"); addText(title, event.title);
+    const summary = document.createElement("p"); summary.className = "member-event__summary"; addText(summary, event.summary);
+    const detail = document.createElement("p"); detail.className = "member-event__details"; addText(detail, event.details || "Event details will be shared by ACM AJCE.");
+    const row = document.createElement("div"); row.className = "member-event__action";
+    const coupon = document.createElement("input"); coupon.placeholder = "Coupon code (optional)"; coupon.setAttribute("aria-label", `Coupon for ${event.title}`);
+    const button = document.createElement("button"); button.className = "portal-button"; button.type = "button";
+    if (event.registration_status) { button.disabled = true; addText(button, "Registered"); } else { addText(button, "Apply"); }
+    button.addEventListener("click", async () => {
+      button.disabled = true;
+      try {
+        await requestJson(`/api/events/${event.id}/register`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ couponCode: coupon.value }) });
+        addText(button, "Registered"); coupon.disabled = true;
+      } catch (error) { button.disabled = false; window.alert(error.message); }
+    });
+    row.append(coupon, button); article.append(meta, title, summary, detail, row); return article;
+  };
+
+  if (eventsList) {
+    requestJson("/api/events")
+      .then(({ events }) => {
+        eventsList.replaceChildren();
+        if (!events.length) { const empty = document.createElement("p"); empty.className = "events-loading"; addText(empty, "No published events yet. Check back soon."); eventsList.append(empty); return; }
+        events.forEach((event) => eventsList.append(createEventCard(event)));
+      })
+      .catch((error) => { setStatus(eventsList, error.message, "error"); });
+  }
+</script>
+
+<style is:global>
+  .member-event { padding: 20px; }
+  .member-event__meta { margin: 0 0 14px; color: #b8a7ff; font: 700 0.65rem/1.35 "Space Mono", monospace; letter-spacing: 0.05em; text-transform: uppercase; }
+  .member-event h3 { margin: 0; font-size: 1.2rem; }
+  .member-event__summary { margin: 11px 0 0; color: rgba(251, 250, 255, 0.75); line-height: 1.5; }
+  .member-event__details { min-height: 2.8em; margin: 10px 0 18px; color: rgba(251, 250, 255, 0.48); font-size: 0.85rem; line-height: 1.45; }
+  .member-event__action { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 9px; }
+  .member-event__action input { min-width: 0; border: 1px solid rgba(230, 225, 255, 0.26); border-radius: 5px; padding: 0 10px; background: rgba(42, 36, 85, 0.36); color: #fbfaff; outline: none; }
+  .member-event__action input:focus { border-color: #b8a7ff; }
+  .member-event__action .portal-button { min-height: 40px; padding: 0 13px; }
+  @media (max-width: 440px) { .member-event__action { grid-template-columns: 1fr; } }
+</style>
