@@ -109,6 +109,12 @@ const fromBase64Url = (value: string) => {
   return atob(base64.padEnd(Math.ceil(base64.length / 4) * 4, "="));
 };
 
+const bytesToBase64Url = (bytes: Uint8Array) =>
+  toBase64Url(String.fromCharCode(...bytes));
+
+const base64UrlToBytes = (value: string) =>
+  Uint8Array.from(fromBase64Url(value), (character) => character.charCodeAt(0));
+
 const randomToken = () => {
   const bytes = crypto.getRandomValues(new Uint8Array(32));
   return toBase64Url(String.fromCharCode(...bytes));
@@ -324,6 +330,38 @@ export const hashCoupon = (code: string, locals: any) =>
 
 export const createCouponCode = () =>
   `AJCE-${crypto.randomUUID().replace(/-/g, "").slice(0, 10).toUpperCase()}`;
+
+const couponCipherKey = async (locals: any) => {
+  const source = encoder.encode(getRequiredSecret(locals, "COUPON_ENCRYPTION_SECRET"));
+  const digest = await crypto.subtle.digest("SHA-256", source);
+  return crypto.subtle.importKey("raw", digest, { name: "AES-GCM" }, false, ["encrypt", "decrypt"]);
+};
+
+export const encryptCouponCode = async (code: string, locals: any) => {
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const cipher = await crypto.subtle.encrypt(
+    { name: "AES-GCM", iv },
+    await couponCipherKey(locals),
+    encoder.encode(code)
+  );
+  return `${bytesToBase64Url(iv)}.${bytesToBase64Url(new Uint8Array(cipher))}`;
+};
+
+export const decryptCouponCode = async (ciphertext: string | null, locals: any) => {
+  if (!ciphertext) return null;
+  const [ivValue, encryptedValue] = ciphertext.split(".");
+  if (!ivValue || !encryptedValue) return null;
+  try {
+    const plain = await crypto.subtle.decrypt(
+      { name: "AES-GCM", iv: base64UrlToBytes(ivValue) },
+      await couponCipherKey(locals),
+      base64UrlToBytes(encryptedValue)
+    );
+    return new TextDecoder().decode(plain);
+  } catch {
+    return null;
+  }
+};
 
 export const createRazorpayOrder = async (
   locals: any,

@@ -87,12 +87,14 @@ const greetingName = viewerName === "ACM AJCE Admin" ? "ACM AJCE" : viewerName.s
             <label class="console-field"><span>Short summary</span><textarea name="summary" required></textarea></label>
             <div class="console-form__two"><label class="console-field"><span>Starts</span><input name="startsAt" type="datetime-local" required /></label><label class="console-field"><span>Ends</span><input name="endsAt" type="datetime-local" /></label></div>
             <div class="console-form__two"><label class="console-field"><span>Venue</span><input name="venue" /></label><label class="console-field"><span>Capacity</span><input name="capacity" type="number" min="1" /></label></div>
+            <div class="console-form__two"><label class="console-field"><span>Registration fee (Rs.)</span><input name="registrationFeeRupees" type="number" min="0" step="0.01" value="0" /></label><label class="console-field"><span>Member coupon discount (Rs.)</span><input name="couponDiscountRupees" type="number" min="0" step="0.01" value="0" data-coupon-discount /></label></div>
             <label class="console-field"><span>Registration deadline</span><input name="registrationDeadline" type="datetime-local" /></label>
             <label class="console-field"><span>Member details</span><textarea name="details"></textarea></label>
             <label class="console-field"><span>Poster image URL</span><input name="posterUrl" type="url" placeholder="https://..." /></label>
             <div class="console-form__two"><label class="console-field"><span>Event link</span><input name="eventUrl" type="url" placeholder="https://..." /></label><label class="console-field"><span>WhatsApp link</span><input name="whatsappUrl" type="url" placeholder="https://chat.whatsapp.com/..." /></label></div>
             <label class="console-field"><span>After registration message</span><textarea name="afterRegistrationContent" placeholder="What a registered member should know next"></textarea></label>
-            <div class="console-checks"><label><input name="memberOnly" type="checkbox" checked /> Members only</label><label><input name="registrationOpen" type="checkbox" checked /> Registration open</label><label><input name="published" type="checkbox" /> Publish now</label></div>
+            <div class="console-checks"><label><input name="memberOnly" type="checkbox" checked /> Members only</label><label><input name="couponEnabled" type="checkbox" data-coupon-toggle /> Enable private member coupon</label><label><input name="registrationOpen" type="checkbox" checked /> Registration open</label><label><input name="published" type="checkbox" /> Publish now</label></div>
+            <p class="console-form-note">When member coupons are enabled, every active member receives a different account-bound code. The code is rejected for every other account and expires after use.</p>
             <button class="console-primary" type="submit">Save event</button><p id="event-status" class="console-status" aria-live="polite"></p>
           </form>
         </aside>
@@ -109,22 +111,11 @@ const greetingName = viewerName === "ACM AJCE Admin" ? "ACM AJCE" : viewerName.s
     </section>
 
     <section class="console-view" data-console-view="coupons" hidden>
-      <header class="console-section-heading"><div><span class="console-kicker">Access codes</span><h2>Issue private one-time coupons</h2><p>Coupon values are shown once at creation, stored as hashes, and expire when a member uses them.</p></div></header>
-      <div class="console-coupon-layout">
-        <section class="console-panel console-editor">
-          <div class="console-panel__heading"><div><span class="console-kicker">New coupon</span><h2>Assign a member code</h2></div></div>
-          <form id="coupon-form" class="console-form">
-            <label class="console-field"><span>Event</span><select id="coupon-event" name="eventId" required><option value="">Choose event</option></select></label>
-            <label class="console-field"><span>Member</span><select id="coupon-member" name="userId" required><option value="">Choose member</option></select></label>
-            <div class="console-form__two"><label class="console-field"><span>Discount in paise</span><input name="discountAmountPaise" type="number" min="0" value="0" /></label><label class="console-field"><span>Expires</span><input name="expiresAt" type="datetime-local" /></label></div>
-            <button class="console-primary" type="submit">Generate one-time code</button><p id="coupon-status" class="console-status" aria-live="polite"></p>
-          </form>
-        </section>
-        <section class="console-panel">
-          <div class="console-panel__heading"><div><span class="console-kicker">Coupon history</span><h2>Issued codes</h2></div></div>
-          <div id="coupon-history" class="console-table-wrap console-table-wrap--inner"><p class="console-empty">Loading coupon history...</p></div>
-        </section>
-      </div>
+      <header class="console-section-heading"><div><span class="console-kicker">Member coupon records</span><h2>Private event benefits, without exposed codes</h2><p>Enable the member coupon while creating an event. The system provisions one account-bound code for each active member, stores only its validation hash, and marks it unusable after registration.</p></div></header>
+      <section class="console-panel">
+        <div class="console-panel__heading"><div><span class="console-kicker">Coupon activity</span><h2>Issued and redeemed codes</h2></div></div>
+        <div id="coupon-history" class="console-table-wrap console-table-wrap--inner"><p class="console-empty">Loading coupon history...</p></div>
+      </section>
     </section>
 
     <section class="console-view" data-console-view="funds" hidden>
@@ -320,8 +311,14 @@ const greetingName = viewerName === "ACM AJCE Admin" ? "ACM AJCE" : viewerName.s
   .console-certificate-event__count { color: #c6bcff !important; font: 700 0.66rem/1.4 "Space Mono", monospace; text-align: right; white-space: nowrap; }
   .console-certificate-event button { min-height: 34px; border: 1px solid rgba(168, 150, 255, 0.56); border-radius: 5px; padding: 0 10px; background: rgba(92, 75, 183, 0.3); color: #eeeaff; font-size: 0.68rem; font-weight: 800; cursor: pointer; }
   .console-certificate-event button:hover, .console-certificate-event button:focus-visible { background: rgba(112, 91, 220, 0.55); outline: none; }
+  .console-events-workbench { grid-template-columns: 1fr; gap: 16px; }
+  .console-events-workbench .console-events-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .console-events-workbench .console-editor { position: static; }
+  .console-form-note { margin: -2px 0 1px; color: #8f8b9c; font-size: 0.7rem; line-height: 1.5; }
+  .console-field.is-disabled { opacity: 0.42; }
   @media (max-width: 1120px) { .console-quick-actions { grid-template-columns: 1fr 1fr; } .console-fund-layout { grid-template-columns: 1fr; } .console-fund-entry { position: static; } }
-  @media (max-width: 760px) { .console-page__heading { align-items: flex-start; flex-direction: column; } .console-heading-actions { justify-content: flex-start; } .console-signalbar { overflow-x: auto; } .console-quick-actions { grid-template-columns: 1fr; } .console-fund-layout { grid-template-columns: 1fr; } .console-certificate-event { grid-template-columns: 1fr; gap: 8px; } .console-certificate-event__count { text-align: left; } }
+  @media (max-width: 1000px) { .console-events-workbench .console-events-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 760px) { .console-page__heading { align-items: flex-start; flex-direction: column; } .console-heading-actions { justify-content: flex-start; } .console-signalbar { overflow-x: auto; } .console-quick-actions { grid-template-columns: 1fr; } .console-fund-layout { grid-template-columns: 1fr; } .console-events-workbench .console-events-grid { grid-template-columns: 1fr; } .console-certificate-event { grid-template-columns: 1fr; gap: 8px; } .console-certificate-event__count { text-align: left; } }
 </style>
 
 <script>
@@ -350,8 +347,8 @@ const greetingName = viewerName === "ACM AJCE Admin" ? "ACM AJCE" : viewerName.s
 
   const demoOverview = { users: 38, activeMembers: 27, fundsPaise: 490000, publishedEvents: 2, openEvents: 2, registrations: 96, couponsIssued: 14, certificatesIssued: 43 };
   const demoEvents = [
-    { id: "demo-uxplore", title: "UXplore 2026", summary: "A product and interface design challenge for campus teams.", details: "Member registration preview.", venue: "AJCE Main Block", starts_at: "2026-08-18T09:30:00.000Z", ends_at: "2026-08-18T16:30:00.000Z", registration_deadline: "2026-08-15T18:00:00.000Z", capacity: 80, member_only: 1, registration_open: 1, published: 1 },
-    { id: "demo-data", title: "Data Alchemy", summary: "A hands-on session about building useful data stories.", details: "Member registration preview.", venue: "Innovation Lab", starts_at: "2026-09-05T10:00:00.000Z", ends_at: "2026-09-05T15:00:00.000Z", registration_deadline: "2026-09-03T18:00:00.000Z", capacity: 60, member_only: 1, registration_open: 1, published: 1 },
+    { id: "demo-uxplore", title: "UXplore 2026", summary: "A product and interface design challenge for campus teams.", details: "Member registration preview.", venue: "AJCE Main Block", starts_at: "2026-08-18T09:30:00.000Z", ends_at: "2026-08-18T16:30:00.000Z", registration_deadline: "2026-08-15T18:00:00.000Z", capacity: 80, registration_fee_paise: 30000, coupon_enabled: 1, coupon_discount_amount_paise: 5000, member_only: 1, registration_open: 1, published: 1 },
+    { id: "demo-data", title: "Data Alchemy", summary: "A hands-on session about building useful data stories.", details: "Member registration preview.", venue: "Innovation Lab", starts_at: "2026-09-05T10:00:00.000Z", ends_at: "2026-09-05T15:00:00.000Z", registration_deadline: "2026-09-03T18:00:00.000Z", capacity: 60, registration_fee_paise: 0, coupon_enabled: 0, coupon_discount_amount_paise: 0, member_only: 1, registration_open: 1, published: 1 },
   ];
   const demoMembers = [
     { id: "preview-member", full_name: "Ananya Thomas", email: "ananya.thomas@ajce.in", phone: "+91 98765 43210", department: "Computer Science and Engineering", study_year: "Third year", admission_number: "AJCE24CSE001", member_number: "AJCE-ACM-2026-DEMO01", membership_status: "active", expires_at: "2027-07-01T00:00:00.000Z", starts_at: "2026-07-01T00:00:00.000Z", razorpay_payment_id: "pay_demo_001", amount_paise: 15000 },
@@ -400,16 +397,13 @@ const greetingName = viewerName === "ACM AJCE Admin" ? "ACM AJCE" : viewerName.s
   const eventStatus = document.querySelector("#event-status");
   const eventEditorTitle = document.querySelector("#event-editor-title");
   const resetEventButton = document.querySelector("#reset-event");
-  const couponForm = document.querySelector("#coupon-form");
-  const couponStatus = document.querySelector("#coupon-status");
-  const couponEvent = document.querySelector("#coupon-event");
-  const couponMember = document.querySelector("#coupon-member");
   const memberSearch = document.querySelector("#member-search");
   const memberDialog = document.querySelector("#member-dialog");
   const memberForm = document.querySelector("#member-form");
   const memberStatus = document.querySelector("#member-status");
+  const couponToggle = document.querySelector("[data-coupon-toggle]");
+  const couponDiscountInput = document.querySelector("[data-coupon-discount]");
 
-  const setOptions = (select, values, label) => { select.replaceChildren(new Option(`Choose ${label}`, "")); values.forEach((item) => select.add(new Option(item.title || item.full_name, item.id))); };
   const renderOverview = () => {
     setText('[data-metric="users"]', overview.users ?? 0);
     setText('[data-metric="members"]', overview.activeMembers ?? 0);
@@ -477,6 +471,17 @@ const greetingName = viewerName === "ACM AJCE Admin" ? "ACM AJCE" : viewerName.s
         link.textContent = label;
         links.append(link);
       });
+      if (event.coupon_enabled) {
+        const coupon = document.createElement("span");
+        const discount = Number(event.coupon_discount_amount_paise || 0);
+        coupon.textContent = `Member coupon / save ${formatMoney(discount)}`;
+        links.append(coupon);
+      }
+      if (Number(event.registration_fee_paise || 0)) {
+        const fee = document.createElement("span");
+        fee.textContent = `Fee ${formatMoney(event.registration_fee_paise)}`;
+        links.append(fee);
+      }
       const footer = document.createElement("div");
       footer.className = "console-event-card__footer";
       const state = document.createElement("span");
@@ -564,14 +569,16 @@ const greetingName = viewerName === "ACM AJCE Admin" ? "ACM AJCE" : viewerName.s
     table.append(head, body);
     fundsTable.append(table);
   };
-  const resetEventForm = () => { editingEventId = null; eventForm.reset(); eventForm.memberOnly.checked = true; eventForm.registrationOpen.checked = true; eventEditorTitle.textContent = "Create event"; resetEventButton.hidden = true; status(eventStatus, ""); };
-  const editEvent = (event) => { editingEventId = event.id; eventEditorTitle.textContent = `Edit ${event.title}`; resetEventButton.hidden = false; eventForm.title.value = event.title; eventForm.summary.value = event.summary; eventForm.details.value = event.details || ""; eventForm.venue.value = event.venue || ""; eventForm.posterUrl.value = event.poster_url || ""; eventForm.eventUrl.value = event.event_url || ""; eventForm.whatsappUrl.value = event.whatsapp_url || ""; eventForm.afterRegistrationContent.value = event.after_registration_content || ""; eventForm.startsAt.value = dateInput(event.starts_at); eventForm.endsAt.value = dateInput(event.ends_at); eventForm.registrationDeadline.value = dateInput(event.registration_deadline); eventForm.capacity.value = event.capacity || ""; eventForm.memberOnly.checked = Boolean(event.member_only); eventForm.registrationOpen.checked = Boolean(event.registration_open); eventForm.published.checked = Boolean(event.published); window.scrollTo({ top: document.querySelector(".console-events-workbench").offsetTop - 18, behavior: "smooth" }); };
+  const updateCouponFields = () => { couponDiscountInput.disabled = !couponToggle.checked; couponDiscountInput.closest("label").classList.toggle("is-disabled", !couponToggle.checked); };
+  const resetEventForm = () => { editingEventId = null; eventForm.reset(); eventForm.memberOnly.checked = true; eventForm.registrationOpen.checked = true; eventForm.registrationFeeRupees.value = "0"; eventForm.couponDiscountRupees.value = "0"; eventForm.couponEnabled.checked = false; updateCouponFields(); eventEditorTitle.textContent = "Create event"; resetEventButton.hidden = true; status(eventStatus, ""); };
+  const editEvent = (event) => { editingEventId = event.id; eventEditorTitle.textContent = `Edit ${event.title}`; resetEventButton.hidden = false; eventForm.title.value = event.title; eventForm.summary.value = event.summary; eventForm.details.value = event.details || ""; eventForm.venue.value = event.venue || ""; eventForm.posterUrl.value = event.poster_url || ""; eventForm.eventUrl.value = event.event_url || ""; eventForm.whatsappUrl.value = event.whatsapp_url || ""; eventForm.afterRegistrationContent.value = event.after_registration_content || ""; eventForm.startsAt.value = dateInput(event.starts_at); eventForm.endsAt.value = dateInput(event.ends_at); eventForm.registrationDeadline.value = dateInput(event.registration_deadline); eventForm.capacity.value = event.capacity || ""; eventForm.registrationFeeRupees.value = Number(event.registration_fee_paise || 0) / 100; eventForm.couponDiscountRupees.value = Number(event.coupon_discount_amount_paise || 0) / 100; eventForm.memberOnly.checked = Boolean(event.member_only); eventForm.couponEnabled.checked = Boolean(event.coupon_enabled); eventForm.registrationOpen.checked = Boolean(event.registration_open); eventForm.published.checked = Boolean(event.published); updateCouponFields(); window.scrollTo({ top: document.querySelector(".console-events-workbench").offsetTop - 18, behavior: "smooth" }); };
   const deleteEvent = async (event) => { if (demoMode) { status(eventStatus, "Preview mode does not remove saved events."); return; } if (!window.confirm(`Delete ${event.title}?`)) return; try { await getJson(`/api/admin/events/${event.id}`, { method: "DELETE" }); await loadRecords(); } catch (error) { status(eventStatus, error.message, "error"); } };
   const openMember = (member) => { memberForm.id.value = member.id; memberForm.fullName.value = member.full_name || ""; memberForm.phone.value = member.phone || ""; memberForm.department.value = member.department || ""; memberForm.studyYear.value = member.study_year || ""; memberForm.admissionNumber.value = member.admission_number || ""; status(memberStatus, ""); memberDialog.showModal(); };
-  const loadRecords = async () => { if (demoMode) { overview = demoOverview; events = demoEvents; members = demoMembers; coupons = demoCoupons; certificateEvents = demoCertificateEvents.map((event) => ({ ...event })); fundData = { ...demoFundData }; fundEntries = [...demoFundEntries]; } else { const [overviewResponse, eventResponse, memberResponse, couponResponse, fundResponse, certificateResponse] = await Promise.all([getJson("/api/admin/overview"), getJson("/api/admin/events"), getJson("/api/admin/members"), getJson("/api/admin/coupons"), getJson("/api/admin/funds"), getJson("/api/admin/certificates")]); overview = overviewResponse; events = eventResponse.events; members = memberResponse.members; coupons = couponResponse.coupons; certificateEvents = certificateResponse.events; fundData = fundResponse; fundEntries = fundResponse.entries; } setOptions(couponEvent, events, "event"); setOptions(couponMember, members, "member"); renderOverview(); renderMembers(memberSearch.value); renderEvents(); renderCoupons(); renderCertificates(); renderFunds(); };
-  eventForm.addEventListener("submit", async (event) => { event.preventDefault(); if (demoMode) { status(eventStatus, "Preview mode only. This event is not saved."); return; } try { const values = Object.fromEntries(new FormData(eventForm)); values.memberOnly = eventForm.memberOnly.checked; values.registrationOpen = eventForm.registrationOpen.checked; values.published = eventForm.published.checked; const endpoint = editingEventId ? `/api/admin/events/${editingEventId}` : "/api/admin/events"; await getJson(endpoint, { method: editingEventId ? "PATCH" : "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(values) }); status(eventStatus, "Event saved.", "success"); resetEventForm(); await loadRecords(); } catch (error) { status(eventStatus, error.message, "error"); } });
+  const loadRecords = async () => { if (demoMode) { overview = demoOverview; events = demoEvents; members = demoMembers; coupons = demoCoupons; certificateEvents = demoCertificateEvents.map((event) => ({ ...event })); fundData = { ...demoFundData }; fundEntries = [...demoFundEntries]; } else { const [overviewResponse, eventResponse, memberResponse, couponResponse, fundResponse, certificateResponse] = await Promise.all([getJson("/api/admin/overview"), getJson("/api/admin/events"), getJson("/api/admin/members"), getJson("/api/admin/coupons"), getJson("/api/admin/funds"), getJson("/api/admin/certificates")]); overview = overviewResponse; events = eventResponse.events; members = memberResponse.members; coupons = couponResponse.coupons; certificateEvents = certificateResponse.events; fundData = fundResponse; fundEntries = fundResponse.entries; } renderOverview(); renderMembers(memberSearch.value); renderEvents(); renderCoupons(); renderCertificates(); renderFunds(); };
+  couponToggle?.addEventListener("change", updateCouponFields);
+  updateCouponFields();
+  eventForm.addEventListener("submit", async (event) => { event.preventDefault(); if (demoMode) { status(eventStatus, "Preview mode only. This event is not saved."); return; } try { const values = Object.fromEntries(new FormData(eventForm)); values.memberOnly = eventForm.memberOnly.checked; values.couponEnabled = eventForm.couponEnabled.checked; values.registrationOpen = eventForm.registrationOpen.checked; values.published = eventForm.published.checked; const endpoint = editingEventId ? `/api/admin/events/${editingEventId}` : "/api/admin/events"; await getJson(endpoint, { method: editingEventId ? "PATCH" : "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(values) }); status(eventStatus, "Event saved.", "success"); resetEventForm(); await loadRecords(); } catch (error) { status(eventStatus, error.message, "error"); } });
   resetEventButton.addEventListener("click", resetEventForm);
-  couponForm.addEventListener("submit", async (event) => { event.preventDefault(); if (demoMode) { status(couponStatus, "Preview code: AJCE-DEMO-2026. No real coupon was created.", "success"); return; } try { const data = await getJson("/api/admin/coupons", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(Object.fromEntries(new FormData(couponForm))) }); status(couponStatus, `Code created: ${data.code}. Copy it now; it cannot be retrieved later.`, "success"); couponForm.reset(); await loadRecords(); } catch (error) { status(couponStatus, error.message, "error"); } });
   fundForm?.addEventListener("submit", async (event) => { event.preventDefault(); const values = Object.fromEntries(new FormData(fundForm)); const amountPaise = Math.round(Number(values.amountRupees) * 100); if (!Number.isFinite(amountPaise) || amountPaise <= 0) { status(fundStatus, "Enter a valid amount in rupees.", "error"); return; } if (demoMode) { const entry = { id: crypto.randomUUID(), entry_type: values.entryType, amount_paise: amountPaise, title: String(values.title), category: String(values.category || ""), notes: String(values.notes || ""), recorded_at: values.recordedAt ? new Date(String(values.recordedAt)).toISOString() : new Date().toISOString(), recorded_by_name: "ACM AJCE Admin" }; fundEntries.unshift(entry); const movement = entry.entry_type === "debit" ? -entry.amount_paise : entry.amount_paise; fundData = { ...fundData, adjustmentPaise: fundData.adjustmentPaise + movement, currentFundsPaise: fundData.currentFundsPaise + movement }; overview = { ...overview, fundsPaise: fundData.currentFundsPaise }; fundForm.reset(); renderOverview(); renderFunds(); status(fundStatus, "Preview fund entry added to this session.", "success"); return; } try { await getJson("/api/admin/funds", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ entryType: values.entryType, amountPaise, title: values.title, category: values.category, notes: values.notes, recordedAt: values.recordedAt }) }); fundForm.reset(); await loadRecords(); status(fundStatus, "Fund entry saved.", "success"); } catch (error) { status(fundStatus, error.message, "error"); } });
   memberForm.addEventListener("submit", async (event) => { event.preventDefault(); if (demoMode) { status(memberStatus, "Preview mode only. Member records are unchanged."); return; } try { const data = Object.fromEntries(new FormData(memberForm)); const id = data.id; delete data.id; await getJson(`/api/admin/members/${id}`, { method: "PATCH", headers: { "content-type": "application/json" }, body: JSON.stringify(data) }); status(memberStatus, "Member record saved.", "success"); await loadRecords(); window.setTimeout(() => memberDialog.close(), 450); } catch (error) { status(memberStatus, error.message, "error"); } });
   memberSearch.addEventListener("input", () => renderMembers(memberSearch.value));

@@ -1,6 +1,7 @@
 import type { APIRoute } from "astro";
 import {
   createCouponCode,
+  encryptCouponCode,
   getDatabase,
   hashCoupon,
   json,
@@ -52,22 +53,28 @@ export const POST: APIRoute = async ({ request, locals }) => {
     }
 
     const database = getDatabase(locals);
-    const event = await database.prepare("SELECT id FROM events WHERE id = ? LIMIT 1").bind(eventId).first();
+    const event = await database.prepare("SELECT id, coupon_enabled FROM events WHERE id = ? LIMIT 1").bind(eventId).first<{ id: string; coupon_enabled: number }>();
     const user = await database.prepare("SELECT id FROM users WHERE id = ? LIMIT 1").bind(userId).first();
     if (!event || !user) throw new MembershipError("The event or member no longer exists.", 404);
+    if (!event.coupon_enabled) {
+      throw new MembershipError("Enable member coupons in this event before issuing a code.", 409);
+    }
 
     const code = createCouponCode();
     await database
       .prepare(
         `INSERT INTO coupons
-         (id, event_id, assigned_user_id, code_hash, discount_amount_paise, expires_at, created_by)
-         VALUES (?, ?, ?, ?, ?, ?, ?)`
+         (id, event_id, assigned_user_id, code_hash, code_ciphertext, code_prefix,
+          discount_amount_paise, expires_at, created_by)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
       )
       .bind(
         crypto.randomUUID(),
         eventId,
         userId,
         await hashCoupon(code, locals),
+        await encryptCouponCode(code, locals),
+        code.slice(0, 9),
         discountAmountPaise,
         expiresAt?.toISOString() ?? null,
         admin.id

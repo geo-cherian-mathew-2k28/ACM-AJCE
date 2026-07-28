@@ -32,6 +32,16 @@ const asUrl = (value: unknown, label: string) => {
   }
 };
 
+const asRupees = (value: unknown, label: string) => {
+  const input = asText(value);
+  if (!input) return 0;
+  const amount = Number(input);
+  if (!Number.isFinite(amount) || amount < 0) {
+    throw new MembershipError(`${label} must be a valid amount.`, 400);
+  }
+  return Math.round(amount * 100);
+};
+
 const eventValues = (body: Record<string, unknown>) => {
   const title = asText(body.title);
   const summary = asText(body.summary);
@@ -43,6 +53,14 @@ const eventValues = (body: Record<string, unknown>) => {
   const capacity = capacityInput ? Number(capacityInput) : null;
   if (capacity !== null && (!Number.isInteger(capacity) || capacity < 1)) {
     throw new MembershipError("Capacity must be a positive whole number.", 400);
+  }
+  const registrationFeePaise = asRupees(body.registrationFeeRupees, "Registration fee");
+  const couponEnabled = body.couponEnabled === true || body.couponEnabled === "true" ? 1 : 0;
+  const couponDiscountAmountPaise = couponEnabled
+    ? asRupees(body.couponDiscountRupees, "Member coupon discount")
+    : 0;
+  if (couponEnabled && couponDiscountAmountPaise > registrationFeePaise) {
+    throw new MembershipError("Member coupon discount cannot exceed the event fee.", 400);
   }
 
   return {
@@ -59,6 +77,9 @@ const eventValues = (body: Record<string, unknown>) => {
     endsAt: asDate(body.endsAt, "End time"),
     registrationDeadline: asDate(body.registrationDeadline, "Registration deadline"),
     capacity,
+    registrationFeePaise,
+    couponEnabled,
+    couponDiscountAmountPaise,
     memberOnly: body.memberOnly === false || body.memberOnly === "false" ? 0 : 1,
     registrationOpen: body.registrationOpen === false || body.registrationOpen === "false" ? 0 : 1,
     published: body.published === true || body.published === "true" ? 1 : 0,
@@ -87,8 +108,9 @@ export const POST: APIRoute = async ({ request, locals }) => {
         `INSERT INTO events
          (id, title, slug, summary, details, venue, poster_url, event_url, whatsapp_url,
           after_registration_content, starts_at, ends_at, registration_deadline, capacity,
+          registration_fee_paise, coupon_enabled, coupon_discount_amount_paise,
           member_only, registration_open, published, created_by)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
       )
       .bind(
         id,
@@ -105,6 +127,9 @@ export const POST: APIRoute = async ({ request, locals }) => {
         values.endsAt,
         values.registrationDeadline,
         values.capacity,
+        values.registrationFeePaise,
+        values.couponEnabled,
+        values.couponDiscountAmountPaise,
         values.memberOnly,
         values.registrationOpen,
         values.published,

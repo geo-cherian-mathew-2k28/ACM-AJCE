@@ -18,12 +18,15 @@ type EventRecord = {
   registration_deadline: string | null;
   capacity: number | null;
   member_only: number;
+  registration_fee_paise: number;
+  coupon_enabled: number;
 };
 
 type CouponRecord = {
   id: string;
   expires_at: string | null;
   used_at: string | null;
+  discount_amount_paise: number;
 };
 
 export const POST: APIRoute = async ({ request, params, locals }) => {
@@ -71,11 +74,12 @@ export const POST: APIRoute = async ({ request, params, locals }) => {
     const body = (await request.json().catch(() => ({}))) as Record<string, unknown>;
     const couponCode = String(body.couponCode ?? "").trim();
     let couponId: string | null = null;
+    let discountAmountPaise = 0;
     if (couponCode) {
       const codeHash = await hashCoupon(couponCode, locals);
       const coupon = await database
         .prepare(
-          `SELECT id, expires_at, used_at FROM coupons
+          `SELECT id, expires_at, used_at, discount_amount_paise FROM coupons
            WHERE event_id = ? AND assigned_user_id = ? AND code_hash = ? LIMIT 1`
         )
         .bind(event.id, user.id, codeHash)
@@ -94,6 +98,7 @@ export const POST: APIRoute = async ({ request, params, locals }) => {
         throw new MembershipError("This coupon has already been used.", 409);
       }
       couponId = coupon.id;
+      discountAmountPaise = event.coupon_enabled ? Number(coupon.discount_amount_paise ?? 0) : 0;
     }
 
     const registration = {
@@ -104,13 +109,19 @@ export const POST: APIRoute = async ({ request, params, locals }) => {
     };
     await database
       .prepare(
-        `INSERT INTO event_registrations (id, event_id, user_id, coupon_id, status)
-         VALUES (?, ?, ?, ?, 'registered')`
+        `INSERT INTO event_registrations
+         (id, event_id, user_id, coupon_id, discount_amount_paise, status)
+         VALUES (?, ?, ?, ?, ?, 'registered')`
       )
-      .bind(registration.id, registration.eventId, registration.userId, registration.couponId)
+      .bind(registration.id, registration.eventId, registration.userId, registration.couponId, discountAmountPaise)
       .run();
 
-    return json({ ok: true, registration });
+    return json({
+      ok: true,
+      registration,
+      discountAmountPaise,
+      payableAmountPaise: Math.max(0, Number(event.registration_fee_paise ?? 0) - discountAmountPaise),
+    });
   } catch (error) {
     return toApiError(error);
   }

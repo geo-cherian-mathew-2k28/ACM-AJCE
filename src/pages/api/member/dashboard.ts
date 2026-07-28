@@ -1,5 +1,15 @@
 import type { APIRoute } from "astro";
-import { getActiveMembership, getDatabase, json, requireUser, toApiError } from "../../../lib/membership";
+import {
+  createCouponCode,
+  decryptCouponCode,
+  encryptCouponCode,
+  getActiveMembership,
+  getDatabase,
+  hashCoupon,
+  json,
+  requireUser,
+  toApiError,
+} from "../../../lib/membership";
 
 export const prerender = false;
 
@@ -56,10 +66,56 @@ export const GET: APIRoute = async ({ request, locals }) => {
         .bind(user.id),
     ]);
 
+    const upcomingEvents = upcoming.results ?? [];
+    if (membership) {
+      for (const event of upcomingEvents as Array<Record<string, any>>) {
+        if (!event.coupon_enabled || event.registration_status || !event.registration_open) continue;
+        let coupon = await database
+          .prepare(
+            `SELECT id, code_ciphertext, code_prefix, discount_amount_paise, expires_at, used_at
+             FROM coupons WHERE event_id = ? AND assigned_user_id = ? LIMIT 1`
+          )
+          .bind(event.id, user.id)
+          .first<any>();
+        if (!coupon) {
+          const code = createCouponCode();
+          await database
+            .prepare(
+              `INSERT OR IGNORE INTO coupons
+               (id, event_id, assigned_user_id, code_hash, code_ciphertext, code_prefix,
+                discount_amount_paise, expires_at)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+            )
+            .bind(
+              crypto.randomUUID(),
+              event.id,
+              user.id,
+              await hashCoupon(code, locals),
+              await encryptCouponCode(code, locals),
+              code.slice(0, 9),
+              Number(event.coupon_discount_amount_paise ?? 0),
+              event.registration_deadline ?? null
+            )
+            .run();
+          coupon = await database
+            .prepare(
+              `SELECT id, code_ciphertext, code_prefix, discount_amount_paise, expires_at, used_at
+               FROM coupons WHERE event_id = ? AND assigned_user_id = ? LIMIT 1`
+            )
+            .bind(event.id, user.id)
+            .first<any>();
+        }
+        event.member_coupon_code = await decryptCouponCode(coupon?.code_ciphertext ?? null, locals);
+        event.member_coupon_prefix = coupon?.code_prefix ?? null;
+        event.member_coupon_discount_amount_paise = coupon?.discount_amount_paise ?? 0;
+        event.member_coupon_used_at = coupon?.used_at ?? null;
+      }
+    }
+
     return json({
       user,
       membership: membership ?? null,
-      upcoming: upcoming.results ?? [],
+      upcoming: upcomingEvents,
       registrations: registrations.results ?? [],
       certificates: certificates.results ?? [],
       transactions: transactions.results ?? [],

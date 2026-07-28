@@ -28,6 +28,16 @@ const toUrl = (value: unknown, label: string) => {
   }
 };
 
+const toRupees = (value: unknown, label: string) => {
+  const input = asText(value);
+  if (!input) return 0;
+  const amount = Number(input);
+  if (!Number.isFinite(amount) || amount < 0) {
+    throw new MembershipError(`${label} must be a valid amount.`, 400);
+  }
+  return Math.round(amount * 100);
+};
+
 export const PATCH: APIRoute = async ({ request, params, locals }) => {
   try {
     await requireAdmin(request, locals);
@@ -47,13 +57,28 @@ export const PATCH: APIRoute = async ({ request, params, locals }) => {
     if (capacity !== null && (!Number.isInteger(capacity) || capacity < 1)) {
       throw new MembershipError("Capacity must be a positive whole number.", 400);
     }
+    const registrationFeePaise = body.registrationFeeRupees === undefined
+      ? Number(current.registration_fee_paise ?? 0)
+      : toRupees(body.registrationFeeRupees, "Registration fee");
+    const couponEnabled = body.couponEnabled === undefined
+      ? Number(current.coupon_enabled ?? 0)
+      : (body.couponEnabled === true || body.couponEnabled === "true" ? 1 : 0);
+    const couponDiscountAmountPaise = couponEnabled
+      ? (body.couponDiscountRupees === undefined
+          ? Number(current.coupon_discount_amount_paise ?? 0)
+          : toRupees(body.couponDiscountRupees, "Member coupon discount"))
+      : 0;
+    if (couponEnabled && couponDiscountAmountPaise > registrationFeePaise) {
+      throw new MembershipError("Member coupon discount cannot exceed the event fee.", 400);
+    }
 
     await database
       .prepare(
         `UPDATE events
          SET title = ?, slug = ?, summary = ?, details = ?, venue = ?, poster_url = ?, event_url = ?,
              whatsapp_url = ?, after_registration_content = ?, starts_at = ?, ends_at = ?,
-             registration_deadline = ?, capacity = ?, member_only = ?, registration_open = ?,
+             registration_deadline = ?, capacity = ?, registration_fee_paise = ?, coupon_enabled = ?,
+             coupon_discount_amount_paise = ?, member_only = ?, registration_open = ?,
              published = ?, updated_at = CURRENT_TIMESTAMP
          WHERE id = ?`
       )
@@ -71,6 +96,9 @@ export const PATCH: APIRoute = async ({ request, params, locals }) => {
         toIso(body.endsAt ?? current.ends_at, "End time"),
         toIso(body.registrationDeadline ?? current.registration_deadline, "Registration deadline"),
         capacity,
+        registrationFeePaise,
+        couponEnabled,
+        couponDiscountAmountPaise,
         body.memberOnly === undefined ? current.member_only : (body.memberOnly === false || body.memberOnly === "false" ? 0 : 1),
         body.registrationOpen === undefined ? current.registration_open : (body.registrationOpen === false || body.registrationOpen === "false" ? 0 : 1),
         body.published === undefined ? current.published : (body.published === true || body.published === "true" ? 1 : 0),
