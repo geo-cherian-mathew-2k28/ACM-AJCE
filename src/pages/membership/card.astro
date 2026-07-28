@@ -10,23 +10,55 @@ import {
 } from "../../lib/membership";
 
 const viewer = await getCurrentUser(Astro.request, Astro.locals);
-if (!viewer) return Astro.redirect("/membership");
+const isLocalPreviewHost = ["localhost", "127.0.0.1", "::1"].includes(
+  Astro.url.hostname
+);
+const isPreview = isLocalPreviewHost && Astro.url.searchParams.get("preview") === "member";
+if (!viewer && !isPreview) return Astro.redirect("/membership");
 
 const requestedMemberId = Astro.url.searchParams.get("member");
-const memberId = requestedMemberId && isAdminEmail(viewer.email, Astro.locals) ? requestedMemberId : viewer.id;
-const database = getDatabase(Astro.locals);
-const member = await database.prepare("SELECT * FROM users WHERE id = ? LIMIT 1").bind(memberId).first<MemberUser>();
-const membership = member ? await getActiveMembership(database, member.id) : null;
+const memberId = requestedMemberId && viewer && isAdminEmail(viewer.email, Astro.locals) ? requestedMemberId : viewer?.id;
+const database = isPreview ? null : getDatabase(Astro.locals);
+const member = isPreview
+  ? ({
+      id: "preview-member",
+      google_sub: "preview-member",
+      email: "preview.member@acm-ajce.local",
+      full_name: "Ananya Thomas",
+      avatar_url: null,
+      role: "member",
+      phone: "+91 98765 43210",
+      department: "Computer Science and Engineering",
+      study_year: "Third year",
+      admission_number: "AJCE24CSE001",
+      profile_complete: 1,
+      created_at: "2026-07-01T00:00:00.000Z",
+      updated_at: "2026-07-01T00:00:00.000Z",
+    } as MemberUser)
+  : await database.prepare("SELECT * FROM users WHERE id = ? LIMIT 1").bind(memberId).first<MemberUser>();
+const membership = isPreview
+  ? ({
+      id: "preview-membership",
+      user_id: "preview-member",
+      member_number: "AJCE-ACM-2026-DEMO01",
+      plan_code: "local-annual",
+      amount_paise: 15_000,
+      status: "active",
+      starts_at: "2026-07-01T00:00:00.000Z",
+      expires_at: "2027-07-01T00:00:00.000Z",
+      payment_id: "pay_preview",
+    } as MembershipRecord)
+  : member ? await getActiveMembership(database, member.id) : null;
 if (!member || !membership) return Astro.redirect("/membership");
 
 const validTo = new Date((membership as MembershipRecord).expires_at).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" });
 ---
 
-<MembershipLayout title="ACM AJCE Member ID" signedIn>
+<MembershipLayout title="ACM AJCE Member ID" signedIn={!isPreview}>
   <section class="id-page">
     <div class="id-page__heading">
       <div><p class="portal-eyebrow">ACM AJCE member ID</p><h1 class="portal-title">Your chapter card.</h1></div>
-      <div class="id-page__actions"><a class="portal-button portal-button--subtle" href="/membership">Dashboard</a><button class="portal-button" type="button" id="download-card">Download as PDF</button></div>
+      <div class="id-page__actions"><a class="portal-button portal-button--subtle" href={isPreview ? "/membership?preview=member" : "/membership"}>Dashboard</a><button class="portal-button" type="button" id="download-card">Download as PDF</button></div>
     </div>
     <article id="member-card" class="member-id-card">
       <div class="member-id-card__top"><img src="/brand/acm-ajce-light.png" alt="ACM AJCE" /><span>LOCAL CHAPTER</span></div>

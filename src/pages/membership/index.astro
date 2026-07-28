@@ -12,18 +12,56 @@ import {
 let user: MemberUser | null = null;
 let membership: MembershipRecord | null = null;
 let portalIssue = "";
+const isLocalPreviewHost = ["localhost", "127.0.0.1", "::1"].includes(
+  Astro.url.hostname
+);
+const previewMode = isLocalPreviewHost
+  ? Astro.url.searchParams.get("preview")
+  : null;
+const isPreview = previewMode === "member" || previewMode === "admin";
+const previewUser: MemberUser = {
+  id: "preview-member",
+  google_sub: "preview-member",
+  email: "preview.member@acm-ajce.local",
+  full_name: previewMode === "admin" ? "ACM AJCE Admin" : "Ananya Thomas",
+  avatar_url: null,
+  role: previewMode === "admin" ? "admin" : "member",
+  phone: "+91 98765 43210",
+  department: "Computer Science and Engineering",
+  study_year: "Third year",
+  admission_number: "AJCE24CSE001",
+  profile_complete: 1,
+  created_at: "2026-07-01T00:00:00.000Z",
+  updated_at: "2026-07-01T00:00:00.000Z",
+};
+const previewMembership: MembershipRecord = {
+  id: "preview-membership",
+  user_id: previewUser.id,
+  member_number: "AJCE-ACM-2026-DEMO01",
+  plan_code: "local-annual",
+  amount_paise: 15_000,
+  status: "active",
+  starts_at: "2026-07-01T00:00:00.000Z",
+  expires_at: "2027-07-01T00:00:00.000Z",
+  payment_id: "pay_preview",
+};
 
-try {
-  user = await getCurrentUser(Astro.request, Astro.locals);
-  if (user) membership = await getActiveMembership(getDatabase(Astro.locals), user.id);
-} catch (error) {
-  portalIssue = error instanceof Error ? error.message : "Membership services are not available yet.";
+if (isPreview) {
+  user = previewUser;
+  membership = previewMembership;
+} else {
+  try {
+    user = await getCurrentUser(Astro.request, Astro.locals);
+    if (user) membership = await getActiveMembership(getDatabase(Astro.locals), user.id);
+  } catch (error) {
+    portalIssue = error instanceof Error ? error.message : "Membership services are not available yet.";
+  }
 }
 
-const isAdmin = user ? isAdminEmail(user.email, Astro.locals) : false;
+const isAdmin = isPreview ? previewMode === "admin" : user ? isAdminEmail(user.email, Astro.locals) : false;
 ---
 
-<MembershipLayout signedIn={Boolean(user)}>
+<MembershipLayout signedIn={Boolean(user) && !isPreview}>
   {!user ? (
     <section class="login-layout">
       <div class="login-copy">
@@ -40,6 +78,13 @@ const isAdmin = user ? isAdminEmail(user.email, Astro.locals) : false;
         <h2>Continue with your Google account.</h2>
         <p>We use your Google sign-in only to create and secure your ACM AJCE membership account.</p>
         <a class="portal-button" href="/api/auth/google">Continue with Google</a>
+        {isLocalPreviewHost && (
+          <div class="preview-links">
+            <span>Local preview</span>
+            <a href="/membership?preview=member">Member dashboard</a>
+            <a href="/membership?preview=admin">Admin dashboard</a>
+          </div>
+        )}
       </div>
     </section>
   ) : !membership ? (
@@ -83,8 +128,8 @@ const isAdmin = user ? isAdminEmail(user.email, Astro.locals) : false;
           <h1 class="portal-title">Hello, {user.full_name.split(" ")[0]}.</h1>
         </div>
         <div class="dashboard-actions">
-          <a class="portal-button portal-button--subtle" href="/membership/card">View ID card</a>
-          {isAdmin && <a class="portal-button" href="/membership/admin">Member operations</a>}
+          <a class="portal-button portal-button--subtle" href={isPreview ? "/membership/card?preview=member" : "/membership/card"}>View ID card</a>
+          {isAdmin && <a class="portal-button" href={isPreview ? "/membership/admin?preview=admin" : "/membership/admin"}>Member operations</a>}
         </div>
       </div>
 
@@ -99,7 +144,24 @@ const isAdmin = user ? isAdminEmail(user.email, Astro.locals) : false;
           <div><p class="portal-eyebrow">Events</p><h2 id="member-events-heading">Apply with your member account.</h2></div>
           <p>Any coupon assigned to you is valid for one registration only and expires immediately after use.</p>
         </div>
-        <div id="member-events-list" class="events-list" aria-live="polite"><p class="events-loading">Loading upcoming events...</p></div>
+        {isPreview ? (
+          <div id="member-events-list" class="events-list" data-demo="true">
+            <article class="member-event portal-panel">
+              <p class="member-event__meta">18 Aug 2026 / AJCE Main Block</p>
+              <h3>UXplore 2026</h3>
+              <p class="member-event__summary">A one-day product and interface design challenge for campus teams.</p>
+              <p class="member-event__details">Your assigned coupon field appears here when a code is issued to your member account.</p>
+              <div class="member-event__action"><input value="AJCE-DEMO-CODE" aria-label="Preview coupon code" disabled /><button class="portal-button" type="button" disabled>Preview only</button></div>
+            </article>
+            <article class="member-event portal-panel">
+              <p class="member-event__meta">05 Sep 2026 / Innovation Lab</p>
+              <h3>Data Alchemy</h3>
+              <p class="member-event__summary">An ACM AJCE hands-on session about building useful data stories.</p>
+              <p class="member-event__details">Once live, members can review the event, apply, and use a personal coupon here.</p>
+              <div class="member-event__action"><input placeholder="Coupon code (optional)" aria-label="Preview coupon input" disabled /><button class="portal-button" type="button" disabled>Preview only</button></div>
+            </article>
+          </div>
+        ) : <div id="member-events-list" class="events-list" aria-live="polite"><p class="events-loading">Loading upcoming events...</p></div>}
       </section>
     </section>
   )}
@@ -111,6 +173,10 @@ const isAdmin = user ? isAdminEmail(user.email, Astro.locals) : false;
   .login-panel__label, .join-plan__tag { margin: 0 0 13px; color: #b8a7ff; font: 700 0.67rem/1 "Space Mono", monospace; letter-spacing: 0.1em; text-transform: uppercase; }
   .login-panel h2 { margin: 0; font-size: clamp(1.35rem, 2vw, 1.8rem); }
   .login-panel p:not(.login-panel__label) { margin: 13px 0 24px; color: rgba(251, 250, 255, 0.67); line-height: 1.55; }
+  .preview-links { display: grid; grid-template-columns: auto 1fr 1fr; gap: 8px; align-items: center; margin-top: 20px; padding-top: 16px; border-top: 1px solid rgba(230, 225, 255, 0.13); }
+  .preview-links span { color: rgba(251, 250, 255, 0.5); font: 700 0.61rem/1 "Space Mono", monospace; letter-spacing: 0.05em; text-transform: uppercase; }
+  .preview-links a { color: #b8a7ff; font-size: 0.76rem; font-weight: 700; text-decoration: none; }
+  .preview-links a:hover, .preview-links a:focus-visible { color: #e6e1ff; outline: none; }
 
   .join-layout { margin-top: 40px; align-items: start; min-height: auto; }
   .profile-panel, .join-plan { padding: 28px; }
@@ -252,7 +318,7 @@ const isAdmin = user ? isAdminEmail(user.email, Astro.locals) : false;
     row.append(coupon, button); article.append(meta, title, summary, detail, row); return article;
   };
 
-  if (eventsList) {
+  if (eventsList && eventsList.dataset.demo !== "true") {
     requestJson("/api/events")
       .then(({ events }) => {
         eventsList.replaceChildren();

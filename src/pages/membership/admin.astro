@@ -2,15 +2,21 @@
 import MembershipLayout from "../../layouts/MembershipLayout.astro";
 import { getCurrentUser, isAdminEmail } from "../../lib/membership";
 
-const user = await getCurrentUser(Astro.request, Astro.locals);
-if (!user || !isAdminEmail(user.email, Astro.locals)) return Astro.redirect("/membership");
+const isLocalPreviewHost = ["localhost", "127.0.0.1", "::1"].includes(
+  Astro.url.hostname
+);
+const isPreview = isLocalPreviewHost && Astro.url.searchParams.get("preview") === "admin";
+const user = isPreview
+  ? { email: "preview.admin@acm-ajce.local" }
+  : await getCurrentUser(Astro.request, Astro.locals);
+if (!isPreview && (!user || !isAdminEmail(user.email, Astro.locals))) return Astro.redirect("/membership");
 ---
 
-<MembershipLayout title="ACM AJCE Member Operations" signedIn>
-  <section class="admin-page">
+<MembershipLayout title="ACM AJCE Member Operations" signedIn={!isPreview}>
+  <section class="admin-page" data-demo={isPreview ? "true" : "false"}>
     <div class="admin-heading">
       <div><p class="portal-eyebrow">Member operations</p><h1 class="portal-title">Chapter membership.</h1></div>
-      <a class="portal-button portal-button--subtle" href="/membership">Member dashboard</a>
+      <a class="portal-button portal-button--subtle" href={isPreview ? "/membership?preview=admin" : "/membership"}>Member dashboard</a>
     </div>
 
     <div id="admin-metrics" class="admin-metrics" aria-live="polite">
@@ -133,6 +139,16 @@ if (!user || !isAdminEmail(user.email, Astro.locals)) return Astro.redirect("/me
   const memberDialog = document.querySelector("#member-dialog");
   const memberForm = document.querySelector("#member-form");
   const memberStatus = document.querySelector("#member-status");
+  const demoMode = document.querySelector(".admin-page")?.dataset.demo === "true";
+  const demoOverview = { users: 38, activeMembers: 27, fundsPaise: 405000, publishedEvents: 2 };
+  const demoEvents = [
+    { id: "demo-uxplore", title: "UXplore 2026", summary: "A product and interface design challenge for campus teams.", details: "Member registration preview.", venue: "AJCE Main Block", starts_at: "2026-08-18T09:30:00.000Z", ends_at: "2026-08-18T16:30:00.000Z", registration_deadline: "2026-08-15T18:00:00.000Z", capacity: 80, member_only: 1, registration_open: 1, published: 1 },
+    { id: "demo-data", title: "Data Alchemy", summary: "A hands-on session about building useful data stories.", details: "Member registration preview.", venue: "Innovation Lab", starts_at: "2026-09-05T10:00:00.000Z", ends_at: "2026-09-05T15:00:00.000Z", registration_deadline: "2026-09-03T18:00:00.000Z", capacity: 60, member_only: 1, registration_open: 1, published: 1 },
+  ];
+  const demoMembers = [
+    { id: "preview-member", full_name: "Ananya Thomas", email: "ananya.thomas@ajce.in", phone: "+91 98765 43210", department: "Computer Science and Engineering", study_year: "Third year", admission_number: "AJCE24CSE001", member_number: "AJCE-ACM-2026-DEMO01", membership_status: "active", expires_at: "2027-07-01T00:00:00.000Z", razorpay_payment_id: "pay_demo_001", amount_paise: 15000 },
+    { id: "preview-member-two", full_name: "Arjun Mathew", email: "arjun.mathew@ajce.in", phone: "+91 98765 43211", department: "Electronics and Communication Engineering", study_year: "Second year", admission_number: "AJCE25ECE014", member_number: "AJCE-ACM-2026-DEMO02", membership_status: "active", expires_at: "2027-07-01T00:00:00.000Z", razorpay_payment_id: "pay_demo_002", amount_paise: 15000 },
+  ];
 
   const resetEventForm = () => { editingEventId = null; eventForm.reset(); eventTitle.textContent = "Create an event"; resetEvent.hidden = true; status(eventStatus, ""); };
   const setOptions = (select, values, label) => { select.replaceChildren(new Option(`Choose ${label}`, "")); values.forEach((item) => select.add(new Option(item.title || item.full_name, item.id))); };
@@ -152,7 +168,7 @@ if (!user || !isAdminEmail(user.email, Astro.locals)) return Astro.redirect("/me
         eventForm.title.value = event.title; eventForm.summary.value = event.summary; eventForm.details.value = event.details || ""; eventForm.venue.value = event.venue || ""; eventForm.startsAt.value = dateInput(event.starts_at); eventForm.endsAt.value = dateInput(event.ends_at); eventForm.registrationDeadline.value = dateInput(event.registration_deadline); eventForm.capacity.value = event.capacity || ""; eventForm.memberOnly.checked = Boolean(event.member_only); eventForm.registrationOpen.checked = Boolean(event.registration_open); eventForm.published.checked = Boolean(event.published); eventForm.scrollIntoView({ behavior: "smooth", block: "start" });
       });
       const remove = document.createElement("button"); remove.type = "button"; remove.className = "portal-button portal-button--danger"; remove.textContent = "Delete";
-      remove.addEventListener("click", async () => { if (!window.confirm(`Delete ${event.title}?`)) return; try { await getJson(`/api/admin/events/${event.id}`, { method: "DELETE" }); await loadRecords(); } catch (error) { window.alert(error.message); } });
+      remove.addEventListener("click", async () => { if (demoMode) { status(eventStatus, "Preview mode does not change saved events."); return; } if (!window.confirm(`Delete ${event.title}?`)) return; try { await getJson(`/api/admin/events/${event.id}`, { method: "DELETE" }); await loadRecords(); } catch (error) { window.alert(error.message); } });
       actions.append(edit, remove); card.append(meta, title, summary, actions); eventsHost.append(card);
     });
   };
@@ -170,7 +186,7 @@ if (!user || !isAdminEmail(user.email, Astro.locals)) return Astro.redirect("/me
       const paymentCell = document.createElement("td"); paymentCell.textContent = member.razorpay_payment_id ? `Rs. ${((member.amount_paise || 0) / 100).toFixed(2)}\n${member.razorpay_payment_id}` : "--";
       const actionCell = document.createElement("td"); const actions = document.createElement("div"); actions.className = "table-actions";
       const edit = document.createElement("button"); edit.type = "button"; edit.textContent = "Edit"; edit.addEventListener("click", () => openMember(member));
-      const card = document.createElement("a"); card.href = `/membership/card?member=${encodeURIComponent(member.id)}`; card.textContent = "ID card"; actions.append(edit, card); actionCell.append(actions);
+      const card = document.createElement("a"); card.href = demoMode ? "/membership/card?preview=member" : `/membership/card?member=${encodeURIComponent(member.id)}`; card.textContent = "ID card"; actions.append(edit, card); actionCell.append(actions);
       row.append(memberCell, academicCell, membershipCell, paymentCell, actionCell); body.append(row);
     });
     table.append(head, body); membersHost.append(table);
@@ -179,15 +195,26 @@ if (!user || !isAdminEmail(user.email, Astro.locals)) return Astro.redirect("/me
   const openMember = (member) => { memberForm.id.value = member.id; memberForm.fullName.value = member.full_name || ""; memberForm.phone.value = member.phone || ""; memberForm.department.value = member.department || ""; memberForm.studyYear.value = member.study_year || ""; memberForm.admissionNumber.value = member.admission_number || ""; status(memberStatus, ""); memberDialog.showModal(); };
 
   const loadRecords = async () => {
+    if (demoMode) {
+      const values = [demoOverview.users, demoOverview.activeMembers, `Rs. ${(demoOverview.fundsPaise / 100).toFixed(2)}`, demoOverview.publishedEvents];
+      metrics.querySelectorAll("strong").forEach((node, index) => node.textContent = values[index]);
+      events = demoEvents;
+      members = demoMembers;
+      setOptions(couponEvent, events, "event");
+      setOptions(couponMember, members, "member");
+      renderEvents();
+      renderMembers();
+      return;
+    }
     const [overview, eventData, memberData] = await Promise.all([getJson("/api/admin/overview"), getJson("/api/admin/events"), getJson("/api/admin/members")]);
     const values = [overview.users, overview.activeMembers, `Rs. ${(overview.fundsPaise / 100).toFixed(2)}`, overview.publishedEvents]; metrics.querySelectorAll("strong").forEach((node, index) => node.textContent = values[index]);
     events = eventData.events; members = memberData.members; setOptions(couponEvent, events, "event"); setOptions(couponMember, members, "member"); renderEvents(); renderMembers();
   };
 
-  eventForm.addEventListener("submit", async (event) => { event.preventDefault(); try { const values = Object.fromEntries(new FormData(eventForm)); values.memberOnly = eventForm.memberOnly.checked; values.registrationOpen = eventForm.registrationOpen.checked; values.published = eventForm.published.checked; const url = editingEventId ? `/api/admin/events/${editingEventId}` : "/api/admin/events"; await getJson(url, { method: editingEventId ? "PATCH" : "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(values) }); status(eventStatus, "Event saved.", "success"); resetEventForm(); await loadRecords(); } catch (error) { status(eventStatus, error.message, "error"); } });
+  eventForm.addEventListener("submit", async (event) => { event.preventDefault(); if (demoMode) { status(eventStatus, "Preview mode only. Events are not saved here."); return; } try { const values = Object.fromEntries(new FormData(eventForm)); values.memberOnly = eventForm.memberOnly.checked; values.registrationOpen = eventForm.registrationOpen.checked; values.published = eventForm.published.checked; const url = editingEventId ? `/api/admin/events/${editingEventId}` : "/api/admin/events"; await getJson(url, { method: editingEventId ? "PATCH" : "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(values) }); status(eventStatus, "Event saved.", "success"); resetEventForm(); await loadRecords(); } catch (error) { status(eventStatus, error.message, "error"); } });
   resetEvent.addEventListener("click", resetEventForm);
-  couponForm.addEventListener("submit", async (event) => { event.preventDefault(); try { const data = await getJson("/api/admin/coupons", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(Object.fromEntries(new FormData(couponForm))) }); status(couponStatus, `Code created: ${data.code}. Copy it now; it cannot be retrieved later.`, "success"); couponForm.reset(); } catch (error) { status(couponStatus, error.message, "error"); } });
-  memberForm.addEventListener("submit", async (event) => { event.preventDefault(); try { const data = Object.fromEntries(new FormData(memberForm)); const id = data.id; delete data.id; await getJson(`/api/admin/members/${id}`, { method: "PATCH", headers: { "content-type": "application/json" }, body: JSON.stringify(data) }); status(memberStatus, "Member record saved.", "success"); await loadRecords(); window.setTimeout(() => memberDialog.close(), 450); } catch (error) { status(memberStatus, error.message, "error"); } });
+  couponForm.addEventListener("submit", async (event) => { event.preventDefault(); if (demoMode) { status(couponStatus, "Preview code: AJCE-DEMO-2026. No real coupon was created.", "success"); return; } try { const data = await getJson("/api/admin/coupons", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(Object.fromEntries(new FormData(couponForm))) }); status(couponStatus, `Code created: ${data.code}. Copy it now; it cannot be retrieved later.`, "success"); couponForm.reset(); } catch (error) { status(couponStatus, error.message, "error"); } });
+  memberForm.addEventListener("submit", async (event) => { event.preventDefault(); if (demoMode) { status(memberStatus, "Preview mode only. Member records are not changed."); return; } try { const data = Object.fromEntries(new FormData(memberForm)); const id = data.id; delete data.id; await getJson(`/api/admin/members/${id}`, { method: "PATCH", headers: { "content-type": "application/json" }, body: JSON.stringify(data) }); status(memberStatus, "Member record saved.", "success"); await loadRecords(); window.setTimeout(() => memberDialog.close(), 450); } catch (error) { status(memberStatus, error.message, "error"); } });
   document.querySelector("[data-close-dialog]")?.addEventListener("click", () => memberDialog.close());
   loadRecords().catch((error) => { membersHost.textContent = error.message; });
 </script>
