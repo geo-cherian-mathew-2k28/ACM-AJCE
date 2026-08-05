@@ -39,24 +39,15 @@ setPersistence(auth, browserLocalPersistence).catch(console.error);
 
 export const googleProvider = new GoogleAuthProvider();
 googleProvider.setCustomParameters({
-  hd: "ajce.in",
   prompt: "select_account"
 });
 
 /**
- * Sign in with Google (@ajce.in email enforcement)
+ * Sign in with Google (allows all Google logins for freshers/students)
  */
 export async function loginWithCollegeGoogle() {
   try {
     const result = await signInWithPopup(auth, googleProvider);
-    const email = result.user?.email || "";
-
-    // Strictly validate domain
-    if (!email.toLowerCase().endsWith("@ajce.in")) {
-      await signOut(auth);
-      throw new Error("Access Restricted: Please sign in with your official @ajce.in student email.");
-    }
-
     return result.user;
   } catch (error) {
     if (error.code === "auth/popup-closed-by-user") {
