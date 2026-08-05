@@ -48,7 +48,7 @@ import MembershipLayout from "../../layouts/MembershipLayout.astro";
         
         <div class="flex items-center gap-3">
           <span class="inline-flex items-center gap-1.5 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs px-3 py-1 rounded-full font-medium">
-            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Verified @ajce.in
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Verified Student
           </span>
           <button id="signout-btn" type="button" class="text-xs text-gray-400 hover:text-rose-400 transition-colors underline cursor-pointer">
             Sign Out
@@ -203,12 +203,31 @@ import MembershipLayout from "../../layouts/MembershipLayout.astro";
         
         <!-- Official Membership ID Card Section (Visible once Verified) -->
         <div id="verified-card" class="hidden pt-2 border-t border-emerald-500/30">
-          <div class="bg-gradient-to-r from-[#2A2455] to-[#1A182F] p-4 rounded-lg border border-emerald-500/40 text-center">
-            <span class="text-[10px] text-emerald-400 uppercase tracking-widest font-mono font-bold block mb-1">Official ACM AJCE Membership ID</span>
-            <div id="view-mem-id" class="text-xl font-extrabold text-white font-mono tracking-wider">ACM-AJCE-9842</div>
-            <p class="text-[10px] text-gray-300 mt-1">Active Chapter Member (2024-2025)</p>
+          <div class="bg-gradient-to-r from-[#2A2455] to-[#1A182F] p-4 rounded-lg border border-emerald-500/40 text-center space-y-2">
+            <span class="text-[10px] text-emerald-400 uppercase tracking-widest font-mono font-bold block">Official ACM AJCE Membership ID</span>
+            
+            <div class="flex items-center justify-center gap-2">
+              <div id="view-mem-id" class="text-xl font-extrabold text-white font-mono tracking-wider">ACM-AJCE-9842</div>
+              <button id="copy-mem-id-btn" type="button" class="py-1 px-2.5 rounded bg-[#3D3575] hover:bg-[#4D4770] text-[#B8A7FF] text-[11px] font-semibold flex items-center gap-1 border border-[#4D4770] transition-all cursor-pointer">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+                <span id="copy-mem-text">Copy ID</span>
+              </button>
+            </div>
+
+            <div class="text-[11px] text-gray-300 font-medium">
+              Validity Period: <span id="view-validity" class="text-emerald-400 font-semibold font-mono">Aug 5, 2026 – Aug 5, 2027</span>
+            </div>
+            <p class="text-[10px] text-gray-400" id="view-member-badge">Active Chapter Member</p>
           </div>
         </div>
+      </div>
+
+      <!-- Webmaster Support Contact -->
+      <div class="mb-6 p-3 rounded-xl bg-[#131124] border border-[#2A2455] text-xs text-gray-400">
+        Having issues with your verification or registration? 
+        <a href="mailto:geocherianmathew@gmail.com?subject=ACM%20AJCE%20Membership%20Support" class="text-[#B8A7FF] hover:text-white font-semibold underline ml-1">
+          Contact Webmaster Support
+        </a>
       </div>
 
       <button id="signout-status-btn" type="button" class="text-xs text-gray-400 hover:text-white transition-colors underline cursor-pointer">
@@ -269,8 +288,12 @@ import MembershipLayout from "../../layouts/MembershipLayout.astro";
     const submitBtnText = document.getElementById("submit-btn-text");
     const submitSpinner = document.getElementById("submit-spinner");
 
+    const copyMemIdBtn = document.getElementById("copy-mem-id-btn");
+    const copyMemText = document.getElementById("copy-mem-text");
+
     let currentUser = null;
     let unsubscribeFirestore = null;
+    let currentMembershipId = "";
 
     const showAuthError = (msg) => {
       if (authErrorBanner) {
@@ -291,7 +314,7 @@ import MembershipLayout from "../../layouts/MembershipLayout.astro";
       try {
         await loginWithCollegeGoogle();
       } catch (err) {
-        showAuthError(err.message || "Login failed. Ensure you use an @ajce.in email.");
+        showAuthError(err.message || "Login failed.");
       }
     });
 
@@ -304,6 +327,17 @@ import MembershipLayout from "../../layouts/MembershipLayout.astro";
     signoutBtn?.addEventListener("click", handleSignOut);
     signoutStatusBtn?.addEventListener("click", handleSignOut);
 
+    // Copy Membership ID Handler
+    copyMemIdBtn?.addEventListener("click", () => {
+      if (currentMembershipId) {
+        navigator.clipboard.writeText(currentMembershipId);
+        if (copyMemText) copyMemText.textContent = "Copied!";
+        setTimeout(() => {
+          if (copyMemText) copyMemText.textContent = "Copy ID";
+        }, 2000);
+      }
+    });
+
     // Auth State Persistent Observer
     onAuthStateChanged(auth, (user) => {
       currentUser = user;
@@ -313,7 +347,6 @@ import MembershipLayout from "../../layouts/MembershipLayout.astro";
       }
 
       if (!user) {
-        // Show Auth Gate View
         authGateView?.classList.remove("hidden");
         formView?.classList.add("hidden");
         statusView?.classList.add("hidden");
@@ -346,13 +379,11 @@ import MembershipLayout from "../../layouts/MembershipLayout.astro";
       // Listen to Firestore real-time status for this logged-in user
       unsubscribeFirestore = listenToUserMembership(user.uid, (data) => {
         if (data) {
-          // Record exists in Firestore -> Show Status View
           renderStatusView(data);
           authGateView?.classList.add("hidden");
           formView?.classList.add("hidden");
           statusView?.classList.remove("hidden");
         } else {
-          // No record submitted yet -> Show Form View
           authGateView?.classList.add("hidden");
           formView?.classList.remove("hidden");
           statusView?.classList.add("hidden");
@@ -360,7 +391,7 @@ import MembershipLayout from "../../layouts/MembershipLayout.astro";
       });
     });
 
-    // Render Status Screen with Firestore Data
+    // Render Status Screen with Dynamic Dates & Copy ID
     function renderStatusView(data) {
       document.getElementById("view-name").textContent = data.fullName || "-";
       document.getElementById("view-email").textContent = data.email || currentUser?.email || "-";
@@ -374,6 +405,20 @@ import MembershipLayout from "../../layouts/MembershipLayout.astro";
       const viewStatus = document.getElementById("view-status");
       const verifiedCard = document.getElementById("verified-card");
       const viewMemId = document.getElementById("view-mem-id");
+      const viewValidity = document.getElementById("view-validity");
+      const viewMemberBadge = document.getElementById("view-member-badge");
+
+      const memId = data.membershipId || `ACM-AJCE-${(data.uid || currentUser?.uid || '').slice(0, 5).toUpperCase()}`;
+      currentMembershipId = memId;
+
+      // Dynamic 1-Year Validity Calculation
+      const verifiedDate = data.verifiedAt ? new Date(data.verifiedAt) : (data.submittedAt ? new Date(data.submittedAt) : new Date());
+      const nextYearDate = new Date(verifiedDate);
+      nextYearDate.setFullYear(verifiedDate.getFullYear() + 1);
+
+      const formatDate = (d) => d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+      const validityStr = `${formatDate(verifiedDate)} – ${formatDate(nextYearDate)}`;
+      const activeYears = `${verifiedDate.getFullYear()}-${nextYearDate.getFullYear()}`;
 
       if (data.status === "Verified") {
         statusBadge.className = "inline-flex items-center justify-center w-20 h-20 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 mb-6 shadow-xl";
@@ -383,7 +428,10 @@ import MembershipLayout from "../../layouts/MembershipLayout.astro";
         viewStatus.textContent = "Verified";
         viewStatus.className = "text-emerald-400 font-bold";
         verifiedCard?.classList.remove("hidden");
-        if (viewMemId) viewMemId.textContent = data.membershipId || `ACM-AJCE-${(data.uid || currentUser?.uid || '').slice(0, 5).toUpperCase()}`;
+        
+        if (viewMemId) viewMemId.textContent = memId;
+        if (viewValidity) viewValidity.textContent = validityStr;
+        if (viewMemberBadge) viewMemberBadge.textContent = `Active Chapter Member (${activeYears})`;
       } else if (data.status === "Rejected") {
         statusBadge.className = "inline-flex items-center justify-center w-20 h-20 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/40 mb-6 shadow-xl";
         statusIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>`;
@@ -425,7 +473,6 @@ import MembershipLayout from "../../layouts/MembershipLayout.astro";
           return alert("Please upload your payment screenshot.");
         }
 
-        // Disable button & show spinner
         submitBtn.disabled = true;
         submitBtnText.textContent = "Submitting to Firestore...";
         submitSpinner?.classList.remove("hidden");
@@ -441,7 +488,6 @@ import MembershipLayout from "../../layouts/MembershipLayout.astro";
               txnId,
               screenshotUrl
             });
-            // Firestore onSnapshot listener will automatically switch view to Pending Verification Screen!
           } catch (err) {
             alert("Failed to submit registration to Firestore: " + err.message);
             submitBtn.disabled = false;
