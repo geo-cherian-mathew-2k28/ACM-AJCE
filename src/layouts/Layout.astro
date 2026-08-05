@@ -2,56 +2,85 @@
 import Preloader from "../components/Preloader.astro";
 import Header from "../components/Header.astro";
 import { getAssetUrl } from "../utils/cdn";
-import ajceLogo from "../assets/images/ajce-logo.png";
-import acmAjceLogo from "../assets/images/acm-ajce-logo.png";
 
-const site = Astro.site ?? new URL("https://www.ajce.in");
-const canonicalUrl = new URL(Astro.url.pathname, site);
-const ogImageUrl = new URL(acmAjceLogo.src, site);
-const cdnEnv = import.meta.env.PUBLIC_CDN_URL;
-let cdnOrigin: string | null = null;
-if (cdnEnv) {
-  try {
-    cdnOrigin = new URL(cdnEnv).origin;
-  } catch {
-    cdnOrigin = null;
-  }
-}
+const siteUrl = "https://acm-ajce-website.vercel.app";
+const canonicalUrl = new URL(Astro.url.pathname, siteUrl).toString();
+const ogImageUrl = `${siteUrl}/og-image.png`;
 
-const title = "ACM AJCE";
-const description =
-  "ACM AJCE is a student community at Amal Jyothi College of Engineering for learning, building, and sharing ideas in computing.";
+const title = "ACM AJCE | Premier Student Chapter | Amal Jyothi College of Engineering";
+const description = "Official ACM Student Chapter at Amal Jyothi College of Engineering (AJCE). Empowering students in computer science, software engineering, hackathons, and research under ACM India.";
+const keywords = "ACM, ACM AJCE, ACM India, AJCE, ACM Membership, ACM Student Chapter, Amal Jyothi College of Engineering, ACM Local Chapter, Computing Community, Tech Events, Software Engineering";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "EducationalOrganization",
+  "name": "ACM AJCE Student Chapter",
+  "alternateName": ["ACM AJCE", "Association for Computing Machinery AJCE", "ACM India AJCE Chapter"],
+  "url": siteUrl,
+  "logo": `${siteUrl}/brand/acm-ajce-light.png`,
+  "image": ogImageUrl,
+  "description": description,
+  "parentOrganization": {
+    "@type": "Organization",
+    "name": "ACM India",
+    "url": "https://india.acm.org"
+  },
+  "subOrganization": {
+    "@type": "CollegeOrUniversity",
+    "name": "Amal Jyothi College of Engineering",
+    "url": "https://www.ajce.in"
+  },
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Kanjirappally",
+    "addressRegion": "Kerala",
+    "addressCountry": "India"
+  },
+  "sameAs": [
+    "https://www.ajce.in",
+    "https://india.acm.org"
+  ]
+};
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/png" href={getAssetUrl("/favicon.png")} />
 
+    <!-- Primary Meta Tags -->
     <title>{title}</title>
+    <meta name="title" content={title} />
     <meta name="description" content={description} />
-    <link rel="canonical" href={canonicalUrl.toString()} />
+    <meta name="keywords" content={keywords} />
+    <meta name="author" content="ACM AJCE Chapter" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <link rel="canonical" href={canonicalUrl} />
 
+    <!-- Open Graph / Facebook / WhatsApp Social Cards -->
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="ACM AJCE" />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:url" content={canonicalUrl.toString()} />
-    <meta property="og:image" content={ogImageUrl.toString()} />
-    <meta property="og:image:secure_url" content={ogImageUrl.toString()} />
+    <meta property="og:site_name" content="ACM AJCE Student Chapter" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:title" content="ACM AJCE | Premier Computing Community at AJCE" />
+    <meta property="og:description" content="Innovate, build, and lead with ACM AJCE. Join the global computing network under ACM India at Amal Jyothi College of Engineering." />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:secure_url" content={ogImageUrl} />
     <meta property="og:image:type" content="image/png" />
-    <meta property="og:image:alt" content="ACM AJCE" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="ACM AJCE Banner Logo" />
 
+    <!-- Twitter Social Cards -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={ogImageUrl.toString()} />
+    <meta name="twitter:url" content={canonicalUrl} />
+    <meta name="twitter:title" content="ACM AJCE | Premier Computing Community at AJCE" />
+    <meta name="twitter:description" content="Innovate, build, and lead with ACM AJCE. Join the global computing network under ACM India at Amal Jyothi College of Engineering." />
+    <meta name="twitter:image" content={ogImageUrl} />
 
-    {cdnOrigin && <link rel="dns-prefetch" href={cdnOrigin} />}
-    {cdnOrigin && <link rel="preconnect" href={cdnOrigin} crossorigin />}
-
+    <!-- Schema.org JSON-LD Structured Data for Google Indexing -->
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -72,7 +101,6 @@ const description =
         decoding="async"
         fetchpriority="high"
       />
-
     </div>
     <div class="app-root min-h-screen flex flex-col">
       <Header />
@@ -93,7 +121,6 @@ const description =
       });
 
       const refreshHard = () => {
-        // Always measure triggers NOW
         ScrollTrigger.refresh(true);
       };
 
@@ -387,16 +414,8 @@ const description =
     font-family:
       "PolySans Trial", Inter, Roboto, "Helvetica Neue", "Arial Nova",
       "Nimbus Sans", Arial, sans-serif;
-    /* Hide scrollbar for Firefox */
     scrollbar-width: none;
-    /* Hide scrollbar for Internet Explorer 10+ */
     -ms-overflow-style: none;
-  }
-
-  /* Hide scrollbar for Chrome, Safari and Opera */
-  html::-webkit-scrollbar,
-  body::-webkit-scrollbar {
-    /* display: none; */
   }
 
   :root {
@@ -436,13 +455,6 @@ const description =
   .acm-ajce-logo {
     width: 138px;
     height: auto;
-    object-fit: contain;
-    filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.36));
-  }
-
-  .ajce-logo {
-    width: auto;
-    height: 70px;
     object-fit: contain;
     filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.36));
   }
