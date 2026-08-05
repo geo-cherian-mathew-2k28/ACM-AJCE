@@ -6,7 +6,6 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "postbuild": "node updateCDN.js",
     "preview": "astro preview",
     "astro": "astro",
     "deploy:cdn": "node scripts/upload-r2.mjs"
