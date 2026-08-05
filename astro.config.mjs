@@ -1,6 +1,6 @@
 import { defineConfig } from 'astro/config';
 import tailwindcss from "@tailwindcss/vite";
-import cloudflare from "@astrojs/cloudflare";
+import vercel from "@astrojs/vercel";
 import react from "@astrojs/react";
 import keystatic from '@keystatic/astro';
 
@@ -9,7 +9,7 @@ const cdnUrl = process.env.PUBLIC_CDN_URL?.replace(/\/$/, "");
 export default defineConfig({
     site: 'https://www.ajce.in',
     output: 'server',
-    adapter: cloudflare(),
+    adapter: vercel(),
     integrations: [react(), keystatic()],
     build: {
         assetsPrefix: cdnUrl,
