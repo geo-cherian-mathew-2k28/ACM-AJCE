@@ -318,9 +318,9 @@
 
       let isDelivered = false;
 
-      // Post to real-time server on port 5050
+      // Post to Astro API endpoint which saves directly to Firestore DB
       try {
-        const res = await fetch("http://localhost:5050/api/contact", {
+        const res = await fetch("/api/contact", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(data),

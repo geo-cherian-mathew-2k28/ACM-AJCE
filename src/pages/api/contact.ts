@@ -1,87 +1,51 @@
 import type { APIRoute } from "astro";
-import { Resend } from "resend";
+import { initializeApp, getApps, getApp } from "firebase/app";
+import { getFirestore, collection, addDoc } from "firebase/firestore";
 
 export const prerender = false;
 
-export const POST: APIRoute = async ({ request, locals }) => {
-  const data = await request.json();
-  const { firstName, lastName, email, phone, message, sessionPreference } = data;
+const firebaseConfig = {
+  apiKey: import.meta.env.PUBLIC_FIREBASE_API_KEY || "AIzaSyA9y9ykBbvWMbvRs1PvoH_ITlgaLB96IQY",
+  authDomain: import.meta.env.PUBLIC_FIREBASE_AUTH_DOMAIN || "acm-ajce-portal.firebaseapp.com",
+  projectId: import.meta.env.PUBLIC_FIREBASE_PROJECT_ID || "acm-ajce-portal",
+  storageBucket: import.meta.env.PUBLIC_FIREBASE_STORAGE_BUCKET || "acm-ajce-portal.firebasestorage.app",
+  messagingSenderId: import.meta.env.PUBLIC_FIREBASE_MESSAGING_SENDER_ID || "657659504135",
+  appId: import.meta.env.PUBLIC_FIREBASE_APP_ID || "1:657659504135:web:26bf9f20986f24ed1c6ca2"
+};
 
-  if (!firstName || !email || !message) {
-    return new Response(
-      JSON.stringify({
-        message: "Missing required fields",
-      }),
-      { status: 400 }
-    );
-  }
+const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-  const runtimeEnv = locals.runtime?.env ?? {};
-  const resendApiKey =
-    runtimeEnv.RESEND_API_KEY ??
-    import.meta.env.RESEND_API_KEY ??
-    process.env.RESEND_API_KEY;
-  const resendFrom =
-    runtimeEnv.RESEND_FROM ??
-    import.meta.env.RESEND_FROM ??
-    process.env.RESEND_FROM;
-
-  if (!resendApiKey || !resendFrom) {
-    console.warn("Resend email credentials not configured in environment. Contact entry recorded in Execom database.");
-    return new Response(
-      JSON.stringify({
-        success: true,
-        message: "Message received and logged in Execom Portal.",
-      }),
-      { status: 200 }
-    );
-  }
-
+export const POST: APIRoute = async ({ request }) => {
   try {
-    const resend = new Resend(resendApiKey);
+    const data = await request.json();
+    const { firstName, lastName, email, phone, message } = data;
 
-    const mailOptions = {
-      from: resendFrom,
-      to: runtimeEnv.CONTACT_TO_EMAIL ?? import.meta.env.CONTACT_TO_EMAIL ?? "info@ajce.in",
-      reply_to: email,
-      subject: `New Contact Form Submission from ${firstName} ${lastName || ""}`,
-      text: `
-        Name: ${firstName} ${lastName || ""}
-        Email: ${email}
-        Phone: ${phone || "N/A"}
-        
-        Mentoring Session Preference: ${sessionPreference || "N/A"}
-        
-        Message:
-        ${message}
-      `,
-      html: `
-        <h3>New Contact Form Submission</h3>
-        <p><strong>Name:</strong> ${firstName} ${lastName || ""}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Phone:</strong> ${phone || "N/A"}</p>
-        <p><strong>Mentoring Session Preference:</strong> ${sessionPreference || "N/A"}</p>
-        <br />
-        <p><strong>Message:</strong></p>
-        <p>${message.replace(/\n/g, "<br>")}</p>
-      `,
-    };
+    if (!firstName || !email || !message) {
+      return new Response(
+        JSON.stringify({ message: "Missing required fields" }),
+        { status: 400, headers: { "Content-Type": "application/json" } }
+      );
+    }
 
-    await resend.emails.send(mailOptions);
+    // Save contact message directly into Firestore collection `contacts`
+    await addDoc(collection(db, "contacts"), {
+      name: `${firstName} ${lastName || ""}`.trim(),
+      email: email.trim(),
+      phone: phone ? phone.trim() : "N/A",
+      message: message.trim(),
+      receivedAt: new Date().toISOString()
+    });
 
     return new Response(
-      JSON.stringify({
-        message: "Message sent successfully",
-      }),
-      { status: 200 }
+      JSON.stringify({ success: true, message: "Contact message saved to Firestore DB!" }),
+      { status: 200, headers: { "Content-Type": "application/json" } }
     );
-  } catch (error) {
-    console.error("Error sending email:", error);
+  } catch (error: any) {
+    console.error("Firestore Contact POST Error:", error);
     return new Response(
-      JSON.stringify({
-        message: "Failed to send message",
-      }),
-      { status: 500 }
+      JSON.stringify({ message: error.message || "Server Error" }),
+      { status: 500, headers: { "Content-Type": "application/json" } }
     );
   }
 };
