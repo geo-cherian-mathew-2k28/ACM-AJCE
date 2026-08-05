@@ -5,26 +5,64 @@ import MembershipLayout from "../../layouts/MembershipLayout.astro";
 <MembershipLayout title="ACM AJCE Membership Portal">
   <div class="membership-container max-w-4xl mx-auto py-8 px-4">
     
+    <!-- State 0: Google Authentication Gate -->
+    <div id="auth-gate-view" class="portal-panel max-w-md mx-auto p-8 text-center space-y-6">
+      <div class="w-16 h-16 rounded-full bg-[#2A2455] border border-[#4D4770] flex items-center justify-center mx-auto text-[#B8A7FF]">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457-.39-2.823-1.07-4"></path>
+        </svg>
+      </div>
+
+      <div>
+        <h1 class="text-2xl font-extrabold text-white mb-2">Student Verification</h1>
+        <p class="text-xs text-gray-300 leading-relaxed">
+          Sign in with your official college Google account (<span class="text-[#B8A7FF] font-semibold">@ajce.in</span>) to access the ACM Membership Registration.
+        </p>
+      </div>
+
+      <div id="auth-error-banner" class="hidden p-3 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs font-semibold"></div>
+
+      <button id="google-login-btn" type="button" class="w-full py-3.5 px-5 rounded-xl bg-white hover:bg-gray-100 text-gray-900 font-bold text-sm flex items-center justify-center gap-3 transition-all shadow-lg cursor-pointer">
+        <svg class="w-5 h-5" viewBox="0 0 24 24">
+          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+        </svg>
+        Sign in with Google (@ajce.in)
+      </button>
+
+      <p class="text-[11px] text-gray-500 font-mono">Enforced Domain: @ajce.in</p>
+    </div>
+
     <!-- State 1: Membership Form View -->
-    <div id="form-view">
-      <div class="bg-[#131124] border border-[#2A2455] rounded-2xl p-6 mb-8 flex flex-wrap items-center justify-between gap-4">
+    <div id="form-view" class="hidden">
+      <!-- User Profile Header -->
+      <div class="bg-[#131124] border border-[#2A2455] rounded-2xl p-4 sm:p-6 mb-8 flex flex-wrap items-center justify-between gap-4">
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-full bg-[#2A2455] flex items-center justify-center text-white font-bold text-lg" id="user-avatar">A</div>
+          <img id="user-photo" src="" alt="User Avatar" class="w-11 h-11 rounded-full border border-[#4D4770] hidden" />
+          <div id="user-avatar-fallback" class="w-11 h-11 rounded-full bg-[#2A2455] flex items-center justify-center text-white font-bold text-lg">A</div>
           <div>
-            <p class="text-white font-semibold text-sm" id="user-name">Student Account</p>
-            <p class="text-xs text-[#B8A7FF]" id="user-email">Auto-fetched on College Login (@ajce.in)</p>
+            <p class="text-white font-semibold text-sm" id="user-name">Loading Profile...</p>
+            <p class="text-xs text-[#B8A7FF]" id="user-email">@ajce.in</p>
           </div>
         </div>
-        <span class="inline-flex items-center gap-1.5 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs px-3 py-1 rounded-full font-medium">
-          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> College Domain (@ajce.in)
-        </span>
+        
+        <div class="flex items-center gap-3">
+          <span class="inline-flex items-center gap-1.5 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs px-3 py-1 rounded-full font-medium">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Verified @ajce.in
+          </span>
+          <button id="signout-btn" type="button" class="text-xs text-gray-400 hover:text-rose-400 transition-colors underline cursor-pointer">
+            Sign Out
+          </button>
+        </div>
       </div>
 
       <div class="grid md:grid-cols-3 gap-8">
         <!-- Main Registration Form -->
         <div class="md:col-span-2 portal-panel p-6 sm:p-8">
           <h2 class="text-2xl font-bold text-white mb-1">Student Details</h2>
-          <p class="text-xs text-gray-400 mb-6">Fill in all fields to complete your ACM AJCE chapter membership registration.</p>
+          <p class="text-xs text-gray-400 mb-6">Fill in all required fields to complete your ACM AJCE chapter membership registration.</p>
 
           <form id="membership-form" class="space-y-4">
             <div>
@@ -72,12 +110,6 @@ import MembershipLayout from "../../layouts/MembershipLayout.astro";
               </div>
             </div>
 
-            <div>
-              <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-1.5">College Email ID (@ajce.in) *</label>
-              <input type="email" id="input-email" name="email" required class="portal-input w-full" placeholder="student2028@cs.ajce.in" />
-              <p class="text-[11px] text-gray-400 mt-1">Automatically linked to your Google login upon backend authentication integration.</p>
-            </div>
-
             <!-- Payment & Verification Fields -->
             <div class="pt-4 border-t border-[#2A2455]">
               <h3 class="text-lg font-bold text-white mb-3 flex items-center gap-2">
@@ -97,21 +129,22 @@ import MembershipLayout from "../../layouts/MembershipLayout.astro";
               </div>
             </div>
 
-            <!-- Active Submit Button -->
-            <button id="submit-btn" type="submit" class="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-[#6A5ACD] to-[#8A2BE2] hover:from-[#7B68EE] hover:to-[#9370DB] text-white font-bold text-base shadow-lg transition-all cursor-pointer mt-6">
-              Submit
+            <!-- Submit Button -->
+            <button id="submit-btn" type="submit" class="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-[#6A5ACD] to-[#8A2BE2] hover:from-[#7B68EE] hover:to-[#9370DB] text-white font-bold text-base shadow-lg transition-all cursor-pointer mt-6 flex items-center justify-center gap-2">
+              <span id="submit-btn-text">Submit Registration</span>
+              <div id="submit-spinner" class="hidden w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
             </button>
           </form>
         </div>
 
-        <!-- Payment Sidebar with QR & GPay Button -->
+        <!-- Payment Sidebar -->
         <div class="portal-panel p-6 flex flex-col items-center text-center justify-between">
           <div>
-            <span class="inline-block text-[#B8A7FF] font-mono text-[11px] uppercase tracking-wider font-bold mb-1">Annual Fee</span>
+            <span class="inline-block text-[#B8A7FF] font-mono text-[11px] uppercase tracking-wider font-bold mb-1">Annual Chapter Fee</span>
             <h3 class="text-3xl font-extrabold text-white mb-2">₹200 <span class="text-xs text-gray-400 font-normal">/ 1 year</span></h3>
             <p class="text-xs text-gray-300 mb-4 leading-relaxed">Scan the QR code below using any UPI App (GPay, PhonePe, Paytm) to complete payment.</p>
 
-            <!-- QR Code Container -->
+            <!-- QR Code -->
             <div class="bg-white p-3 rounded-xl shadow-md inline-block mb-4">
               <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=acmajce@upi&pn=ACM%20AJCE%20Chapter&am=200.00&cu=INR" alt="ACM AJCE Payment QR" class="w-40 h-40 object-contain mx-auto" />
               <p class="text-[10px] text-gray-600 font-mono mt-1 font-semibold">UPI ID: acmajce@upi</p>
@@ -119,11 +152,7 @@ import MembershipLayout from "../../layouts/MembershipLayout.astro";
 
             <div class="w-full space-y-2 mb-4">
               <a href="upi://pay?pa=acmajce@upi&pn=ACM%20AJCE%20Chapter&am=200.00&cu=INR" class="w-full py-2.5 px-4 rounded-lg bg-white hover:bg-gray-100 text-gray-900 font-bold text-xs flex items-center justify-center gap-2 transition-all shadow-sm">
-                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14h-2v-2h2v2zm0-4h-2V7h2v5z"/></svg>
                 Pay ₹200 via GPay / PhonePe
-              </a>
-              <a href="upi://pay?pa=acmajce@upi&pn=ACM%20AJCE%20Chapter&am=500.00&cu=INR" class="w-full py-2.5 px-4 rounded-lg bg-[#2A2455] hover:bg-[#3D3575] text-[#B8A7FF] font-bold text-xs flex items-center justify-center gap-2 border border-[#4D4770] transition-all">
-                Direct to GPay (₹500 Premium)
               </a>
             </div>
           </div>
@@ -140,7 +169,7 @@ import MembershipLayout from "../../layouts/MembershipLayout.astro";
       </div>
     </div>
 
-    <!-- State 2: Status & Membership Details View -->
+    <!-- State 2: Verification Pending / Active Status Screen -->
     <div id="status-view" class="hidden portal-panel text-center max-w-lg mx-auto py-10 px-6">
       <div id="status-badge" class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/40 mb-6 shadow-xl">
         <svg id="status-icon" class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
@@ -149,7 +178,7 @@ import MembershipLayout from "../../layouts/MembershipLayout.astro";
       <p class="portal-eyebrow text-[#B8A7FF] font-mono text-xs uppercase tracking-widest mb-1 font-bold">ACM Chapter Membership</p>
       <h1 id="status-title" class="text-2xl font-extrabold text-white mb-3">Verification Pending</h1>
       <p id="status-desc" class="text-gray-300 text-xs mb-6 leading-relaxed">
-        Your registration details and payment transaction receipt have been recorded and are currently under executive review.
+        Your registration details and payment transaction receipt have been recorded in Firestore DB and are currently under executive review.
       </p>
 
       <div class="bg-[#131124] border border-[#2A2455] rounded-xl p-5 mb-6 text-left text-xs space-y-3">
@@ -183,6 +212,10 @@ import MembershipLayout from "../../layouts/MembershipLayout.astro";
           </div>
         </div>
       </div>
+
+      <button id="signout-status-btn" type="button" class="text-xs text-gray-400 hover:text-white transition-colors underline cursor-pointer">
+        Sign Out of Account
+      </button>
     </div>
 
   </div>
@@ -213,184 +246,170 @@ import MembershipLayout from "../../layouts/MembershipLayout.astro";
   }
 </style>
 
-<script is:inline>
+<script>
+  // @ts-nocheck
+  import { 
+    auth, 
+    loginWithCollegeGoogle, 
+    submitMembershipToFirestore, 
+    listenToUserMembership 
+  } from "../../lib/firebase.js";
+  import { onAuthStateChanged, signOut } from "firebase/auth";
+
   document.addEventListener("DOMContentLoaded", () => {
+    const authGateView = document.getElementById("auth-gate-view");
     const formView = document.getElementById("form-view");
     const statusView = document.getElementById("status-view");
+    
+    const googleLoginBtn = document.getElementById("google-login-btn");
+    const authErrorBanner = document.getElementById("auth-error-banner");
+    const signoutBtn = document.getElementById("signout-btn");
+    const signoutStatusBtn = document.getElementById("signout-status-btn");
+    
     const membershipForm = document.getElementById("membership-form");
     const submitBtn = document.getElementById("submit-btn");
+    const submitBtnText = document.getElementById("submit-btn-text");
+    const submitSpinner = document.getElementById("submit-spinner");
 
-    const inputName = document.getElementById("input-fullName");
-    const inputCourse = document.getElementById("input-course");
-    const inputSemester = document.getElementById("input-semester");
-    const inputDept = document.getElementById("input-department");
-    const inputPhone = document.getElementById("input-phone");
-    const inputEmail = document.getElementById("input-email");
-    const inputTxn = document.getElementById("input-txnId");
-    const inputScreenshot = document.getElementById("input-screenshot");
+    let currentUser = null;
+    let unsubscribeFirestore = null;
 
-
-
-    // Dynamic validation error helper
-    const errorMsgContainer = document.createElement("div");
-    errorMsgContainer.id = "form-error-msg";
-    errorMsgContainer.className = "hidden p-3 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs font-semibold mt-4 text-center";
-    membershipForm?.appendChild(errorMsgContainer);
-
-    const showError = (msg) => {
-      if (errorMsgContainer) {
-        errorMsgContainer.textContent = "⚠️ " + msg;
-        errorMsgContainer.classList.remove("hidden");
+    const showAuthError = (msg) => {
+      if (authErrorBanner) {
+        authErrorBanner.textContent = "⚠️ " + msg;
+        authErrorBanner.classList.remove("hidden");
       }
     };
 
-    const clearError = () => {
-      if (errorMsgContainer) {
-        errorMsgContainer.classList.add("hidden");
+    const clearAuthError = () => {
+      if (authErrorBanner) {
+        authErrorBanner.classList.add("hidden");
       }
     };
 
-    // Dynamic User Header Updates based on email input
-    inputEmail?.addEventListener("input", () => {
-      const emailVal = inputEmail.value.trim();
-      const userNameEl = document.getElementById("user-name");
-      const userEmailEl = document.getElementById("user-email");
-      const userAvatarEl = document.getElementById("user-avatar");
-
-      if (emailVal) {
-        if (userEmailEl) userEmailEl.textContent = emailVal;
-        const prefix = emailVal.split("@")[0];
-        if (prefix && userNameEl) {
-          const name = prefix.charAt(0).toUpperCase() + prefix.slice(1);
-          userNameEl.textContent = name;
-          if (userAvatarEl) userAvatarEl.textContent = name.charAt(0);
-        }
+    // Google Login Handler
+    googleLoginBtn?.addEventListener("click", async () => {
+      clearAuthError();
+      try {
+        await loginWithCollegeGoogle();
+      } catch (err) {
+        showAuthError(err.message || "Login failed. Ensure you use an @ajce.in email.");
       }
     });
 
-    // Real-Time SSE Listener for live verification & edit updates
-    const sseUrl = `http://${window.location.hostname || 'localhost'}:5050/events`;
-    try {
-      const eventSource = new EventSource(sseUrl);
-      eventSource.onmessage = (e) => {
-        try {
-          const msg = JSON.parse(e.data);
-          if (msg.type === 'MEMBERSHIPS_UPDATED' || msg.type === 'INIT_STATE') {
-            const allMemberships = msg.type === 'INIT_STATE' ? (msg.data.memberships || []) : (msg.data || []);
-            localStorage.setItem("acm_memberships", JSON.stringify(allMemberships));
-            
-            // Sync user submission status if present
-            const stored = localStorage.getItem("acm_user_submission");
-            if (stored) {
-              const submission = JSON.parse(stored);
-              const latest = allMemberships.find(m => 
-                m.id === submission.id || 
-                (m.email && submission.email && m.email.toLowerCase() === submission.email.toLowerCase())
-              );
-              if (latest) {
-                localStorage.setItem("acm_user_submission", JSON.stringify(latest));
-              }
-            }
-            checkStatus();
-          }
-        } catch (err) {}
-      };
-    } catch (err) {}
+    // Signout Handler
+    const handleSignOut = async () => {
+      if (unsubscribeFirestore) unsubscribeFirestore();
+      await signOut(auth);
+    };
 
-    // Check submission status from Server & LocalStorage
-    const checkStatus = async () => {
-      let stored = localStorage.getItem("acm_user_submission");
-      
-      // Also try fetching from Server API for cross-tab & refreshed state
-      try {
-        const res = await fetch(`http://${window.location.hostname || 'localhost'}:5050/api/memberships`);
-        if (res.ok) {
-          const serverMemberships = await res.json();
-          localStorage.setItem("acm_memberships", JSON.stringify(serverMemberships));
-          if (stored) {
-            const submission = JSON.parse(stored);
-            const latest = serverMemberships.find(m => 
-              m.id === submission.id || 
-              (m.email && submission.email && m.email.toLowerCase() === submission.email.toLowerCase())
-            );
-            if (latest) {
-              stored = JSON.stringify(latest);
-              localStorage.setItem("acm_user_submission", stored);
-            }
-          }
-        }
-      } catch (err) {}
+    signoutBtn?.addEventListener("click", handleSignOut);
+    signoutStatusBtn?.addEventListener("click", handleSignOut);
 
-      if (stored) {
-        try {
-          const submission = JSON.parse(stored);
-          const allMemberships = JSON.parse(localStorage.getItem("acm_memberships") || "[]");
-          const latest = allMemberships.find(m => 
-            m.id === submission.id || 
-            (m.email && submission.email && m.email.toLowerCase() === submission.email.toLowerCase())
-          ) || submission;
+    // Auth State Persistent Observer
+    onAuthStateChanged(auth, (user) => {
+      currentUser = user;
+      if (unsubscribeFirestore) {
+        unsubscribeFirestore();
+        unsubscribeFirestore = null;
+      }
 
-          document.getElementById("view-name").textContent = latest.fullName;
-          document.getElementById("view-email").textContent = latest.email;
-          document.getElementById("view-course-sem").textContent = `${latest.course} (${latest.semester || latest.branch || ''})`;
-          document.getElementById("view-txnid").textContent = latest.txnId;
+      if (!user) {
+        // Show Auth Gate View
+        authGateView?.classList.remove("hidden");
+        formView?.classList.add("hidden");
+        statusView?.classList.add("hidden");
+        return;
+      }
 
-          const statusBadge = document.getElementById("status-badge");
-          const statusIcon = document.getElementById("status-icon");
-          const statusTitle = document.getElementById("status-title");
-          const statusDesc = document.getElementById("status-desc");
-          const viewStatus = document.getElementById("view-status");
-          const verifiedCard = document.getElementById("verified-card");
-          const viewMemId = document.getElementById("view-mem-id");
+      // Populate User Header Profile
+      const userNameEl = document.getElementById("user-name");
+      const userEmailEl = document.getElementById("user-email");
+      const userPhoto = document.getElementById("user-photo");
+      const userFallback = document.getElementById("user-avatar-fallback");
 
-          if (latest.status === "Verified") {
-            statusBadge.className = "inline-flex items-center justify-center w-20 h-20 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 mb-6 shadow-xl";
-            statusIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>`;
-            statusTitle.textContent = "Membership Verified & Active! 🎉";
-            statusDesc.textContent = "Congratulations! Your payment has been verified by the ACM Executive Board. Welcome to the ACM AJCE Chapter.";
-            viewStatus.textContent = "Verified";
-            viewStatus.className = "text-emerald-400 font-bold";
-            verifiedCard?.classList.remove("hidden");
-            if (viewMemId) viewMemId.textContent = latest.id || "ACM-AJCE-9842";
-          } else if (latest.status === "Rejected") {
-            statusBadge.className = "inline-flex items-center justify-center w-20 h-20 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/40 mb-6 shadow-xl";
-            statusIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>`;
-            statusTitle.textContent = "Verification Failed";
-            statusDesc.textContent = "Your transaction reference or screenshot could not be verified. Please contact the chapter executive board.";
-            viewStatus.textContent = "Rejected";
-            viewStatus.className = "text-rose-400 font-bold";
-            verifiedCard?.classList.add("hidden");
-          } else {
-            statusBadge.className = "inline-flex items-center justify-center w-20 h-20 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/40 mb-6 shadow-xl";
-            statusIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>`;
-            statusTitle.textContent = "Verification Pending";
-            statusDesc.textContent = "Your registration details and payment transaction receipt have been recorded and are currently under executive review.";
-            viewStatus.textContent = "Pending Verification";
-            viewStatus.className = "text-amber-400 font-bold";
-            verifiedCard?.classList.add("hidden");
-          }
+      if (userNameEl) userNameEl.textContent = user.displayName || user.email.split("@")[0];
+      if (userEmailEl) userEmailEl.textContent = user.email;
 
+      if (user.photoURL && userPhoto) {
+        userPhoto.src = user.photoURL;
+        userPhoto.classList.remove("hidden");
+        if (userFallback) userFallback.classList.add("hidden");
+      } else if (userFallback) {
+        userFallback.textContent = (user.displayName || user.email).charAt(0).toUpperCase();
+      }
+
+      // Pre-fill Name input if empty
+      const fullNameInput = document.getElementById("input-fullName");
+      if (fullNameInput && !fullNameInput.value && user.displayName) {
+        fullNameInput.value = user.displayName;
+      }
+
+      // Listen to Firestore real-time status for this logged-in user
+      unsubscribeFirestore = listenToUserMembership(user.uid, (data) => {
+        if (data) {
+          // Record exists in Firestore -> Show Status View
+          renderStatusView(data);
+          authGateView?.classList.add("hidden");
           formView?.classList.add("hidden");
           statusView?.classList.remove("hidden");
-        } catch (e) {
+        } else {
+          // No record submitted yet -> Show Form View
+          authGateView?.classList.add("hidden");
           formView?.classList.remove("hidden");
           statusView?.classList.add("hidden");
         }
+      });
+    });
+
+    // Render Status Screen with Firestore Data
+    function renderStatusView(data) {
+      document.getElementById("view-name").textContent = data.fullName || "-";
+      document.getElementById("view-email").textContent = data.email || currentUser?.email || "-";
+      document.getElementById("view-course-sem").textContent = `${data.course || ''} (${data.semester || ''})`;
+      document.getElementById("view-txnid").textContent = data.txnId || "-";
+
+      const statusBadge = document.getElementById("status-badge");
+      const statusIcon = document.getElementById("status-icon");
+      const statusTitle = document.getElementById("status-title");
+      const statusDesc = document.getElementById("status-desc");
+      const viewStatus = document.getElementById("view-status");
+      const verifiedCard = document.getElementById("verified-card");
+      const viewMemId = document.getElementById("view-mem-id");
+
+      if (data.status === "Verified") {
+        statusBadge.className = "inline-flex items-center justify-center w-20 h-20 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 mb-6 shadow-xl";
+        statusIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>`;
+        statusTitle.textContent = "Membership Verified & Active! 🎉";
+        statusDesc.textContent = "Congratulations! Your payment has been verified by the ACM Executive Board. Welcome to the ACM AJCE Chapter.";
+        viewStatus.textContent = "Verified";
+        viewStatus.className = "text-emerald-400 font-bold";
+        verifiedCard?.classList.remove("hidden");
+        if (viewMemId) viewMemId.textContent = data.membershipId || `ACM-AJCE-${user.uid.slice(0, 5).toUpperCase()}`;
+      } else if (data.status === "Rejected") {
+        statusBadge.className = "inline-flex items-center justify-center w-20 h-20 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/40 mb-6 shadow-xl";
+        statusIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>`;
+        statusTitle.textContent = "Verification Failed";
+        statusDesc.textContent = "Your transaction reference or screenshot could not be verified. Please contact the chapter executive board.";
+        viewStatus.textContent = "Rejected";
+        viewStatus.className = "text-rose-400 font-bold";
+        verifiedCard?.classList.add("hidden");
       } else {
-        formView?.classList.remove("hidden");
-        statusView?.classList.add("hidden");
+        statusBadge.className = "inline-flex items-center justify-center w-20 h-20 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/40 mb-6 shadow-xl";
+        statusIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>`;
+        statusTitle.textContent = "Verification Pending";
+        statusDesc.textContent = "Your registration details and payment transaction receipt have been recorded in Firestore DB and are currently under executive review.";
+        viewStatus.textContent = "Pending Verification";
+        viewStatus.className = "text-amber-400 font-bold";
+        verifiedCard?.classList.add("hidden");
       }
-    };
+    }
 
-    checkStatus();
-    window.addEventListener("storage", checkStatus);
-
-    // Form Submit Handler
+    // Submit Membership Handler
     if (membershipForm) {
-      membershipForm.addEventListener("submit", (e) => {
+      membershipForm.addEventListener("submit", async (e) => {
         e.preventDefault();
-
-        clearError();
+        if (!currentUser) return alert("Session expired. Please sign in again.");
 
         const formData = new FormData(membershipForm);
         const fullName = formData.get("fullName")?.toString().trim();
@@ -398,61 +417,47 @@ import MembershipLayout from "../../layouts/MembershipLayout.astro";
         const semester = formData.get("semester")?.toString();
         const department = formData.get("department")?.toString().trim();
         const phone = formData.get("phone")?.toString().trim();
-        const email = formData.get("email")?.toString().trim();
         const txnId = formData.get("txnId")?.toString().trim();
         const fileInput = document.getElementById("input-screenshot");
 
-        // Validate mandatory fields
-        if (!fullName) return showError("Please enter your full name.");
-        if (!course) return showError("Please select your course.");
-        if (!semester) return showError("Please select your semester.");
-        if (!department) return showError("Please enter your department.");
-        if (!phone || !/^[0-9]{10}$/.test(phone)) return showError("Please enter a valid 10-digit mobile number.");
-        if (!email || !email.includes("@")) return showError("Please enter a valid email address.");
-        if (!txnId) return showError("Please enter your UPI transaction UTR / Ref ID.");
-        if (!fileInput || !fileInput.files || fileInput.files.length === 0) return showError("Please attach your payment receipt screenshot.");
+        if (!fullName || !course || !semester || !department || !phone || !txnId) {
+          return alert("Please fill in all required fields.");
+        }
+        if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
+          return alert("Please upload your payment screenshot.");
+        }
 
-        const saveAndSubmit = (screenshotUrl) => {
-          const submissionData = {
-            id: "ACM-AJCE-" + Math.floor(1000 + Math.random() * 9000),
-            fullName,
-            course,
-            semester,
-            department,
-            phone,
-            email,
-            txnId,
-            screenshotUrl: screenshotUrl || "",
-            submittedAt: new Date().toLocaleString(),
-            status: "Pending Verification"
-          };
+        // Disable button & show spinner
+        submitBtn.disabled = true;
+        submitBtnText.textContent = "Submitting to Firestore...";
+        submitSpinner?.classList.remove("hidden");
 
-          // Save locally
-          const existingMemberships = JSON.parse(localStorage.getItem("acm_memberships") || "[]");
-          existingMemberships.unshift(submissionData);
-          localStorage.setItem("acm_memberships", JSON.stringify(existingMemberships));
-          localStorage.setItem("acm_user_submission", JSON.stringify(submissionData));
-
-          // Post to Real-Time SSE Server on port 5050
-          fetch('http://localhost:5050/api/membership', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(submissionData)
-          }).catch(err => console.log('Sync server notice:', err));
-
-          window.dispatchEvent(new Event("storage"));
-          checkStatus();
+        const processSubmission = async (screenshotUrl) => {
+          try {
+            await submitMembershipToFirestore(currentUser, {
+              fullName,
+              course,
+              semester,
+              department,
+              phone,
+              txnId,
+              screenshotUrl
+            });
+            // Firestore onSnapshot listener will automatically switch view to Pending Verification Screen!
+          } catch (err) {
+            alert("Failed to submit registration to Firestore: " + err.message);
+            submitBtn.disabled = false;
+            submitBtnText.textContent = "Submit Registration";
+            submitSpinner?.classList.add("hidden");
+          }
         };
 
-        if (fileInput && fileInput.files && fileInput.files[0]) {
-          const reader = new FileReader();
-          reader.onload = (event) => {
-            saveAndSubmit(event.target.result);
-          };
-          reader.readAsDataURL(fileInput.files[0]);
-        } else {
-          saveAndSubmit("");
-        }
+        const file = fileInput.files[0];
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          processSubmission(event.target.result);
+        };
+        reader.readAsDataURL(file);
       });
     }
   });
