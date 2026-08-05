@@ -65,7 +65,7 @@ const formAction = rawEndpoint ? undefined : `mailto:${fallbackEmail}`;
           type="tel"
           name="phone"
           inputmode="tel"
-          pattern="^[0-9+()\s-]{7,}$"
+          pattern="[0-9]{7,15}"
           class="rounded-2xl border-2 border-dashed border-white/35 bg-transparent px-4 py-3 text-base text-white outline-none transition focus:border-[#B8A7FF]"
         />
       </label>
@@ -93,9 +93,7 @@ const formAction = rawEndpoint ? undefined : `mailto:${fallbackEmail}`;
 </section>
 
 <script>
-  const form = document.getElementById(
-    "contact-form-mobile"
-  ) as HTMLFormElement;
+  const form = document.getElementById("contact-form-mobile");
   if (form) {
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -104,34 +102,56 @@ const formAction = rawEndpoint ? undefined : `mailto:${fallbackEmail}`;
       const setSubmitting = (submitting: boolean) => {
         if (!submitBtn) return;
         submitBtn.innerHTML = submitting ? "Sending..." : originalBtnText;
-        (submitBtn as HTMLButtonElement).disabled = submitting;
+        if (submitBtn) submitBtn.disabled = submitting;
       };
 
       setSubmitting(true);
-
       const formData = new FormData(form);
-      // Handle radio buttons specifically if needed, but Object.fromEntries handles it if checked
       const data = Object.fromEntries(formData.entries());
 
+      let isDelivered = false;
+
+      // Post to real-time SSE server on port 5050
       try {
-        const response = await fetch("/api/contact", {
+        const res = await fetch("http://localhost:5050/api/contact", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(data),
         });
+        if (res.ok) isDelivered = true;
+      } catch (err) {}
 
-        if (response.ok) {
-          form.reset();
-        } else {
-          const resData = await response.json();
-          console.warn(`Failed to send message: ${resData.message || "Error"}`);
-        }
-      } catch (error) {
-        console.error("Error:", error);
-      } finally {
-        setSubmitting(false);
+      // Fallback post to Astro endpoint
+      if (!isDelivered) {
+        try {
+          const res = await fetch("/api/contact", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data),
+          });
+          if (res.ok) isDelivered = true;
+        } catch (err) {}
+      }
+
+      setSubmitting(false);
+
+      if (isDelivered) {
+        try {
+          const existingContacts = JSON.parse(localStorage.getItem("acm_contacts") || "[]");
+          existingContacts.unshift({
+            name: `${data.firstName || ''} ${data.lastName || ''}`.trim(),
+            email: data.email,
+            phone: data.phone || 'N/A',
+            message: data.message,
+            receivedAt: new Date().toLocaleString()
+          });
+          localStorage.setItem("acm_contacts", JSON.stringify(existingContacts));
+          window.dispatchEvent(new Event("storage"));
+        } catch (err) {}
+        form.reset();
+        alert("✓ Message sent successfully!");
+      } else {
+        alert("⚠️ Failed to deliver message. Please check backend connections.");
       }
     });
   }

@@ -1,0 +1,16 @@
+<svg width="400" height="260" viewBox="0 0 400 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Clean white acm-w AJCE emblem matching image 2 -->
+  <g transform="translate(10, 0)">
+    <!-- Back Diamond Frame contour -->
+    <path d="M 270 25 L 340 95 L 270 165" stroke="#FFFFFF" stroke-width="12" stroke-linecap="square" stroke-linejoin="miter" fill="none"/>
+    <path d="M 285 45 L 335 95 L 285 145" stroke="#FFFFFF" stroke-width="6" stroke-linecap="square" fill="none"/>
+
+    <!-- Left Diamond Solid Shape with Rounded Corners -->
+    <rect x="135" y="25" width="135" height="135" rx="36" transform="rotate(45 135 25)" fill="#FFFFFF"/>
+    
+    <!-- Cutout / Inner text inside diamond -->
+    <!-- acm-w text in dark space inside white diamond or overlay -->
+    <text x="50" y="148" font-family="'Inter', 'PolySans Trial', sans-serif" font-weight="900" font-size="44" fill="#000000" letter-spacing="-1.5">acm-w</text>
+    <text x="75" y="180" font-family="'Inter', 'PolySans Trial', sans-serif" font-weight="900" font-size="22" fill="#000000" letter-spacing="3">AJCE</text>
+  </g>
+</svg>

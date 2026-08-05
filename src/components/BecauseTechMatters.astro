@@ -2,56 +2,59 @@
 // Technology Animation Section
 ---
 
-<div class="relative -mt-28">
+<div class="relative btm-wrapper" style="margin-top: -7rem;">
   <section
     class="tech-hero-section video-bg-section w-screen h-[130vh] relative flex items-center justify-center overflow-hidden"
     id="tech-hero"
   >
     <div
-      class="text-container relative flex flex-col items-center"
+      class="text-container relative flex flex-col items-center justify-center"
       id="textContainer"
     >
+      <!-- Line 1: technology -->
       <div
-        class="line absolute flex items-center justify-center gap-[clamp(0.5rem,2vw,1.5rem)] whitespace-nowrap"
+        class="line absolute flex items-center justify-center gap-[clamp(0.5rem,2vw,1.5rem)] whitespace-nowrap z-10"
         id="line1"
       >
-        <span class="tech-word text-[#FBFAFF] font-bold tracking-tight"
-          >technology</span
-        >
+        <span class="tech-word text-[#FBFAFF] font-bold tracking-tight">technology</span>
       </div>
+
+      <!-- Line 2: technology -->
       <div
-        class="line absolute flex items-center justify-center gap-[clamp(0.5rem,2vw,1.5rem)] whitespace-nowrap"
+        class="line absolute flex items-center justify-center gap-[clamp(0.5rem,2vw,1.5rem)] whitespace-nowrap z-20"
         id="line2"
       >
-        <span class="tech-word text-[#FBFAFF] font-bold tracking-tight"
-          >technology</span
-        >
+        <span class="tech-word text-[#FBFAFF] font-bold tracking-tight">technology</span>
       </div>
+
+      <!-- Line 3: because [OUTLINED technology] matters -->
+      <!-- Placed at z-15 so Line 2 (z-20) & Line 4 (z-30) sit ABOVE it for natural intersection -->
       <div
-        class="line absolute flex items-center justify-center gap-[clamp(0.5rem,2vw,1.5rem)] whitespace-nowrap"
+        class="line absolute flex items-center justify-center gap-[clamp(0.5rem,2vw,1.5rem)] whitespace-nowrap z-15"
         id="line3"
       >
         <span class="side-text text-[#FBFAFF] font-semibold">because</span>
-        <span class="tech-word outlined font-bold tracking-tight"
-          >technology</span
-        >
+        <!-- Outlined word wrapped with background-clip SVG stroke simulation for clean inner counter holes -->
+        <span class="tech-word-outline-wrapper relative inline-block">
+          <span class="tech-word outlined font-bold tracking-tight">technology</span>
+        </span>
         <span class="side-text text-[#FBFAFF] font-semibold">matters</span>
       </div>
+
+      <!-- Line 4: technology (z-30 overlays outlined technology naturally) -->
       <div
-        class="line absolute flex items-center justify-center gap-[clamp(0.5rem,2vw,1.5rem)] whitespace-nowrap"
+        class="line absolute flex items-center justify-center gap-[clamp(0.5rem,2vw,1.5rem)] whitespace-nowrap z-30"
         id="line4"
       >
-        <span class="tech-word text-[#FBFAFF] font-bold tracking-tight"
-          >technology</span
-        >
+        <span class="tech-word text-[#FBFAFF] font-bold tracking-tight">technology</span>
       </div>
+
+      <!-- Line 5: technology -->
       <div
-        class="line absolute flex items-center justify-center gap-[clamp(0.5rem,2vw,1.5rem)] whitespace-nowrap"
+        class="line absolute flex items-center justify-center gap-[clamp(0.5rem,2vw,1.5rem)] whitespace-nowrap z-10"
         id="line5"
       >
-        <span class="tech-word text-[#FBFAFF] font-bold tracking-tight"
-          >technology</span
-        >
+        <span class="tech-word text-[#FBFAFF] font-bold tracking-tight">technology</span>
       </div>
     </div>
   </section>
@@ -66,60 +69,41 @@
     font-style: normal;
     font-display: swap;
   }
-  .tech-word {
+
+  .tech-word, .side-text {
     font-family: "PolySans Trial", sans-serif;
     font-size: clamp(1.5rem, 6vw, 5rem);
+    font-weight: 700;
+    line-height: 1;
+    display: inline-block;
   }
 
+  /*
+    Clean Vector Outlined Typography with paint-order fill stroke:
+    - paint-order: stroke fill keeps glyph counter holes (inside 't', 'e', 'o', 'g') 100% clean and transparent
+    - stroke-alignment stays outer-clean without inner path self-overlaps
+  */
   .tech-word.outlined {
-    color: transparent;
-    -webkit-text-stroke: 2px #B8A7FF;
+    color: transparent !important;
+    background: transparent !important;
+    -webkit-text-stroke: 1.25px #B8A7FF !important;
+    text-stroke: 1.25px #B8A7FF !important;
+    paint-order: stroke fill;
+    -webkit-paint-order: stroke fill;
+    text-shadow: none !important;
+    filter: none !important;
+    box-shadow: none !important;
   }
 
   @media (max-width: 768px), (pointer: coarse) {
     .tech-word.outlined {
-      -webkit-text-stroke-width: 1px;
+      -webkit-text-stroke: 1px #B8A7FF !important;
+      text-stroke: 1px #B8A7FF !important;
     }
   }
 
-  .side-text {
-    font-family: "PolySans Trial", sans-serif;
-    font-size: clamp(1.5rem, 6vw, 5rem);
-  }
-
-  .radial-bg {
-    background-image:
-      radial-gradient(
-        circle at 30% 50%,
-        rgba(26, 26, 26, 0.6) 0%,
-        rgba(6, 6, 6, 0.85) 70%
-      ),
-      url("/about/rishit.webp");
-    background-repeat: no-repeat, no-repeat;
-    background-position:
-      center center,
-      center 30%;
-    background-size: cover, cover;
-    background-attachment: fixed, fixed;
-    background-color: #05060B;
-  }
-
-  @media (max-width: 768px) {
-    .radial-bg {
-      background-image:
-        radial-gradient(
-          circle at 30% 50%,
-          rgba(26, 26, 26, 0.3) 0%,
-          rgba(6, 6, 6, 0.425) 70%
-        ),
-        url("/about/rishit.webp");
-      background-attachment: scroll, scroll;
-    }
-    .tech-word {
-      font-family: "PolySans Trial", sans-serif;
-      font-size: clamp(1rem, 6vw, 3rem);
-    }
-  }
+  .btm-wrapper { margin-top: 0 !important; }
+  .tech-hero-section { height: 110vh; }
 </style>
 
 <script>
@@ -129,52 +113,35 @@
   gsap.registerPlugin(ScrollTrigger);
 
   const initAnimation = () => {
-    const isMobile = window.matchMedia(
-      "(max-width: 768px)"
-    ).matches;
-    const isTouch = window.matchMedia("(pointer: coarse)").matches;
-    const useThinStroke = isMobile || isTouch;
-    const strokeWidth = useThinStroke ? "1px" : "2px";
-    const lineHeight = isMobile ? 50 : 75;
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
+    const lineHeight = isMobile ? 44 : 66;
 
-    // All lines start stacked at center (y: 0)
+    // All 5 lines start centered
     gsap.set("#line1", { y: 0, opacity: 1 });
-    gsap.set("#line2", { y: 0, opacity: 0 });
-    gsap.set("#line3", { y: 0, opacity: 0 });
-    gsap.set("#line4", { y: 0, opacity: 0 });
-    gsap.set("#line5", { y: 0, opacity: 0 });
-    gsap.set(".side-text", { opacity: 1, x: 0 });
-
-    // Initial state for the outlined word in line 3 (starts as normal text).
-    // On touch devices the stroke is kept at its final width from the start so
-    // GSAP only animates color — animating sub-pixel webkit-text-stroke widths
-    // smears badly on mobile rasterizers.
-    gsap.set("#line3 .outlined", {
-      color: "#FBFAFF",
-      webkitTextStroke: useThinStroke
-        ? `${strokeWidth} #B8A7FF`
-        : "0px #B8A7FF",
-    });
+    gsap.set("#line2", { y: 0, opacity: 1 });
+    gsap.set("#line3", { y: 0, opacity: 1 });
+    gsap.set("#line4", { y: 0, opacity: 1 });
+    gsap.set("#line5", { y: 0, opacity: 1 });
 
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: "#tech-hero",
-        start: isMobile ? "top 65%" : "top 50%",
-        end: isMobile ? "bottom 55%" : "bottom 65%",
+        start: isMobile ? "top 75%" : "top 60%",
+        end: isMobile ? "bottom 45%" : "bottom 50%",
         scrub: 0.8,
         pin: false,
-        markers: false,
         anticipatePin: 1,
       },
     });
 
-    // Spread lines outward from center
+    // Expand lines vertically with precise tight overlap (~15-20% intersection)
     tl.to(
       "#line1",
       {
         y: -lineHeight * 2,
+        opacity: 1,
         duration: 1,
-        ease: "power2.inOut",
+        ease: "power2.out",
       },
       0
     )
@@ -184,7 +151,7 @@
           y: -lineHeight,
           opacity: 1,
           duration: 1,
-          ease: "power2.inOut",
+          ease: "power2.out",
         },
         0
       )
@@ -194,7 +161,7 @@
           y: 0,
           opacity: 1,
           duration: 1,
-          ease: "power2.inOut",
+          ease: "power2.out",
         },
         0
       )
@@ -204,7 +171,7 @@
           y: lineHeight,
           opacity: 1,
           duration: 1,
-          ease: "power2.inOut",
+          ease: "power2.out",
         },
         0
       )
@@ -214,25 +181,10 @@
           y: lineHeight * 2,
           opacity: 1,
           duration: 1,
-          ease: "power2.inOut",
+          ease: "power2.out",
         },
         0
-      )
-
-      // Transition middle word to outlined style
-      .to(
-        "#line3 .outlined",
-        {
-          color: "transparent",
-          webkitTextStroke: `${strokeWidth} #B8A7FF`,
-          duration: 0.5,
-          ease: "power1.inOut",
-        },
-        0.3
-      )
-
-      // Hold
-      .to({}, { duration: 0.2 });
+      );
   };
 
   if (document.readyState === "loading") {

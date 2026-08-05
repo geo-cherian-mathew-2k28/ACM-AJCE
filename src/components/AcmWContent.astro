@@ -1,165 +1,370 @@
 ---
-// AMMW Content
 import { getAssetUrl } from "../utils/cdn";
 ---
 
-<section
-  class="min-h-screen w-full relative flex flex-col justify-center items-center text-white py-8 px-6 md:py-12 md:px-12 uppercase"
->
-  <div
-    class="h-dvh flex flex-col items-center justify-center relative z-20 gap-10"
-  >
-    <div class="flex items-center justify-center relative px-16">
-      <img
-        id="tubelight"
-        src={getAssetUrl("/pink_tubelight.webp")}
-        alt="violet light"
-        class="acmw-tubelight w-[80vw] max-w-[1400px] opacity-0 select-none absolute z-[-1]
-                    [mask-image:radial-gradient(circle,black_30%,transparent_100%)]
-                    [mask-repeat:no-repeat]
-                    [mask-position:center]
-                    [mask-size:contain]
-                    will-change-opacity
-                    max-[480px]:w-[95vw] max-[480px]:max-w-none max-[480px]:left-1/2 max-[480px]:-translate-x-1/2"
-        loading="lazy"
-        decoding="async"
-      />
+<section class="acmw-section w-full text-white pt-10 pb-20 px-6 md:pt-16 md:pb-28 md:px-12 relative overflow-hidden">
+  <!-- Subtle ambient background glow matching motto section -->
+  <div class="acmw-content-glow" aria-hidden="true"></div>
+
+  <div class="flex flex-col items-center gap-14 w-full max-w-5xl mx-auto relative z-10">
+
+    <!-- ===== IDENTITY CARD ===== -->
+    <div class="acmw-card w-full">
+
+      <!-- Decorative noise overlay -->
+      <div class="acmw-noise" aria-hidden="true"></div>
+
+      <!-- Purple ambient glow blobs -->
+      <div class="acmw-blob acmw-blob-1" aria-hidden="true"></div>
+      <div class="acmw-blob acmw-blob-2" aria-hidden="true"></div>
+
+      <!-- Card content -->
+      <div class="acmw-card-content">
+
+        <!-- LEFT: Logo — transparent webp floats on card gradient -->
+        <div class="acmw-logo-area">
+          <img
+            src={getAssetUrl("/acmw-ajce-card.webp")}
+            alt="ACM-W AJCE Student Chapter"
+            class="acmw-logo"
+            loading="eager"
+            decoding="async"
+          />
+        </div>
+
+        <!-- Vertical rule -->
+        <div class="acmw-vr" aria-hidden="true"></div>
+
+        <!-- RIGHT: Clean, focused title section -->
+        <div class="acmw-text">
+
+          <!-- Kicker line -->
+          <div class="acmw-kicker">
+            <span class="acmw-kicker-dot"></span>
+            AJCE STUDENT CHAPTER
+            <span class="acmw-kicker-dot"></span>
+          </div>
+
+          <!-- Main heading with balanced layout and clean gradient -->
+          <h2 class="acmw-heading">
+            Association for<br />
+            Computing Machinery<br />
+            <span class="acmw-heading-em">— Women's Chapter</span>
+          </h2>
+
+        </div>
+
+      </div>
+
+      <!-- Bottom shimmer line -->
+      <div class="acmw-shimmer" aria-hidden="true"></div>
+    </div>
+    <!-- ===== END CARD ===== -->
+
+    <!-- ===== MISSION ===== -->
+    <div class="acmw-mission w-full max-w-4xl flex flex-col gap-6">
+
+      <div class="flex items-center gap-4">
+        <div class="acmw-rule"></div>
+        <span class="acmw-rule-label">Our Mission</span>
+        <div class="acmw-rule"></div>
+      </div>
+
+      <div class="acmw-font-body">
+        <p class="acmw-p-accent">
+          ACM-W was created with a simple yet profound mission: to create equal
+          access to opportunities in technology and ensure that everyone,
+          regardless of gender, has the chance to grow in STEM.
+          We believe talent and potential aren't defined by barriers, but by the
+          right support, mentorship, and exposure.
+        </p>
+        <p class="acmw-p-body mt-5">
+          As part of ACM AJCE, we are building a community that values contributions
+          across all computing fields. Through conversations, mentoring, and
+          community-led work, we're creating a space where stories and perspectives
+          are shared and voices in tech are amplified.
+          We stand for inclusion, empowerment and growth, encouraging women to take initiative,
+          share their ideas, and thrive in computing fields, shoulder to shoulder with their peers.
+        </p>
+      </div>
     </div>
 
-    <div class="flex items-center gap-10">
-      <img
-        src={getAssetUrl("/acmw-logo.webp")}
-        alt="ACM-W Logo"
-        class="acmw-logo w-[30vw] h-auto max-[480px]:!w-[45vw] max-[480px]:max-w-none"
-        loading="lazy"
-        decoding="async"
-      />
-    </div>
-
-    <div
-      class="text-left text-white text-base leading-relaxed max-w-4xl font-polysans
-                max-[640px]:text-[0.95rem] max-[640px]:leading-[1.45] max-[640px]:max-w-[28rem]
-                max-[480px]:text-[0.85rem] max-[480px]:leading-[1.4]"
-    >
-      <span class="text-primary-pink"
-        >ACM-W was created with a simple yet profound mission: to create equal
-        access to opportunities in technology and ensure that everyone,
-        regardless of gender, has the chance to grow in STEM.<br />
-        We believe talent and potential aren&apos;t defined by barriers, but by the
-        right support, mentorship, and exposure.<br /></span
-      ><br />
-      As part of ACM AJCE, we are building a community that values contributions
-      across all computing fields. Through conversations, mentoring, and
-      community-led work, we&apos;re creating a space where stories and perspectives
-      are shared and voices in tech are amplified.<br />
-      We stand for inclusion, empowerment and growth, encouraging women to take initiative,
-      share their ideas, and thrive in computing fields, shoulder to shoulder with
-      their peers.
-    </div>
-
-    <!-- Learn More Button -->
-    <a
-      href="https://women.acm.org"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="border border-primary-pink text-white px-8 py-3 rounded-full text-sm hover:cursor-pointer hover:scale-105 transition-transform duration-300 ease-in-out font-polysans
-                max-[640px]:text-[0.85rem]
-                max-[480px]:py-[0.55rem] max-[480px]:px-4 max-[480px]:text-[0.8rem]
-                inline-block text-center"
-    >
-      LEARN MORE
+    <!-- ===== CTA ===== -->
+    <a href="https://women.acm.org" target="_blank" rel="noopener noreferrer" class="acmw-cta">
+      <span>Learn More</span>
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="acmw-cta-arrow">
+        <path d="M3 8H13M13 8L9 4M13 8L9 12"
+              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
     </a>
+
   </div>
 </section>
 
 <style>
-  .font-polysans {
-    font-family: "PolySans Trial";
+  .acmw-section {
+    position: relative;
+    background: #05040a;
   }
 
-  .acmw-tubelight {
-    filter: hue-rotate(285deg) saturate(0.72) brightness(0.72);
+  /* Radial gradient aura spreading through section background */
+  .acmw-content-glow {
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80vw;
+    height: 70%;
+    background: radial-gradient(
+      ellipse 60% 50% at 50% 30%,
+      rgba(106, 90, 205, 0.16) 0%,
+      rgba(70, 45, 140, 0.08) 50%,
+      transparent 80%
+    );
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* ═══════════════════════════════════════
+     CARD
+  ═══════════════════════════════════════ */
+  .acmw-card {
+    position: relative;
+    width: 100%;
+    border-radius: 24px;
+    overflow: hidden;
+    background:
+      linear-gradient(135deg,
+        #0d0a23 0%,
+        #130e38 30%,
+        #0f0c2a 60%,
+        #0a0818 100%
+      );
+    border: 1px solid rgba(184, 167, 255, 0.18);
+    box-shadow:
+      0 0 0 1px rgba(106, 90, 205, 0.08),
+      0 24px 80px rgba(0, 0, 0, 0.55),
+      0 4px 16px rgba(0, 0, 0, 0.4);
+  }
+
+  .acmw-noise {
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 200px 200px;
+    pointer-events: none;
+    z-index: 0;
+    mix-blend-mode: overlay;
+  }
+
+  .acmw-blob {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .acmw-blob-1 {
+    width: 380px;
+    height: 380px;
+    top: -120px;
+    left: -80px;
+    background: radial-gradient(circle, rgba(106,90,205,0.18) 0%, transparent 70%);
+  }
+  .acmw-blob-2 {
+    width: 280px;
+    height: 280px;
+    bottom: -80px;
+    right: 60px;
+    background: radial-gradient(circle, rgba(184,167,255,0.10) 0%, transparent 70%);
+  }
+
+  .acmw-shimmer {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(184,167,255,0.35) 30%,
+      rgba(184,167,255,0.70) 50%,
+      rgba(184,167,255,0.35) 70%,
+      transparent 100%
+    );
+  }
+
+  .acmw-card-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    min-height: 240px;
+  }
+
+  .acmw-logo-area {
+    flex-shrink: 0;
+    width: 38%;
+    max-width: 340px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 36px 24px 36px 40px;
   }
 
   .acmw-logo {
-    filter: hue-rotate(285deg) saturate(0.72) brightness(0.94);
+    display: block;
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 0 18px rgba(184, 167, 255, 0.25));
+    transition: filter 0.4s ease, transform 0.4s ease;
+  }
+  .acmw-card:hover .acmw-logo {
+    filter: drop-shadow(0 0 28px rgba(184, 167, 255, 0.40));
+    transform: scale(1.02);
+  }
+
+  .acmw-vr {
+    flex-shrink: 0;
+    width: 1px;
+    align-self: stretch;
+    margin: 28px 0;
+    background: linear-gradient(
+      180deg,
+      transparent 0%,
+      rgba(184,167,255,0.30) 25%,
+      rgba(184,167,255,0.30) 75%,
+      transparent 100%
+    );
+  }
+
+  .acmw-text {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 12px;
+    padding: 36px 44px;
+    min-width: 0;
+  }
+
+  .acmw-kicker {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "Inter", sans-serif;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(184, 167, 255, 0.7);
+  }
+  .acmw-kicker-dot {
+    display: inline-block;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: rgba(184, 167, 255, 0.5);
+    flex-shrink: 0;
+  }
+
+  .acmw-heading {
+    font-family: "Orbitron", "PolySans Bulky Wide", sans-serif !important;
+    font-size: clamp(1.35rem, 2.8vw, 2.1rem);
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+
+  .acmw-heading-em {
+    font-style: normal;
+    background: linear-gradient(135deg, #d8cfff 0%, #b8a7ff 50%, #8872d8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ═══════════════════════════════════════
+     MISSION & CTA
+  ═══════════════════════════════════════ */
+  .acmw-rule {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(184,167,255,0.22), transparent);
+  }
+  .acmw-rule-label {
+    font-family: "Inter", sans-serif;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(184, 167, 255, 0.60);
+    white-space: nowrap;
+  }
+  .acmw-font-body {
+    font-family: "PolySans Trial", "Inter", sans-serif;
+  }
+  .acmw-p-accent {
+    color: #B8A7FF;
+    font-size: clamp(0.9rem, 1.5vw, 1.05rem);
+    line-height: 1.8;
+  }
+  .acmw-p-body {
+    color: rgba(255,255,255,0.65);
+    font-size: clamp(0.875rem, 1.4vw, 1rem);
+    line-height: 1.85;
+  }
+
+  .acmw-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 32px;
+    border-radius: 999px;
+    border: 1.5px solid rgba(184, 167, 255, 0.40);
+    background: transparent;
+    color: #fff;
+    font-family: "PolySans Trial", "Inter", sans-serif;
+    font-size: 0.76rem;
+    letter-spacing: 0.18em;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition:
+      background 0.3s,
+      border-color 0.3s,
+      box-shadow 0.3s,
+      transform 0.25s;
+  }
+  .acmw-cta:hover {
+    background: rgba(106, 90, 205, 0.16);
+    border-color: rgba(184, 167, 255, 0.70);
+    box-shadow: 0 0 24px rgba(106, 90, 205, 0.20);
+    transform: translateY(-2px);
+  }
+  .acmw-cta:hover .acmw-cta-arrow { transform: translateX(4px); }
+  .acmw-cta-arrow { flex-shrink: 0; transition: transform 0.25s; }
+
+  @media (max-width: 640px) {
+    .acmw-card-content {
+      flex-direction: column;
+      min-height: unset;
+    }
+    .acmw-logo-area {
+      width: 100%;
+      max-width: 100%;
+      padding: 32px 32px 16px;
+    }
+    .acmw-logo {
+      max-width: 260px;
+      margin: 0 auto;
+    }
+    .acmw-vr { display: none; }
+    .acmw-text {
+      padding: 16px 28px 32px;
+      align-items: center;
+      text-align: center;
+    }
+    .acmw-kicker { justify-content: center; }
   }
 </style>
-
-<script>
-  import { gsap } from "gsap";
-  import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-  gsap.registerPlugin(ScrollTrigger);
-
-  document.addEventListener("DOMContentLoaded", () => {
-    const tubelight = document.getElementById("tubelight");
-
-    if (tubelight) {
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: tubelight,
-          start: "top 80%",
-          end: "top 50%",
-          scrub: false,
-          once: true,
-        },
-      });
-
-      // Flickering effect
-      tl.to(tubelight, {
-        opacity: 0.3,
-        duration: 0.05,
-        ease: "none",
-      })
-        .to(tubelight, {
-          opacity: 0,
-          duration: 0.05,
-          ease: "none",
-        })
-        .to(tubelight, {
-          opacity: 0.5,
-          duration: 0.08,
-          ease: "none",
-        })
-        .to(tubelight, {
-          opacity: 0.1,
-          duration: 0.05,
-          ease: "none",
-        })
-        .to(tubelight, {
-          opacity: 0.6,
-          duration: 0.1,
-          ease: "none",
-        })
-        .to(tubelight, {
-          opacity: 0.2,
-          duration: 0.06,
-          ease: "none",
-        })
-        .to(tubelight, {
-          opacity: 0.7,
-          duration: 0.12,
-          ease: "none",
-        })
-        .to(tubelight, {
-          opacity: 0.3,
-          duration: 0.05,
-          ease: "none",
-        })
-        //final glow
-        .to(tubelight, {
-          opacity: 0.8,
-          duration: 0.3,
-          ease: "power2.out",
-        })
-        .to(tubelight, {
-          opacity: 0.75,
-          duration: 0.15,
-          ease: "sine.inOut",
-          yoyo: true,
-          repeat: 1,
-        });
-    }
-  });
-</script>

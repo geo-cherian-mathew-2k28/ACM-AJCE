@@ -3,255 +3,128 @@ import { getAssetUrl } from "../utils/cdn";
 ---
 
 <!-- About Sections for Phone -->
-<div class="w-full overflow-hidden">
-  <!-- About Section 1 -->
+<div class="w-full overflow-hidden py-4 flex flex-col gap-4">
+  <!-- About Section 1: ACM AJCE -->
   <section
-    class="about-section-phone section-1 w-full h-screen relative flex flex-col justify-center px-4 py-8 overflow-hidden bg-center bg-cover bg-no-repeat radial-overlay"
-    data-bg={getAssetUrl("/about/about-acm.webp")}
-    style="background-color: #05060B;"
+    class="about-section-phone section-1 w-full relative flex items-center justify-center px-4 py-5 bg-[#05060B]"
   >
     <div
-      class="content-wrapper flex flex-col items-center justify-center h-full gap-4"
+      class="curvy-card relative w-full p-6 sm:p-8 rounded-[2rem] bg-gradient-to-br from-[#131525]/95 via-[#0a0b14]/98 to-[#05060b] border border-[#B8A7FF]/25 shadow-[0_15px_40px_rgba(0,0,0,0.8)] backdrop-blur-xl flex flex-col gap-6 overflow-hidden"
     >
-      <div class="text-container-phone text-white p-4 text-right">
-        <div class="flex flex-col gap-4 text-[0.8rem] leading-[1.4]">
-          <p>
+      <!-- Ambient Glow -->
+      <div class="absolute -top-16 -left-16 w-48 h-48 bg-[#B8A7FF]/15 rounded-full blur-2xl pointer-events-none"></div>
+
+      <div class="heading-container flex flex-col gap-3 relative z-10">
+        <span class="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-[0.25em] text-[#B8A7FF] px-3 py-1 rounded-full bg-[#B8A7FF]/10 border border-[#B8A7FF]/20 w-max">
+          <span class="w-1.5 h-1.5 rounded-full bg-[#B8A7FF] animate-pulse"></span>
+          01 // Community
+        </span>
+        <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-white uppercase leading-tight">
+          ABOUT <span class="text-[#B8A7FF] drop-shadow-[0_0_12px_rgba(184,167,255,0.4)]">ACM AJCE</span>
+        </h2>
+        <div class="w-14 h-1 bg-gradient-to-r from-[#B8A7FF] to-transparent rounded-full"></div>
+      </div>
+
+      <div class="text-container-phone text-white/90 relative z-10">
+        <div class="flex flex-col gap-4 text-xs sm:text-sm leading-relaxed font-light">
+          <p class="border-l-2 border-[#B8A7FF]/40 pl-3">
             ACM AJCE is a student community for people who want to explore
             computing with curiosity, care, and practical collaboration. We
             learn by building, sharing knowledge, and making room for new
             voices.
           </p>
-          <p>
+          <p class="text-white/75">
             We ask questions, build with purpose, and learn together. Through
             workshops, events, and peer-led projects, we want technology to feel
-            more approachable, more useful, and more connected to people.
+            more approachable, useful, and connected to people.
           </p>
         </div>
-      </div>
-      <div
-        class="svg-container-phone w-full max-w-[250px] flex justify-center items-end"
-      >
-        <img
-          src={getAssetUrl("/about/Cassette.svg")}
-          alt="Cassette 1"
-          class="cassette-svg-phone w-full h-auto origin-center drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)] will-change-[transform]"
-          loading="lazy"
-          decoding="async"
-        />
       </div>
     </div>
   </section>
 
-  <!-- About Section 2 -->
+  <!-- About Section 2: AJCE -->
   <section
-    class="about-section-phone section-2 w-full h-screen relative flex flex-col justify-center px-4 py-8 overflow-hidden bg-center bg-cover bg-no-repeat radial-overlay"
-    data-bg={getAssetUrl("/about/about-acm.webp")}
-    style="background-color: #05060B;"
+    class="about-section-phone section-2 w-full relative flex items-center justify-center px-4 py-5 bg-[#05060B]"
   >
     <div
-      class="content-wrapper flex flex-col items-center justify-center h-full gap-4"
+      class="curvy-card relative w-full p-6 sm:p-8 rounded-[2rem] bg-gradient-to-br from-[#131525]/95 via-[#0a0b14]/98 to-[#05060b] border border-[#B8A7FF]/25 shadow-[0_15px_40px_rgba(0,0,0,0.8)] backdrop-blur-xl flex flex-col gap-6 overflow-hidden"
     >
-      <div class="text-container-phone text-white p-4 text-left">
-        <div class="flex flex-col gap-4 text-[0.8rem] leading-[1.4]">
-          <p>
+      <!-- Ambient Glow -->
+      <div class="absolute -bottom-16 -right-16 w-48 h-48 bg-[#6A5ACD]/20 rounded-full blur-2xl pointer-events-none"></div>
+
+      <div class="heading-container flex flex-col gap-3 relative z-10">
+        <span class="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-[0.25em] text-[#B8A7FF] px-3 py-1 rounded-full bg-[#B8A7FF]/10 border border-[#B8A7FF]/20 w-max">
+          <span class="w-1.5 h-1.5 rounded-full bg-[#B8A7FF] animate-pulse"></span>
+          02 // Campus
+        </span>
+        <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-white uppercase leading-tight">
+          ABOUT <span class="text-[#B8A7FF] drop-shadow-[0_0_12px_rgba(184,167,255,0.4)]">AMAL JYOTHI</span>
+        </h2>
+        <div class="w-14 h-1 bg-gradient-to-r from-[#B8A7FF] to-transparent rounded-full"></div>
+      </div>
+
+      <div class="text-container-phone text-white/90 relative z-10">
+        <div class="flex flex-col gap-4 text-xs sm:text-sm leading-relaxed font-light">
+          <p class="border-l-2 border-[#B8A7FF]/40 pl-3">
             Amal Jyothi College of Engineering is located in Kanjirappally,
             Kottayam, Kerala. ACM AJCE brings students together on campus to
             explore technology, exchange ideas, and create work that matters.
           </p>
-          <p>
+          <p class="text-white/75">
             Our chapter is being shaped as an open space for learning: a place
             to try unfamiliar things, collaborate across interests, and grow
             through the craft of computing.
           </p>
         </div>
       </div>
-      <div
-        class="svg-container-phone w-full max-w-[250px] flex justify-center items-end"
-      >
-        <img
-          src={getAssetUrl("/about/3.webp")}
-          alt="Cassette 2"
-          class="cassette-svg-phone w-full h-auto origin-center drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)] will-change-[transform]"
-          loading="lazy"
-          decoding="async"
-        />
-      </div>
     </div>
   </section>
 
-  <!-- About Section 3 -->
+  <!-- About Section 3: Mission -->
   <section
     id="mission"
-    class="about-section-phone section-3 w-full h-screen relative flex flex-col justify-center px-4 py-8 overflow-hidden bg-center bg-cover bg-no-repeat radial-overlay"
-    data-bg={getAssetUrl("/about/about-acm.webp")}
-    style="background-color: #05060B;"
+    class="about-section-phone section-3 w-full relative flex items-center justify-center px-4 py-5 bg-[#05060B]"
   >
     <div
-      class="content-wrapper flex flex-col items-center justify-center h-full gap-4"
+      class="curvy-card relative w-full p-6 sm:p-8 rounded-[2rem] bg-gradient-to-br from-[#131525]/95 via-[#0a0b14]/98 to-[#05060b] border border-[#B8A7FF]/25 shadow-[0_15px_40px_rgba(0,0,0,0.8)] backdrop-blur-xl flex flex-col gap-6 overflow-hidden"
     >
-      <div class="text-container-phone text-white p-4 text-right">
-        <div class="flex flex-col gap-4 text-[0.8rem] leading-[1.4]">
-          <p>
-            <span class="block mb-2 font-mono uppercase tracking-[0.24em] text-[#B8A7FF]">Our mission</span>
+      <!-- Ambient Glow -->
+      <div class="absolute -top-16 -right-16 w-48 h-48 bg-[#B8A7FF]/20 rounded-full blur-2xl pointer-events-none"></div>
+
+      <div class="heading-container flex flex-col gap-3 relative z-10">
+        <span class="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-[0.25em] text-[#B8A7FF] px-3 py-1 rounded-full bg-[#B8A7FF]/10 border border-[#B8A7FF]/20 w-max">
+          <span class="w-1.5 h-1.5 rounded-full bg-[#B8A7FF] animate-pulse"></span>
+          03 // Purpose
+        </span>
+        <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-white uppercase leading-tight">
+          OUR <span class="text-[#B8A7FF] drop-shadow-[0_0_12px_rgba(184,167,255,0.4)]">MISSION</span> & VISION
+        </h2>
+        <div class="w-14 h-1 bg-gradient-to-r from-[#B8A7FF] to-transparent rounded-full"></div>
+      </div>
+
+      <div class="text-container-phone text-white/90 relative z-10">
+        <div class="flex flex-col gap-4 text-xs sm:text-sm leading-relaxed font-light">
+          <div class="bg-[#B8A7FF]/10 p-4 rounded-xl border border-[#B8A7FF]/20">
+            <span class="block mb-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#B8A7FF]">Our Mission</span>
             To foster a deep passion for technology and innovation among our
             members, making space for curiosity and experimentation.
-          </p>
-          <p>
+          </div>
+          <p class="text-white/80">
             The Association for Computing Machinery (ACM) is the world's
-            largest educational and scientific computing society. Since its
-            inception in 1947, ACM has united educators, researchers, and
-            professionals to advance computing as a science and a profession.
+            largest educational and scientific computing society, uniting educators, researchers, and professionals.
           </p>
-          <p>
-            It promotes the highest standards of technical excellence, fosters
-            lifelong learning, and supports career development through a global
-            network of conferences, publications, and professional communities.
-            With a strong commitment to innovation and leadership, ACM
-            continues to shape the future of computing worldwide.
+          <p class="text-white/70">
+            It promotes technical excellence, lifelong learning, and career development globally.
           </p>
         </div>
-      </div>
-      <div
-        class="svg-container-phone w-full max-w-[250px] flex justify-center items-end"
-      >
-        <img
-          src={getAssetUrl("/about/2.webp")}
-          alt="Cassette 3"
-          class="cassette-svg-phone w-full h-auto origin-center drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)] will-change-[transform]"
-          loading="lazy"
-          decoding="async"
-        />
       </div>
     </div>
   </section>
 </div>
 
 <style>
-  .radial-overlay {
-    position: relative;
-  }
-  .radial-overlay::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-image: radial-gradient(
-      circle at 30% 50%,
-      rgba(26, 26, 26, 0.6) 0%,
-      rgba(6, 6, 6, 0.85) 70%
-    );
-    pointer-events: none;
-    z-index: 0;
-  }
-  .radial-overlay > * {
-    position: relative;
-    z-index: 1;
+  .about-section-phone {
+    background-color: #05060B;
   }
 </style>
-
-<script>
-  import { gsap } from "gsap";
-  import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-  gsap.registerPlugin(ScrollTrigger);
-
-  function initPhoneAnimations() {
-    console.log("Initializing Phone Animations");
-    const lazySections = document.querySelectorAll(".about-section-phone");
-    const loadBg = (section: Element) => {
-      if (!(section instanceof HTMLElement)) return;
-      const bg = section.dataset.bg;
-      if (!bg) return;
-      section.style.backgroundImage = `url(${bg})`;
-      section.removeAttribute("data-bg");
-    };
-
-    if ("IntersectionObserver" in window) {
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              loadBg(entry.target);
-              observer.unobserve(entry.target);
-            }
-          });
-        },
-        { rootMargin: "200px 0px", threshold: 0.01 }
-      );
-      lazySections.forEach((section) => observer.observe(section));
-    } else {
-      lazySections.forEach(loadBg);
-    }
-
-    const sections = document.querySelectorAll(".about-section-phone");
-
-    sections.forEach((section, index) => {
-      const cassette = section.querySelector(".cassette-svg-phone");
-
-      if (cassette) {
-        let xStart, xEnd, rotationEnd;
-
-        if (index === 0) {
-          // Section 1
-          xStart = -100; // Reduced from -200
-          xEnd = -20; // Reduced from -40
-          rotationEnd = 10; // Reduced rotation
-        } else if (index === 1) {
-          // Section 2
-          xStart = 100; // Reduced from 200
-          xEnd = 25; // Reduced from 50
-          rotationEnd = -10;
-        } else {
-          // Section 3
-          xStart = -100;
-          xEnd = -20;
-          rotationEnd = 10;
-        }
-
-        const rotationStart = -45;
-
-        gsap.fromTo(
-          cassette,
-          {
-            y: 300,
-            x: xStart,
-            rotation: rotationStart,
-          },
-          {
-            y: 0,
-            x: xEnd,
-            rotation: rotationEnd,
-            duration: 1,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: section,
-              start: "top 70%",
-              end: "bottom bottom",
-              scrub: 1,
-              toggleActions: "play none none reverse",
-            },
-          }
-        );
-      }
-    });
-
-    // Refresh ScrollTrigger to ensure positions are correct after layout
-    ScrollTrigger.refresh();
-  }
-
-  let phoneInit = false;
-  const safeInit = () => {
-    if (phoneInit) return;
-    phoneInit = true;
-    initPhoneAnimations();
-  };
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", safeInit);
-  } else {
-    safeInit();
-  }
-
-  window.addEventListener("load", () => {
-    ScrollTrigger.refresh();
-  });
-</script>

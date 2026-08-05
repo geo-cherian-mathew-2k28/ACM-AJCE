@@ -3,274 +3,181 @@ import { getAssetUrl } from "../utils/cdn";
 ---
 
 <!-- About Sections-->
-<div class="about-container w-screen overflow-hidden">
-  <!-- About Section 1: -->
+<div class="about-container w-screen overflow-hidden py-8 flex flex-col gap-6 md:gap-8 relative">
+
+  <!-- About Section 1: ACM AJCE -->
   <section
     id="about-acm-ajce"
     data-section="about-acm-ajce"
-    class="about-section section-1 video-bg-section w-screen h-screen relative bg-center bg-cover bg-no-repeat"
+    class="about-section section-1 w-screen relative flex items-center justify-center px-6 md:px-16 lg:px-24 py-4 md:py-6"
   >
     <div
-      class="cassette-container cassette-left svg-container svg-left relative w-[500px] h-[500px] ml-[-50px] mb-[-600px] md:h-[400px] md:w-[400px] lg:h-[500px] lg:w-[500px]"
+      class="curvy-card relative w-full max-w-[1100px] p-8 md:p-12 lg:p-16 rounded-[2.5rem] bg-gradient-to-br from-[#131525]/90 via-[#0a0b14]/95 to-[#05060b]/98 border border-[#B8A7FF]/25 shadow-[0_20px_60px_rgba(0,0,0,0.7)] backdrop-blur-xl flex flex-col lg:flex-row items-start lg:items-center justify-between gap-10 overflow-hidden group hover:border-[#B8A7FF]/40 transition-all duration-500"
     >
-      <img
-        src={getAssetUrl("/about/Cassette.webp")}
-        alt="Cassette 1"
-        class="cassette-svg w-full h-auto origin-bottom-left rotate-[21deg]"
-        loading="lazy"
-        decoding="async"
-      />
-    </div>
-    <div
-      class="text-container text-right absolute top-1/2 -translate-y-1/2 text-white p-8 left-[45vw] w-[50vw] max-w-[800px]"
-    >
-      <div
-        class="text-[1.4rem] leading-[1.55] max-w-[700px] flex flex-col gap-6"
-      >
-        <p>
-          ACM AJCE is a student community for people who want to explore
-          computing with curiosity, care, and practical collaboration. We learn
-          by building, sharing knowledge, and making room for new voices.
-        </p>
-        <p>
-          We ask questions, build with purpose, and learn together. Through
-          workshops, events, and peer-led projects, we want technology to feel
-          more approachable, more useful, and more connected to the people who
-          use it.
-        </p>
+      <!-- Ambient Glow -->
+      <div class="absolute -top-24 -left-24 w-72 h-72 bg-[#B8A7FF]/10 rounded-full blur-3xl pointer-events-none group-hover:bg-[#B8A7FF]/20 transition-all duration-700"></div>
+
+      <div class="heading-container w-full lg:w-5/12 flex flex-col gap-4 relative z-10">
+        <span class="inline-flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-[#B8A7FF] px-3.5 py-1.5 rounded-full bg-[#B8A7FF]/10 border border-[#B8A7FF]/20 w-max">
+          <!-- 4-point Sparkle Star -->
+          <svg class="w-3.5 h-3.5 text-[#B8A7FF]" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0C12 6.627 17.373 12 24 12C17.373 12 12 17.373 12 24C12 17.373 6.627 12 0 12C6.627 12 12 6.627 12 0Z"/>
+          </svg>
+          01 // Community
+        </span>
+
+        <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-white uppercase leading-tight">
+          ABOUT <br/>
+          <span class="relative inline-block text-[#B8A7FF] drop-shadow-[0_0_15px_rgba(184,167,255,0.4)]">
+            ACM AJCE
+            <!-- Wavy Underline Squiggle -->
+            <svg class="absolute -bottom-2 left-0 w-full h-3 text-[#B8A7FF] pointer-events-none" viewBox="0 0 100 12" fill="none" preserveAspectRatio="none">
+              <path d="M0 6 Q 25 0, 50 6 T 100 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <!-- Sparkle Star Next to Title -->
+          <svg class="w-6 h-6 text-[#B8A7FF] inline-block ml-1.5 align-middle animate-pulse drop-shadow-[0_0_10px_#B8A7FF]" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0C12 6.627 17.373 12 24 12C17.373 12 12 17.373 12 24C12 17.373 6.627 12 0 12C6.627 12 12 6.627 12 0Z"/>
+          </svg>
+        </h2>
+        <div class="w-20 h-1 bg-gradient-to-r from-[#B8A7FF] to-transparent rounded-full mt-1"></div>
+      </div>
+
+      <div class="text-container text-left text-white/90 w-full lg:w-7/12 relative z-10">
+        <div class="text-base md:text-lg leading-relaxed flex flex-col gap-6 font-light">
+          <p class="border-l-2 border-[#B8A7FF]/40 pl-4">
+            ACM AJCE is a vibrant student community for individuals who want to explore
+            computing with curiosity, care, and practical collaboration. We learn
+            by building, sharing knowledge, and making room for new voices.
+          </p>
+          <p class="text-white/75">
+            We ask questions, build with purpose, and learn together. Through
+            workshops, events, and peer-led projects, we want technology to feel
+            more approachable, more useful, and deeply connected to the people who
+            use it.
+          </p>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- About Section 2:-->
+  <!-- About Section 2: AJCE -->
   <section
     id="about-ajce"
     data-section="about-ajce"
-    class="about-section section-2 video-bg-section w-screen h-screen relative bg-center bg-cover bg-no-repeat"
+    class="about-section section-2 w-screen relative flex items-center justify-center px-6 md:px-16 lg:px-24 py-4 md:py-6"
   >
     <div
-      class="text-container text-left absolute top-1/2 -translate-y-1/2 text-white p-8 left-[10vw] w-[55vw] max-w-[800px]"
+      class="curvy-card relative w-full max-w-[1100px] p-8 md:p-12 lg:p-16 rounded-[2.5rem] bg-gradient-to-br from-[#131525]/90 via-[#0a0b14]/95 to-[#05060b]/98 border border-[#B8A7FF]/25 shadow-[0_20px_60px_rgba(0,0,0,0.7)] backdrop-blur-xl flex flex-col lg:flex-row-reverse items-start lg:items-center justify-between gap-10 overflow-hidden group hover:border-[#B8A7FF]/40 transition-all duration-500"
     >
-      <div
-        class="text-[1.4rem] leading-[1.55] max-w-[700px] flex flex-col gap-6"
-      >
-        <p>
-          Amal Jyothi College of Engineering is located in Kanjirappally,
-          Kottayam, Kerala. ACM AJCE brings students together on campus to
-          explore technology, exchange ideas, and create work that matters.
-        </p>
-        <p>
-          Our chapter is being shaped as an open space for learning: a place to
-          try unfamiliar things, collaborate across interests, and grow through
-          the craft of computing.
-        </p>
+      <!-- Ambient Glow -->
+      <div class="absolute -bottom-24 -right-24 w-72 h-72 bg-[#6A5ACD]/15 rounded-full blur-3xl pointer-events-none group-hover:bg-[#6A5ACD]/25 transition-all duration-700"></div>
+
+      <div class="heading-container w-full lg:w-5/12 flex flex-col gap-4 relative z-10 lg:items-end lg:text-right">
+        <span class="inline-flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-[#B8A7FF] px-3.5 py-1.5 rounded-full bg-[#B8A7FF]/10 border border-[#B8A7FF]/20 w-max">
+          <svg class="w-3.5 h-3.5 text-[#B8A7FF]" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0C12 6.627 17.373 12 24 12C17.373 12 12 17.373 12 24C12 17.373 6.627 12 0 12C6.627 12 12 6.627 12 0Z"/>
+          </svg>
+          02 // Campus
+        </span>
+
+        <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-white uppercase leading-tight">
+          ABOUT <br/>
+          <span class="relative inline-block text-[#B8A7FF] drop-shadow-[0_0_15px_rgba(184,167,255,0.4)]">
+            AMAL JYOTHI
+            <!-- Wavy Underline Squiggle -->
+            <svg class="absolute -bottom-2 left-0 w-full h-3 text-[#B8A7FF] pointer-events-none" viewBox="0 0 100 12" fill="none" preserveAspectRatio="none">
+              <path d="M0 6 Q 25 0, 50 6 T 100 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <svg class="w-6 h-6 text-[#B8A7FF] inline-block ml-1.5 align-middle animate-pulse drop-shadow-[0_0_10px_#B8A7FF]" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0C12 6.627 17.373 12 24 12C17.373 12 12 17.373 12 24C12 17.373 6.627 12 0 12C6.627 12 12 6.627 12 0Z"/>
+          </svg>
+        </h2>
+        <div class="w-20 h-1 bg-gradient-to-l from-[#B8A7FF] to-transparent rounded-full mt-1"></div>
       </div>
-    </div>
-    <div
-      class="cassette-container cassette-right svg-container svg-right w-[500px] h-[500px] absolute right-0 top-1/2 -translate-y-1/2 mr-[-100px] md:h-[400px] md:w-[400px] lg:h-[500px] lg:w-[500px]"
-    >
-      <img
-        src={getAssetUrl("/about/3.webp")}
-        alt="Cassette 2"
-        class="cassette-svg w-full h-auto origin-bottom-right rotate-[-15deg]"
-        loading="lazy"
-        decoding="async"
-      />
+
+      <div class="text-container text-left text-white/90 w-full lg:w-7/12 relative z-10">
+        <div class="text-base md:text-lg leading-relaxed flex flex-col gap-6 font-light">
+          <p class="border-l-2 border-[#B8A7FF]/40 pl-4">
+            Amal Jyothi College of Engineering is located in Kanjirappally,
+            Kottayam, Kerala. ACM AJCE brings students together on campus to
+            explore technology, exchange ideas, and create work that matters.
+          </p>
+          <p class="text-white/75">
+            Our chapter is being shaped as an open space for learning: a place to
+            try unfamiliar things, collaborate across interests, and grow through
+            the craft of computing.
+          </p>
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- About Section 3:-->
+  <!-- About Section 3: Mission -->
   <section
     id="mission"
     data-section="mission"
-    class="about-section section-3 video-bg-section w-screen h-screen relative bg-center bg-cover bg-no-repeat"
+    class="about-section section-3 w-screen relative flex items-center justify-center px-6 md:px-16 lg:px-24 py-4 md:py-6"
   >
     <div
-      class="cassette-container cassette-left cassette-left-two svg-container svg-left-two relative w-[500px] h-[500px] ml-[-50px] mb-[200px] md:h-[400px] md:w-[400px] lg:h-[500px] lg:w-[500px]"
+      class="curvy-card relative w-full max-w-[1100px] p-8 md:p-12 lg:p-16 rounded-[2.5rem] bg-gradient-to-br from-[#131525]/90 via-[#0a0b14]/95 to-[#05060b]/98 border border-[#B8A7FF]/25 shadow-[0_20px_60px_rgba(0,0,0,0.7)] backdrop-blur-xl flex flex-col lg:flex-row items-start lg:items-center justify-between gap-10 overflow-hidden group hover:border-[#B8A7FF]/40 transition-all duration-500"
     >
-      <img
-        src={getAssetUrl("/about/2.webp")}
-        alt="Cassette 3"
-        class="cassette-svg w-full h-auto origin-bottom-left rotate-[11deg]"
-        loading="lazy"
-        decoding="async"
-      />
-    </div>
-    <div
-      class="text-container text-right absolute top-1/2 -translate-y-1/2 text-white p-8 left-[45vw] w-[50vw] max-w-[800px]"
-    >
-      <div
-        class="text-[1.4rem] leading-[1.55] max-w-[700px] flex flex-col gap-6"
-      >
-        <p>
-          <span class="block mb-2 text-sm font-mono uppercase tracking-[0.28em] text-[#B8A7FF]">Our mission</span>
-          To foster a deep passion for technology and innovation among our
-          members, making space for curiosity, experimentation, and ideas that
-          matter beyond the classroom.
-        </p>
-        <p>
-          The Association for Computing Machinery (ACM) is the world’s largest
-          educational and scientific computing society. Since its inception in
-          1947, ACM has united educators, researchers, and professionals to
-          advance computing as a science and a profession.
-        </p>
-        <p>
-          It promotes the highest standards of technical excellence, fosters
-          lifelong learning, and supports career development through a global
-          network of conferences, publications, and professional communities.
-          With a strong commitment to innovation and leadership, ACM continues
-          to shape the future of computing worldwide.
-        </p>
+      <!-- Ambient Glow -->
+      <div class="absolute -top-24 -right-24 w-72 h-72 bg-[#B8A7FF]/15 rounded-full blur-3xl pointer-events-none group-hover:bg-[#B8A7FF]/25 transition-all duration-700"></div>
+
+      <div class="heading-container w-full lg:w-5/12 flex flex-col gap-4 relative z-10">
+        <span class="inline-flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-[#B8A7FF] px-3.5 py-1.5 rounded-full bg-[#B8A7FF]/10 border border-[#B8A7FF]/20 w-max">
+          <svg class="w-3.5 h-3.5 text-[#B8A7FF]" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0C12 6.627 17.373 12 24 12C17.373 12 12 17.373 12 24C12 17.373 6.627 12 0 12C6.627 12 12 6.627 12 0Z"/>
+          </svg>
+          03 // Purpose
+        </span>
+
+        <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-white uppercase leading-tight">
+          OUR <span class="relative inline-block text-[#B8A7FF] drop-shadow-[0_0_15px_rgba(184,167,255,0.4)]">
+            MISSION
+            <!-- Wavy Underline Squiggle -->
+            <svg class="absolute -bottom-2 left-0 w-full h-3 text-[#B8A7FF] pointer-events-none" viewBox="0 0 100 12" fill="none" preserveAspectRatio="none">
+              <path d="M0 6 Q 25 0, 50 6 T 100 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <svg class="w-6 h-6 text-[#B8A7FF] inline-block ml-1.5 align-middle animate-pulse drop-shadow-[0_0_10px_#B8A7FF]" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0C12 6.627 17.373 12 24 12C17.373 12 12 17.373 12 24C12 17.373 6.627 12 0 12C6.627 12 12 6.627 12 0Z"/>
+          </svg>
+          & VISION
+        </h2>
+        <div class="w-20 h-1 bg-gradient-to-r from-[#B8A7FF] to-transparent rounded-full mt-1"></div>
+      </div>
+
+      <div class="text-container text-left text-white/90 w-full lg:w-7/12 relative z-10">
+        <div class="text-sm md:text-base leading-relaxed flex flex-col gap-5 font-light">
+          <div class="bg-[#B8A7FF]/10 p-5 rounded-2xl border border-[#B8A7FF]/20 relative overflow-hidden">
+            <span class="block mb-1 text-xs font-semibold uppercase tracking-[0.2em] text-[#B8A7FF] flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5 text-[#B8A7FF]" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 0C12 6.627 17.373 12 24 12C17.373 12 12 17.373 12 24C12 17.373 6.627 12 0 12C6.627 12 12 6.627 12 0Z"/>
+              </svg>
+              Our Mission
+            </span>
+            To foster a deep passion for technology and innovation among our
+            members, making space for curiosity, experimentation, and ideas that
+            matter beyond the classroom.
+          </div>
+          <p class="text-white/80">
+            The Association for Computing Machinery (ACM) is the world’s largest
+            educational and scientific computing society. Since 1947, ACM has united educators, researchers, and professionals to advance computing as a science and a profession.
+          </p>
+          <p class="text-white/70 text-xs md:text-sm">
+            It promotes technical excellence, lifelong learning, and career development through a global network of conferences, publications, and professional communities.
+          </p>
+        </div>
       </div>
     </div>
   </section>
 </div>
 
 <style>
-  @media (max-height: 720px) {
-    .about-container .text-container {
-      padding: 1.25rem;
-    }
-
-    .about-container .text-container > div {
-      font-size: 1.15rem;
-      line-height: 1.45;
-      gap: 1rem;
-    }
-
-    .about-container .cassette-container {
-      width: 420px;
-      height: 420px;
-    }
-
-    .about-container .section-1 .cassette-container {
-      margin-left: -20px;
-      margin-bottom: -420px;
-    }
-
-    .about-container .section-2 .cassette-container {
-      margin-right: -60px;
-    }
-
-    .about-container .section-3 .cassette-container {
-      margin-left: -20px;
-      margin-bottom: 100px;
-    }
-  }
-
-  @media (max-height: 600px) {
-    .about-container .text-container {
-      top: 56%;
-      padding: 1rem;
-    }
-
-    .about-container .text-container > div {
-      font-size: 1rem;
-      line-height: 1.4;
-      gap: 0.75rem;
-    }
-
-    .about-container .cassette-container {
-      width: 360px;
-      height: 360px;
-    }
-
-    .about-container .section-1 .cassette-container {
-      margin-bottom: -320px;
-    }
-
-    .about-container .section-2 .cassette-container {
-      top: 55%;
-      margin-right: -40px;
-    }
-
-    .about-container .section-3 .cassette-container {
-      margin-bottom: 40px;
-    }
-  }
-
-  @media (min-width: 769px) and (max-width: 1099px) and (min-height: 601px) {
-    #about-acm-ajce .text-container > div,
-    #about-ajce .text-container > div,
-    #mission .text-container > div {
-      font-size: 1.12rem;
-    }
+  .about-section {
+    background: transparent;
   }
 </style>
-
-<script>
-  import { gsap } from "gsap";
-  import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-  gsap.registerPlugin(ScrollTrigger);
-
-  function initAnimations() {
-    const lazySections = document.querySelectorAll(".js-lazy-bg");
-    const loadBg = (section: Element) => {
-      if (!(section instanceof HTMLElement)) return;
-      const bg = section.dataset.bg;
-      if (!bg) return;
-      section.style.backgroundImage = `url(${bg})`;
-      section.removeAttribute("data-bg");
-    };
-
-    if ("IntersectionObserver" in window) {
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              loadBg(entry.target);
-              observer.unobserve(entry.target);
-            }
-          });
-        },
-        { rootMargin: "200px 0px", threshold: 0.01 },
-      );
-      lazySections.forEach((section) => observer.observe(section));
-    } else {
-      lazySections.forEach(loadBg);
-    }
-
-    const sections = document.querySelectorAll(".about-section");
-
-    sections.forEach((section) => {
-      const cassette = section.querySelector(".cassette-svg");
-      const isLeft =
-        section.querySelector(".cassette-left") ||
-        section.querySelector(".cassette-left-two") ||
-        section.querySelector(".svg-left") ||
-        section.querySelector(".svg-left-two") ||
-        section.querySelector(".webp-left") ||
-        section.querySelector(".webp-left-two");
-      const isRight =
-        section.querySelector(".cassette-right") ||
-        section.querySelector(".svg-right") ||
-        section.querySelector(".webp-right");
-
-      if (cassette && (isLeft || isRight)) {
-        const xStart = isLeft ? -300 : 300;
-
-        //tilt animation
-        gsap.from(cassette, {
-          x: xStart,
-          rotation: 45, //45 degrees
-          duration: 1,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: section,
-            start: "top 80%",
-            end: "center center",
-            scrub: 1,
-            toggleActions: "play none none reverse",
-          },
-        });
-      }
-    });
-  }
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initAnimations);
-  } else {
-    initAnimations();
-  }
-</script>

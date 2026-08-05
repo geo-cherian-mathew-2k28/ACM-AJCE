@@ -1,263 +1,314 @@
 ---
-const isLocalPreviewHost = ["localhost", "127.0.0.1", "::1"].includes(Astro.url.hostname);
-const membershipHref = isLocalPreviewHost ? "/membership/admin?preview=admin" : "/membership";
+const membershipHref = "/membership";
 ---
 
 <header
-  class="site-header fixed top-5 left-0 right-0 z-50 w-full px-4 py-2 pointer-events-none"
+  class="site-header fixed top-4 left-0 right-0 z-50 w-full px-4 md:px-8 pointer-events-none"
 >
-  <a
-    href={membershipHref}
-    class="membership-cta pointer-events-auto"
-    aria-label="Open ACM AJCE membership"
-  >
-    <span class="membership-cta__label">ACM Membership</span>
-    <span class="membership-cta__arrow" aria-hidden="true">&rarr;</span>
-  </a>
-  <div
-    class="header-inner relative max-w-4xl mx-auto flex justify-center pointer-events-auto"
-  >
-    <nav>
-      <!-- Desktop nav -->
-      <div class="nav-desktop">
-        <div
-          class="header-pill relative flex items-center justify-center w-fit px-8 overflow-hidden"
-          style="height:50px;border-radius:41px;border:1px solid #FBFAFF;background:rgba(0,0,0,0.35);backdrop-filter:blur(4px);"
-        >
-          <!-- The Blob -->
-          <div
-            id="nav-blob"
-            class="absolute top-0 bottom-0 bg-[#B8A7FF] rounded-[41px] transition-all duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)] opacity-0 -z-10"
-            style="left: 0; width: 0;"
-          >
-          </div>
+  <div class="max-w-[1400px] mx-auto relative flex items-center justify-between w-full h-[50px]">
+    
+    <!-- Left Spacer for layout symmetry (Official logos are fixed via Layout.astro) -->
+    <div class="hidden lg:block w-48 pointer-events-none"></div>
 
-          <!-- Dynamic Title for MORE sections -->
+    <!-- Mobile left spacer so hamburger doesn't sit over logos -->
+    <div class="block lg:hidden w-[120px] pointer-events-none flex-shrink-0"></div>
+
+    <!-- Center Navigation Pill -->
+    <div class="header-inner relative flex justify-center pointer-events-auto mx-auto lg:mx-0">
+      <nav>
+        <!-- Desktop nav -->
+        <div class="nav-desktop">
           <div
-            id="dynamic-title"
-            class="absolute inset-0 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300"
+            class="header-pill relative flex items-center justify-center w-fit px-8 overflow-hidden"
+            style="height:50px;border-radius:41px;border:1px solid rgba(251,250,255,0.25);background:rgba(10,11,20,0.65);backdrop-filter:blur(12px);"
           >
+            <!-- The Blob -->
             <div
-              class="justify-start text-white text-base font-light font-['PolySans_Trial'] uppercase"
+              id="nav-blob"
+              class="absolute top-0 bottom-0 bg-[#B8A7FF] rounded-[41px] transition-all duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)] opacity-0 -z-10"
+              style="left: 0; width: 0;"
             >
             </div>
+
+            <!-- Dynamic Title for MORE sections -->
+            <div
+              id="dynamic-title"
+              class="absolute inset-0 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300"
+            >
+              <div
+                class="justify-start text-white text-base font-light font-['PolySans_Trial'] uppercase"
+              >
+              </div>
+            </div>
+
+            <ul
+              class="nav-list relative z-10 flex items-center gap-2 md:gap-4 text-[13.5px] md:text-[14.8px] font-mono uppercase text-white"
+              style="white-space:nowrap;align-items:center;letter-spacing:0.04em;"
+            >
+              <li>
+                <a
+                  href="#about"
+                  class="nav-link inline-block px-3 py-1 hover:text-white transition-colors"
+                  >ABOUT</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#mission"
+                  class="nav-link inline-block px-3 py-1 hover:text-white transition-colors"
+                  >MISSION</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#events"
+                  class="nav-link inline-block px-3 py-1 hover:text-white transition-colors"
+                  >EVENTS</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#acm-w"
+                  class="nav-link inline-block px-3 py-1 hover:text-white transition-colors"
+                  >ACM-W</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  role="button"
+                  class="more-toggle inline-block px-3 py-1 more-link hover:opacity-80 transition-opacity"
+                  aria-controls="desktopMoreMenu"
+                  aria-expanded="false">MORE</a
+                >
+              </li>
+            </ul>
           </div>
-
-          <ul
-            class="nav-list relative z-10 flex items-center gap-2 md:gap-4 text-[13.5px] md:text-[14.8px] font-mono uppercase text-white"
-            style="white-space:nowrap;align-items:center;letter-spacing:0.04em;"
-          >
-            <li>
-              <a
-                href="#about"
-                class="nav-link inline-block px-3 py-1 hover:text-white transition-colors"
-                >ABOUT</a
-              >
-            </li>
-            <li>
-              <a
-                href="#mission"
-                class="nav-link inline-block px-3 py-1 hover:text-white transition-colors"
-                >MISSION</a
-              >
-            </li>
-            <li>
-              <a
-                href="#events"
-                class="nav-link inline-block px-3 py-1 hover:text-white transition-colors"
-                >EVENTS</a
-              >
-            </li>
-            <li>
-              <a
-                href="#acm-w"
-                class="nav-link inline-block px-3 py-1 hover:text-white transition-colors"
-                >ACM-W</a
-              >
-            </li>
-            <li>
-              <a
-                href="#"
-                role="button"
-                class="more-toggle inline-block px-3 py-1 more-link hover:opacity-80 transition-opacity"
-                aria-controls="desktopMoreMenu"
-                aria-expanded="false">MORE</a
-              >
-            </li>
-          </ul>
         </div>
-      </div>
 
-      <!-- Desktop More dropdown -->
-      <div id="desktopMoreMenu" class="more-menu w-[220px]">
-        <ul class="mobile-more-list">
-          <li>
-            <a
-              href="#team"
-              class="text-yellow-50 uppercase font-['PolySans_Trial'] text-[11px]"
-              >Team</a
-            >
-          </li>
-          <li>
-            <a
-              href="#partners"
-              class="text-yellow-50 uppercase font-['PolySans_Trial'] text-[11px]"
-              >Partners</a
-            >
-          </li>
-          <li>
-            <a
-              href="#gallery"
-              class="text-yellow-50 uppercase font-['PolySans_Trial'] text-[11px]"
-              >Gallery</a
-            >
-          </li>
-          <li>
-            <a
-              href="#contact"
-              class="text-yellow-50 uppercase font-['PolySans_Trial'] text-[11px]"
-              >Contact Us</a
-            >
-          </li>
-        </ul>
-      </div>
-
-      <!-- Mobile nav -->
-      <div class="nav-mobile">
-        <button
-          id="mobile-menu-btn"
-          class="pointer-events-auto w-12 h-12 flex items-center justify-center rounded-full bg-[rgba(0,0,0,0.35)] border border-[#FBFAFF] backdrop-blur transition-transform active:scale-95"
-          aria-label="Toggle menu"
-        >
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="#FBFAFF"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <line x1="3" y1="12" x2="21" y2="12"></line>
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-            <line x1="3" y1="18" x2="21" y2="18"></line>
-          </svg>
-        </button>
-
-        <div
-          id="mobile-menu-overlay"
-          class="fixed inset-0 bg-black/95 z-[100] translate-x-full transition-transform duration-300 flex flex-col items-center justify-center"
-        >
-          <button
-            id="mobile-menu-close"
-            class="absolute top-6 right-6 w-12 h-12 flex items-center justify-center text-[#FBFAFF]"
-          >
-            <svg
-              width="32"
-              height="32"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
-          </button>
-          <ul class="flex flex-col gap-6 text-center">
+        <!-- Desktop More dropdown -->
+        <div id="desktopMoreMenu" class="more-menu w-[200px]">
+          <ul class="mobile-more-list flex flex-col gap-1 p-1">
             {
               [
-                "about",
-                "mission",
-                "events",
-                "acm-w",
-                "team",
-                "partners",
-                "gallery",
-                "contact",
-                "membership",
-              ].map((item) => (
+                { label: "Team", href: "#team" },
+                { label: "Partners", href: "#partners" },
+                { label: "Gallery", href: "#gallery" },
+                { label: "Contact Us", href: "#contact" }
+              ].map(item => (
                 <li>
                   <a
-                    href={item === "membership" ? membershipHref : `#${item}`}
-                    class="mobile-nav-link text-3xl font-light font-['PolySans_Trial'] uppercase text-[#FBFAFF] hover:text-[#B8A7FF] transition-colors"
+                    href={item.href}
+                    class="desktop-more-item group flex items-center justify-between px-3 py-2 rounded-lg text-[#FBFAFF] font-['PolySans_Trial'] text-xs uppercase tracking-wider transition-all duration-200 hover:bg-[#B8A7FF]/20 hover:text-[#B8A7FF] hover:translate-x-1"
                   >
-                    {item.replace("-", " ")}
+                    <span>{item.label}</span>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200">
+                      <path d="M5 12h14"/><path d="m13 6 6 6-6 6"/>
+                    </svg>
                   </a>
                 </li>
               ))
             }
           </ul>
         </div>
-      </div>
-    </nav>
+
+        <!-- Mobile nav -->
+        <div class="nav-mobile">
+          <button
+            id="mobile-menu-btn"
+            class="pointer-events-auto w-12 h-12 flex items-center justify-center rounded-full bg-[rgba(0,0,0,0.35)] border border-[#FBFAFF] backdrop-blur transition-transform active:scale-95"
+            aria-label="Toggle menu"
+          >
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#FBFAFF"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </button>
+
+          <div
+            id="mobile-menu-overlay"
+            class="fixed inset-0 bg-black/95 z-[100] translate-x-full transition-transform duration-300 flex flex-col items-center justify-center"
+          >
+            <!-- Close button -->
+            <button
+              id="mobile-menu-close"
+              class="absolute top-6 right-6 w-12 h-12 flex items-center justify-center text-[#FBFAFF]"
+            >
+              <svg
+                width="32"
+                height="32"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+
+            <!-- Primary nav links -->
+            <ul class="flex flex-col gap-5 text-center">
+              {
+                [
+                  { label: "About",   href: "#about" },
+                  { label: "Mission", href: "#mission" },
+                  { label: "Events",  href: "#events" },
+                  { label: "ACM‑W",   href: "#acm-w" },
+                ].map((item) => (
+                  <li>
+                    <a
+                      href={item.href}
+                      class="mobile-nav-link text-3xl font-light font-['PolySans_Trial'] uppercase text-[#FBFAFF] hover:text-[#B8A7FF] transition-colors"
+                    >
+                      {item.label}
+                    </a>
+                  </li>
+                ))
+              }
+
+              <!-- MORE accordion -->
+              <li class="more-accordion-item">
+                <button
+                  id="mobile-more-btn"
+                  class="text-3xl font-light font-['PolySans_Trial'] uppercase text-[#B8A7FF] flex items-center gap-2 mx-auto transition-colors"
+                  aria-expanded="false"
+                  aria-controls="mobile-more-panel"
+                >
+                  More
+                  <svg id="mobile-more-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="transition-transform duration-300">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </button>
+
+                <!-- Sub-items panel -->
+                <div
+                  id="mobile-more-panel"
+                  class="overflow-hidden"
+                  style="max-height:0; transition: max-height 0.35s cubic-bezier(0.4,0,0.2,1);"
+                >
+                  <ul class="flex flex-col gap-3 pt-4 text-center">
+                    {
+                      [
+                        { label: "Team",     href: "#team" },
+                        { label: "Partners", href: "#partners" },
+                        { label: "Gallery",  href: "#gallery" },
+                        { label: "Contact",  href: "#contact" },
+                      ].map((item) => (
+                        <li>
+                          <a
+                            href={item.href}
+                            class="mobile-nav-link text-xl font-light font-['PolySans_Trial'] uppercase text-white/60 hover:text-[#B8A7FF] transition-colors tracking-widest"
+                          >
+                            {item.label}
+                          </a>
+                        </li>
+                      ))
+                    }
+                  </ul>
+                </div>
+              </li>
+            </ul>
+
+            <!-- Membership CTA -->
+            <a
+              href={membershipHref}
+              class="mobile-nav-link mobile-membership-cta mt-10"
+            >
+              <span class="cta-badge">JOIN</span>
+              <span>ACM Membership</span>
+              <span aria-hidden="true">→</span>
+            </a>
+          </div>
+        </div>
+      </nav>
+    </div>
+
+    <!-- Right: High-Converting ACM Membership CTA -->
+    <div class="pointer-events-auto hidden sm:flex items-center">
+      <a
+        href={membershipHref}
+        class="membership-cta-hero group"
+        aria-label="Join ACM Chapter"
+      >
+        <span class="membership-cta-badge">JOIN</span>
+        <span class="membership-cta-label">ACM Membership</span>
+        <span class="membership-cta-arrow" aria-hidden="true">&rarr;</span>
+      </a>
+    </div>
+
   </div>
 </header>
 
+
 <style>
-  .membership-cta {
-    position: absolute;
-    top: 2px;
-    right: clamp(1rem, 2.2vw, 2.5rem);
-    z-index: 2;
+  .membership-cta-hero {
     display: inline-flex;
     align-items: center;
-    gap: 0.55rem;
-    min-height: 44px;
-    padding: 0 0.75rem 0 0.85rem;
-    border: 1px solid rgba(184, 167, 255, 0.82);
-    border-radius: 6px;
-    background: rgba(42, 36, 85, 0.8);
-    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.26);
+    gap: 0.65rem;
+    height: 46px;
+    padding: 0 1.1rem 0 0.8rem;
+    border: 1px solid rgba(184, 167, 255, 0.4);
+    border-radius: 41px;
+    background: rgba(15, 14, 28, 0.75);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 15px rgba(184, 167, 255, 0.15);
     color: #fbfaff;
     font-family: "PolySans Trial", monospace;
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     font-weight: 700;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.06em;
     text-decoration: none;
     text-transform: uppercase;
-    transition:
-      background-color 180ms ease,
-      border-color 180ms ease,
-      color 180ms ease,
-      transform 180ms ease;
+    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
   }
 
-  .membership-cta::before {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
+  .membership-cta-badge {
+    padding: 0.25rem 0.55rem;
+    border-radius: 20px;
     background: #b8a7ff;
-    box-shadow: 0 0 10px rgba(184, 167, 255, 0.7);
-    content: "";
-  }
-
-  .membership-cta__arrow {
-    font-size: 1rem;
+    color: #0a0b14;
+    font-size: 0.65rem;
+    font-weight: 800;
     line-height: 1;
-    transition: transform 180ms ease;
+    letter-spacing: 0.08em;
+    transition: transform 0.3s ease, background-color 0.3s ease;
   }
 
-  .membership-cta:hover,
-  .membership-cta:focus-visible {
-    border-color: #e6e1ff;
-    background: #b8a7ff;
-    color: #2a2455;
-    transform: translateY(-2px);
+  .membership-cta-arrow {
+    font-size: 0.95rem;
+    line-height: 1;
+    color: #b8a7ff;
+    transition: transform 0.3s ease, color 0.3s ease;
   }
 
-  .membership-cta:hover::before,
-  .membership-cta:focus-visible::before {
-    background: #2a2455;
-    box-shadow: none;
+  .membership-cta-hero:hover {
+    border-color: #b8a7ff;
+    background: rgba(28, 24, 52, 0.95);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5), 0 0 25px rgba(184, 167, 255, 0.35);
   }
 
-  .membership-cta:hover .membership-cta__arrow,
-  .membership-cta:focus-visible .membership-cta__arrow {
-    transform: translateX(3px);
+  .membership-cta-hero:hover .membership-cta-badge {
+    background: #ffffff;
+    transform: scale(1.05);
+  }
+
+  .membership-cta-hero:hover .membership-cta-arrow {
+    transform: translateX(4px);
+    color: #ffffff;
   }
 
   .header-pill {
@@ -336,16 +387,15 @@ const membershipHref = isLocalPreviewHost ? "/membership/admin?preview=admin" : 
   .more-menu {
     position: absolute;
     top: calc(100% + 8px);
-    right: 0; /* stick to right */
+    right: 0;
     left: auto;
-    border: 1px solid #FBFAFF;
+    border: 1px solid rgba(251, 250, 255, 0.2);
     border-radius: 16px;
-    background: rgba(0, 0, 0, 0.35);
-    backdrop-filter: blur(4px);
-    padding: 10px 12px;
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
+    background: rgba(10, 11, 20, 0.92);
+    backdrop-filter: blur(16px);
+    padding: 12px 14px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
     z-index: 60;
-    /* animation base state */
     opacity: 0;
     transform: translateY(8px) scale(0.96);
     transform-origin: top right;
@@ -354,52 +404,14 @@ const membershipHref = isLocalPreviewHost ? "/membership/admin?preview=admin" : 
       transform 0.24s cubic-bezier(0.22, 0.61, 0.36, 1);
     pointer-events: none;
   }
+  .nav-desktop:hover .more-menu,
   .more-menu.open {
     opacity: 1;
     transform: translateY(0) scale(1);
     pointer-events: auto;
   }
-  .mobile-more-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    gap: 6px;
-    text-align: left;
-  }
-  .mobile-more-list a {
-    text-decoration: none;
-    letter-spacing: 0.04em;
-  }
-  .more-menu .mobile-more-list li {
-    opacity: 0;
-    transform: translateY(6px);
-    transition:
-      opacity 0.2s ease,
-      transform 0.25s ease;
-  }
-  .more-menu.open .mobile-more-list li {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  .more-menu.open .mobile-more-list li:nth-child(1) {
-    transition-delay: 0.02s;
-  }
-  .more-menu.open .mobile-more-list li:nth-child(2) {
-    transition-delay: 0.06s;
-  }
-  .more-menu.open .mobile-more-list li:nth-child(3) {
-    transition-delay: 0.1s;
-  }
-  .more-menu.open .mobile-more-list li:nth-child(4) {
-    transition-delay: 0.14s;
-  }
 
   @media (max-width: 952px) {
-    .membership-cta {
-      display: none;
-    }
-
     body.partners-active .site-header {
       z-index: 200;
     }
@@ -408,38 +420,29 @@ const membershipHref = isLocalPreviewHost ? "/membership/admin?preview=admin" : 
       pointer-events: none;
     }
     .site-header {
-      top: 15px;
+      top: 14px;
       bottom: auto;
-      padding: 0 15px;
+      padding: 0 16px;
     }
     .header-inner {
+      width: 100%;
       justify-content: flex-end;
     }
-    body.hero-in-view .site-header {
-      top: auto;
-      bottom: calc(18px + env(safe-area-inset-bottom, 0px));
-    }
-    body.hero-in-view .header-inner {
-      justify-content: center;
-    }
-    #mobile-menu-btn,
-    #mobile-menu-close {
-      width: 45px;
-      height: 45px;
+    #mobile-menu-btn {
+      position: fixed;
+      top: 14px;
+      right: 16px;
+      width: 44px;
+      height: 44px;
+      z-index: 60;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
     }
     #mobile-menu-close {
-      top: 15px;
-      right: 15px;
-      bottom: auto;
-      left: auto;
-      transform: none;
-    }
-    body.hero-in-view #mobile-menu-close {
-      top: auto;
-      right: auto;
-      bottom: calc(18px + env(safe-area-inset-bottom, 0px));
-      left: 50%;
-      transform: translateX(-50%);
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 44px;
+      height: 44px;
     }
     .nav-desktop {
       display: none;
@@ -453,33 +456,60 @@ const membershipHref = isLocalPreviewHost ? "/membership/admin?preview=admin" : 
   @media screen and (max-width: 480px) {
     .site-header {
       top: 10px;
-      padding: 0 10px;
+      padding: 0 12px;
     }
-    body.hero-in-view .site-header {
-      top: auto;
-      bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+    #mobile-menu-btn {
+      top: 10px;
+      right: 12px;
+      width: 38px;
+      height: 38px;
     }
-    #mobile-menu-btn,
     #mobile-menu-close {
-      width: 35px;
-      height: 35px;
+      top: 10px;
+      right: 12px;
+      width: 38px;
+      height: 38px;
     }
     #mobile-menu-btn svg,
     #mobile-menu-close svg {
       width: 20px;
       height: 20px;
     }
-    #mobile-menu-close {
-      top: 10px;
-      right: 10px;
-    }
-    body.hero-in-view #mobile-menu-close {
-      top: auto;
-      right: auto;
-      bottom: calc(10px + env(safe-area-inset-bottom, 0px));
-      left: 50%;
-      transform: translateX(-50%);
-    }
+  }
+
+  /* Mobile overlay Membership CTA */
+  .mobile-membership-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.6rem 1.4rem 0.6rem 0.85rem;
+    border-radius: 99px;
+    border: 1px solid rgba(184, 167, 255, 0.4);
+    background: rgba(184, 167, 255, 0.1);
+    color: #FBFAFF;
+    font-family: "PolySans Trial", monospace;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.2s ease, border-color 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .mobile-membership-cta:active {
+    background: rgba(184, 167, 255, 0.22);
+    border-color: #B8A7FF;
+  }
+  .mobile-membership-cta .cta-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.2rem 0.5rem;
+    border-radius: 99px;
+    background: #B8A7FF;
+    color: #0a0b14;
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
   }
 </style>
 
@@ -494,13 +524,16 @@ const membershipHref = isLocalPreviewHost ? "/membership/admin?preview=admin" : 
     );
     const moreToggle = document.querySelector(".nav-desktop .more-toggle");
     const pill = document.querySelector(".header-pill");
-    const dynamicTitle = document.querySelector("#dynamic-title div"); // Changed to div
+    const dynamicTitle = document.querySelector("#dynamic-title div");
 
     // Mobile Menu Logic
     const mobileMenuBtn = document.getElementById("mobile-menu-btn");
     const mobileMenuOverlay = document.getElementById("mobile-menu-overlay");
     const mobileMenuClose = document.getElementById("mobile-menu-close");
     const mobileNavLinks = document.querySelectorAll(".mobile-nav-link");
+    const mobileMoreBtn = document.getElementById("mobile-more-btn");
+    const mobileMorePanel = document.getElementById("mobile-more-panel");
+    const mobileMoreChevron = document.getElementById("mobile-more-chevron");
 
     function toggleMobileMenu(show) {
       if (show) {
@@ -509,9 +542,61 @@ const membershipHref = isLocalPreviewHost ? "/membership/admin?preview=admin" : 
       } else {
         mobileMenuOverlay.classList.add("translate-x-full");
         document.body.classList.remove("mobile-menu-open");
+        // Also collapse the More panel when menu closes
+        if (mobileMorePanel) {
+          mobileMorePanel.style.maxHeight = "0";
+          if (mobileMoreChevron) mobileMoreChevron.style.transform = "";
+          if (mobileMoreBtn) mobileMoreBtn.setAttribute("aria-expanded", "false");
+        }
       }
     }
 
+    // More accordion toggle
+    if (mobileMoreBtn && mobileMorePanel) {
+      mobileMoreBtn.addEventListener("click", () => {
+        const isOpen = mobileMoreBtn.getAttribute("aria-expanded") === "true";
+        if (isOpen) {
+          mobileMorePanel.style.maxHeight = "0";
+          mobileMoreChevron && (mobileMoreChevron.style.transform = "");
+          mobileMoreBtn.setAttribute("aria-expanded", "false");
+        } else {
+          mobileMorePanel.style.maxHeight = mobileMorePanel.scrollHeight + "px";
+          mobileMoreChevron && (mobileMoreChevron.style.transform = "rotate(180deg)");
+          mobileMoreBtn.setAttribute("aria-expanded", "true");
+        }
+      });
+    }
+
+    // Desktop More toggle
+    const desktopMoreMenu = document.getElementById("desktopMoreMenu");
+    if (moreToggle && desktopMoreMenu) {
+      moreToggle.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const isOpen = desktopMoreMenu.classList.contains("open");
+        if (isOpen) {
+          desktopMoreMenu.classList.remove("open");
+          moreToggle.setAttribute("aria-expanded", "false");
+        } else {
+          desktopMoreMenu.classList.add("open");
+          moreToggle.setAttribute("aria-expanded", "true");
+        }
+      });
+      // Close when clicking outside
+      document.addEventListener("click", (e) => {
+        if (!desktopMoreMenu.contains(e.target) && e.target !== moreToggle) {
+          desktopMoreMenu.classList.remove("open");
+          moreToggle.setAttribute("aria-expanded", "false");
+        }
+      });
+      // Close when a More link is clicked
+      desktopMoreMenu.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+          desktopMoreMenu.classList.remove("open");
+          moreToggle.setAttribute("aria-expanded", "false");
+        });
+      });
+    }
     if (mobileMenuBtn) {
       mobileMenuBtn.addEventListener("click", () => toggleMobileMenu(true));
     }
@@ -522,19 +607,15 @@ const membershipHref = isLocalPreviewHost ? "/membership/admin?preview=admin" : 
       link.addEventListener("click", () => toggleMobileMenu(false));
     });
 
-    // Capture initial full width for restoration
     let fullWidth = pill ? pill.offsetWidth : 0;
     if (pill) {
       pill.style.setProperty("--full-width", `${fullWidth}px`);
-      // Update full width on resize
       window.addEventListener("resize", () => {
-        // Temporarily remove dynamic class to measure
         const wasDynamic = pill.classList.contains("dynamic-mode");
         if (wasDynamic) pill.classList.remove("dynamic-mode");
 
         const navList = document.querySelector(".nav-list");
         if (navList) {
-          // 32px padding-left + 32px padding-right (px-8 = 2rem = 32px)
           const w = navList.offsetWidth + 64;
           pill.style.setProperty("--full-width", `${w}px`);
         }
@@ -545,23 +626,18 @@ const membershipHref = isLocalPreviewHost ? "/membership/admin?preview=admin" : 
       });
     }
 
-    // IDs that live under the "MORE" dropdown
     const moreSectionIds = [
       "team",
       "partners",
       "gallery",
       "contact",
     ];
-    // Several visual sections sit inside broader page sections. Resolve each one
-    // to the nav state it represents, so nested layouts cannot make the blob flicker.
     const navSectionMap = {
       home: null,
       about: "about",
       "about-acm-ajce": "about",
       "about-ajce": "about",
       mission: "mission",
-      // The chapter initiatives expand the Mission story; keep that tab active
-      // until visitors reach the Events section.
       "community-outreach": "mission",
       "community-sdg": "mission",
       "community-chapter": "mission",
@@ -591,7 +667,6 @@ const membershipHref = isLocalPreviewHost ? "/membership/admin?preview=admin" : 
         : navSectionId || "none";
     };
 
-    // Function to update blob position
     function updateBlob(targetLink) {
       if (!targetLink || !blob) return;
 
@@ -610,7 +685,6 @@ const membershipHref = isLocalPreviewHost ? "/membership/admin?preview=admin" : 
       blob.style.width = `${width}px`;
       blob.style.opacity = "1";
 
-      // Color logic
       const href = targetLink.getAttribute("href");
       if (href === "#acm-w") {
         blob.style.backgroundColor = "#6A5ACD";
@@ -619,7 +693,6 @@ const membershipHref = isLocalPreviewHost ? "/membership/admin?preview=admin" : 
       }
     }
 
-    // Function to hide blob
     function hideBlob() {
       if (blob) blob.style.opacity = "0";
     }
@@ -640,7 +713,6 @@ const membershipHref = isLocalPreviewHost ? "/membership/admin?preview=admin" : 
           let isLongText = false;
 
           if (sectionId.startsWith("community-")) {
-            // Format: Community: Outreach
             const sub = sectionId.replace("community-", "");
             let displaySub = sub;
             if (sub === "outreach") displaySub = "Outreach";
@@ -656,7 +728,6 @@ const membershipHref = isLocalPreviewHost ? "/membership/admin?preview=admin" : 
           dynamicTitle.style.whiteSpace = "nowrap";
 
           if (isLongText) {
-            // Measure text width
             const font = "16px PolySans_Trial";
             const tempSpan = document.createElement("span");
             tempSpan.style.fontFamily = "'PolySans_Trial', sans-serif";
@@ -674,8 +745,7 @@ const membershipHref = isLocalPreviewHost ? "/membership/admin?preview=admin" : 
             const totalWidth = width + 55;
 
             pill.style.setProperty("width", `${totalWidth}px`);
-            pill.style.setProperty("padding-left", "0px"); // Reset to avoid double padding if width includes it? Actually my logic sets width including padding.
-            // Wait, transition: width 0.3s. If I set width explicit, it should animate.
+            pill.style.setProperty("padding-left", "0px");
           } else {
             pill.style.setProperty("width", "112px");
           }
@@ -684,7 +754,6 @@ const membershipHref = isLocalPreviewHost ? "/membership/admin?preview=admin" : 
       } else {
         pill.classList.remove("dynamic-mode");
         pill.classList.remove("pink-mode");
-        // Clear inline styles so it returns to original CSS/auto width
         pill.style.removeProperty("width");
         pill.style.removeProperty("padding-left");
       }
@@ -719,9 +788,6 @@ const membershipHref = isLocalPreviewHost ? "/membership/admin?preview=admin" : 
     }
 
     function getActiveSection() {
-      // A fixed reading line keeps the active state stable while each section
-      // enters and leaves the viewport. Smaller nested sections win over their
-      // wrappers, which is important for About -> Mission and Events -> Work.
       const focusLine = Math.min(
         Math.max(window.innerHeight * 0.36, 170),
         360
@@ -746,8 +812,6 @@ const membershipHref = isLocalPreviewHost ? "/membership/admin?preview=admin" : 
         return containingFocusLine[0].section;
       }
 
-      // During intentional gaps between sections, keep the most recently
-      // passed section active instead of switching based on scroll direction.
       const passedSections = measurements.filter(
         ({ rect }) => rect.top <= focusLine
       );
@@ -782,10 +846,9 @@ const membershipHref = isLocalPreviewHost ? "/membership/admin?preview=admin" : 
       requestAnimationFrame(updateActiveSection);
     }
 
-    // Intersection Observer to track sections
     const observerOptions = {
       root: null,
-      rootMargin: "-20% 0px -60% 0px", // Trigger when section is near top/center
+      rootMargin: "-20% 0px -60% 0px",
       threshold: 0,
     };
 
@@ -795,123 +858,5 @@ const membershipHref = isLocalPreviewHost ? "/membership/admin?preview=admin" : 
 
     sections.forEach((section) => observer.observe(section));
     window.addEventListener("scroll", scheduleNavUpdate, { passive: true });
-
-    // Removed manual hover listener as requested
-
-    // EXISTING DROPDOWN LOGIC
-    const toggles = Array.from(document.querySelectorAll(".more-toggle"));
-    const moreMenuLinks = document.querySelectorAll("#desktopMoreMenu a");
-
-    const getMenuFor = (tg) => {
-      const id = tg.getAttribute("aria-controls");
-      return id ? document.getElementById(id) : null;
-    };
-
-    const openMenu = (tg, menu) => {
-      tg.setAttribute("aria-expanded", "true");
-      menu.classList.add("open");
-    };
-
-    const closeMenu = (tg, menu) => {
-      tg.setAttribute("aria-expanded", "false");
-      menu.classList.remove("open");
-    };
-
-    const allMenus = () => toggles.map(getMenuFor).filter(Boolean);
-
-    const closeAll = () =>
-      toggles.forEach((tg) => {
-        const m = getMenuFor(tg);
-        if (m) closeMenu(tg, m);
-      });
-
-    let suppressNextDocClick = false;
-
-    toggles.forEach((tg) => {
-      const menu = getMenuFor(tg);
-      if (!menu) return;
-      tg.addEventListener("click", (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        suppressNextDocClick = true;
-        setTimeout(() => {
-          suppressNextDocClick = false;
-        }, 0);
-        const expanded = tg.getAttribute("aria-expanded") === "true";
-        toggles.forEach((ot) => {
-          if (ot !== tg) {
-            const otherMenu = getMenuFor(ot);
-            if (otherMenu) closeMenu(ot, otherMenu);
-          }
-        });
-        if (expanded) {
-          closeMenu(tg, menu);
-        } else {
-          openMenu(tg, menu);
-        }
-      });
-
-      let hoverTimer = null;
-      const startCloseTimer = () => {
-        hoverTimer = setTimeout(() => {
-          closeMenu(tg, menu);
-        }, 220);
-      };
-      const clearCloseTimer = () => {
-        if (hoverTimer) {
-          clearTimeout(hoverTimer);
-          hoverTimer = null;
-        }
-      };
-
-      tg.addEventListener("mouseenter", () => {
-        openMenu(tg, menu);
-      });
-      tg.addEventListener("mouseleave", () => {
-        startCloseTimer();
-      });
-      menu.addEventListener("mouseenter", () => {
-        clearCloseTimer();
-      });
-      menu.addEventListener("mouseleave", () => {
-        startCloseTimer();
-      });
-    });
-
-    moreMenuLinks.forEach((link) => {
-      link.addEventListener("click", () => {
-        closeAll();
-      });
-    });
-
-    document.addEventListener("click", (e) => {
-      if (suppressNextDocClick) return;
-      const t = e.target;
-      if (!(t instanceof Node)) return;
-      const withinToggle = toggles.some((tg) => tg.contains(t));
-      const withinMenu = allMenus().some((m) => m.contains(t));
-      if (!withinToggle && !withinMenu) closeAll();
-    });
-
-    // Smooth-scroll
-    document.addEventListener("click", (e) => {
-      const el =
-        e.target instanceof Element ? e.target.closest('a[href^="#"]') : null;
-      if (!el) return;
-      const href = el.getAttribute("href");
-      if (!href || href.length < 2) return;
-      const id = href.slice(1);
-      const target = document.getElementById(id);
-      if (!target) return;
-      e.preventDefault();
-      closeAll();
-      target.scrollIntoView({ behavior: "smooth", block: "start" });
-      history.replaceState(null, "", `#${id}`);
-
-      // Manually update blob on click
-      applyNavState(id);
-      currentSectionId = getNavStateId(id);
-    });
-    scheduleNavUpdate();
   });
 </script>

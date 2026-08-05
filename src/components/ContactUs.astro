@@ -24,24 +24,21 @@
 
     <!-- Contact Form Overlay -->
     <div
-      class="contact-form-overlay absolute top-[8%] left-[11%] w-[78%] h-[72%] z-20 opacity-0 pointer-events-none flex flex-col items-center justify-center"
+      class="contact-form-overlay absolute top-[17%] left-[11%] w-[78%] h-[53%] z-20 opacity-0 pointer-events-none flex flex-col items-center justify-center"
     >
-      <div class="flex flex-col items-center text-[#2A2455] mb-1">
-        <div
-          class="text-center justify-start text-[#2A2455] text-2xl font-bold font-['PolySans_Trial']"
-        >
-          Say Hello!
-        </div>
+      <!-- Compact Success Notification Toast -->
+      <div id="contact-success-banner" class="hidden absolute top-2 left-1/2 transform -translate-x-1/2 z-30 px-3.5 py-1.5 rounded-full bg-emerald-500/90 text-white text-[11px] font-semibold shadow-lg backdrop-blur-sm transition-all flex items-center gap-1.5 border border-emerald-400/40">
+        <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span> Message Sent Successfully!
       </div>
 
       <form
-        class="contact-form pointer-events-auto mt-4 flex w-full max-w-[50%] flex-col gap-4 text-xs text-[#2A2455] px-4"
+        class="contact-form pointer-events-auto flex w-full max-w-[44%] flex-col gap-2.5 text-xs text-[#2A2455] px-2"
         method="POST"
         id="contact-form-desktop"
       >
-        <div class="contact-grid grid gap-4 sm:grid-cols-2">
+        <div class="contact-grid grid gap-2.5 sm:grid-cols-2">
           <label
-            class="flex flex-col gap-2 text-[8px] font-semibold uppercase tracking-[0.35em] text-[#4D4770] sm:text-[10px]"
+            class="flex flex-col gap-0.5 text-[8px] font-semibold uppercase tracking-[0.28em] text-[#4D4770] sm:text-[9px]"
           >
             First Name
             <input
@@ -52,52 +49,52 @@
             />
           </label>
           <label
-            class="flex flex-col gap-2 text-[8px] font-semibold uppercase tracking-[0.35em] text-[#4D4770] sm:text-[10px]"
+            class="flex flex-col gap-0.5 text-[8px] font-semibold uppercase tracking-[0.28em] text-[#4D4770] sm:text-[9px]"
           >
             Last Name
             <input type="text" name="lastName" class="contact-input" />
           </label>
         </div>
 
-        <div class="contact-grid grid gap-4 sm:grid-cols-2">
+        <div class="contact-grid grid gap-2.5 sm:grid-cols-2">
           <label
-            class="flex flex-col gap-2 text-[8px] font-semibold uppercase tracking-[0.35em] text-[#4D4770] sm:text-[10px]"
+            class="flex flex-col gap-0.5 text-[8px] font-semibold uppercase tracking-[0.28em] text-[#4D4770] sm:text-[9px]"
           >
             Email
             <input type="email" name="email" required class="contact-input" />
           </label>
           <label
-            class="flex flex-col gap-2 text-[8px] font-semibold uppercase tracking-[0.35em] text-[#4D4770] sm:text-[10px]"
+            class="flex flex-col gap-0.5 text-[8px] font-semibold uppercase tracking-[0.28em] text-[#4D4770] sm:text-[9px]"
           >
             Phone
             <input
               type="tel"
               name="phone"
               inputmode="tel"
-              pattern="^[0-9+()\s-]{7,}$"
+              pattern="[0-9]{7,15}"
               class="contact-input"
             />
           </label>
         </div>
 
         <label
-          class="flex flex-col gap-2 text-[8px] font-semibold uppercase tracking-[0.35em] text-[#4D4770] sm:text-[10px]"
+          class="flex flex-col gap-0.5 text-[8px] font-semibold uppercase tracking-[0.28em] text-[#4D4770] sm:text-[9px]"
         >
           Message
           <textarea
             name="message"
             rows="2"
             required
-            class="contact-input resize-none py-2.5"></textarea>
+            class="contact-input resize-none py-1.5"></textarea>
         </label>
 
-        <div class="flex flex-col items-center gap-4 mt-4">
+        <div class="flex flex-col items-center justify-center pt-1.5 mt-0.5">
           <div
-            class="w-40 h-10 bg-[#2A2455] rounded-[200px] flex items-center justify-center overflow-hidden"
+            class="w-32 h-8 bg-[#2A2455] rounded-[200px] flex items-center justify-center overflow-hidden shadow-sm"
           >
             <button
               type="submit"
-              class="group inline-flex items-center justify-center gap-2 w-full h-full text-lg font-light text-[#FBFAFF] sm:text-xl hover:bg-white/5 transition-colors"
+              class="group inline-flex items-center justify-center gap-2 w-full h-full text-xs font-semibold text-[#FBFAFF] sm:text-sm hover:bg-white/10 transition-colors cursor-pointer"
             >
               Submit
             </button>
@@ -143,16 +140,12 @@
 
   gsap.registerPlugin(ScrollTrigger);
 
-  const canvas = document.querySelector("#laptop-canvas") as HTMLCanvasElement;
-  const context = canvas?.getContext("2d", { alpha: true });
+  const canvas = document.querySelector("#laptop-canvas");
+  const context = canvas ? canvas.getContext("2d", { alpha: true }) : null;
   const section = document.querySelector(".laptop-section");
 
   const frameCount = 125;
-  const narrowQuery = "(max-width: 1024px)";
-  let maxCacheSize = frameCount;
-  let preloadRadius = 8;
-  const pendingFrames = new Set<number>();
-  const frameCache = new Map<number, HTMLImageElement>();
+  const frames: HTMLImageElement[] = new Array(frameCount);
   const prefersReducedMotion = window.matchMedia(
     "(prefers-reduced-motion: reduce)"
   ).matches;
@@ -161,175 +154,69 @@
     frame: 0,
   };
 
-  const updatePerfSettings = () => {
-    const isNarrow = window.matchMedia(narrowQuery).matches;
-    maxCacheSize = isNarrow ? Math.min(12, frameCount) : frameCount;
-    preloadRadius = isNarrow ? 3 : 8;
-  };
-
   const currentFrame = (index: number) =>
     getAssetUrl(
       `/outputFolder/frame_${(index + 1).toString().padStart(4, "0")}.avif`
     );
 
-  const normalizeFrameUrl = (url: string) => {
-    try {
-      return new URL(url, window.location.href).href;
-    } catch {
-      return url;
-    }
-  };
-
-  const clampFrame = (index: number) =>
-    Math.max(0, Math.min(frameCount - 1, Math.round(index)));
-
   const resizeCanvas = () => {
     if (!canvas || !context) return;
-    updatePerfSettings();
     const rect = canvas.getBoundingClientRect();
     if (!rect.width || !rect.height) return;
-    const maxDpr = window.matchMedia(narrowQuery).matches
-      ? 1.25
-      : 1.5;
-    const dpr = Math.min(window.devicePixelRatio || 1, maxDpr);
-    const width = Math.round(rect.width * dpr);
-    const height = Math.round(rect.height * dpr);
-    if (canvas.width !== width || canvas.height !== height) {
-      canvas.width = width;
-      canvas.height = height;
-    }
+    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+    canvas.width = Math.round(rect.width * dpr);
+    canvas.height = Math.round(rect.height * dpr);
   };
 
-  const trimCache = (center: number) => {
-    if (maxCacheSize >= frameCount || frameCache.size <= maxCacheSize) return;
-    const keys = Array.from(frameCache.keys()).sort(
-      (a, b) => Math.abs(a - center) - Math.abs(b - center)
-    );
-    const keep = new Set(keys.slice(0, maxCacheSize));
-    for (const key of frameCache.keys()) {
-      if (!keep.has(key)) frameCache.delete(key);
-    }
-  };
-
-  const loadFrame = async (index: number) => {
-    const clampedIndex = clampFrame(index);
-    const cached = frameCache.get(clampedIndex);
-    if (cached) return cached;
-    const frameUrl = currentFrame(clampedIndex);
-    const frameKey = normalizeFrameUrl(frameUrl);
-    const sharedFrameCache = (window as any).__contactLaptopFrameCache as
-      | Map<string, HTMLImageElement>
-      | undefined;
-    const sharedFrame = sharedFrameCache?.get(frameKey);
-    if (sharedFrame) {
-      frameCache.set(clampedIndex, sharedFrame);
-      return sharedFrame;
-    }
-    if (pendingFrames.has(clampedIndex)) return null;
-    pendingFrames.add(clampedIndex);
-
-    const img = new Image();
-    img.decoding = "async";
-    img.src = frameUrl;
-    const awaitLoad = () =>
-      new Promise((resolve) => {
-        if (img.complete) {
-          resolve(null);
-          return;
-        }
-        img.onload = () => resolve(null);
-        img.onerror = () => resolve(null);
-      });
-
-    if (typeof img.decode === "function") {
-      try {
-        await img.decode();
-      } catch {
-        await awaitLoad();
-      }
-    } else {
-      await awaitLoad();
-    }
-
-    pendingFrames.delete(clampedIndex);
-    frameCache.set(clampedIndex, img);
-    sharedFrameCache?.set(frameKey, img);
-    trimCache(clampedIndex);
-    return img;
-  };
-
-  const queueFrames = (center: number) => {
-    const start = Math.max(0, center - preloadRadius);
-    const end = Math.min(frameCount - 1, center + preloadRadius);
-    for (let i = start; i <= end; i++) {
-      void loadFrame(i);
-    }
-  };
-
-  let preloadAllScheduled = false;
-  const preloadAllFrames = async () => {
-    const concurrency = Math.min(6, frameCount);
-    let nextIndex = 0;
-
-    const worker = async () => {
-      while (nextIndex < frameCount) {
-        const index = nextIndex;
-        nextIndex += 1;
-        await loadFrame(index);
-      }
-    };
-
-    await Promise.all(
-      Array.from({ length: concurrency }, () => worker())
-    );
-  };
-
-  const schedulePreloadAll = () => {
-    if (prefersReducedMotion || preloadAllScheduled) return;
-    if (window.matchMedia(narrowQuery).matches) return;
-    preloadAllScheduled = true;
-    window.setTimeout(() => {
-      void preloadAllFrames();
-    }, 200);
-  };
-
-  let lastRenderedFrame = -1;
-  let lastCanvasWidth = 0;
-  let lastCanvasHeight = 0;
+  let renderPending = false;
+  let lastFrameRendered = -1;
 
   const render = () => {
-    if (!context || !canvas) return;
-    const frame = clampFrame(laptop.frame);
-    const img = frameCache.get(frame);
-    if (!img) {
-      void loadFrame(frame).then((loaded) => {
-        if (loaded && frame === clampFrame(laptop.frame)) render();
-      });
-      return;
-    }
+    if (renderPending) return;
+    renderPending = true;
+    requestAnimationFrame(() => {
+      renderPending = false;
+      if (!context || !canvas) return;
+      const targetIndex = Math.max(
+        0,
+        Math.min(frameCount - 1, Math.round(laptop.frame))
+      );
+      if (targetIndex === lastFrameRendered) return;
+      const img = frames[targetIndex];
+      if (img && img.complete) {
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        context.drawImage(img, 0, 0, canvas.width, canvas.height);
+        lastFrameRendered = targetIndex;
+      }
+    });
+  };
 
-    if (
-      frame === lastRenderedFrame &&
-      canvas.width === lastCanvasWidth &&
-      canvas.height === lastCanvasHeight
-    ) {
-      return;
+  const preloadAllFrames = async () => {
+    const promises = [];
+    for (let i = 0; i < frameCount; i++) {
+      const img = new Image();
+      img.decoding = "async";
+      img.src = currentFrame(i);
+      frames[i] = img;
+      promises.push(
+        new Promise((resolve) => {
+          if (img.complete) {
+            resolve(null);
+            return;
+          }
+          img.onload = () => resolve(null);
+          img.onerror = () => resolve(null);
+        })
+      );
     }
-
-    lastRenderedFrame = frame;
-    lastCanvasWidth = canvas.width;
-    lastCanvasHeight = canvas.height;
-    context.clearRect(0, 0, canvas.width, canvas.height);
-    context.drawImage(img, 0, 0, canvas.width, canvas.height);
-    queueFrames(frame);
+    await Promise.all(promises);
   };
 
   const initSequence = async () => {
     if (!canvas || !context) return;
     resizeCanvas();
-    await loadFrame(0);
+    await preloadAllFrames();
     render();
-    schedulePreloadAll();
 
     if (prefersReducedMotion) {
       const formOverlay = document.querySelector(
@@ -339,9 +226,7 @@
         formOverlay.style.opacity = "1";
         formOverlay.style.pointerEvents = "auto";
       }
-      const heading = document.querySelector(
-        ".contact-heading"
-      ) as HTMLElement | null;
+      const heading = document.querySelector(".contact-heading");
       if (heading) {
         heading.style.opacity = "0";
         heading.style.transform = "translateY(-50px)";
@@ -354,41 +239,36 @@
         trigger: ".laptop-section",
         start: "top top",
         end: "bottom bottom",
-        scrub: 0.5,
+        scrub: 0.1,
       },
     });
 
     tl.to(laptop, {
-      frame: 0,
-      duration: 0.5,
+      frame: frameCount - 1,
+      snap: "frame",
+      ease: "none",
+      duration: 2.2,
       onUpdate: render,
     })
-      .to(laptop, {
-        frame: frameCount - 1,
-        snap: "frame",
-        ease: "none",
-        duration: 2,
-        onUpdate: render,
-      })
       .to(
         ".contact-heading",
         {
           opacity: 0,
           y: -50,
-          duration: (20 / frameCount) * 2,
-          ease: "none",
+          duration: 0.3,
+          ease: "power1.out",
         },
-        `<+${(40 / frameCount) * 2}`
+        0.8
       )
       .to(
         ".contact-form-overlay",
         {
           opacity: 1,
           pointerEvents: "auto",
-          duration: 0.5,
-          ease: "power2.inOut",
+          duration: 0.35,
+          ease: "power2.out",
         },
-        `<+${(40 / frameCount) * 2}`
+        1.8
       );
   };
 
@@ -416,14 +296,11 @@
 
   window.addEventListener("resize", () => {
     resizeCanvas();
-    lastRenderedFrame = -1;
+    lastFrameRendered = -1;
     render();
   });
 
-  // Form handling
-  const form = document.getElementById(
-    "contact-form-desktop"
-  ) as HTMLFormElement;
+  const form = document.getElementById("contact-form-desktop");
   if (form) {
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -432,35 +309,57 @@
       const setSubmitting = (submitting: boolean) => {
         if (!submitBtn) return;
         submitBtn.innerHTML = submitting ? "Sending..." : originalBtnText;
-        (submitBtn as HTMLButtonElement).disabled = submitting;
+        if (submitBtn) submitBtn.disabled = submitting;
       };
 
       setSubmitting(true);
-
       const formData = new FormData(form);
       const data = Object.fromEntries(formData.entries());
 
+      let isDelivered = false;
+
+      // Post to real-time server on port 5050
       try {
-        const response = await fetch("/api/contact", {
+        const res = await fetch("http://localhost:5050/api/contact", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(data),
         });
 
-        if (response.ok) {
-          form.reset();
-        } else {
-          const resData = await response.json();
-          console.warn(
-            `Failed to send message: ${resData.message || "Unknown error"}`
-          );
+        if (res.ok) {
+          isDelivered = true;
         }
-      } catch (error) {
-        console.error("Error:", error);
-      } finally {
-        setSubmitting(false);
+      } catch (err) {
+        console.error("Contact API delivery error:", err);
+      }
+
+      setSubmitting(false);
+
+      if (isDelivered) {
+        // Save locally
+        try {
+          const existingContacts = JSON.parse(localStorage.getItem("acm_contacts") || "[]");
+          existingContacts.unshift({
+            name: `${data.firstName || ''} ${data.lastName || ''}`.trim(),
+            email: data.email,
+            phone: data.phone || 'N/A',
+            message: data.message,
+            receivedAt: new Date().toLocaleString()
+          });
+          localStorage.setItem("acm_contacts", JSON.stringify(existingContacts));
+          window.dispatchEvent(new Event("storage"));
+        } catch (err) {}
+
+        // Show Toast only on verified delivery
+        const banner = document.getElementById("contact-success-banner");
+        if (banner) banner.classList.remove("hidden");
+        form.reset();
+
+        setTimeout(() => {
+          if (banner) banner.classList.add("hidden");
+        }, 4000);
+      } else {
+        alert("⚠️ Failed to deliver message to Executive Dashboard. Please ensure backend server is running.");
       }
     });
   }

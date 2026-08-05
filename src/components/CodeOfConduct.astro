@@ -2,173 +2,86 @@
 import "../styles/globals.css";
 ---
 
-<div class="h-full overflow-x-hidden">
-  <section
-    id="community-conduct"
-    class="relative z-20 py-12 md:py-20 border-t border-white/10 overflow-hidden"
+<div class="code-of-conduct-container w-screen overflow-hidden py-12 px-6 md:px-16 lg:px-24">
+  <div id="community-conduct" class="absolute -top-24 pointer-events-none"></div>
+
+  <!-- Section Wrapper -->
+  <div
+    class="max-w-[1200px] mx-auto p-8 md:p-12 rounded-[2.5rem] bg-gradient-to-br from-[#131525]/90 via-[#0a0b14]/95 to-[#05060b]/98 border border-[#B8A7FF]/25 shadow-[0_20px_60px_rgba(0,0,0,0.7)] backdrop-blur-xl flex flex-col lg:flex-row gap-10 overflow-hidden relative group"
   >
-    <div
-      class="max-w-[1400px] mx-auto md:grid md:grid-cols-10 md:grid-rows-5 gap-0 relative z-10 md:min-h-[600px]"
-    >
-      <!-- Horizontal Lines (Grid Row 3) - Visible on Left, Hidden on Right -->
-      <div
-        class="hidden md:block col-start-1 col-end-11 row-start-3 row-end-4 border-t-2 border-b-2 border-dashed border-[#B8A7FF]/50 pointer-events-none z-20"
-        style="mask-image: linear-gradient(to right, black 50%, transparent 50%); -webkit-mask-image: linear-gradient(to right, black 50%, transparent 50%);"
-      >
+    <!-- Ambient Glow -->
+    <div class="absolute -bottom-24 -left-24 w-72 h-72 bg-[#B8A7FF]/15 rounded-full blur-3xl pointer-events-none group-hover:bg-[#B8A7FF]/25 transition-all duration-700"></div>
+
+    <!-- Left Header Column -->
+    <div class="w-full lg:w-4/12 flex flex-col justify-between gap-6 relative z-10">
+      <div class="flex flex-col gap-4">
+        <span class="inline-flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-[#B8A7FF] px-3.5 py-1.5 rounded-full bg-[#B8A7FF]/10 border border-[#B8A7FF]/20 w-max font-mono">
+          <span class="w-2 h-2 rounded-full bg-[#B8A7FF] animate-pulse"></span>
+          Ethics & Conduct
+        </span>
+        <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-white uppercase leading-tight">
+          ACM AJCE <br/>
+          <span class="text-[#B8A7FF] drop-shadow-[0_0_15px_rgba(184,167,255,0.4)]">CODE OF CONDUCT</span>
+        </h2>
+        <div class="w-16 h-1 bg-gradient-to-r from-[#B8A7FF] to-transparent rounded-full mt-1"></div>
       </div>
 
-      <!-- Left: Title and Intro -->
-      <!-- Title: Rows 1-2 -->
-      <div
-        class="flex flex-col h-full md:col-start-1 md:col-end-6 md:row-start-1 md:row-end-3 md:border-r-2 md:border-dashed md:border-[#B8A7FF]/50"
-      >
-        <div class="p-6 md:p-10 flex items-start h-full">
-          <h1
-            class="text-4xl sm:text-5xl md:text-6xl lg:text-[5rem] leading-[0.9] font-bold text-[#FBFAFF] uppercase tracking-tighter break-words"
-          >
-            ACM AJCE<br />
-            <span class="text-[#B8A7FF]">CODE OF CONDUCT</span>
-          </h1>
-        </div>
-      </div>
+      <p class="text-xs md:text-sm font-mono text-white/75 leading-relaxed uppercase border-l-2 border-[#B8A7FF]/40 pl-4">
+        Ground in the ACM Code of Ethics. Computing professionals have a profound impact on society and must prioritise the public good.
+      </p>
 
-      <!-- Subtitle: Row 3 -->
-      <div
-        class="flex flex-col h-full md:col-start-1 md:col-end-6 md:row-start-3 md:row-end-4 md:border-r-2 md:border-dashed md:border-[#B8A7FF]/50"
-      >
-        <div class="px-6 md:px-10 py-4 md:py-0 flex items-center h-full">
-          <div
-            class="text-[#B8A7FF] text-xl sm:text-2xl md:text-3xl font-bold font-['Inter'] leading-tight"
-          >
-            Core Values & Expectations
-          </div>
-        </div>
-      </div>
-
-      <!-- Intro Text: Rows 4-5 -->
-      <div
-        class="flex flex-col h-full md:col-start-1 md:col-end-6 md:row-start-4 md:row-end-6 md:border-r-2 md:border-dashed md:border-[#B8A7FF]/50"
-      >
-        <div class="p-6 md:p-10 h-full flex items-end">
-          <div
-            class="text-left text-gray-300 text-xs sm:text-sm font-mono leading-relaxed max-w-lg"
-          >
-            AS THE ACM AJCE STUDENT CHAPTER, OUR VALUES AND
-            EXPECTATIONS ARE GROUNDED IN THE ACM CODE OF ETHICS AND PROFESSIONAL
-            CONDUCT. COMPUTING PROFESSIONALS HAVE A PROFOUND IMPACT ON SOCIETY
-            AND MUST PRIORITISE THE PUBLIC GOOD.
-          </div>
-        </div>
-      </div>
-
-      <!-- Right: Detailed Points (Spans Full Height on Desktop) -->
-      <div
-        class="flex flex-col h-full md:col-start-6 md:col-end-11 md:row-start-1 md:row-end-6"
-      >
-        <!-- Scrollable content area for detailed points -->
-        <div class="p-6 md:p-10 h-full overflow-y-auto custom-scrollbar">
-          <div
-            class="grid grid-cols-1 gap-8 text-gray-300 font-mono text-xs sm:text-sm leading-relaxed"
-          >
-            <!-- 1. General Ethical Principles -->
-            <div>
-              <h3
-                class="text-[#B8A7FF] font-bold uppercase tracking-wider mb-2 text-base"
-              >
-                1. General Ethical Principles
-              </h3>
-              <p class="mb-2">Computing professionals should:</p>
-              <ul class="list-disc list-inside space-y-1 ml-2 text-gray-400">
-                <li>Contribute to the well-being of society and avoid harm.</li>
-                <li>
-                  Be honest, trustworthy, fair, and respectful toward all
-                  individuals.
-                </li>
-                <li>
-                  Uphold inclusivity, accessibility, and non-discrimination.
-                </li>
-                <li>
-                  Respect intellectual property, protect users’ privacy, and
-                  honour confidentiality.
-                </li>
-                <li>
-                  Consider the broader implications of their work on society and
-                  environment.
-                </li>
-              </ul>
-            </div>
-
-            <!-- 2. Professional Responsibilities -->
-            <div>
-              <h3
-                class="text-[#B8A7FF] font-bold uppercase tracking-wider mb-2 text-base"
-              >
-                2. Professional Responsibilities
-              </h3>
-              <p class="mb-2">Professionals are expected to:</p>
-              <ul class="list-disc list-inside space-y-1 ml-2 text-gray-400">
-                <li>Deliver high-quality work and valid expertise.</li>
-                <li>Follow laws, policies, and professional standards.</li>
-                <li>
-                  Evaluate systems for risks and design secure, reliable
-                  solutions.
-                </li>
-                <li>Access systems only with proper authorisation.</li>
-                <li>Promote public understanding and engage in peer review.</li>
-              </ul>
-            </div>
-
-            <!-- 3. Leadership Responsibilities -->
-            <div>
-              <h3
-                class="text-[#B8A7FF] font-bold uppercase tracking-wider mb-2 text-base"
-              >
-                3. Leadership Responsibilities
-              </h3>
-              <p class="mb-2">Leaders must:</p>
-              <ul class="list-disc list-inside space-y-1 ml-2 text-gray-400">
-                <li>Ensure goals prioritise the public good.</li>
-                <li>Foster ethical behaviour, transparency, and respect.</li>
-                <li>Support team well-being and growth.</li>
-                <li>Enforce sound governance and policies.</li>
-              </ul>
-            </div>
-
-            <!-- 4. Compliance -->
-            <div>
-              <h3
-                class="text-[#B8A7FF] font-bold uppercase tracking-wider mb-2 text-base"
-              >
-                4. Compliance With Code
-              </h3>
-              <ul class="list-disc list-inside space-y-1 ml-2 text-gray-400">
-                <li>Uphold and promote the ACM Code.</li>
-                <li>Address ethical concerns responsibly.</li>
-                <li>
-                  Unethical behaviour is incompatible with ACM membership.
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
+      <div class="hidden lg:block text-xs font-mono text-white/40">
+        ASSOCIATION FOR COMPUTING MACHINERY
       </div>
     </div>
-  </section>
-</div>
 
-<style>
-  /* Custom Scrollbar for the text area */
-  .custom-scrollbar::-webkit-scrollbar {
-    width: 6px;
-  }
-  .custom-scrollbar::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.05);
-  }
-  .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: #B8A7FF;
-    border-radius: 3px;
-  }
-  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: #B8A7FF;
-  }
-</style>
+    <!-- Right Content Grid -->
+    <div class="w-full lg:w-8/12 grid grid-cols-1 sm:grid-cols-2 gap-6 relative z-10">
+      
+      <!-- Principle 1 -->
+      <div class="p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-[#B8A7FF]/40 transition-all flex flex-col gap-3">
+        <span class="text-xs font-mono uppercase tracking-wider text-[#B8A7FF] font-semibold">
+          1 // Ethical Principles
+        </span>
+        <h3 class="text-base font-bold text-white uppercase">Society & Public Good</h3>
+        <p class="text-xs text-white/70 font-light leading-relaxed">
+          Contribute to societal well-being, avoid harm, uphold inclusivity, respect privacy, and honor intellectual property.
+        </p>
+      </div>
+
+      <!-- Principle 2 -->
+      <div class="p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-[#B8A7FF]/40 transition-all flex flex-col gap-3">
+        <span class="text-xs font-mono uppercase tracking-wider text-[#B8A7FF] font-semibold">
+          2 // Professional Standard
+        </span>
+        <h3 class="text-base font-bold text-white uppercase">Excellence & Security</h3>
+        <p class="text-xs text-white/70 font-light leading-relaxed">
+          Deliver high-quality work, evaluate system risks, design secure & reliable solutions, and adhere to policies.
+        </p>
+      </div>
+
+      <!-- Principle 3 -->
+      <div class="p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-[#B8A7FF]/40 transition-all flex flex-col gap-3">
+        <span class="text-xs font-mono uppercase tracking-wider text-[#B8A7FF] font-semibold">
+          3 // Leadership Values
+        </span>
+        <h3 class="text-base font-bold text-white uppercase">Transparency & Growth</h3>
+        <p class="text-xs text-white/70 font-light leading-relaxed">
+          Ensure goals prioritize public good, foster ethical behavior, and support team well-being and growth.
+        </p>
+      </div>
+
+      <!-- Principle 4 -->
+      <div class="p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-[#B8A7FF]/40 transition-all flex flex-col gap-3">
+        <span class="text-xs font-mono uppercase tracking-wider text-[#B8A7FF] font-semibold">
+          4 // Compliance
+        </span>
+        <h3 class="text-base font-bold text-white uppercase">Upholding The Code</h3>
+        <p class="text-xs text-white/70 font-light leading-relaxed">
+          Uphold and promote the ACM Code. Unethical behavior is incompatible with ACM chapter membership.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</div>

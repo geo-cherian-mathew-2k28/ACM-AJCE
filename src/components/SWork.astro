@@ -37,33 +37,8 @@ cassetteImages.forEach((src, i) => {
   }
 });
 
-function shuffle(array: Project[]) {
-  let currentIndex = array.length;
-  while (currentIndex != 0) {
-    let randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex--;
-    [array[currentIndex], array[randomIndex]] = [
-      array[randomIndex],
-      array[currentIndex],
-    ];
-  }
-}
-
-shuffle(projects);
-
-// Add pens in between projects regularly
-let works: Project[] = [];
-let chunkSize = Math.floor(projects.length / (pens.length || 1));
-let i = 0;
-let j = 0;
-while (i < projects.length) {
-  works.push(projects[i]);
-  if (pens.length > 0 && j < pens.length && (i + 1) % chunkSize === 0) {
-    works.push(pens[j]);
-    j++;
-  }
-  i++;
-}
+// Keep stable event order for reliable SSR hydration
+let works: Project[] = [...projects];
 
 const EVENT_MOVEMENT_SCROLL_MULTIPLIER = 5;
 const EVENT_END_WRAP_SCROLL_MULTIPLIER = 3;

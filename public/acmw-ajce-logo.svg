@@ -1,0 +1,21 @@
+<svg width="780" height="220" viewBox="0 0 780 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Left: Pure White acm-w AJCE Emblem (Image 2) -->
+  <g transform="translate(10, 10)">
+    <!-- Back Diamond Outer Outline -->
+    <path d="M 230 20 L 295 85 L 230 150" stroke="#FFFFFF" stroke-width="10" stroke-linecap="square" fill="none"/>
+    
+    <!-- Front Solid Diamond Base -->
+    <rect x="115" y="15" width="120" height="120" rx="30" transform="rotate(45 115 15)" fill="#FFFFFF"/>
+    
+    <!-- acm-w & AJCE Text cut out in dark inside solid white diamond -->
+    <text x="45" y="120" font-family="'Inter', 'PolySans Trial', sans-serif" font-weight="900" font-size="38" fill="#000000" letter-spacing="-1.5">acm-w</text>
+    <text x="66" y="148" font-family="'Inter', 'PolySans Trial', sans-serif" font-weight="900" font-size="18" fill="#000000" letter-spacing="3">AJCE</text>
+  </g>
+
+  <!-- Right: Association for Computing Machinery AJCE Student Chapter -->
+  <g transform="translate(320, 20)">
+    <text x="0" y="50" font-family="'Inter', 'PolySans Trial', sans-serif" font-weight="700" font-size="40" fill="#FFFFFF">Association for</text>
+    <text x="0" y="105" font-family="'Inter', 'PolySans Trial', sans-serif" font-weight="700" font-size="40" fill="#FFFFFF">Computing Machinery</text>
+    <text x="0" y="158" font-family="'Inter', 'PolySans Trial', sans-serif" font-weight="600" font-size="28" fill="#FFFFFF">AJCE Student Chapter</text>
+  </g>
+</svg>

@@ -26,34 +26,30 @@ const videoEndTime = undefined; // Use full video duration (set to specific seco
 ---
 
 <Layout>
-    <ScrollVideo
-        webmSrc="/ACMWebsiteVid.webm"
-        mp4Src="/ACMWebsiteVid.mp4"
-        startTime={videoStartTime}
-        endTime={videoEndTime}
-    >
-        <section id="home" class="page-section relative">
-            <div class="relative h-screen w-screen">
-                <Hero />
-            </div>
-            <LegendPins />
-            <BecauseTechMatters />
-        </section>
+    <section id="home" class="page-section relative">
+        <div class="relative h-screen w-screen">
+            <Hero />
+        </div>
+        <LegendPins />
+        <BecauseTechMatters />
+    </section>
 
-        <section id="about" class="page-section">
-            <div data-variant-host>
-                <template data-variant="desktop">
-                    <About />
-                </template>
-                <template data-variant="mobile">
-                    <About_Phone />
-                </template>
-            </div>
-        </section>
-    </ScrollVideo>
+    <section id="about" class="page-section">
+        <div data-variant-host>
+            <template data-variant="desktop">
+                <About />
+            </template>
+            <template data-variant="mobile">
+                <About_Phone />
+            </template>
+        </div>
+    </section>
 
     <IgnitingMinds />
     <CodeOfConduct />
+
+    <!-- Spacing gap above Events section -->
+    <div class="w-full h-20 md:h-32 bg-transparent pointer-events-none" aria-hidden="true"></div>
 
     <section id="events" class="page-section">
         <Events />

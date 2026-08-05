@@ -1,6 +1,6 @@
 ---
 interface Props {
-  title: string;
+  title?: string;
   fullName: string;
   position: string;
   imageUrl: string;
@@ -19,7 +19,7 @@ const {
   linkedinUrl,
   googleScholarUrl,
   githubUrl,
-  isW,
+  isW = false,
   preloadImage = false,
 } = Astro.props;
 
@@ -30,46 +30,41 @@ const isFaculty = position.toLowerCase().includes("faculty");
 ---
 
 <div
-  class="board-member-card relative w-full aspect-[1.6] rounded-lg bg-white overflow-hidden flex items-end justify-center"
+  class={`board-member-card relative w-full aspect-[1.6] rounded-xl overflow-hidden flex items-end justify-center shadow-lg border ${
+    isW
+      ? "bg-gradient-to-br from-[#FFF5F8] to-[#FCE7F0] border-pink-300/60 shadow-pink-900/10"
+      : "bg-white border-purple-100/30"
+  }`}
   data-faculty={isFaculty}
+  data-is-w={isW}
 >
-  <!-- Background Pattern -->
+  <!-- Background Noise Texture -->
   <div
-    class="absolute inset-0 pointer-events-none opacity-50 z-0"
+    class="absolute inset-0 pointer-events-none opacity-40 z-0"
     style={`background-image: url('${getAssetUrl("/noise.webp")}'); background-size: cover;`}
   >
   </div>
+
+  <!-- Subtle Bottom Brand Accent Line (Pink gradient for ACM-W, Purple gradient for main chapter) -->
   <div
-    class="w-[97%] h-[96.5%] flex justify-center items-center absolute z-20 pointer-events-none"
+    class={`absolute bottom-0 inset-x-0 h-1 z-20 ${
+      isW
+        ? "bg-gradient-to-r from-[#EC4899] to-[#F472B6]"
+        : "bg-gradient-to-r from-[#6A5ACD] to-[#B8A7FF]"
+    }`}
   >
-    <img
-      src={getAssetUrl("/casette-layout-orange.svg")}
-      alt="Background Pattern"
-      class="absolute w-full h-full object-cover"
-      loading="lazy"
-      decoding="async"
-    />
   </div>
 
-  <div
-    class="w-full flex justify-center items-center z-20 h-[20%] pb-1 absolute bottom-0"
-  >
-    <img
-      src={getAssetUrl("/acm-logo-black.webp")}
-      alt="ACM AJCE Logo"
-      class="h-full object-cover"
-      loading="lazy"
-      decoding="async"
-    />
-  </div>
-
-  <!-- Member Info -->
+  <!-- Member Info Layout -->
   <div class="flex items-center w-full h-full text-center z-10">
-    <div class="h-full w-2/5 flex items-end overflow-hidden">
+    <!-- Left: Photo Container -->
+    <div class="h-full w-2/5 flex items-end overflow-hidden relative">
       <img
         src={imageUrl}
         alt={fullName}
-        class="h-full w-full object-cover object-top"
+        class={`h-full w-full object-cover object-top filter grayscale contrast-105 ${
+          isW ? "brightness-95 sepia-[0.15] hue-rotate-[290deg]" : "brightness-95"
+        }`}
         loading="lazy"
         decoding="async"
         data-board-preload={preloadImage}
@@ -77,40 +72,41 @@ const isFaculty = position.toLowerCase().includes("faculty");
       />
     </div>
 
+    <!-- Right: Name, Role & Social Links -->
     <div
-      class="board-card-copy w-3/5 min-w-0 z-20 text-left flex flex-col justify-center mb-10 gap-1.5 pl-5 pr-4 sm:pl-6"
+      class="board-card-copy w-3/5 min-w-0 z-20 text-left flex flex-col justify-center gap-2 pl-5 pr-4 sm:pl-6"
     >
-      <div class="">
+      <div>
         <h3
           style="font-family: 'PolySans Bold';"
-          class="board-card-name text-gray-900 m-0"
+          class={`board-card-name m-0 ${isW ? "text-pink-950" : "text-gray-900"}`}
         >
           {displayName}
         </h3>
         <p
           style="font-family: PolySans Slim;"
-          class={isW
-            ? "board-card-role text-primary-pink m-0"
-            : "board-card-role text-primary-orange m-0"}
+          class={`board-card-role m-0 mt-0.5 font-semibold ${
+            isW ? "text-[#DB2777]" : "text-[#7C3AED]"
+          }`}
         >
           {position}
         </p>
       </div>
 
       <!-- Social Links -->
-      <div class="board-card-social flex justify-center gap-3 mt-2">
+      <div class="board-card-social flex items-center gap-3 mt-1">
         {
           linkedinUrl && (
             <a
               href={linkedinUrl}
               target="_blank"
               rel="noopener noreferrer"
-              class="hover:cursor-pointer"
+              class="hover:cursor-pointer transition-transform hover:scale-110"
             >
               <img
                 src={getAssetUrl("/linkedin-orange.svg")}
                 alt="LinkedIn"
-                class="board-card-icon"
+                class={`board-card-icon ${isW ? "filter hue-rotate-[290deg] saturate-150" : ""}`}
                 loading="lazy"
                 decoding="async"
               />
@@ -124,12 +120,12 @@ const isFaculty = position.toLowerCase().includes("faculty");
               href={googleScholarUrl}
               target="_blank"
               rel="noopener noreferrer"
-              class="hover:cursor-pointer"
+              class="hover:cursor-pointer transition-transform hover:scale-110"
             >
               <img
                 src={getAssetUrl("/google-scholar-orange.svg")}
                 alt="Google Scholar"
-                class="board-card-icon"
+                class={`board-card-icon ${isW ? "filter hue-rotate-[290deg] saturate-150" : ""}`}
                 loading="lazy"
                 decoding="async"
               />
@@ -143,12 +139,12 @@ const isFaculty = position.toLowerCase().includes("faculty");
               href={githubUrl}
               target="_blank"
               rel="noopener noreferrer"
-              class="hover:cursor-pointer"
+              class="hover:cursor-pointer transition-transform hover:scale-110"
             >
               <img
                 src={getAssetUrl("/github-orange.svg")}
                 alt="GitHub"
-                class="board-card-icon"
+                class={`board-card-icon ${isW ? "filter hue-rotate-[290deg] saturate-150" : ""}`}
                 loading="lazy"
                 decoding="async"
               />
@@ -165,8 +161,8 @@ const isFaculty = position.toLowerCase().includes("faculty");
     display: block;
     max-width: 100%;
     overflow-wrap: anywhere;
-    font-size: clamp(0.82rem, 2.9vw, 1.16rem);
-    line-height: 1.08;
+    font-size: clamp(0.85rem, 3vw, 1.2rem);
+    line-height: 1.12;
   }
 
   .board-card-role {
@@ -186,12 +182,11 @@ const isFaculty = position.toLowerCase().includes("faculty");
   .board-member-card[data-faculty="true"] .board-card-copy {
     padding-left: clamp(0.85rem, 3vw, 1.25rem);
     padding-right: clamp(0.85rem, 3vw, 1.25rem);
-    margin-bottom: clamp(1.35rem, 5vw, 2.25rem);
   }
 
   .board-member-card[data-faculty="true"] .board-card-name {
-    font-size: clamp(0.76rem, 2.55vw, 1.02rem);
-    line-height: 1.04;
+    font-size: clamp(0.8rem, 2.6vw, 1.05rem);
+    line-height: 1.08;
   }
 
   .board-member-card[data-faculty="true"] .board-card-role {

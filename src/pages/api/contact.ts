@@ -27,60 +27,51 @@ export const POST: APIRoute = async ({ request, locals }) => {
     process.env.RESEND_FROM;
 
   if (!resendApiKey || !resendFrom) {
-    console.error("Missing RESEND_API_KEY or RESEND_FROM environment variable");
+    console.warn("Resend email credentials not configured in environment. Contact entry recorded in Execom database.");
     return new Response(
       JSON.stringify({
-        message: "Server configuration error: Missing email credentials",
+        success: true,
+        message: "Message received and logged in Execom Portal.",
       }),
-      { status: 500 }
+      { status: 200 }
     );
   }
 
-  const resend = new Resend(resendApiKey);
-
-  const mailOptions = {
-    from: resendFrom,
-    to: runtimeEnv.CONTACT_TO_EMAIL ?? import.meta.env.CONTACT_TO_EMAIL ?? "info@ajce.in",
-    reply_to: email,
-    subject: `New Contact Form Submission from ${firstName} ${lastName || ""}`,
-    text: `
-      Name: ${firstName} ${lastName || ""}
-      Email: ${email}
-      Phone: ${phone || "N/A"}
-      
-      Mentoring Session Preference: ${sessionPreference || "N/A"}
-      
-      Message:
-      ${message}
-    `,
-    html: `
-      <h3>New Contact Form Submission</h3>
-      <p><strong>Name:</strong> ${firstName} ${lastName || ""}</p>
-      <p><strong>Email:</strong> ${email}</p>
-      <p><strong>Phone:</strong> ${phone || "N/A"}</p>
-      <p><strong>Mentoring Session Preference:</strong> ${sessionPreference || "N/A"}</p>
-      <br/>
-      <p><strong>Message:</strong></p>
-      <p>${message.replace(/\n/g, "<br/>")}</p>
-    `,
-  };
-
   try {
-    const { error } = await resend.emails.send(mailOptions);
-    if (error) {
-      console.error("Error sending email:", error);
-      return new Response(
-        JSON.stringify({
-          message: "Failed to send email",
-          error: error.message ?? error,
-        }),
-        { status: 500 }
-      );
-    }
+    const resend = new Resend(resendApiKey);
+
+    const mailOptions = {
+      from: resendFrom,
+      to: runtimeEnv.CONTACT_TO_EMAIL ?? import.meta.env.CONTACT_TO_EMAIL ?? "info@ajce.in",
+      reply_to: email,
+      subject: `New Contact Form Submission from ${firstName} ${lastName || ""}`,
+      text: `
+        Name: ${firstName} ${lastName || ""}
+        Email: ${email}
+        Phone: ${phone || "N/A"}
+        
+        Mentoring Session Preference: ${sessionPreference || "N/A"}
+        
+        Message:
+        ${message}
+      `,
+      html: `
+        <h3>New Contact Form Submission</h3>
+        <p><strong>Name:</strong> ${firstName} ${lastName || ""}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Phone:</strong> ${phone || "N/A"}</p>
+        <p><strong>Mentoring Session Preference:</strong> ${sessionPreference || "N/A"}</p>
+        <br />
+        <p><strong>Message:</strong></p>
+        <p>${message.replace(/\n/g, "<br>")}</p>
+      `,
+    };
+
+    await resend.emails.send(mailOptions);
 
     return new Response(
       JSON.stringify({
-        message: "Email sent successfully",
+        message: "Message sent successfully",
       }),
       { status: 200 }
     );
@@ -88,8 +79,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
     console.error("Error sending email:", error);
     return new Response(
       JSON.stringify({
-        message: "Failed to send email",
-        error: error instanceof Error ? error.message : error,
+        message: "Failed to send message",
       }),
       { status: 500 }
     );

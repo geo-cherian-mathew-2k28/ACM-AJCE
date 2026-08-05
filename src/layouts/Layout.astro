@@ -28,7 +28,7 @@ const description =
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/png" href={acmAjceLogo.src} />
+    <link rel="icon" type="image/png" href={getAssetUrl("/favicon.png")} />
 
     <title>{title}</title>
     <meta name="description" content={description} />
@@ -51,25 +51,7 @@ const description =
 
     {cdnOrigin && <link rel="dns-prefetch" href={cdnOrigin} />}
     {cdnOrigin && <link rel="preconnect" href={cdnOrigin} crossorigin />}
-    <link
-      rel="preload"
-      as="image"
-      href={acmAjceLogo.src}
-      fetchpriority="high"
-    />
-    <link
-      rel="preload"
-      as="image"
-      href={ajceLogo.src}
-      fetchpriority="high"
-    />
-    <link
-      rel="preload"
-      as="video"
-      href={getAssetUrl("/ACMWebsiteVid.mp4")}
-      type="video/mp4"
-      fetchpriority="high"
-    />
+
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -90,14 +72,7 @@ const description =
         decoding="async"
         fetchpriority="high"
       />
-      <img
-        src={ajceLogo.src}
-        alt="Amal Jyothi College of Engineering"
-        class="ajce-logo"
-        loading="eager"
-        decoding="async"
-        fetchpriority="high"
-      />
+
     </div>
     <div class="app-root min-h-screen flex flex-col">
       <Header />

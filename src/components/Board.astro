@@ -1,24 +1,60 @@
 ---
 import BoardMemberCardSingular from "../components/BoardMemberCardSingular.astro";
-
 import { reader } from "../utils/reader";
 import { getAssetUrl } from "../utils/cdn";
 
 const boardData = await reader.singletons.board.read();
 const boardMembers = boardData?.items ?? [];
 
-const mainBoardMembers = boardMembers.filter(
-  (member) => !member.isW && member.position !== "Faculty Coordinator"
-);
-const acmwBoardMembers = boardMembers.filter((member) => member.isW);
 const facultyCoordinator = boardMembers.find(
-  (member) => member.position === "Faculty Coordinator"
+  (member) => member.position.toLowerCase().includes("faculty")
+);
+
+// 1. Executive Officers
+const execPositions = [
+  "chairperson",
+  "chairman",
+  "vice chair",
+  "treasurer",
+  "secretary",
+  "chief operating officer",
+  "webmaster",
+];
+
+const executiveLeaders = boardMembers.filter(
+  (member) =>
+    !member.position.toLowerCase().includes("faculty") &&
+    !member.position.toLowerCase().includes("women") &&
+    execPositions.some((p) => member.position.toLowerCase().includes(p))
+);
+
+// 2. Women's Chapter
+const acmwLeaders = boardMembers.filter((member) => member.isW || member.position.toLowerCase().includes("women"));
+
+// 3. Department Leads & Coordinators
+const departmentLeads = boardMembers.filter(
+  (member) =>
+    !member.position.toLowerCase().includes("faculty") &&
+    !member.position.toLowerCase().includes("women") &&
+    !executiveLeaders.includes(member) &&
+    (member.position.toLowerCase().includes("lead") ||
+      member.position.toLowerCase().includes("coordinator")) &&
+    !member.position.toLowerCase().includes("team")
+);
+
+// 4. Sub-teams (Marketing Team, Media Team Member, Design Team, Event Coordination Team, Content Writer)
+const teamMembers = boardMembers.filter(
+  (member) =>
+    !member.position.toLowerCase().includes("faculty") &&
+    !member.position.toLowerCase().includes("women") &&
+    !executiveLeaders.includes(member) &&
+    !departmentLeads.includes(member)
 );
 ---
 
 <section
   id="team"
-  class="board-section w-full min-h-screen py-12 px-4 relative"
+  class="board-section w-full min-h-screen py-16 px-4 relative overflow-hidden"
 >
   <div class="fixed inset-0 z-0 pointer-events-none opacity-0 board-bg-layer">
     <img
@@ -31,11 +67,12 @@ const facultyCoordinator = boardMembers.find(
   </div>
 
   <div class="max-w-7xl mx-auto flex flex-col relative z-10">
-    <div class="flex justify-center mb-12">
+    <!-- Header Title -->
+    <div class="flex justify-center mb-8">
       <img
         src={getAssetUrl("/the_team.webp")}
         alt="The Team"
-        class="w-80 md:w-[30rem] lg:w-[50rem] h-auto"
+        class="w-80 md:w-[30rem] lg:w-[48rem] h-auto team-heading-theme-filter"
         loading="lazy"
         decoding="async"
         data-board-preload
@@ -43,53 +80,67 @@ const facultyCoordinator = boardMembers.find(
       />
     </div>
 
-    <!-- Faculty Coordinator - Featured Card -->
-    {
-      facultyCoordinator && (
-        <div class="flex justify-center self-center w-[85vw] sm:w-[60vw] md:w-[40vw] lg:w-[23vw] mb-12">
-          <div class="transition-all duration-300 hover:scale-105 hover:shadow-2xl self-center">
-            <BoardMemberCardSingular
-              title={facultyCoordinator.title}
-              fullName={facultyCoordinator.fullName}
-              position={facultyCoordinator.position}
-              imageUrl={getAssetUrl(facultyCoordinator.imageUrl)}
-              linkedinUrl={facultyCoordinator.linkedinUrl}
-              googleScholarUrl={facultyCoordinator.googleScholarUrl}
-              githubUrl={facultyCoordinator.githubUrl}
-              isW={facultyCoordinator.isW}
-            />
-          </div>
-        </div>
-      )
-    }
-
-    <!-- Main Board Members Grid -->
-    <div
-      class="w-full lg:w-[70vw] self-center flex flex-wrap justify-center gap-4 mb-12"
-    >
-      {
-        mainBoardMembers.map((member) => (
-          <div class="w-full sm:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.67rem)] transition-all duration-300 hover:scale-105 hover:shadow-2xl self-center justify-center items-center flex">
-            <BoardMemberCardSingular
-              title={member.title}
-              fullName={member.fullName}
-              position={member.position}
-              imageUrl={getAssetUrl(member.imageUrl)}
-              linkedinUrl={member.linkedinUrl}
-              googleScholarUrl={member.googleScholarUrl}
-              githubUrl={member.githubUrl}
-              isW={member.isW}
-            />
-          </div>
-        ))
-      }
+    <!-- Category Filter Tabs -->
+    <div class="flex justify-center items-center gap-2.5 mb-12 flex-wrap" id="team-tabs">
+      <button
+        data-view="exec"
+        class="team-pill-btn active text-xs sm:text-sm font-semibold tracking-wider px-5 py-2.5 rounded-full border transition-all duration-300"
+      >
+        EXECUTIVE OFFICERS
+      </button>
+      <button
+        data-view="acmw"
+        class="team-pill-btn text-xs sm:text-sm font-semibold tracking-wider px-5 py-2.5 rounded-full border transition-all duration-300"
+      >
+        WOMEN'S CHAPTER
+      </button>
+      <button
+        data-view="leads"
+        class="team-pill-btn text-xs sm:text-sm font-semibold tracking-wider px-5 py-2.5 rounded-full border transition-all duration-300"
+      >
+        DEPARTMENT LEADS
+      </button>
+      <button
+        data-view="teams"
+        class="team-pill-btn text-xs sm:text-sm font-semibold tracking-wider px-5 py-2.5 rounded-full border transition-all duration-300"
+      >
+        CORE SUB-TEAMS
+      </button>
+      <button
+        data-view="all"
+        class="team-pill-btn text-xs sm:text-sm font-semibold tracking-wider px-5 py-2.5 rounded-full border transition-all duration-300"
+      >
+        ALL MEMBERS
+      </button>
     </div>
 
-    {
-      acmwBoardMembers.length > 0 && (
-        <div class="w-full lg:w-[70vw] self-center flex flex-wrap justify-center gap-4 mb-12">
-          {acmwBoardMembers.map((member) => (
-            <div class="w-full md:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.67rem)] transition-all duration-300 hover:scale-105 hover:shadow-2xl self-center justify-center items-center flex">
+    <!-- 1. Executive Officers Grid -->
+    <div id="view-exec" class="team-view-section active w-full flex flex-col items-center">
+      {
+        facultyCoordinator && (
+          <div class="team-group-faculty flex flex-col items-center mb-10">
+            <span class="text-[0.65rem] uppercase tracking-widest text-[#B8A7FF] font-bold mb-3 px-4 py-1 rounded-full bg-purple-950/40 border border-purple-400/20 shadow-md">
+              Faculty Advisor
+            </span>
+            <div class="w-[85vw] sm:w-[50vw] md:w-[35vw] lg:w-[22vw] transition-all duration-300 hover:scale-105">
+              <BoardMemberCardSingular
+                title={facultyCoordinator.title}
+                fullName={facultyCoordinator.fullName}
+                position={facultyCoordinator.position}
+                imageUrl={getAssetUrl(facultyCoordinator.imageUrl)}
+                linkedinUrl={facultyCoordinator.linkedinUrl}
+                googleScholarUrl={facultyCoordinator.googleScholarUrl}
+                githubUrl={facultyCoordinator.githubUrl}
+                isW={facultyCoordinator.isW}
+              />
+            </div>
+          </div>
+        )
+      }
+      <div class="w-full lg:w-[75vw] flex flex-wrap justify-center gap-5 mb-8">
+        {
+          executiveLeaders.map((member) => (
+            <div class="w-full sm:w-[calc(50%-0.75rem)] lg:w-[calc(33.333%-0.85rem)] transition-all duration-300 hover:scale-105 flex justify-center">
               <BoardMemberCardSingular
                 title={member.title}
                 fullName={member.fullName}
@@ -101,23 +152,167 @@ const facultyCoordinator = boardMembers.find(
                 isW={member.isW}
               />
             </div>
-          ))}
-        </div>
-      )
-    }
-
-    <!-- Call to Action Button -->
-    <div class="text-center mt-16">
-      <button
-        id="crew-btn"
-        class="text-white border-2 border-primary-orange hover:cursor-pointer py-2 px-4 text-sm rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl
-            sm:py-4 sm:px-8 sm:text-base"
-      >
-        SEE THE ENTIRE CREW MAKING MAGIC!
-      </button>
+          ))
+        }
+      </div>
     </div>
+
+    <!-- 2. Women's Chapter Grid -->
+    <div id="view-acmw" class="team-view-section hidden w-full flex flex-col items-center">
+      {
+        facultyCoordinator && (
+          <div class="team-group-faculty flex flex-col items-center mb-10">
+            <span class="text-[0.65rem] uppercase tracking-widest text-[#B8A7FF] font-bold mb-3 px-4 py-1 rounded-full bg-purple-950/40 border border-purple-400/20 shadow-md">
+              Faculty Advisor
+            </span>
+            <div class="w-[85vw] sm:w-[50vw] md:w-[35vw] lg:w-[22vw] transition-all duration-300 hover:scale-105">
+              <BoardMemberCardSingular
+                title={facultyCoordinator.title}
+                fullName={facultyCoordinator.fullName}
+                position={facultyCoordinator.position}
+                imageUrl={getAssetUrl(facultyCoordinator.imageUrl)}
+                linkedinUrl={facultyCoordinator.linkedinUrl}
+                googleScholarUrl={facultyCoordinator.googleScholarUrl}
+                githubUrl={facultyCoordinator.githubUrl}
+                isW={facultyCoordinator.isW}
+              />
+            </div>
+          </div>
+        )
+      }
+      <div class="w-full lg:w-[75vw] flex flex-wrap justify-center gap-5 mb-8">
+        {
+          acmwLeaders.map((member) => (
+            <div class="w-full sm:w-[calc(50%-0.75rem)] lg:w-[calc(33.333%-0.85rem)] transition-all duration-300 hover:scale-105 flex justify-center">
+              <BoardMemberCardSingular
+                title={member.title}
+                fullName={member.fullName}
+                position={member.position}
+                imageUrl={getAssetUrl(member.imageUrl)}
+                linkedinUrl={member.linkedinUrl}
+                googleScholarUrl={member.googleScholarUrl}
+                githubUrl={member.githubUrl}
+                isW={member.isW}
+              />
+            </div>
+          ))
+        }
+      </div>
+    </div>
+
+    <!-- 3. Department Leads Grid -->
+    <div id="view-leads" class="team-view-section hidden w-full flex flex-col items-center">
+      <div class="w-full lg:w-[75vw] flex flex-wrap justify-center gap-5 mb-8">
+        {
+          departmentLeads.map((member) => (
+            <div class="w-full sm:w-[calc(50%-0.75rem)] lg:w-[calc(33.333%-0.85rem)] transition-all duration-300 hover:scale-105 flex justify-center">
+              <BoardMemberCardSingular
+                title={member.title}
+                fullName={member.fullName}
+                position={member.position}
+                imageUrl={getAssetUrl(member.imageUrl)}
+                linkedinUrl={member.linkedinUrl}
+                googleScholarUrl={member.googleScholarUrl}
+                githubUrl={member.githubUrl}
+                isW={member.isW}
+              />
+            </div>
+          ))
+        }
+      </div>
+    </div>
+
+    <!-- 4. Core Sub-teams Grid -->
+    <div id="view-teams" class="team-view-section hidden w-full flex flex-col items-center">
+      <div class="w-full lg:w-[75vw] flex flex-wrap justify-center gap-5 mb-8">
+        {
+          teamMembers.map((member) => (
+            <div class="w-full sm:w-[calc(50%-0.75rem)] lg:w-[calc(33.333%-0.85rem)] transition-all duration-300 hover:scale-105 flex justify-center">
+              <BoardMemberCardSingular
+                title={member.title}
+                fullName={member.fullName}
+                position={member.position}
+                imageUrl={getAssetUrl(member.imageUrl)}
+                linkedinUrl={member.linkedinUrl}
+                googleScholarUrl={member.googleScholarUrl}
+                githubUrl={member.githubUrl}
+                isW={member.isW}
+              />
+            </div>
+          ))
+        }
+      </div>
+    </div>
+
+    <!-- 5. All Members Grid -->
+    <div id="view-all" class="team-view-section hidden w-full flex flex-col items-center">
+      {
+        facultyCoordinator && (
+          <div class="team-group-faculty flex flex-col items-center mb-10">
+            <span class="text-[0.65rem] uppercase tracking-widest text-[#B8A7FF] font-bold mb-3 px-4 py-1 rounded-full bg-purple-950/40 border border-purple-400/20 shadow-md">
+              Faculty Advisor
+            </span>
+            <div class="w-[85vw] sm:w-[50vw] md:w-[35vw] lg:w-[22vw] transition-all duration-300 hover:scale-105">
+              <BoardMemberCardSingular
+                title={facultyCoordinator.title}
+                fullName={facultyCoordinator.fullName}
+                position={facultyCoordinator.position}
+                imageUrl={getAssetUrl(facultyCoordinator.imageUrl)}
+                linkedinUrl={facultyCoordinator.linkedinUrl}
+                googleScholarUrl={facultyCoordinator.googleScholarUrl}
+                githubUrl={facultyCoordinator.githubUrl}
+                isW={facultyCoordinator.isW}
+              />
+            </div>
+          </div>
+        )
+      }
+      <div class="w-full lg:w-[75vw] flex flex-wrap justify-center gap-5 mb-8">
+        {
+          boardMembers
+            .filter((m) => !m.position.toLowerCase().includes("faculty"))
+            .map((member) => (
+              <div class="w-full sm:w-[calc(50%-0.75rem)] lg:w-[calc(33.333%-0.85rem)] transition-all duration-300 hover:scale-105 flex justify-center">
+                <BoardMemberCardSingular
+                  title={member.title}
+                  fullName={member.fullName}
+                  position={member.position}
+                  imageUrl={getAssetUrl(member.imageUrl)}
+                  linkedinUrl={member.linkedinUrl}
+                  googleScholarUrl={member.googleScholarUrl}
+                  githubUrl={member.githubUrl}
+                  isW={member.isW}
+                />
+              </div>
+            ))
+        }
+      </div>
+    </div>
+
   </div>
 </section>
+
+<style>
+  .team-heading-theme-filter {
+    filter: hue-rotate(245deg) saturate(1.4) brightness(1.2);
+  }
+
+  .team-pill-btn {
+    background: rgba(106, 90, 205, 0.12);
+    border-color: rgba(184, 167, 255, 0.22);
+    color: rgba(255, 255, 255, 0.7);
+  }
+  .team-pill-btn:hover {
+    border-color: rgba(184, 167, 255, 0.55);
+    color: #ffffff;
+  }
+  .team-pill-btn.active {
+    background: linear-gradient(135deg, rgba(106, 90, 205, 0.5), rgba(184, 167, 255, 0.25));
+    border-color: #B8A7FF;
+    color: #ffffff;
+    box-shadow: 0 0 20px rgba(184, 167, 255, 0.35);
+  }
+</style>
 
 <script>
   import { gsap } from "gsap";
@@ -143,7 +338,6 @@ const facultyCoordinator = boardMembers.find(
       });
     };
 
-    // Initialize on load
     if (document.readyState === "loading") {
       document.addEventListener("DOMContentLoaded", initBoardAnimation);
     } else {
@@ -151,79 +345,34 @@ const facultyCoordinator = boardMembers.find(
     }
   }
 
-  if (typeof window !== "undefined") {
-    const updateCrewBtnText = () => {
-      const btn = document.getElementById("crew-btn");
-      if (!btn) return;
-      if (window.innerWidth < 738) {
-        btn.textContent = "SEE THE ENTIRE CREW!";
-      } else {
-        btn.textContent = "SEE THE ENTIRE CREW MAKING MAGIC!";
-      }
-    };
-    window.addEventListener("resize", updateCrewBtnText);
-    // Set on load
-    updateCrewBtnText();
+  // --- Category Tab Switcher ---
+  const setupTeamTabSwitching = () => {
+    const tabBtns = document.querySelectorAll(".team-pill-btn");
+    const viewSections = document.querySelectorAll(".team-view-section");
+
+    tabBtns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const targetView = btn.getAttribute("data-view");
+
+        tabBtns.forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+
+        viewSections.forEach((sec) => {
+          if (sec.id === `view-${targetView}`) {
+            sec.classList.remove("hidden");
+            sec.classList.add("active");
+          } else {
+            sec.classList.add("hidden");
+            sec.classList.remove("active");
+          }
+        });
+      });
+    });
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", setupTeamTabSwitching);
+  } else {
+    setupTeamTabSwitching();
   }
 </script>
-
-<style>
-  /* Custom animations */
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(30px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  .grid > div {
-    animation: fadeInUp 0.6s ease-out forwards;
-  }
-
-  .grid > div:nth-child(1) {
-    animation-delay: 0.1s;
-  }
-  .grid > div:nth-child(2) {
-    animation-delay: 0.2s;
-  }
-  .grid > div:nth-child(3) {
-    animation-delay: 0.3s;
-  }
-  .grid > div:nth-child(4) {
-    animation-delay: 0.4s;
-  }
-  .grid > div:nth-child(5) {
-    animation-delay: 0.5s;
-  }
-  .grid > div:nth-child(6) {
-    animation-delay: 0.6s;
-  }
-  .grid > div:nth-child(7) {
-    animation-delay: 0.7s;
-  }
-  .grid > div:nth-child(8) {
-    animation-delay: 0.8s;
-  }
-  .grid > div:nth-child(9) {
-    animation-delay: 0.9s;
-  }
-
-  /* Responsive adjustments */
-  @media (max-width: 768px) {
-    .grid {
-      grid-template-columns: 1fr;
-      gap: 1.5rem;
-    }
-  }
-
-  @media (min-width: 769px) and (max-width: 1024px) {
-    .grid {
-      grid-template-columns: repeat(2, 1fr);
-      gap: 2rem;
-    }
-  }
-</style>

@@ -1,27 +1,35 @@
 ---
-// Introduction Section
+// Hero Component with Centered Text, Animated Geometric Mesh & Glowing Starfield Background
 ---
 
 <div class="relative -mt-28">
-  <!-- Hero Section 1 -->
+  <!-- Hero Section -->
   <section
-    class="hero-section video-bg-section w-screen h-screen relative flex items-center justify-start pl-[15vw] max-md:pl-[8vw] max-md:text-left max-md:justify-start"
+    class="hero-section video-bg-section w-screen h-screen relative flex items-center justify-center text-center px-4 overflow-hidden"
   >
+    <!-- Deep Ambient Mesh Background -->
+    <div class="hero-mesh-grid absolute inset-0 pointer-events-none z-0" aria-hidden="true"></div>
+    <div class="hero-aurora hero-aurora-1 pointer-events-none" aria-hidden="true"></div>
+    <div class="hero-aurora hero-aurora-2 pointer-events-none" aria-hidden="true"></div>
+    
+    <!-- Interactive Canvas Particle & Starfield Layer -->
+    <canvas id="hero-particles" class="absolute inset-0 w-full h-full pointer-events-none z-0"></canvas>
+    
     <div
-      class="max-w-[600px] text-white"
-      style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);"
+      class="max-w-[900px] text-white relative z-10 flex flex-col items-center justify-center mx-auto"
+      style="text-shadow: 0 4px 24px rgba(0, 0, 0, 0.85);"
     >
       <div
-        class="hero-text-wrap w-[1145px] inline-flex flex-col justify-start items-start max-md:w-full max-md:max-w-[96vw]"
+        class="hero-text-wrap w-full flex flex-col justify-center items-center text-center"
       >
         <div
-          class="hero-line-1 self-stretch justify-start text-7xl font-bold max-md:text-[clamp(2.2rem,10vw,3rem)] max-md:leading-[1.05]"
+          class="hero-line-1 text-center text-7xl font-bold max-md:text-[clamp(2.2rem,10vw,3.2rem)] max-md:leading-[1.1]"
           style="color:#B8A7FF; font-family: 'PolySans Bulky Wide'"
         >
           we are the
         </div>
         <div
-          class="hero-line-2 self-stretch justify-end text-yellow-50 text-7xl font-bold max-md:text-[clamp(2.2rem,11.2vw,3.4rem)] max-md:leading-[1.05] max-md:inline-block"
+          class="hero-line-2 text-center text-yellow-50 text-7xl font-bold max-md:text-[clamp(2.2rem,11vw,3.5rem)] max-md:leading-[1.1]"
           style="font-family: 'PolySans Bulky Wide'"
         >
           association for<br />computing machinery
@@ -31,116 +39,95 @@
 
     <style>
       @font-face {
-          font-family: "PolySans Bold";
-          src: url("../assets/fonts/PolySans-trial/PolySans-trial/Mono/PolySansTrial-BulkyMono.otf")
-            format("opentype");
-          font-weight: 700;
-          font-style: normal;
-          font-display: swap;
-        }
+        font-family: "PolySans Bold";
+        src: url("../assets/fonts/PolySans-trial/PolySans-trial/Mono/PolySansTrial-BulkyMono.otf")
+          format("opentype");
+        font-weight: 700;
+        font-style: normal;
+        font-display: swap;
+      }
 
       .hero-line-1,
       .hero-line-2 {
         opacity: 0;
       }
 
-      .radial-bg {
-        background-image: radial-gradient(
-            circle at 30% 50%,
-            rgba(26, 26, 26, 0.6) 0%,
-            rgba(6, 6, 6, 0.85) 70%
-          ),
-          url("/about/rishit.webp");
-        background-repeat: no-repeat, no-repeat;
-        background-position:
-          center center,
-          center 30%;
-        background-size: cover, cover;
-        background-attachment: fixed, fixed;
-        background-color: #05060B;
-      }
       .hero-section {
         height: 100vh;
         position: relative;
+        background: #05040a;
       }
-      .hero-text-wrap {
-        max-width: calc(100vw - 19vw);
+
+      /* Perspective Mesh Grid */
+      .hero-mesh-grid {
+        background-image: 
+          linear-gradient(rgba(184, 167, 255, 0.05) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(184, 167, 255, 0.05) 1px, transparent 1px);
+        background-size: 50px 50px;
+        background-position: center center;
+        mask-image: radial-gradient(circle at center, black 30%, transparent 80%);
+        -webkit-mask-image: radial-gradient(circle at center, black 30%, transparent 80%);
       }
-      .legend-pin {
+
+      /* Animated Glowing Aurora Accents */
+      .hero-aurora {
         position: absolute;
+        border-radius: 50%;
+        filter: blur(100px);
+        pointer-events: none;
+        z-index: 0;
+      }
+      .hero-aurora-1 {
+        top: 30%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 600px;
+        height: 400px;
+        background: radial-gradient(ellipse at center, rgba(106, 90, 205, 0.35) 0%, rgba(184, 167, 255, 0.15) 50%, rgba(5, 4, 10, 0) 80%);
+        animation: pulseAurora 10s ease-in-out infinite alternate;
+      }
+      .hero-aurora-2 {
+        bottom: 20%;
+        left: 50%;
+        transform: translate(-50%, 0);
+        width: 750px;
+        height: 300px;
+        background: radial-gradient(ellipse at center, rgba(184, 167, 255, 0.2) 0%, rgba(106, 90, 205, 0.08) 60%, rgba(5, 4, 10, 0) 80%);
+        animation: pulseAurora 14s ease-in-out infinite alternate-reverse;
       }
 
-      .hero-section.in-view .legend-pin {
-        position: fixed !important;
-        bottom: 2rem !important;
-        z-index: 60 !important;
+      @keyframes pulseAurora {
+        0% { transform: translate(-50%, -50%) scale(0.95); opacity: 0.7; }
+        50% { transform: translate(-50%, -45%) scale(1.1); opacity: 1; }
+        100% { transform: translate(-50%, -55%) scale(1); opacity: 0.8; }
       }
 
-      .hero-section.in-view .left-legend {
-        left: 2rem !important;
-      }
-      .hero-section.in-view .right-legend {
-        right: 2rem !important;
+      .hero-text-wrap {
+        max-width: 90vw;
       }
 
       @media (min-width: 769px) and (max-width: 1320px) {
-        .hero-section {
-          padding-left: clamp(2rem, 8vw, 8rem);
-        }
-
-        .hero-text-wrap {
-          width: min(1145px, calc(100vw - clamp(2rem, 8vw, 8rem) - 4vw));
-          max-width: calc(100vw - clamp(2rem, 8vw, 8rem) - 4vw);
-        }
-
         .hero-line-1,
         .hero-line-2 {
-          font-size: clamp(3.1rem, 7vw, 4.5rem);
-          line-height: 1.05;
-        }
-
-      }
-
-      @media (min-width: 769px) and (max-width: 1141px) {
-        .hero-line-1,
-        .hero-line-2 {
-          font-size: clamp(3.1rem, 6.3vw, 4.05rem);
+          font-size: clamp(3.2rem, 7vw, 4.8rem);
+          line-height: 1.1;
         }
       }
 
       @media (max-width: 768px) {
-        .hero-section {
-          padding-left: 8vw;
-        }
         .hero-text-wrap {
           width: 100%;
-          max-width: 92vw;
         }
         .hero-line-1 {
           font-size: clamp(2.2rem, 8.5vw, 3.6rem);
-          line-height: 1.05;
+          line-height: 1.1;
         }
         .hero-line-2 {
           font-size: clamp(2.2rem, 9.5vw, 4rem);
-          line-height: 1.05;
+          line-height: 1.1;
         }
         .hero-line-2 br {
           display: none;
-        }
-        .radial-bg {
-          background-attachment: scroll, scroll;
-        }
-        .hero-section.in-view .legend-pin {
-          bottom: auto !important;
-          top: 5rem !important;
-        }
-        .hero-section.in-view .left-legend {
-          left: 1rem !important;
-        }
-        .hero-section.in-view .right-legend {
-          top: 8rem !important;
-          right: auto !important;
-          left: 1rem !important;
         }
       }
     </style>
@@ -152,12 +139,117 @@
 
       gsap.registerPlugin(ScrambleTextPlugin, ScrollTrigger);
 
+      // --- Interactive Particle & Starfield Canvas ---
+      const initCanvasParticles = () => {
+        const canvas = document.getElementById("hero-particles") as HTMLCanvasElement;
+        if (!canvas) return;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return;
+
+        let width = (canvas.width = window.innerWidth);
+        let height = (canvas.height = window.innerHeight);
+
+        window.addEventListener("resize", () => {
+          if (!canvas) return;
+          width = canvas.width = window.innerWidth;
+          height = canvas.height = window.innerHeight;
+        });
+
+        interface Particle {
+          x: number;
+          y: number;
+          size: number;
+          vx: number;
+          vy: number;
+          alpha: number;
+          baseAlpha: number;
+          color: string;
+        }
+
+        const particleCount = Math.min(Math.floor(width / 14), 90);
+        const particles: Particle[] = [];
+        const colors = ["#ffffff", "#E2D9FF", "#B8A7FF", "#6A5ACD"];
+
+        for (let i = 0; i < particleCount; i++) {
+          const x = Math.random() * width;
+          const y = Math.random() * height;
+          const alpha = Math.random() * 0.6 + 0.25;
+          particles.push({
+            x,
+            y,
+            size: Math.random() * 2 + 0.8,
+            vx: (Math.random() - 0.5) * 0.3,
+            vy: (Math.random() - 0.5) * 0.3,
+            alpha,
+            baseAlpha: alpha,
+            color: colors[Math.floor(Math.random() * colors.length)],
+          });
+        }
+
+        let mouseX = width / 2;
+        let mouseY = height / 2;
+        window.addEventListener("mousemove", (e) => {
+          mouseX = e.clientX;
+          mouseY = e.clientY;
+        });
+
+        const animate = () => {
+          ctx.clearRect(0, 0, width, height);
+
+          // Draw subtle connections
+          for (let a = 0; a < particles.length; a++) {
+            for (let b = a + 1; b < particles.length; b++) {
+              const dx = particles[a].x - particles[b].x;
+              const dy = particles[a].y - particles[b].y;
+              const dist = Math.sqrt(dx * dx + dy * dy);
+              if (dist < 120) {
+                ctx.beginPath();
+                ctx.strokeStyle = `rgba(184, 167, 255, ${0.14 * (1 - dist / 120)})`;
+                ctx.lineWidth = 0.5;
+                ctx.moveTo(particles[a].x, particles[a].y);
+                ctx.lineTo(particles[b].x, particles[b].y);
+                ctx.stroke();
+              }
+            }
+          }
+
+          particles.forEach((p) => {
+            p.x += p.vx;
+            p.y += p.vy;
+
+            if (p.x < 0 || p.x > width) p.vx *= -1;
+            if (p.y < 0 || p.y > height) p.vy *= -1;
+
+            // Gentle mouse attraction/repulsion
+            const dx = mouseX - p.x;
+            const dy = mouseY - p.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < 140) {
+              const force = (140 - dist) / 140;
+              p.x -= (dx / dist) * force * 1.2;
+              p.y -= (dy / dist) * force * 1.2;
+            }
+
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            ctx.fillStyle = p.color;
+            ctx.globalAlpha = p.alpha;
+            ctx.fill();
+          });
+
+          requestAnimationFrame(animate);
+        };
+
+        animate();
+      };
+
       const initScramble = () => {
         const line1 = document.querySelector(".hero-line-1");
         const line2 = document.querySelector(".hero-line-2");
         const section1 = document.querySelector(".hero-section");
 
         if (!line1 || !line2 || !section1) return;
+        section1.classList.add("loaded");
 
         // Helper to wrap words in spans
         const wrapWords = (element: Element) => {
@@ -173,15 +265,14 @@
                   if (word) {
                     const span = document.createElement("span");
                     span.textContent = word;
-                    span.className = "hover-scramble inline-block mr-2"; // mr-2 for spacing
+                    span.className = "hover-scramble inline-block mx-1.5 cursor-pointer transition-colors duration-200 hover:text-white"; 
                     span.dataset.original = word;
                     element.appendChild(span);
-                    element.appendChild(document.createTextNode(" ")); // Space between words
                   }
                 });
               }
             } else {
-              element.appendChild(node); 
+              element.appendChild(node);
             }
           });
         };
@@ -189,7 +280,18 @@
         wrapWords(line1);
         wrapWords(line2);
 
-        
+        // Entrance animation centered
+        gsap.fromTo(
+          ".hero-line-1 span",
+          { opacity: 0, y: 30, filter: "blur(8px)" },
+          { opacity: 1, y: 0, filter: "blur(0px)", duration: 1, stagger: 0.12, ease: "power3.out" }
+        );
+        gsap.fromTo(
+          ".hero-line-2 span",
+          { opacity: 0, y: 40, filter: "blur(10px)" },
+          { opacity: 1, y: 0, filter: "blur(0px)", duration: 1.1, stagger: 0.1, delay: 0.3, ease: "power3.out" }
+        );
+
         gsap.set([line1, line2], { opacity: 1 });
 
         const words = document.querySelectorAll(".hover-scramble");
@@ -197,12 +299,12 @@
           if (word instanceof HTMLElement) {
             word.addEventListener("mouseenter", () => {
               gsap.to(word, {
-                duration: 0.8,
+                duration: 0.7,
                 scrambleText: {
                   text: word.dataset.original || "",
                   chars: "upperAndLowerCase",
-                  revealDelay: 0.1,
-                  speed: 0.3,
+                  revealDelay: 0.05,
+                  speed: 0.35,
                 },
               });
             });
@@ -224,16 +326,23 @@
           io.observe(section1);
         } catch (e) {
           console.warn(
-            "IntersectionObserver not available — legend pinning will remain scoped via absolute positioning."
+            "IntersectionObserver not available."
           );
         }
       };
 
-      if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", initScramble);
-      } else {
+      const setupHero = () => {
         initScramble();
+        initCanvasParticles();
+      };
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", setupHero);
+      } else {
+        setupHero();
       }
+
+      window.addEventListener("siteLoaded", setupHero);
     </script>
   </section>
 </div>

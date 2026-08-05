@@ -2,949 +2,116 @@
 const preloaderLogo = "/brand/acm-ajce-light.png";
 ---
 
-<div id="preloader" class="preloader">
-  <div class="loader-content">
-    <div class="preloader-laptop" aria-label="Loading ACM AJCE">
-      <canvas
-        id="preloader-laptop-canvas"
-        class="preloader-laptop__canvas"
-        style="background: url('/outputFolder/frame_0001.avif') center / contain no-repeat;"
-      ></canvas>
-      <div id="preloader-laptop-screen" class="preloader-laptop__screen">
-        <span class="preloader-laptop__status">Loading</span>
-        <img src={preloaderLogo} alt="ACM AJCE" />
-        <div class="progress-bar" aria-hidden="true">
-          <div class="progress-fill"></div>
-        </div>
-      </div>
+<div id="preloader" class="preloader-overlay">
+  <div class="logo-wrapper">
+    <div class="logo-glow"></div>
+    <img src={preloaderLogo} alt="ACM AJCE" class="acm-logo" />
+    <div class="loading-bar-container">
+      <div class="loading-bar-fill"></div>
     </div>
   </div>
 </div>
 
 <script>
-  const preloader = document.getElementById("preloader");
-  const progressFill = document.querySelector(".progress-fill") as HTMLElement;
-  const preloaderLaptopCanvas = document.getElementById(
-    "preloader-laptop-canvas"
-  ) as HTMLCanvasElement | null;
-  const preloaderLaptopContext = preloaderLaptopCanvas?.getContext("2d", {
-    alpha: true,
-  });
-  const preloaderLaptopScreen = document.getElementById(
-    "preloader-laptop-screen"
-  );
-  import { getAssetUrl } from "../utils/cdn";
-
-  let progressTween: any = null;
-  let gsapInstance: any = null;
-  let progressValue = 0;
-  let hasStartedCompletion = false;
-  let hasFinished = false;
-  let fallbackTimeoutId = 0;
-  let fakeProgressTimer = 0;
-  let remainingWarmupStarted = false;
-  const preloadHintUrls = new Set<string>();
-
-  const CRITICAL_WARMUP_TIMEOUT = 5000;
-  const VARIANTS_WAIT_TIMEOUT = 1600;
-  const CONTACT_LAPTOP_FRAME_COUNT = 125;
-  const DESKTOP_CONTACT_QUERY = "(min-width: 769px) and (pointer: fine)";
-
-  const getGsap = async () => {
-    if (gsapInstance) return gsapInstance;
-    const mod = await import("gsap");
-    gsapInstance = mod.gsap || mod.default || mod;
-    return gsapInstance;
-  };
-
-  const setProgress = (gsap: any, nextValue: number, duration = 0.2) => {
-    const clamped = Math.max(progressValue, Math.min(95, nextValue));
-    if (clamped === progressValue) return;
-    progressValue = clamped;
-    if (progressTween) progressTween.kill();
-    progressTween = gsap.to(progressFill, {
-      width: `${clamped}%`,
-      duration,
-      ease: "power1.out",
-      overwrite: "auto",
-    });
-  };
-
-  const startFakeProgress = (gsap: any) => {
-    if (fakeProgressTimer) window.clearInterval(fakeProgressTimer);
-    fakeProgressTimer = window.setInterval(() => {
-      if (hasFinished || hasStartedCompletion) return;
-      const increment = progressValue < 60 ? 6 : 3;
-      setProgress(gsap, progressValue + increment, 0.3);
-    }, 180);
-  };
-
-  const stopFakeProgress = () => {
-    if (!fakeProgressTimer) return;
-    window.clearInterval(fakeProgressTimer);
-    fakeProgressTimer = 0;
-  };
-
-  const waitForWindowLoad = () =>
-    new Promise<void>((resolve) => {
-      if (document.readyState === "complete") {
-        resolve();
-        return;
-      }
-      window.addEventListener("load", () => resolve(), { once: true });
-    });
-
-  const waitForFonts = () => {
-    if (document.fonts && document.fonts.ready) {
-      return document.fonts.ready.catch(() => {});
-    }
-    return Promise.resolve();
-  };
-
-  const withTimeout = async (promise: Promise<unknown>, timeoutMs: number) => {
-    let timeoutId = 0;
-    try {
-      return await Promise.race([
-        promise,
-        new Promise<null>((resolve) => {
-          timeoutId = window.setTimeout(() => resolve(null), timeoutMs);
-        }),
-      ]);
-    } finally {
-      if (timeoutId) window.clearTimeout(timeoutId);
-    }
-  };
-
-  const waitForVariantsMounted = () =>
-    new Promise<void>((resolve) => {
-      const hosts = Array.from(
-        document.querySelectorAll("[data-variant-host]")
-      ) as HTMLElement[];
-
-      if (!hosts.length) {
-        resolve();
-        return;
-      }
-
-      const allReady = hosts.every((host) => host.dataset.variantReady);
-      if (allReady) {
-        resolve();
-        return;
-      }
-
-      let resolved = false;
-      const done = () => {
-        if (resolved) return;
-        resolved = true;
-        window.removeEventListener("variants-mounted", done as EventListener);
-        resolve();
-      };
-
-      window.addEventListener("variants-mounted", done as EventListener, {
-        once: true,
-      });
-      window.setTimeout(done, VARIANTS_WAIT_TIMEOUT);
-    });
-
-  const addPreloadHint = (href: string, as: "image" | "video", type?: string) => {
-    const absoluteHref = new URL(href, window.location.href).href;
-    const key = `${as}:${absoluteHref}`;
-    if (preloadHintUrls.has(key)) return;
-    preloadHintUrls.add(key);
-
-    const link = document.createElement("link");
-    link.rel = "preload";
-    link.as = as;
-    link.href = absoluteHref;
-    if (type) link.type = type;
-    document.head.appendChild(link);
-  };
-
-  const isVideoBufferedEnough = (video: HTMLVideoElement) => {
-    if (video.readyState >= 4) return true;
-    const duration = video.duration;
-    if (!duration || !isFinite(duration)) return video.readyState >= 3;
-    const buffered = video.buffered;
-    if (!buffered.length) return false;
-    const end = buffered.end(buffered.length - 1);
-    return end / duration >= 0.995;
-  };
-
-  const getPreferredVideoSource = (video: HTMLVideoElement) => {
-    const sources = Array.from(
-      video.querySelectorAll("source[src]")
-    ) as HTMLSourceElement[];
-    const playableSource =
-      sources.find((source) => {
-        const mediaMatches =
-          !source.media || window.matchMedia(source.media).matches;
-        const canPlay =
-          !source.type || video.canPlayType(source.type) !== "";
-        return mediaMatches && canPlay;
-      }) || sources.find((source) => !source.media);
-
-    return playableSource?.src || video.currentSrc || video.src;
-  };
-
-  const fetchVideoBlob = async (
-    src: string,
-    fallbackType: string,
-    onProgress?: (progress: number) => void
-  ) => {
-    const response = await fetch(src, { cache: "force-cache" });
-    if (!response.ok) {
-      throw new Error(`Unable to preload scroll video: ${response.status}`);
-    }
-
-    const contentType = response.headers.get("content-type") || fallbackType;
-    const contentLength = Number(response.headers.get("content-length") || 0);
-
-    if (!response.body) {
-      const blob = await response.blob();
-      onProgress?.(1);
-      return blob;
-    }
-
-    const reader = response.body.getReader();
-    const chunks: Uint8Array[] = [];
-    let received = 0;
-
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      if (!value) continue;
-
-      chunks.push(value);
-      received += value.byteLength;
-      if (contentLength > 0) {
-        onProgress?.(Math.min(received / contentLength, 1));
-      }
-    }
-
-    onProgress?.(1);
-    return new Blob(chunks, { type: contentType });
-  };
-
-  const waitForVideoMetadata = (video: HTMLVideoElement) =>
-    new Promise<void>((resolve) => {
-      if (video.readyState >= 1) {
-        resolve();
-        return;
-      }
-
-      const done = () => {
-        video.removeEventListener("loadedmetadata", done);
-        video.removeEventListener("error", done);
-        resolve();
-      };
-
-      video.addEventListener("loadedmetadata", done, { once: true });
-      video.addEventListener("error", done, { once: true });
-    });
-
-  const warmScrollVideo = async (gsap?: any) => {
-    const video = document.querySelector(
-      "[data-scroll-video]"
-    ) as HTMLVideoElement | null;
-
-    if (!video || video.dataset.warmed === "true") return;
-
-    if (video.getAttribute("preload") !== "auto") {
-      video.setAttribute("preload", "auto");
-    }
-
-    const src = getPreferredVideoSource(video);
-    if (!src) return;
-
-    const sourceType = src.endsWith(".webm") ? "video/webm" : "video/mp4";
-    addPreloadHint(src, "video", sourceType);
-
-    try {
-      const blob = await fetchVideoBlob(src, sourceType, (progress) => {
-        if (gsap) setProgress(gsap, 10 + progress * 40, 0.1);
-      });
-      const previousObjectUrl = video.dataset.videoObjectUrl;
-      if (previousObjectUrl) {
-        URL.revokeObjectURL(previousObjectUrl);
-      }
-
-      const objectUrl = URL.createObjectURL(blob);
-      video.dataset.videoObjectUrl = objectUrl;
-      video.src = objectUrl;
-      video.load();
-      await waitForVideoMetadata(video);
-      video.pause();
-      video.currentTime = parseFloat(video.dataset.startTime || "0");
-      video.dataset.warmed = "true";
-      if (gsap) setProgress(gsap, 50, 0.15);
-    } catch (error) {
-      console.warn("Scroll video preload failed", error);
-      try {
-        video.load();
-        await waitForVideoMetadata(video);
-      } finally {
-        video.dataset.warmed = "true";
-      }
-    }
-  };
-
-  const parseBackgroundImageUrls = (value: string | null | undefined) => {
-    if (!value) return [];
-    const urls: string[] = [];
-    const regex = /url\((['"]?)(.*?)\1\)/g;
-    let match: RegExpExecArray | null = null;
-    while ((match = regex.exec(value))) {
-      const url = match[2]?.trim();
-      if (!url || url.startsWith("data:")) continue;
-      urls.push(url);
-    }
-    return urls;
-  };
-
-  const normalizeUrl = (raw: string) => {
-    try {
-      return new URL(raw, window.location.href).href;
-    } catch {
-      return raw;
-    }
-  };
-
-  const isLikelyImageUrl = (url: string) =>
-    /\.(avif|webp|png|jpe?g|gif|svg|bmp|ico)(\?.*)?$/i.test(url);
-
-  const collectCriticalImageCandidates = () => {
-    const vh = window.innerHeight || 900;
-    const map = new Map<string, number>();
-
-    const upsert = (rawUrl: string, priority: number) => {
-      if (!rawUrl || !isLikelyImageUrl(rawUrl)) return;
-      const url = normalizeUrl(rawUrl);
-      const prev = map.get(url) ?? -Infinity;
-      if (priority > prev) map.set(url, priority);
-    };
-
-    const criticalSelector =
-      ".cassette-img, .cassette-svg, .mobile-cassette-img, #partners-svg, .acm-logo";
-
-    const images = Array.from(document.querySelectorAll("img[src]")) as HTMLImageElement[];
-    images.forEach((img) => {
-      if (img.hasAttribute("data-preloader-ignore")) return;
-
-      const rect = img.getBoundingClientRect();
-      const inNearRange = rect.top < vh * 8 && rect.bottom > -vh;
-      const inSoonRange = rect.top < vh * 4 && rect.bottom > -vh;
-      const inView = rect.top < vh && rect.bottom > 0;
-      const isCritical = img.matches(criticalSelector);
-
-      let priority = 0;
-      if (img.getAttribute("fetchpriority") === "high") priority += 8;
-      if (img.getAttribute("loading") === "eager") priority += 5;
-      if (isCritical) priority += 6;
-      if (inView) priority += 8;
-      else if (inSoonRange) priority += 5;
-      else if (inNearRange) priority += 3;
-
-      if (priority > 0) {
-        const src = img.currentSrc || img.src;
-        upsert(src, priority);
-      }
-
-      if (inSoonRange || isCritical) {
-        img.loading = "eager";
-        if (!img.getAttribute("fetchpriority")) {
-          img.setAttribute("fetchpriority", "high");
-        }
-      }
-    });
-
-    const bgElements = Array.from(
-      document.querySelectorAll("[style*='background-image']")
-    ) as HTMLElement[];
-    bgElements.forEach((el) => {
-      const rect = el.getBoundingClientRect();
-      const inNearRange = rect.top < vh * 8 && rect.bottom > -vh;
-      if (!inNearRange) return;
-
-      const inlineStyle = el.getAttribute("style");
-      const computedStyle = getComputedStyle(el).backgroundImage;
-      const urls = [
-        ...parseBackgroundImageUrls(inlineStyle),
-        ...parseBackgroundImageUrls(computedStyle),
-      ];
-
-      urls.forEach((url) => upsert(url, 4));
-    });
-
-    upsert(getAssetUrl("/glow_ball_red.svg"), 7);
-    upsert(getAssetUrl("/about/Cassette.webp"), 6);
-    upsert(getAssetUrl("/about/2.webp"), 6);
-    upsert(getAssetUrl("/about/3.webp"), 6);
-    upsert(getAssetUrl("/Cassette_Tech.webp"), 6);
-    upsert(getAssetUrl("/Cassette_cc.webp"), 6);
-    upsert(getAssetUrl("/Cassette_Design.webp"), 6);
-    upsert(getAssetUrl("/Cassette_Management.webp"), 6);
-    upsert(getAssetUrl("/Cassette_Research.webp"), 6);
-
-    return Array.from(map.entries())
-      .sort((a, b) => b[1] - a[1])
-      .map(([url]) => url);
-  };
-
-  const preloadImage = (url: string, timeoutMs = 3500) =>
-    new Promise<void>((resolve) => {
-      const image = new Image();
-      let settled = false;
-      let timeoutId = 0;
-
-      const done = () => {
-        if (settled) return;
-        settled = true;
-        if (timeoutId) window.clearTimeout(timeoutId);
-        resolve();
-      };
-
-      image.onload = done;
-      image.onerror = done;
-      if (timeoutMs > 0) {
-        timeoutId = window.setTimeout(done, timeoutMs);
-      }
-      image.decoding = "async";
-      image.src = url;
-
-      if (image.complete) {
-        done();
-      } else if (typeof image.decode === "function") {
-        image.decode().then(done).catch(done);
-      }
-    });
-
-  const preloadDecodedImage = (url: string) =>
-    new Promise<HTMLImageElement>((resolve) => {
-      const image = new Image();
-      let settled = false;
-
-      const done = () => {
-        if (settled) return;
-        settled = true;
-        resolve(image);
-      };
-
-      image.onload = done;
-      image.onerror = done;
-      image.decoding = "async";
-      image.src = url;
-
-      if (image.complete) {
-        done();
-      } else if (typeof image.decode === "function") {
-        image.decode().then(done).catch(done);
-      }
-    });
-
-  const preloadInBatches = async (
-    urls: string[],
-    concurrency: number,
-    onProgress?: (loaded: number, total: number) => void,
-    timeoutMs = 3500
-  ) => {
-    if (!urls.length) return;
-    const total = urls.length;
-    let nextIndex = 0;
-    let loaded = 0;
-
-    const worker = async () => {
-      while (nextIndex < total) {
-        const index = nextIndex++;
-        const url = urls[index];
-        await preloadImage(url, timeoutMs);
-        loaded += 1;
-        onProgress?.(loaded, total);
-      }
-    };
-
-    const workerCount = Math.min(concurrency, total);
-    await Promise.all(Array.from({ length: workerCount }, () => worker()));
-  };
-
-  const warmCriticalAssets = async (gsap?: any) => {
-    const allCandidates = collectCriticalImageCandidates();
-    const isMobile =
-      window.matchMedia("(max-width: 768px)").matches;
-    const maxCritical = isMobile ? 32 : 48;
-    const urls = allCandidates.slice(0, maxCritical);
-
-    await preloadInBatches(urls, 8, (loaded, total) => {
-      const normalized = total ? loaded / total : 1;
-      if (gsap) {
-        setProgress(gsap, 10 + normalized * 78, 0.15);
-      }
-    });
-  };
-
-  const collectEventCassetteUrls = () =>
-    Array.from(
-      document.querySelectorAll<HTMLImageElement>(".s-work img.js-video[src]")
-    )
-      .map((img) => img.currentSrc || img.src)
-      .filter(Boolean)
-      .map((url) => normalizeUrl(url));
-
-  const warmEventCassettes = async (gsap?: any) => {
-    const urls = Array.from(new Set(collectEventCassetteUrls()));
-    if (!urls.length) {
-      if (gsap) setProgress(gsap, 65, 0.15);
-      return;
-    }
-
-    urls.forEach((url) => addPreloadHint(url, "image"));
-    await preloadInBatches(
-      urls,
-      6,
-      (loaded, total) => {
-        const normalized = total ? loaded / total : 1;
-        if (gsap) setProgress(gsap, 50 + normalized * 15, 0.12);
-      },
-      0
-    );
-  };
-
-  const collectContactLaptopFrameUrls = () =>
-    Array.from({ length: CONTACT_LAPTOP_FRAME_COUNT }, (_, index) =>
-      normalizeUrl(
-        getAssetUrl(
-          `/outputFolder/frame_${(index + 1).toString().padStart(4, "0")}.avif`
-        )
-      )
-    );
-
-  const warmContactLaptopFrames = async (gsap?: any) => {
-    const shouldWarmLaptop =
-      window.matchMedia(DESKTOP_CONTACT_QUERY).matches &&
-      !!document.querySelector(".laptop-section");
-
-    if (!shouldWarmLaptop) {
-      if (gsap) setProgress(gsap, 90, 0.15);
-      return;
-    }
-
-    const urls = collectContactLaptopFrameUrls();
-    urls.slice(0, 6).forEach((url) => addPreloadHint(url, "image", "image/avif"));
-
-    const frameCache =
-      ((window as any).__contactLaptopFrameCache as
-        | Map<string, HTMLImageElement>
-        | undefined) || new Map<string, HTMLImageElement>();
-    (window as any).__contactLaptopFrameCache = frameCache;
-
-    const concurrency = 8;
-    let nextIndex = 0;
-    let loaded = 0;
-
-    const worker = async () => {
-      while (nextIndex < urls.length) {
-        const index = nextIndex++;
-        const url = urls[index];
-        if (!frameCache.has(url)) {
-          const image = await preloadDecodedImage(url);
-          frameCache.set(url, image);
-        }
-        loaded += 1;
-        const normalized = urls.length ? loaded / urls.length : 1;
-        if (gsap) setProgress(gsap, 65 + normalized * 25, 0.08);
-      }
-    };
-
-    await Promise.all(
-      Array.from({ length: Math.min(concurrency, urls.length) }, () => worker())
-    );
-  };
-
-  const warmRequiredAssets = async (gsap?: any) => {
-    await Promise.all([
-      warmScrollVideo(gsap),
-      warmEventCassettes(gsap),
-      warmContactLaptopFrames(gsap),
-    ]);
-    if (gsap) setProgress(gsap, 90, 0.2);
-  };
-
-  const warmRemainingAssets = async () => {
-    if (remainingWarmupStarted) return;
-    remainingWarmupStarted = true;
-  };
-
-  const PRELOADER_FRAME_COUNT = 125;
-  const PRELOADER_OPEN_DURATION = 2200;
-  const preloaderFrameCache = new Map<number, HTMLImageElement>();
-  const pendingPreloaderFrames = new Map<number, Promise<HTMLImageElement>>();
-  let requestedPreloaderFrame = 0;
-
-  const preloaderFrameUrl = (index: number) =>
-    getAssetUrl(
-      `/outputFolder/frame_${(index + 1).toString().padStart(4, "0")}.avif`
-    );
-
-  const resizePreloaderLaptop = () => {
-    if (!preloaderLaptopCanvas || !preloaderLaptopContext) return;
-    const rect = preloaderLaptopCanvas.getBoundingClientRect();
-    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
-    const width = Math.round(rect.width * dpr);
-    const height = Math.round(rect.height * dpr);
-    if (!width || !height) return;
-    if (preloaderLaptopCanvas.width !== width || preloaderLaptopCanvas.height !== height) {
-      preloaderLaptopCanvas.width = width;
-      preloaderLaptopCanvas.height = height;
-    }
-  };
-
-  const drawPreloaderFrame = (image: HTMLImageElement) => {
-    if (!preloaderLaptopCanvas || !preloaderLaptopContext) return;
-    preloaderLaptopContext.clearRect(
-      0,
-      0,
-      preloaderLaptopCanvas.width,
-      preloaderLaptopCanvas.height
-    );
-    preloaderLaptopContext.drawImage(
-      image,
-      0,
-      0,
-      preloaderLaptopCanvas.width,
-      preloaderLaptopCanvas.height
-    );
-  };
-
-  const loadPreloaderFrame = (frame: number) => {
-    const frameIndex = Math.max(
-      0,
-      Math.min(PRELOADER_FRAME_COUNT - 1, Math.round(frame))
-    );
-    const cached = preloaderFrameCache.get(frameIndex);
-    if (cached) return Promise.resolve(cached);
-    const pending = pendingPreloaderFrames.get(frameIndex);
-    if (pending) return pending;
-
-    const promise = new Promise<HTMLImageElement>((resolve) => {
-      const image = new Image();
-      image.decoding = "async";
-      image.src = preloaderFrameUrl(frameIndex);
-      const complete = () => {
-        preloaderFrameCache.set(frameIndex, image);
-        pendingPreloaderFrames.delete(frameIndex);
-        resolve(image);
-      };
-      if (image.complete) {
-        complete();
-      } else {
-        image.onload = complete;
-        image.onerror = complete;
-      }
-    });
-    pendingPreloaderFrames.set(frameIndex, promise);
-    return promise;
-  };
-
-  const preloadPreloaderFrames = async () => {
-    const concurrency = 8;
-    let nextFrame = 0;
-    const worker = async () => {
-      while (nextFrame < PRELOADER_FRAME_COUNT) {
-        const frame = nextFrame;
-        nextFrame += 1;
-        await loadPreloaderFrame(frame);
-      }
-    };
-    await Promise.all(Array.from({ length: concurrency }, () => worker()));
-  };
-
-  const renderPreloaderFrame = async (frame: number) => {
-    const frameIndex = Math.max(
-      0,
-      Math.min(PRELOADER_FRAME_COUNT - 1, Math.round(frame))
-    );
-    requestedPreloaderFrame = frameIndex;
-    const image = await loadPreloaderFrame(frameIndex);
-    if (frameIndex === requestedPreloaderFrame) drawPreloaderFrame(image);
-  };
-
-  const playPreloaderLaptop = async () => {
-    if (!preloaderLaptopCanvas) return;
-    resizePreloaderLaptop();
-    await preloadPreloaderFrames();
-    const startedAt = performance.now();
-
-    await new Promise<void>((resolve) => {
-      const advance = (now: number) => {
-        const progress = Math.min(
-          1,
-          (now - startedAt) / PRELOADER_OPEN_DURATION
-        );
-        void renderPreloaderFrame(progress * (PRELOADER_FRAME_COUNT - 1));
-        if (progress < 1) {
-          window.requestAnimationFrame(advance);
-          return;
-        }
-        void renderPreloaderFrame(PRELOADER_FRAME_COUNT - 1).then(resolve);
-      };
-      window.requestAnimationFrame(advance);
-    });
-    preloaderLaptopScreen?.classList.add("is-visible");
-  };
-
-  const revealPreloaderLogo = () => {
-    preloaderLaptopScreen?.classList.add("is-visible", "is-ready");
-  };
-
-  const proceedToCompletion = async (gsap: any) => {
-    if (hasStartedCompletion || hasFinished) return;
-    hasStartedCompletion = true;
-    stopFakeProgress();
-    if (fallbackTimeoutId) window.clearTimeout(fallbackTimeoutId);
-
-    if (progressTween) progressTween.kill();
-    progressTween = gsap.to(progressFill, {
-      width: "100%",
-      duration: 0.55,
-      ease: "power1.out",
-      onComplete: () => {
-        revealPreloaderLogo();
-        window.setTimeout(finishLoading, 1200);
-      },
-    });
-  };
-
-  const initPreloader = async () => {
-    if (!preloader || !progressFill) return;
-
-    const gsap = await getGsap();
-
-    gsap.set(preloader, { autoAlpha: 1 });
-    gsap.set(progressFill, { width: "0%" });
-    progressValue = 0;
-
-    const startTime = performance.now();
-
-    const openingPromise = playPreloaderLaptop();
-    startFakeProgress(gsap);
-
-    await waitForVariantsMounted();
-
-    const criticalAssetPromise = withTimeout(
-      warmCriticalAssets(gsap),
-      CRITICAL_WARMUP_TIMEOUT
-    );
-
-    await Promise.allSettled([
-      waitForWindowLoad(),
-      waitForFonts(),
-      warmRequiredAssets(gsap),
-      criticalAssetPromise,
-      openingPromise,
-    ]);
-
-    const elapsed = performance.now() - startTime;
-    const minimumDisplay = 3300;
-    const delay = Math.max(0, minimumDisplay - elapsed);
-
-    window.setTimeout(() => {
-      void proceedToCompletion(gsap);
-    }, delay);
-  };
-
-  function finishLoading() {
+  function dismissPreloader() {
     const preloader = document.getElementById("preloader");
-    if (!preloader || !gsapInstance || hasFinished) return;
-    hasFinished = true;
-    hasStartedCompletion = true;
-    if (fallbackTimeoutId) window.clearTimeout(fallbackTimeoutId);
-    const tl = gsapInstance.timeline({
-      onComplete: () => {
-        if (progressTween) progressTween.kill();
-        void warmRemainingAssets();
-        (window as any).__preloaderDone = true;
-        window.dispatchEvent(new CustomEvent("preloader:done"));
-      },
-    });
+    if (!preloader || (window as any).__preloaderDone) return;
+    (window as any).__preloaderDone = true;
 
-    tl.to(preloader, {
-      autoAlpha: 0,
-      duration: 0.7,
-      ease: "power2.out",
-    })
-      .set(preloader, { display: "none" });
+    preloader.style.opacity = "0";
+    setTimeout(() => {
+      preloader.style.display = "none";
+      window.dispatchEvent(new CustomEvent("preloader:done"));
+      window.dispatchEvent(new CustomEvent("siteLoaded"));
+    }, 400);
   }
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", () => {
-      void initPreloader();
-    });
+  if (document.readyState === "complete") {
+    setTimeout(dismissPreloader, 100);
   } else {
-    void initPreloader();
+    window.addEventListener("load", dismissPreloader);
+    document.addEventListener("DOMContentLoaded", () => setTimeout(dismissPreloader, 200));
+    setTimeout(dismissPreloader, 600); // Safety fallback
   }
 </script>
 
 <style>
-  .preloader {
+  .preloader-overlay {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #05060B; /* Match body background */
-    z-index: 9999;
+    inset: 0;
+    z-index: 99999;
+    background-color: #0a0b14;
     display: flex;
-    justify-content: center;
     align-items: center;
-    overflow: hidden;
+    justify-content: center;
+    transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  .loader-content {
+  .logo-wrapper {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: clamp(1.1rem, 3vh, 1.75rem);
+    gap: 1.5rem;
   }
 
-  .preloader-laptop {
-    position: relative;
-    width: min(72vw, 42rem);
-    aspect-ratio: 16 / 9;
-  }
-
-  .preloader-laptop__canvas {
-    display: block;
-    width: 100%;
-    height: 100%;
-    filter:
-      hue-rotate(230deg)
-      saturate(0.82)
-      brightness(1.12)
-      drop-shadow(0 0 0.7rem rgba(184, 167, 255, 0.46))
-      drop-shadow(0 0 1.6rem rgba(106, 90, 205, 0.22));
-  }
-
-  .preloader-laptop__screen {
-    position: absolute;
-    top: 18%;
-    left: 27%;
-    box-sizing: border-box;
-    width: 46%;
-    height: 46%;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 360ms ease;
-  }
-
-  .preloader-laptop__screen.is-visible {
-    opacity: 1;
-  }
-
-  .preloader-laptop__status {
-    position: absolute;
-    top: 34%;
-    left: 50%;
-    color: #2A2455;
-    font-family: "PolySans Bold", "PolySans Trial", sans-serif;
-    font-size: clamp(0.8rem, 1.7vw, 1.1rem);
-    font-weight: 700;
-    text-transform: uppercase;
-    transform: translateX(-50%);
-    transition: opacity 360ms ease, transform 360ms ease;
-    white-space: nowrap;
-  }
-
-  .preloader-laptop__screen img {
+  .logo-glow {
     position: absolute;
     top: 50%;
     left: 50%;
-    display: block;
-    width: 88%;
-    max-height: 72%;
+    transform: translate(-50%, -50%);
+    width: 180px;
+    height: 180px;
+    background: radial-gradient(circle, rgba(184, 167, 255, 0.3) 0%, transparent 70%);
+    border-radius: 50%;
+    filter: blur(20px);
+    animation: logoPulse 1.8s ease-in-out infinite alternate;
+    pointer-events: none;
+  }
+
+  .acm-logo {
+    width: clamp(140px, 20vw, 220px);
+    height: auto;
     object-fit: contain;
-    filter: invert(1);
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(0.94);
-    transition: opacity 650ms cubic-bezier(0.22, 1, 0.36, 1),
-      transform 650ms cubic-bezier(0.22, 1, 0.36, 1);
-  }
-
-  .preloader-laptop__screen.is-ready .preloader-laptop__status {
-    opacity: 0;
-    transform: translate(-50%, -0.25rem);
-  }
-
-  .preloader-laptop__screen.is-ready img {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
-  }
-
-  .progress-bar {
-    position: absolute;
-    top: 60%;
-    left: 12%;
-    width: 76%;
-    height: 4px;
-    background-color: rgba(42, 36, 85, 0.18);
-    border-radius: 2px;
-    overflow: hidden;
-    transition: opacity 360ms ease, transform 360ms ease;
-  }
-
-  .preloader-laptop__screen.is-ready .progress-bar {
-    opacity: 0;
-    transform: translateY(0.25rem);
-  }
-
-  .progress-fill {
-    height: 100%;
-    background: #6A5ACD;
     position: relative;
-    width: 0%;
-    border-radius: 2px;
-    overflow: hidden;
+    z-index: 10;
+    filter: drop-shadow(0 0 25px rgba(184, 167, 255, 0.4));
   }
 
-  .progress-fill::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: -100%;
+  .loading-bar-container {
+    width: 120px;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 999px;
+    overflow: hidden;
+    position: relative;
+    z-index: 10;
+  }
+
+  .loading-bar-fill {
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(251, 250, 255, 0.7), transparent);
-    animation: shimmer 2s infinite;
+    background: linear-gradient(90deg, transparent, #B8A7FF, transparent);
+    animation: barSlide 1.2s ease-in-out infinite;
   }
 
-  @keyframes shimmer {
+  @keyframes logoPulse {
     0% {
-      left: -100%;
+      transform: translate(-50%, -50%) scale(0.85);
+      opacity: 0.4;
     }
     100% {
-      left: 100%;
+      transform: translate(-50%, -50%) scale(1.15);
+      opacity: 0.9;
     }
   }
 
-  @media (max-width: 768px) {
-    .preloader-laptop {
-      width: min(90vw, 34rem);
+  @keyframes barSlide {
+    0% {
+      transform: translateX(-100%);
     }
-
-    .preloader-laptop__screen {
-      top: 17%;
-      left: 25%;
-      width: 50%;
-      height: 48%;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .preloader-laptop__screen {
-      gap: 0.15rem;
-    }
-
-    .preloader-laptop__screen img {
-      width: 3.6rem;
-      max-height: 3rem;
+    100% {
+      transform: translateX(100%);
     }
   }
 </style>
