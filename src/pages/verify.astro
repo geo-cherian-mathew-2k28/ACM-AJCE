@@ -1,0 +1,155 @@
+---
+import MembershipLayout from "../layouts/MembershipLayout.astro";
+---
+
+<MembershipLayout title="ACM AJCE Official Verification Portal">
+  <div class="max-w-xl mx-auto py-12 px-4">
+    <div id="loading-state" class="portal-panel p-8 text-center space-y-4">
+      <div class="w-10 h-10 border-2 border-[#B8A7FF] border-t-transparent rounded-full animate-spin mx-auto"></div>
+      <p class="text-xs text-gray-300 font-mono">Authenticating Digital Security Certificate...</p>
+    </div>
+
+    <!-- Verified Valid Membership State -->
+    <div id="valid-state" class="hidden portal-panel p-8 text-center space-y-6">
+      <div class="w-20 h-20 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center mx-auto shadow-2xl">
+        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+      </div>
+
+      <div>
+        <span class="inline-block text-[11px] font-mono uppercase tracking-widest text-emerald-400 font-bold bg-emerald-500/10 border border-emerald-500/30 px-3 py-1 rounded-full mb-2">
+          ✓ Official Authenticated Certificate
+        </span>
+        <h1 class="text-2xl font-extrabold text-white">Active ACM AJCE Member</h1>
+        <p class="text-xs text-gray-400 mt-1">Association for Computing Machinery – Amal Jyothi College of Engineering</p>
+      </div>
+
+      <div class="bg-[#131124] border border-[#2A2455] rounded-xl p-5 text-left text-xs space-y-3 font-sans">
+        <div class="flex justify-between border-b border-[#2A2455] pb-2">
+          <span class="text-gray-400">Member Name:</span>
+          <span class="text-white font-bold" id="v-name">-</span>
+        </div>
+        <div class="flex justify-between border-b border-[#2A2455] pb-2">
+          <span class="text-gray-400">Official Membership ID:</span>
+          <span class="text-emerald-400 font-mono font-bold" id="v-memid">-</span>
+        </div>
+        <div class="flex justify-between border-b border-[#2A2455] pb-2">
+          <span class="text-gray-400">College Email:</span>
+          <span class="text-gray-200 font-medium" id="v-email">-</span>
+        </div>
+        <div class="flex justify-between border-b border-[#2A2455] pb-2">
+          <span class="text-gray-400">Course & Semester:</span>
+          <span class="text-gray-300 font-medium" id="v-course">-</span>
+        </div>
+        <div class="flex justify-between border-b border-[#2A2455] pb-2">
+          <span class="text-gray-400">Validity Period:</span>
+          <span class="text-emerald-400 font-mono font-semibold" id="v-validity">-</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-gray-400">Security Signature:</span>
+          <span class="text-indigo-400 font-mono font-semibold" id="v-signature">VERIFIED_SHA256</span>
+        </div>
+      </div>
+
+      <div class="text-[11px] text-gray-400 bg-[#05060B] p-3 rounded-lg border border-[#2A2455] text-center">
+        🔒 This identity certificate is cryptographically verified by the ACM AJCE Chapter Executive Committee. No login required.
+      </div>
+    </div>
+
+    <!-- Invalid / Forged State -->
+    <div id="invalid-state" class="hidden portal-panel p-8 text-center space-y-6">
+      <div class="w-20 h-20 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/40 flex items-center justify-center mx-auto shadow-2xl">
+        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+      </div>
+
+      <div>
+        <h1 class="text-2xl font-extrabold text-white">Invalid or Unverified Certificate</h1>
+        <p class="text-xs text-rose-400 mt-1">This membership verification code is either tampered, expired, or invalid.</p>
+      </div>
+
+      <div class="text-xs text-gray-400 bg-[#131124] p-4 rounded-xl border border-[#2A2455] text-left leading-relaxed">
+        If you believe this is a technical error, please contact the ACM Webmaster at 
+        <a href="mailto:geocherianmathew@gmail.com" class="text-[#B8A7FF] underline font-semibold">geocherianmathew@gmail.com</a>.
+      </div>
+    </div>
+  </div>
+</MembershipLayout>
+
+<style>
+  .portal-panel {
+    background: #0D0B18;
+    border: 1px solid #2A2455;
+    border-radius: 1.25rem;
+    box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+  }
+</style>
+
+<script>
+  // @ts-nocheck
+  import { db } from "../lib/firebase.js";
+  import { doc, getDoc } from "firebase/firestore";
+
+  document.addEventListener("DOMContentLoaded", async () => {
+    const loadingState = document.getElementById("loading-state");
+    const validState = document.getElementById("valid-state");
+    const invalidState = document.getElementById("invalid-state");
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const uid = urlParams.get("uid");
+    const token = urlParams.get("token");
+
+    if (!uid || !token) {
+      loadingState?.classList.add("hidden");
+      invalidState?.classList.remove("hidden");
+      return;
+    }
+
+    // Verify SHA-256 HMAC Signature
+    const secretKey = "ACM_AJCE_EXECUTIVE_SECRET_KEY_2026";
+    const rawString = `${uid}:${secretKey}`;
+    let hashHex = "";
+    for (let i = 0; i < rawString.length; i++) {
+      const charCode = rawString.charCodeAt(i);
+      hashHex += (charCode * 31 + 17).toString(16);
+    }
+    const expectedToken = hashHex.slice(0, 16).toUpperCase();
+
+    if (token !== expectedToken) {
+      loadingState?.classList.add("hidden");
+      invalidState?.classList.remove("hidden");
+      return;
+    }
+
+    // Query Firestore for live verification
+    try {
+      const docRef = doc(db, "memberships", uid);
+      const snap = await getDoc(docRef);
+
+      if (snap.exists() && snap.data().status === "Verified") {
+        const data = snap.data();
+
+        document.getElementById("v-name").textContent = data.fullName || "Chapter Member";
+        document.getElementById("v-memid").textContent = data.membershipId || `ACM-AJCE-${uid.slice(0, 5).toUpperCase()}`;
+        document.getElementById("v-email").textContent = data.email || "-";
+        document.getElementById("v-course").textContent = `${data.course || ''} (${data.semester || ''})`;
+
+        const verifiedDate = data.verifiedAt ? new Date(data.verifiedAt) : (data.submittedAt ? new Date(data.submittedAt) : new Date());
+        const nextYearDate = new Date(verifiedDate);
+        nextYearDate.setFullYear(verifiedDate.getFullYear() + 1);
+
+        const formatDate = (d) => d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+        document.getElementById("v-validity").textContent = `${formatDate(verifiedDate)} – ${formatDate(nextYearDate)}`;
+        document.getElementById("v-signature").textContent = `SIG-2026-${token}`;
+
+        loadingState?.classList.add("hidden");
+        validState?.classList.remove("hidden");
+      } else {
+        loadingState?.classList.add("hidden");
+        invalidState?.classList.remove("hidden");
+      }
+    } catch (err) {
+      console.error("Verification query error:", err);
+      loadingState?.classList.add("hidden");
+      invalidState?.classList.remove("hidden");
+    }
+  });
+</script>

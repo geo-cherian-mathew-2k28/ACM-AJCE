@@ -203,8 +203,8 @@ import MembershipLayout from "../../layouts/MembershipLayout.astro";
         
         <!-- Official Membership ID Card Section (Visible once Verified) -->
         <div id="verified-card" class="hidden pt-2 border-t border-emerald-500/30">
-          <div class="bg-gradient-to-r from-[#2A2455] to-[#1A182F] p-4 rounded-lg border border-emerald-500/40 text-center space-y-2">
-            <span class="text-[10px] text-emerald-400 uppercase tracking-widest font-mono font-bold block">Official ACM AJCE Membership ID</span>
+          <div class="bg-gradient-to-r from-[#2A2455] to-[#1A182F] p-5 rounded-xl border border-emerald-500/40 text-center space-y-3 shadow-xl">
+            <span class="text-[10px] text-emerald-400 uppercase tracking-widest font-mono font-bold block">Official ACM AJCE Membership Card</span>
             
             <div class="flex items-center justify-center gap-2">
               <div id="view-mem-id" class="text-xl font-extrabold text-white font-mono tracking-wider">ACM-AJCE-9842</div>
@@ -214,10 +214,22 @@ import MembershipLayout from "../../layouts/MembershipLayout.astro";
               </button>
             </div>
 
+            <!-- Security QR Code Container -->
+            <div class="bg-white p-3 rounded-xl inline-block shadow-lg border border-purple-300">
+              <img id="view-security-qr" src="" alt="Cryptographic Verification QR" class="w-36 h-36 object-contain mx-auto" />
+              <span class="text-[9px] text-purple-900 font-mono font-bold block mt-1 uppercase tracking-wider">Scan to Verify Authenticity</span>
+            </div>
+
             <div class="text-[11px] text-gray-300 font-medium">
               Validity Period: <span id="view-validity" class="text-emerald-400 font-semibold font-mono">Aug 5, 2026 – Aug 5, 2027</span>
             </div>
+            
             <p class="text-[10px] text-gray-400" id="view-member-badge">Active Chapter Member</p>
+
+            <button id="download-card-btn" type="button" class="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-lg transition-all cursor-pointer border border-emerald-400/40">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+              Download Membership Card (PNG)
+            </button>
           </div>
         </div>
       </div>
@@ -225,9 +237,9 @@ import MembershipLayout from "../../layouts/MembershipLayout.astro";
       <!-- Webmaster Support Contact -->
       <div class="mb-6 p-3 rounded-xl bg-[#131124] border border-[#2A2455] text-xs text-gray-400">
         Having issues with your verification or registration? 
-        <a href="mailto:geocherianmathew@gmail.com?subject=ACM%20AJCE%20Membership%20Support" class="text-[#B8A7FF] hover:text-white font-semibold underline ml-1">
+        <button id="webmaster-mail-btn" type="button" class="text-[#B8A7FF] hover:text-white font-semibold underline ml-1 cursor-pointer">
           Contact Webmaster Support
-        </a>
+        </button>
       </div>
 
       <button id="signout-status-btn" type="button" class="text-xs text-gray-400 hover:text-white transition-colors underline cursor-pointer">
@@ -290,10 +302,13 @@ import MembershipLayout from "../../layouts/MembershipLayout.astro";
 
     const copyMemIdBtn = document.getElementById("copy-mem-id-btn");
     const copyMemText = document.getElementById("copy-mem-text");
+    const downloadCardBtn = document.getElementById("download-card-btn");
+    const webmasterMailBtn = document.getElementById("webmaster-mail-btn");
 
     let currentUser = null;
     let unsubscribeFirestore = null;
     let currentMembershipId = "";
+    let currentMembershipData = null;
 
     const showAuthError = (msg) => {
       if (authErrorBanner) {
@@ -336,6 +351,98 @@ import MembershipLayout from "../../layouts/MembershipLayout.astro";
           if (copyMemText) copyMemText.textContent = "Copy ID";
         }, 2000);
       }
+    });
+
+    // Webmaster Email Choice Handler (Gmail Web vs Default App)
+    webmasterMailBtn?.addEventListener("click", () => {
+      const email = "geocherianmathew@gmail.com";
+      const subject = encodeURIComponent("ACM AJCE Membership Support");
+      const body = encodeURIComponent("Hi Webmaster,\n\nI need help with my ACM AJCE membership verification.\n\nDetails:\nName: " + (currentMembershipData?.fullName || '') + "\nEmail: " + (currentMembershipData?.email || currentUser?.email || ''));
+      
+      const gmailWebUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${subject}&body=${body}`;
+      const defaultMailUrl = `mailto:${email}?subject=${subject}&body=${body}`;
+
+      // Open in Gmail web interface by default for maximum compatibility
+      window.open(gmailWebUrl, "_blank");
+    });
+
+    // Download High-Resolution Membership Card PNG Canvas
+    downloadCardBtn?.addEventListener("click", () => {
+      if (!currentMembershipData) return;
+
+      const canvas = document.createElement("canvas");
+      canvas.width = 1000;
+      canvas.height = 600;
+      const ctx = canvas.getContext("2d");
+
+      // Draw Background
+      const gradient = ctx.createLinearGradient(0, 0, 1000, 600);
+      gradient.addColorStop(0, "#0D0B18");
+      gradient.addColorStop(0.5, "#1A182F");
+      gradient.addColorStop(1, "#2A2455");
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, 1000, 600);
+
+      // Draw Border
+      ctx.strokeStyle = "#8A2BE2";
+      ctx.lineWidth = 8;
+      ctx.strokeRect(20, 20, 960, 560);
+
+      // Header Text
+      ctx.fillStyle = "#A78BFA";
+      ctx.font = "bold 26px sans-serif";
+      ctx.fillText("ASSOCIATION FOR COMPUTING MACHINERY", 60, 80);
+
+      ctx.fillStyle = "#FFFFFF";
+      ctx.font = "900 42px sans-serif";
+      ctx.fillText("ACM AJCE STUDENT CHAPTER", 60, 130);
+
+      // Member Name & ID
+      ctx.fillStyle = "#FBFAFF";
+      ctx.font = "bold 36px sans-serif";
+      ctx.fillText(currentMembershipData.fullName || "Chapter Member", 60, 220);
+
+      ctx.fillStyle = "#34D399";
+      ctx.font = "bold 32px monospace";
+      ctx.fillText(`ID: ${currentMembershipId}`, 60, 270);
+
+      // Details
+      ctx.fillStyle = "#D1D5DB";
+      ctx.font = "22px sans-serif";
+      ctx.fillText(`Course: ${currentMembershipData.course || ''} (${currentMembershipData.semester || ''})`, 60, 340);
+      ctx.fillText(`Email: ${currentMembershipData.email || ''}`, 60, 380);
+
+      const verifiedDate = currentMembershipData.verifiedAt ? new Date(currentMembershipData.verifiedAt) : new Date();
+      const nextYearDate = new Date(verifiedDate);
+      nextYearDate.setFullYear(verifiedDate.getFullYear() + 1);
+      const formatDate = (d) => d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+
+      ctx.fillStyle = "#A78BFA";
+      ctx.font = "bold 22px monospace";
+      ctx.fillText(`Valid: ${formatDate(verifiedDate)} - ${formatDate(nextYearDate)}`, 60, 430);
+
+      // Security Badge
+      ctx.fillStyle = "#10B981";
+      ctx.font = "bold 20px sans-serif";
+      ctx.fillText("OFFICIAL AUTHENTICATED DIGITAL CERTIFICATE", 60, 520);
+
+      // Draw Verification QR Code on Canvas
+      const qrImg = document.getElementById("view-security-qr");
+      if (qrImg && qrImg.complete) {
+        ctx.fillStyle = "#FFFFFF";
+        ctx.fillRect(720, 220, 220, 220);
+        ctx.drawImage(qrImg, 730, 230, 200, 200);
+
+        ctx.fillStyle = "#A78BFA";
+        ctx.font = "bold 14px monospace";
+        ctx.fillText("SCAN TO VERIFY", 760, 465);
+      }
+
+      // Trigger Download
+      const link = document.createElement("a");
+      link.download = `ACM_AJCE_Card_${currentMembershipId}.png`;
+      link.href = canvas.toDataURL("image/png");
+      link.click();
     });
 
     // Auth State Persistent Observer
@@ -391,8 +498,9 @@ import MembershipLayout from "../../layouts/MembershipLayout.astro";
       });
     });
 
-    // Render Status Screen with Dynamic Dates & Copy ID
+    // Render Status Screen with Dynamic Dates & Security QR
     function renderStatusView(data) {
+      currentMembershipData = data;
       document.getElementById("view-name").textContent = data.fullName || "-";
       document.getElementById("view-email").textContent = data.email || currentUser?.email || "-";
       document.getElementById("view-course-sem").textContent = `${data.course || ''} (${data.semester || ''})`;
@@ -407,6 +515,7 @@ import MembershipLayout from "../../layouts/MembershipLayout.astro";
       const viewMemId = document.getElementById("view-mem-id");
       const viewValidity = document.getElementById("view-validity");
       const viewMemberBadge = document.getElementById("view-member-badge");
+      const viewSecurityQr = document.getElementById("view-security-qr");
 
       const memId = data.membershipId || `ACM-AJCE-${(data.uid || currentUser?.uid || '').slice(0, 5).toUpperCase()}`;
       currentMembershipId = memId;
@@ -432,6 +541,11 @@ import MembershipLayout from "../../layouts/MembershipLayout.astro";
         if (viewMemId) viewMemId.textContent = memId;
         if (viewValidity) viewValidity.textContent = validityStr;
         if (viewMemberBadge) viewMemberBadge.textContent = `Active Chapter Member (${activeYears})`;
+
+        // Load Security QR Code API Endpoint
+        if (viewSecurityQr) {
+          viewSecurityQr.src = `/api/verify-qr.png?uid=${encodeURIComponent(data.uid || currentUser?.uid || '')}`;
+        }
       } else if (data.status === "Rejected") {
         statusBadge.className = "inline-flex items-center justify-center w-20 h-20 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/40 mb-6 shadow-xl";
         statusIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>`;
