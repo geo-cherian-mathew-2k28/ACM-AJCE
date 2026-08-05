@@ -383,7 +383,7 @@ import MembershipLayout from "../../layouts/MembershipLayout.astro";
         viewStatus.textContent = "Verified";
         viewStatus.className = "text-emerald-400 font-bold";
         verifiedCard?.classList.remove("hidden");
-        if (viewMemId) viewMemId.textContent = data.membershipId || `ACM-AJCE-${user.uid.slice(0, 5).toUpperCase()}`;
+        if (viewMemId) viewMemId.textContent = data.membershipId || `ACM-AJCE-${(data.uid || currentUser?.uid || '').slice(0, 5).toUpperCase()}`;
       } else if (data.status === "Rejected") {
         statusBadge.className = "inline-flex items-center justify-center w-20 h-20 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/40 mb-6 shadow-xl";
         statusIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>`;
