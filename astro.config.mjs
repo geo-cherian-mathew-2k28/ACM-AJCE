@@ -9,7 +9,9 @@ const cdnUrl = process.env.PUBLIC_CDN_URL?.replace(/\/$/, "");
 export default defineConfig({
     site: 'https://www.ajce.in',
     output: 'server',
-    adapter: vercel(),
+    adapter: vercel({
+        runtime: 'nodejs20.x'
+    }),
     integrations: [react(), keystatic()],
     build: {
         assetsPrefix: cdnUrl,
