@@ -1,5 +1,5 @@
 ---
-// Gallery_Phone.astro — Professional Mobile-first Gallery & Fullscreen Touch Lightbox
+// Gallery_Phone.astro — Mobile-first Gallery with Working Touch Lightbox
 import { getAssetUrl } from "../utils/cdn";
 
 const galleryItems = [
@@ -59,9 +59,9 @@ const categories = ["ALL", "WORKSHOPS", "TALKS", "3D FORGE", "COMMUNITY"];
         class="phone-gallery-card group relative aspect-[4/3] rounded-xl overflow-hidden bg-white/5 border border-white/10 cursor-pointer active:scale-95 transition-all duration-300"
         data-category={item.category.toLowerCase()}
         data-index={idx}
-        data-[#src]={getAssetUrl(item.src)}
-        data-[#title]={item.title}
-        data-[#cat]={item.category}
+        data-src={getAssetUrl(item.src)}
+        data-title={item.title}
+        data-cat={item.category}
         role="button"
         tabindex="0"
         aria-label={`View ${item.title}`}
@@ -141,17 +141,17 @@ const categories = ["ALL", "WORKSHOPS", "TALKS", "3D FORGE", "COMMUNITY"];
       id="phone-lightbox-img"
       src=""
       alt=""
-      class="max-h-[70vh] max-w-full object-contain rounded-xl border border-white/15 shadow-2xl transition-all duration-300"
+      class="max-h-[70vh] max-w-full object-contain rounded-xl border border-white/20 shadow-[0_10px_40px_rgba(0,0,0,0.8)] transition-all duration-300"
     />
 
     <!-- Navigation Overlay Buttons -->
     <button
       type="button"
       id="phone-lightbox-prev"
-      class="absolute left-2 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/60 border border-white/20 flex items-center justify-center text-white active:scale-90 transition-transform z-30"
+      class="absolute left-2 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/75 border border-white/25 flex items-center justify-center text-white active:scale-90 transition-transform z-30 shadow-lg"
       aria-label="Previous Image"
     >
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
         <path d="m15 18-6-6 6-6"/>
       </svg>
     </button>
@@ -159,10 +159,10 @@ const categories = ["ALL", "WORKSHOPS", "TALKS", "3D FORGE", "COMMUNITY"];
     <button
       type="button"
       id="phone-lightbox-next"
-      class="absolute right-2 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/60 border border-white/20 flex items-center justify-center text-white active:scale-90 transition-transform z-30"
+      class="absolute right-2 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/75 border border-white/25 flex items-center justify-center text-white active:scale-90 transition-transform z-30 shadow-lg"
       aria-label="Next Image"
     >
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
         <path d="m9 18 6-6-6-6"/>
       </svg>
     </button>
@@ -217,9 +217,9 @@ const categories = ["ALL", "WORKSHOPS", "TALKS", "3D FORGE", "COMMUNITY"];
       const item = currentVisibleItems[currentIndex];
       if (!item || !lightboxImg) return;
 
-      const src = item.getAttribute("data-#src") || "";
-      const title = item.getAttribute("data-#title") || "";
-      const cat = item.getAttribute("data-#cat") || "";
+      const src = item.getAttribute("data-src") || "";
+      const title = item.getAttribute("data-title") || "";
+      const cat = item.getAttribute("data-cat") || "";
 
       lightboxImg.src = src;
       lightboxImg.alt = title;
