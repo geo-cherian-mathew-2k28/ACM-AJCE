@@ -31,9 +31,7 @@ const isFaculty = position.toLowerCase().includes("faculty");
 
 <div
   class={`board-member-card relative w-full aspect-[1.6] rounded-xl overflow-hidden flex items-end justify-center shadow-lg border ${
-    isFaculty
-      ? "bg-gradient-to-br from-[#FFFBEB] to-[#FEF3C7] border-amber-300/70 shadow-amber-900/10"
-      : isW
+    isW
       ? "bg-gradient-to-br from-[#FFF5F8] to-[#FCE7F0] border-pink-300/60 shadow-pink-900/10"
       : "bg-white border-purple-100/30"
   }`}
@@ -68,7 +66,7 @@ const isFaculty = position.toLowerCase().includes("faculty");
         alt={fullName}
         class={`h-full w-full object-cover object-top filter grayscale contrast-105 ${
           isFaculty
-            ? "brightness-95 sepia-[0.2] hue-rotate-[15deg]"
+            ? "brightness-95"
             : isW
             ? "brightness-95 sepia-[0.15] hue-rotate-[290deg]"
             : "brightness-95"
@@ -88,7 +86,7 @@ const isFaculty = position.toLowerCase().includes("faculty");
         <h3
           style="font-family: 'PolySans Bold';"
           class={`board-card-name m-0 ${
-            isFaculty ? "text-amber-950" : isW ? "text-pink-950" : "text-gray-900"
+            isW ? "text-pink-950" : "text-gray-900"
           }`}
         >
           {displayName}
@@ -96,7 +94,7 @@ const isFaculty = position.toLowerCase().includes("faculty");
         <p
           style="font-family: PolySans Slim;"
           class={`board-card-role m-0 mt-0.5 font-semibold ${
-            isFaculty ? "text-[#B45309]" : isW ? "text-[#DB2777]" : "text-[#7C3AED]"
+            isFaculty ? "text-[#D97706]" : isW ? "text-[#DB2777]" : "text-[#7C3AED]"
           }`}
         >
           {position}

@@ -87,14 +87,8 @@ const teamMembers = boardMembers.filter(
     <!-- Category Filter Tabs -->
     <div class="flex justify-center items-center gap-2.5 mb-12 flex-wrap" id="team-tabs">
       <button
-        data-view="faculty"
-        class="team-pill-btn active text-xs sm:text-sm font-semibold tracking-wider px-5 py-2.5 rounded-full border transition-all duration-300"
-      >
-        FACULTY IN-CHARGE
-      </button>
-      <button
         data-view="exec"
-        class="team-pill-btn text-xs sm:text-sm font-semibold tracking-wider px-5 py-2.5 rounded-full border transition-all duration-300"
+        class="team-pill-btn active text-xs sm:text-sm font-semibold tracking-wider px-5 py-2.5 rounded-full border transition-all duration-300"
       >
         EXECUTIVE OFFICERS
       </button>
@@ -117,6 +111,12 @@ const teamMembers = boardMembers.filter(
         CORE SUB-TEAMS
       </button>
       <button
+        data-view="faculty"
+        class="team-pill-btn text-xs sm:text-sm font-semibold tracking-wider px-5 py-2.5 rounded-full border transition-all duration-300"
+      >
+        FACULTY IN-CHARGE
+      </button>
+      <button
         data-view="all"
         class="team-pill-btn text-xs sm:text-sm font-semibold tracking-wider px-5 py-2.5 rounded-full border transition-all duration-300"
       >
@@ -124,30 +124,8 @@ const teamMembers = boardMembers.filter(
       </button>
     </div>
 
-    <!-- 0. Faculty In-Charge Grid -->
-    <div id="view-faculty" class="team-view-section active w-full flex flex-col items-center">
-      <div class="w-full lg:w-[75vw] flex flex-wrap justify-center gap-5 mb-8">
-        {
-          facultyMembers.map((member) => (
-            <div class="w-full sm:w-[calc(50%-0.75rem)] lg:w-[calc(33.333%-0.85rem)] transition-all duration-300 hover:scale-105 flex justify-center">
-              <BoardMemberCardSingular
-                title={member.title}
-                fullName={member.fullName}
-                position={member.position}
-                imageUrl={getAssetUrl(member.imageUrl)}
-                linkedinUrl={member.linkedinUrl}
-                googleScholarUrl={member.googleScholarUrl}
-                githubUrl={member.githubUrl}
-                isW={member.isW}
-              />
-            </div>
-          ))
-        }
-      </div>
-    </div>
-
     <!-- 1. Executive Officers Grid -->
-    <div id="view-exec" class="team-view-section hidden w-full flex flex-col items-center">
+    <div id="view-exec" class="team-view-section active w-full flex flex-col items-center">
       <div class="w-full lg:w-[75vw] flex flex-wrap justify-center gap-5 mb-8">
         {
           executiveLeaders.map((member) => (
@@ -217,6 +195,28 @@ const teamMembers = boardMembers.filter(
       <div class="w-full lg:w-[75vw] flex flex-wrap justify-center gap-5 mb-8">
         {
           teamMembers.map((member) => (
+            <div class="w-full sm:w-[calc(50%-0.75rem)] lg:w-[calc(33.333%-0.85rem)] transition-all duration-300 hover:scale-105 flex justify-center">
+              <BoardMemberCardSingular
+                title={member.title}
+                fullName={member.fullName}
+                position={member.position}
+                imageUrl={getAssetUrl(member.imageUrl)}
+                linkedinUrl={member.linkedinUrl}
+                googleScholarUrl={member.googleScholarUrl}
+                githubUrl={member.githubUrl}
+                isW={member.isW}
+              />
+            </div>
+          ))
+        }
+      </div>
+    </div>
+
+    <!-- 5. Faculty In-Charge Grid -->
+    <div id="view-faculty" class="team-view-section hidden w-full flex flex-col items-center">
+      <div class="w-full lg:w-[75vw] flex flex-wrap justify-center gap-5 mb-8">
+        {
+          facultyMembers.map((member) => (
             <div class="w-full sm:w-[calc(50%-0.75rem)] lg:w-[calc(33.333%-0.85rem)] transition-all duration-300 hover:scale-105 flex justify-center">
               <BoardMemberCardSingular
                 title={member.title}

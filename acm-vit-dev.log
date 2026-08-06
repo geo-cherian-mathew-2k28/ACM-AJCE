@@ -1,0 +1,529 @@
+[2m23:31:14[22m [34m[@astrojs/cloudflare][39m Enabling sessions with Cloudflare KV with the "SESSION" KV binding.
+[2m23:31:14[22m [34m[@astrojs/cloudflare][39m If you see the error "Invalid binding `SESSION`" in your build output, you need to add the binding to your wrangler config file.
+[33m[1m23:31:14[22m [WARN] [adapter][39m Cloudflare does not support sharp at runtime. However, you can configure `imageService: "compile"` to optimize images with sharp on prerendered pages during build time.
+[2m23:31:15[22m [34m[types][39m Generated [2m2ms[22m
+[2m23:31:15[22m [34m[content][39m Syncing content
+[2m23:31:15[22m [34m[content][39m Synced content
+
+[42m[1m astro [22m[49m [32mv5.16.6[39m [2mready in[22m 2533 [2mms[22m
+
+[2m┃[22m Local    [36mhttp://localhost:4321/[39m
+[2m┃[22m Network  [36mhttp://172.28.112.1:4321/[39m
+           [36mhttp://192.168.1.4:4321/[39m
+
+[2m23:31:15[22m [32mwatching for file changes...[39m
+
+[43m[30m update [39m[49m [33m▶ New version of Astro available: 7.1.1[39m
+  Run [36mpnpm dlx @astrojs/upgrade[39m to update
+
+[2m23:31:35[22m [34m[200][39m / [2m3694ms[22m
+[2m23:31:53[22m [34m[200][39m / [2m31ms[22m
+[2m23:32:03[22m [34m[200][39m / [2m29ms[22m
+[2m23:32:40[22m [34m[200][39m / [2m80ms[22m
+[2m23:32:41[22m [34m[200][39m / [2m67ms[22m
+[2m23:33:12[22m [34m[200][39m / [2m40ms[22m
+[2m23:36:43[22m [34m[watch][39m src/components/ACMW.astro
+[2m23:36:43[22m [34m[watch][39m src/components/ACMW.astro
+[2m23:36:43[22m [34m[watch][39m src/content/projects.json
+[2m23:36:44[22m [34m[watch][39m src/content/projects.json
+[2m23:36:44[22m [34m[watch][39m src/data/projectsData.ts
+[2m23:36:44[22m [34m[watch][39m src/data/projectsData.ts
+[2m23:36:44[22m [34m[watch][39m /src/styles/globals.css
+[2m23:36:44[22m [34m[watch][39m /src/styles/globals.css
+[2m23:36:44[22m [34m[watch][39m public/about/2.svg
+[2m23:36:44[22m [34m[watch][39m /src/styles/globals.css
+[2m23:36:44[22m [34m[watch][39m public/blogs/placeholder.svg
+[2m23:36:44[22m [34m[watch][39m src/components/EventDetails.astro
+[2m23:36:44[22m [34m[watch][39m src/components/EventDetails.astro
+[2m23:36:44[22m [34m[watch][39m src/components/OldContactUs.astro
+[2m23:36:44[22m [34m[watch][39m src/components/OldContactUs.astro
+[2m23:36:44[22m [34m[watch][39m src/content/projects.json
+[2m23:36:44[22m [34m[watch][39m src/content/projects.json
+[2m23:36:44[22m [34m[watch][39m src/data/projectsData.ts
+[2m23:36:44[22m [34m[watch][39m src/data/projectsData.ts
+[2m23:36:44[22m [34m[watch][39m /src/styles/globals.css
+[2m23:36:44[22m [34m[watch][39m /src/styles/globals.css
+[2m23:36:44[22m [34m[watch][39m public/about/2.svg
+[2m23:36:44[22m [34m[watch][39m /src/styles/globals.css
+[2m23:36:44[22m [34m[watch][39m public/blogs/placeholder.svg
+[2m23:36:44[22m [34m[watch][39m src/pages/grep.astro
+[2m23:36:44[22m [34m[watch][39m src/pages/grep.astro
+[2m23:36:44[22m [34m[watch][39m src/phoneComponents/ContactUs_Phone.astro
+[2m23:36:44[22m [34m[watch][39m src/phoneComponents/ContactUs_Phone.astro
+[2m23:36:44[22m [34m[watch][39m src/components/Blogs.astro
+[2m23:36:44[22m [34m[watch][39m src/components/CodeOfConduct.astro
+[2m23:36:44[22m [34m[watch][39m /src/components/ContactUs.astro?astro&type=style&index=0&lang.css
+[2m23:36:44[22m [34m[watch][39m src/components/ContactUs.astro
+[2m23:36:44[22m [34m[watch][39m src/components/BecauseTechMatters.astro
+[2m23:36:44[22m [34m[watch][39m src/components/DistinguishedSpeaker.astro
+[2m23:36:44[22m [34m[watch][39m src/components/DistinguishedSpeaker.astro
+[2m23:36:44[22m [34m[watch][39m src/components/Gallery.astro
+[2m23:36:44[22m [34m[watch][39m src/components/Footer.astro
+[2m23:36:44[22m [34m[watch][39m src/components/hero.astro
+[2m23:36:44[22m [34m[watch][39m src/components/Header.astro
+[2m23:36:44[22m [34m[watch][39m src/components/IgnitingMindsSection.astro
+[2m23:36:44[22m [34m[watch][39m src/components/LegendPins.astro
+[2m23:36:44[22m [34m[watch][39m src/components/ProjectsIntro.astro
+[2m23:36:44[22m [34m[watch][39m src/components/ProofGallery.astro
+[2m23:36:44[22m [34m[watch][39m /src/components/SWork.astro?astro&type=style&index=0&lang.css
+[2m23:36:44[22m [34m[watch][39m src/components/SWork.astro
+[2m23:36:44[22m [34m[watch][39m src/pages/grep.astro
+[2m23:36:44[22m [34m[watch][39m src/pages/grep.astro
+[2m23:36:44[22m [34m[watch][39m src/phoneComponents/ContactUs_Phone.astro
+[2m23:36:44[22m [34m[watch][39m src/phoneComponents/ContactUs_Phone.astro
+[2m23:36:44[22m [34m[watch][39m src/phoneComponents/Gallery_Phone.astro
+[2m23:36:44[22m [34m[watch][39m src/pages/index.astro
+[2m23:36:44[22m [34m[watch][39m src/pages/index.astro
+[2m23:36:44[22m [34m[watch][39m /src/styles/globals.css
+[2m23:36:44[22m [34m[watch][39m public/projects/acmone.svg
+[2m23:36:49[22m [34m[watch][39m /src/styles/globals.css
+[2m23:36:49[22m [34m[watch][39m public/background_domains.svg
+[2m23:36:49[22m [34m[watch][39m /src/styles/globals.css
+[2m23:36:49[22m [34m[watch][39m public/casette-layout-orange.svg
+[2m23:36:49[22m [34m[watch][39m /src/styles/globals.css
+[2m23:36:49[22m [34m[watch][39m public/favicon.svg
+[2m23:36:49[22m [34m[watch][39m /src/styles/globals.css
+[2m23:36:49[22m [34m[watch][39m public/gallery.svg
+[2m23:36:49[22m [34m[watch][39m /src/styles/globals.css
+[2m23:36:49[22m [34m[watch][39m public/github-orange.svg
+[2m23:36:49[22m [34m[watch][39m /src/styles/globals.css
+[2m23:36:49[22m [34m[watch][39m public/glow_ball_red.svg
+[2m23:36:49[22m [34m[watch][39m /src/styles/globals.css
+[2m23:36:49[22m [34m[watch][39m public/google-scholar-orange.svg
+[2m23:36:49[22m [34m[watch][39m /src/styles/globals.css
+[2m23:36:49[22m [34m[watch][39m public/linkedin-orange.svg
+[2m23:36:49[22m [34m[watch][39m /src/styles/globals.css
+[2m23:36:49[22m [34m[watch][39m public/MacBook Pro 15.svg
+[2m23:36:49[22m [34m[watch][39m /src/styles/globals.css
+[2m23:36:49[22m [34m[watch][39m public/MacBookScreen.svg
+[2m23:36:49[22m [34m[watch][39m /src/styles/globals.css
+[2m23:36:49[22m [34m[watch][39m public/partners-cassette.svg
+[2m23:36:49[22m [34m[watch][39m /src/styles/globals.css
+[2m23:36:49[22m [34m[watch][39m public/the_team.svg
+[2m23:36:49[22m [34m[watch][39m /src/styles/globals.css
+[2m23:36:49[22m [34m[watch][39m public/Type7.svg
+[2m23:36:59[22m [34m[200][39m / [2m7084ms[22m
+[2m23:37:26[22m [34m[watch][39m src/components/Footer.astro
+[2m23:37:28[22m [34m[200][39m / [2m679ms[22m
+[2m23:37:43[22m [34m[watch][39m /src/components/Footer.astro?astro&type=style&index=0&lang.css
+[2m23:37:43[22m [34m[watch][39m src/components/Footer.astro
+[2m23:38:18[22m [34m[watch][39m src/content/projects.json
+[2m23:38:18[22m [34m[watch][39m src/content/projects.json
+[2m23:38:18[22m [34m[watch][39m src/data/projectsData.ts
+[2m23:38:18[22m [34m[watch][39m src/data/projectsData.ts
+[2m23:38:18[22m [34m[watch][39m /src/components/CelebrationPopup.astro?astro&type=style&index=0&lang.css
+[2m23:38:18[22m [34m[watch][39m src/components/CelebrationPopup.astro
+[2m23:38:18[22m [34m[watch][39m src/pages/grep.astro
+[2m23:38:18[22m [34m[watch][39m src/pages/grep.astro
+[2m23:38:20[22m [34m[200][39m / [2m716ms[22m
+[2m23:38:20[22m [34m[200][39m / [2m803ms[22m
+[2m23:38:46[22m [34m[watch][39m src/components/BoardMemberCardSingular.astro
+[2m23:38:48[22m [34m[200][39m / [2m938ms[22m
+[2m23:38:49[22m [34m[watch][39m src/components/ProofGallery.astro
+[2m23:40:54[22m [34m[200][39m / [2m372ms[22m
+[2m23:40:56[22m [34m[200][39m / [2m34ms[22m
+[2m23:41:38[22m [34m[200][39m / [2m12ms[22m
+[2m23:42:17[22m [34m[200][39m / [2m25ms[22m
+[2m23:42:58[22m [34m[200][39m / [2m63ms[22m
+[2m23:53:52[22m [34m[watch][39m /src/styles/globals.css
+[2m23:53:58[22m [34m[watch][39m src/layouts/Layout.astro
+[2m23:54:01[22m [34m[watch][39m src/components/AcmWContent.astro
+[2m23:54:08[22m [34m[watch][39m src/components/BoardMemberCardSingular.astro
+[2m23:54:09[22m [34m[watch][39m src/components/ProofGallery.astro
+[2m23:54:11[22m [34m[200][39m / [2m7146ms[22m
+[2m23:54:11[22m [34m[200][39m / [2m7181ms[22m
+[2m23:54:11[22m [34m[200][39m / [2m7203ms[22m
+[2m23:54:12[22m [34m[watch][39m /src/components/IgnitingMindsSection.astro?astro&type=style&index=0&lang.css
+[2m23:54:12[22m [34m[watch][39m src/components/IgnitingMindsSection.astro
+[2m23:54:14[22m [34m[200][39m / [2m3073ms[22m
+[2m23:54:14[22m [34m[200][39m / [2m3103ms[22m
+[2m23:54:15[22m [34m[watch][39m src/components/DistinguishedSpeaker.astro
+[2m23:54:15[22m [34m[watch][39m src/components/DistinguishedSpeaker.astro
+[2m23:54:19[22m [34m[watch][39m src/components/Preloader.astro
+[2m23:54:22[22m [34m[watch][39m src/phoneComponents/Domains_Phone.astro
+[2m23:54:24[22m [34m[200][39m / [2m2760ms[22m
+[2m23:54:25[22m [34m[200][39m / [2m1228ms[22m
+[2m23:55:13[22m [34m[watch][39m src/phoneComponents/Domains_Phone.astro
+[2m23:55:16[22m [34m[200][39m / [2m1343ms[22m
+[2m23:55:17[22m [34m[watch][39m src/components/Domains.astro
+[2m23:56:33[22m [34m[watch][39m src/content/projects.json
+[2m23:56:33[22m [34m[watch][39m src/content/projects.json
+[2m23:56:33[22m [34m[watch][39m src/data/projectsData.ts
+[2m23:56:33[22m [34m[watch][39m src/data/projectsData.ts
+[2m23:56:33[22m [34m[watch][39m /src/styles/globals.css
+[2m23:56:33[22m [34m[watch][39m public/acm-logo-black.svg
+[2m23:56:33[22m [34m[watch][39m src/components/DomeGallery.astro
+[2m23:56:33[22m [34m[watch][39m src/components/DomeGallery.astro
+[2m23:56:33[22m [34m[watch][39m src/components/EventDetails.astro
+[2m23:56:33[22m [34m[watch][39m src/components/EventDetails.astro
+[2m23:56:33[22m [34m[watch][39m src/components/OldContactUs.astro
+[2m23:56:33[22m [34m[watch][39m src/components/OldContactUs.astro
+[2m23:56:33[22m [34m[watch][39m src/content/projects.json
+[2m23:56:33[22m [34m[watch][39m src/content/projects.json
+[2m23:56:33[22m [34m[watch][39m src/data/projectsData.ts
+[2m23:56:33[22m [34m[watch][39m src/data/projectsData.ts
+[2m23:56:33[22m [34m[watch][39m /src/styles/globals.css
+[2m23:56:33[22m [34m[watch][39m public/acm-logo-black.svg
+[2m23:56:33[22m [34m[watch][39m src/components/BecauseTechMatters.astro
+[2m23:56:33[22m [34m[watch][39m /src/layouts/Layout.astro?astro&type=style&index=0&lang.css
+[2m23:56:33[22m [34m[watch][39m src/layouts/Layout.astro
+[2m23:56:33[22m [34m[watch][39m src/pages/grep.astro
+[2m23:56:33[22m [34m[watch][39m src/pages/grep.astro
+[2m23:56:33[22m [34m[watch][39m src/phoneComponents/About_Phone.astro
+[2m23:56:33[22m [34m[watch][39m src/components/Blogs.astro
+[2m23:56:33[22m [34m[watch][39m src/components/Cassette.astro
+[2m23:56:33[22m [34m[watch][39m src/components/Cassette.astro
+[2m23:56:33[22m [34m[watch][39m /src/components/CelebrationPopup.astro?astro&type=style&index=0&lang.css
+[2m23:56:33[22m [34m[watch][39m src/components/CelebrationPopup.astro
+[2m23:56:33[22m [34m[watch][39m src/components/CodeOfConduct.astro
+[2m23:56:33[22m [34m[watch][39m src/components/ContactUs.astro
+[2m23:56:33[22m [34m[watch][39m src/components/DistinguishedSpeaker.astro
+[2m23:56:33[22m [34m[watch][39m src/components/DistinguishedSpeaker.astro
+[2m23:56:33[22m [34m[watch][39m src/components/Domains.astro
+[2m23:56:33[22m [34m[watch][39m /src/components/Gallery.astro?astro&type=style&index=0&lang.css
+[2m23:56:33[22m [34m[watch][39m src/components/Gallery.astro
+[2m23:56:33[22m [34m[watch][39m /src/components/Footer.astro?astro&type=style&index=0&lang.css
+[2m23:56:33[22m [34m[watch][39m src/components/Footer.astro
+[2m23:56:33[22m [34m[watch][39m src/components/Header.astro
+[2m23:56:33[22m [34m[watch][39m /src/components/hero.astro?astro&type=style&index=0&lang.css
+[2m23:56:33[22m [34m[watch][39m src/components/hero.astro
+[2m23:56:33[22m [34m[watch][39m src/components/IgnitingMindsSection.astro
+[2m23:56:33[22m [34m[watch][39m /src/components/Preloader.astro?astro&type=style&index=0&lang.css
+[2m23:56:33[22m [34m[watch][39m src/components/Preloader.astro
+[2m23:56:33[22m [34m[watch][39m src/components/ProjectScreen.astro
+[2m23:56:33[22m [34m[watch][39m src/components/LegendPins.astro
+[2m23:56:33[22m [34m[watch][39m src/components/ProofGallery.astro
+[2m23:56:33[22m [34m[watch][39m /src/components/SWork.astro?astro&type=style&index=0&lang.css
+[2m23:56:33[22m [34m[watch][39m src/components/SWork.astro
+[2m23:56:33[22m [34m[watch][39m /src/layouts/Layout.astro?astro&type=style&index=0&lang.css
+[2m23:56:33[22m [34m[watch][39m src/layouts/Layout.astro
+[2m23:56:33[22m [34m[watch][39m src/pages/grep.astro
+[2m23:56:33[22m [34m[watch][39m src/pages/grep.astro
+[2m23:56:33[22m [34m[watch][39m src/phoneComponents/About_Phone.astro
+[2m23:56:33[22m [34m[watch][39m src/phoneComponents/Domains_Phone.astro
+[2m23:56:33[22m [34m[watch][39m /src/phoneComponents/Gallery_Phone.astro?astro&type=style&index=0&lang.css
+[2m23:56:33[22m [34m[watch][39m src/phoneComponents/Gallery_Phone.astro
+[2m23:56:33[22m [34m[watch][39m src/phoneComponents/ProjectScreen-Phone.astro
+[2m23:56:33[22m [34m[watch][39m src/pages/index.astro
+[2m23:56:33[22m [34m[watch][39m src/pages/index.astro
+[2m23:56:34[22m [34m[watch][39m /src/styles/globals.css
+[2m23:56:34[22m [34m[watch][39m public/acmw-bento-phone.svg
+[2m23:56:35[22m [34m[watch][39m /src/styles/globals.css
+[2m23:56:35[22m [34m[watch][39m public/acmw-bento.svg
+[2m23:56:35[22m [34m[watch][39m /src/styles/globals.css
+[2m23:56:35[22m [34m[watch][39m public/acmw-bento.svg
+[2m23:56:35[22m [34m[watch][39m /src/styles/globals.css
+[2m23:56:35[22m [34m[watch][39m public/acmw-logo.svg
+[2m23:56:35[22m [34m[watch][39m /src/styles/globals.css
+[2m23:56:35[22m [34m[watch][39m public/acmwmotto.svg
+[2m23:56:35[22m [34m[watch][39m /src/styles/globals.css
+[2m23:56:35[22m [34m[watch][39m public/acmwtable.svg
+[2m23:56:35[22m [34m[watch][39m /src/styles/globals.css
+[2m23:56:35[22m [34m[watch][39m public/acm_topleft.svg
+[2m23:56:35[22m [34m[watch][39m /src/styles/globals.css
+[2m23:56:35[22m [34m[watch][39m public/background_pattern.svg
+[2m23:56:35[22m [34m[watch][39m /src/styles/globals.css
+[2m23:56:35[22m [34m[watch][39m public/bloglayout.svg
+[2m23:56:35[22m [34m[watch][39m /src/styles/globals.css
+[2m23:56:35[22m [34m[watch][39m public/button_arrow.svg
+[2m23:56:35[22m [34m[watch][39m /src/styles/globals.css
+[2m23:56:35[22m [34m[watch][39m public/casette-layout-pink.svg
+[2m23:56:35[22m [34m[watch][39m /src/styles/globals.css
+[2m23:56:35[22m [34m[watch][39m public/casette-layout-white.svg
+[2m23:56:35[22m [34m[watch][39m /src/styles/globals.css
+[2m23:56:35[22m [34m[watch][39m public/Cassette_App.svg
+[2m23:56:35[22m [34m[watch][39m /src/styles/globals.css
+[2m23:56:35[22m [34m[watch][39m public/Cassette_cc.svg
+[2m23:56:35[22m [34m[watch][39m /src/styles/globals.css
+[2m23:56:35[22m [34m[watch][39m public/Cassette_Management.svg
+[2m23:56:35[22m [34m[watch][39m /src/styles/globals.css
+[2m23:56:35[22m [34m[watch][39m public/Cassette_Research.svg
+[2m23:56:35[22m [34m[watch][39m /src/styles/globals.css
+[2m23:56:35[22m [34m[watch][39m public/Cassette_Tech.svg
+[2m23:56:35[22m [34m[watch][39m /src/styles/globals.css
+[2m23:56:35[22m [34m[watch][39m public/Cassette_Web.svg
+[2m23:56:37[22m [34m[watch][39m /src/styles/globals.css
+[2m23:56:37[22m [34m[watch][39m public/gallery-bg-text.svg
+[2m23:56:37[22m [34m[watch][39m /src/styles/globals.css
+[2m23:56:37[22m [34m[watch][39m public/gallery.svg
+[2m23:56:37[22m [34m[watch][39m /src/styles/globals.css
+[2m23:56:37[22m [34m[watch][39m public/github-icon.svg
+[2m23:56:37[22m [34m[watch][39m /src/styles/globals.css
+[2m23:56:37[22m [34m[watch][39m public/github-pink.svg
+[2m23:56:37[22m [34m[watch][39m /src/styles/globals.css
+[2m23:56:37[22m [34m[watch][39m public/google-scholar-pink.svg
+[2m23:56:37[22m [34m[watch][39m /src/styles/globals.css
+[2m23:56:37[22m [34m[watch][39m public/linkedin-pink.svg
+[2m23:56:37[22m [34m[watch][39m /src/styles/globals.css
+[2m23:56:37[22m [34m[watch][39m public/partner-casette.svg
+[2m23:56:38[22m [34m[watch][39m /src/styles/globals.css
+[2m23:56:38[22m [34m[watch][39m public/rotate.svg
+[2m23:56:38[22m [34m[watch][39m /src/styles/globals.css
+[2m23:56:38[22m [34m[watch][39m public/the_team.svg
+[2m23:56:38[22m [34m[watch][39m /src/styles/globals.css
+[2m23:56:38[22m [34m[watch][39m public/top-arrow.svg
+[2m23:56:38[22m [34m[watch][39m /src/styles/globals.css
+[2m23:56:38[22m [34m[watch][39m public/Type7.svg
+[2m23:56:38[22m [34m[watch][39m /src/styles/globals.css
+[2m23:56:38[22m [34m[watch][39m public/AOIs/research/aiml.svg
+[2m23:56:38[22m [34m[watch][39m /src/styles/globals.css
+[2m23:56:38[22m [34m[watch][39m public/AOIs/research/bioinfo.svg
+[2m23:56:38[22m [34m[watch][39m /src/styles/globals.css
+[2m23:56:38[22m [34m[watch][39m public/AOIs/research/blockchain.svg
+[2m23:56:38[22m [34m[watch][39m /src/styles/globals.css
+[2m23:56:38[22m [34m[watch][39m public/AOIs/research/cybersec.svg
+[2m23:56:38[22m [34m[watch][39m /src/styles/globals.css
+[2m23:56:38[22m [34m[watch][39m public/AOIs/research/iot.svg
+[2m23:56:38[22m [34m[watch][39m /src/styles/globals.css
+[2m23:56:38[22m [34m[watch][39m public/AOIs/research/quantum.svg
+[2m23:56:38[22m [34m[watch][39m /src/styles/globals.css
+[2m23:56:38[22m [34m[watch][39m public/AOIs/tech/app.svg
+[2m23:56:38[22m [34m[watch][39m /src/styles/globals.css
+[2m23:56:38[22m [34m[watch][39m public/blogs/placeholder.svg
+[2m23:56:38[22m [34m[watch][39m /src/styles/globals.css
+[2m23:56:38[22m [34m[watch][39m public/domains/cc/vim.svg
+[2m23:56:38[22m [34m[watch][39m /src/styles/globals.css
+[2m23:56:38[22m [34m[watch][39m public/domains/design/ae.svg
+[2m23:56:38[22m [34m[watch][39m /src/styles/globals.css
+[2m23:56:38[22m [34m[watch][39m public/AOIs/tech/devops.svg
+[2m23:56:38[22m [34m[watch][39m /src/styles/globals.css
+[2m23:56:38[22m [34m[watch][39m public/AOIs/tech/foss.svg
+[2m23:56:38[22m [34m[watch][39m /src/styles/globals.css
+[2m23:56:38[22m [34m[watch][39m public/AOIs/tech/gamedev.svg
+[2m23:56:38[22m [34m[watch][39m /src/styles/globals.css
+[2m23:56:38[22m [34m[watch][39m public/AOIs/tech/web.svg
+[2m23:56:38[22m [34m[watch][39m /src/styles/globals.css
+[2m23:56:38[22m [34m[watch][39m public/domains/web/cloudflare.svg
+[2m23:56:38[22m [34m[watch][39m /src/styles/globals.css
+[2m23:56:38[22m [34m[watch][39m public/events/apptitude-cassette.svg
+[2m23:56:38[22m [34m[watch][39m /src/styles/globals.css
+[2m23:56:38[22m [34m[watch][39m public/events/c2c-cassette.svg
+[2m23:56:38[22m [34m[watch][39m /src/styles/globals.css
+[2m23:56:38[22m [34m[watch][39m public/events/codart-cassette.svg
+[2m23:56:38[22m [34m[watch][39m /src/styles/globals.css
+[2m23:56:38[22m [34m[watch][39m public/events/code-plusplus-cassette.svg
+[2m23:56:38[22m [34m[watch][39m /src/styles/globals.css
+[2m23:56:38[22m [34m[watch][39m public/events/reverse-coding-cassette.svg
+[2m23:56:41[22m [34m[watch][39m /src/styles/globals.css
+[2m23:56:41[22m [34m[watch][39m public/footer/Twitter.svg
+[2m23:56:41[22m [34m[watch][39m /src/styles/globals.css
+[2m23:56:41[22m [34m[watch][39m public/outreacch/beyond-norm-logo.svg
+[2m23:56:41[22m [34m[watch][39m /src/styles/globals.css
+[2m23:56:41[22m [34m[watch][39m public/projects/Cover.svg
+[2m23:56:43[22m [34m[200][39m / [2m2936ms[22m
+[2m23:56:43[22m [34m[200][39m / [2m2967ms[22m
+[2m23:56:43[22m [34m[200][39m / [2m2998ms[22m
+[2m23:58:44[22m [34m[watch][39m /src/components/Footer.astro?astro&type=style&index=0&lang.css
+[2m23:58:44[22m [34m[watch][39m src/components/Footer.astro
+[2m23:58:47[22m [34m[watch][39m src/data/projectsData.ts
+[2m23:58:47[22m [34m[watch][39m src/data/projectsData.ts
+[2m23:58:50[22m [34m[200][39m / [2m1053ms[22m
+[2m23:58:50[22m [34m[watch][39m src/content/projects.json
+[2m23:58:50[22m [34m[watch][39m src/content/projects.json
+[2m00:01:44[22m [34m[200][39m / [2m955ms[22m
+[2m00:02:34[22m [34m[200][39m / [2m29ms[22m
+[2m00:03:50[22m [34m[200][39m / [2m39ms[22m
+[2m00:10:06[22m [34m[200][39m / [2m59ms[22m
+[2m00:10:15[22m [34m[200][39m / [2m33ms[22m
+[2m00:14:04[22m [34m[watch][39m /src/styles/globals.css
+[2m00:14:04[22m [34m[watch][39m /src/styles/globals.css
+[2m00:14:17[22m [34m[watch][39m /src/layouts/Layout.astro?astro&type=style&index=0&lang.css
+[2m00:14:17[22m [34m[watch][39m src/layouts/Layout.astro
+[2m00:14:17[22m [34m[watch][39m /src/components/Footer.astro?astro&type=style&index=0&lang.css
+[2m00:14:17[22m [34m[watch][39m src/components/Footer.astro
+[2m00:14:19[22m [34m[watch][39m src/components/ContactUs.astro
+[2m00:14:25[22m [34m[watch][39m /src/components/BecauseTechMatters.astro?astro&type=style&index=0&lang.css
+[2m00:14:25[22m [34m[watch][39m src/components/BecauseTechMatters.astro
+[2m00:14:26[22m [34m[200][39m / [2m5669ms[22m
+[2m00:14:26[22m [34m[200][39m / [2m5744ms[22m
+[2m00:14:26[22m [34m[200][39m / [2m5794ms[22m
+[2m00:14:26[22m [34m[200][39m / [2m5847ms[22m
+[2m00:14:26[22m [34m[200][39m / [2m5903ms[22m
+[2m00:14:26[22m [34m[200][39m / [2m5961ms[22m
+[2m00:14:29[22m [34m[watch][39m /src/components/hero.astro?astro&type=style&index=0&lang.css
+[2m00:14:29[22m [34m[watch][39m src/components/hero.astro
+[2m00:14:33[22m [34m[watch][39m /src/components/Preloader.astro?astro&type=style&index=0&lang.css
+[2m00:14:33[22m [34m[watch][39m src/components/Preloader.astro
+[2m00:14:52[22m [34m[watch][39m /src/phoneComponents/Domains_Phone.astro?astro&type=style&index=0&lang.css
+[2m00:14:52[22m [34m[watch][39m src/phoneComponents/Domains_Phone.astro
+[2m00:14:54[22m [34m[watch][39m src/phoneComponents/About_Phone.astro
+[2m00:14:58[22m [34m[200][39m / [2m1393ms[22m
+[2m00:14:58[22m [34m[200][39m / [2m1463ms[22m
+[2m00:15:02[22m [34m[watch][39m src/components/ProofGallery.astro
+[2m00:15:07[22m [34m[200][39m / [2m1675ms[22m
+[2m00:15:07[22m [34m[200][39m / [2m1709ms[22m
+[2m00:15:24[22m [34m[200][39m / [2m33ms[22m
+[2m00:18:31[22m [34m[watch][39m src/pages/index.astro
+[2m00:18:31[22m [34m[watch][39m src/pages/index.astro
+[2m00:18:33[22m [34m[200][39m / [2m566ms[22m
+[2m00:18:33[22m [34m[200][39m / [2m587ms[22m
+[2m00:18:34[22m [34m[watch][39m src/layouts/Layout.astro
+[2m00:18:54[22m [34m[200][39m / [2m363ms[22m
+[2m00:21:50[22m [34m[200][39m / [2m82ms[22m
+[2m00:30:09[22m [34m[watch][39m src/components/AcmWBento.astro
+[2m00:30:09[22m [34m[watch][39m src/components/AcmWBento.astro
+[2m00:30:12[22m [34m[200][39m / [2m1146ms[22m
+[2m00:30:13[22m [34m[watch][39m src/components/AcmWContent.astro
+[2m00:30:17[22m [34m[watch][39m src/pages/index.astro
+[2m00:30:17[22m [34m[watch][39m src/pages/index.astro
+[2m00:30:20[22m [34m[200][39m / [2m1403ms[22m
+[2m00:30:21[22m [34m[watch][39m src/components/Header.astro
+[2m00:30:25[22m [34m[watch][39m src/components/Domains.astro
+[2m00:30:28[22m [34m[200][39m / [2m1211ms[22m
+[2m00:30:29[22m [34m[watch][39m src/phoneComponents/Domains_Phone.astro
+[2m00:30:33[22m [34m[watch][39m src/components/Footer.astro
+[2m00:30:37[22m [34m[200][39m / [2m1242ms[22m
+[2m00:32:48[22m [34m[200][39m / [2m36ms[22m
+[2m00:33:56[22m [34m[watch][39m src/components/AcmWMotto.astro
+[2m00:34:01[22m [34m[200][39m / [2m1927ms[22m
+[2m00:34:10[22m [34m[200][39m / [2m78ms[22m
+[2m00:34:35[22m [34m[200][39m / [2m29ms[22m
+[2m00:35:40[22m [34m[200][39m / [2m38ms[22m
+[2m00:45:16[22m [34m[watch][39m src/content/partners.json
+[2m00:45:16[22m [34m[watch][39m src/content/partners.json
+[2m00:45:20[22m [34m[200][39m / [2m1235ms[22m
+[2m00:45:21[22m [34m[watch][39m src/components/PartnerCasetteSingular.astro
+[2m00:45:21[22m [34m[watch][39m src/components/PartnerCasetteSingular.astro
+[2m00:45:24[22m [34m[watch][39m src/components/Partners.astro
+[2m00:45:28[22m [34m[200][39m / [2m1236ms[22m
+[2m00:45:51[22m [34m[200][39m / [2m51ms[22m
+[2m00:46:28[22m [34m[200][39m / [2m30ms[22m
+[2m00:57:39[22m [34m[200][39m /grep [2m74ms[22m
+[2m00:57:52[22m [34m[vite][39m [32m✨ new dependencies optimized: [33mpdfjs-dist[32m[39m
+[2m00:57:52[22m [34m[vite][39m [32m✨ optimized dependencies changed. reloading[39m
+[2m00:57:52[22m [34m[200][39m /grep [2m30ms[22m
+[2m00:57:52[22m [34m[200][39m / [2m178ms[22m
+[2m00:57:53[22m [34m[200][39m / [2m103ms[22m
+[2m00:59:02[22m [34m[200][39m / [2m25ms[22m
+[2m01:09:25[22m [34m[watch][39m src/pages/index.astro
+[2m01:09:25[22m [34m[watch][39m src/pages/index.astro
+[2m01:09:29[22m [34m[200][39m / [2m1191ms[22m
+[2m01:09:30[22m [34m[watch][39m src/layouts/Layout.astro
+[2m01:09:34[22m [34m[watch][39m src/components/LegendPins.astro
+[2m01:09:38[22m [34m[watch][39m src/components/Header.astro
+[2m01:09:40[22m [34m[200][39m / [2m3063ms[22m
+[2m01:09:41[22m [34m[200][39m / [2m1242ms[22m
+[2m01:09:42[22m [34m[watch][39m src/components/Footer.astro
+[2m01:11:24[22m [34m[watch][39m /src/components/LegendPins.astro?astro&type=style&index=0&lang.css
+[2m01:11:24[22m [34m[watch][39m src/components/LegendPins.astro
+[2m01:11:27[22m [34m[watch][39m src/components/ProofGallery.astro
+[2m01:11:31[22m [34m[watch][39m src/components/Gallery.astro
+[2m01:11:32[22m [34m[200][39m / [2m2505ms[22m
+[2m01:11:34[22m [34m[200][39m / [2m1301ms[22m
+[2m01:11:35[22m [34m[watch][39m src/phoneComponents/Gallery_Phone.astro
+[2m01:12:21[22m [34m[watch][39m /src/components/LegendPins.astro?astro&type=style&index=0&lang.css
+[2m01:12:21[22m [34m[watch][39m src/components/LegendPins.astro
+[2m01:12:24[22m [34m[watch][39m src/components/ProofGallery.astro
+[2m01:12:28[22m [34m[200][39m / [2m1147ms[22m
+[2m01:14:38[22m [34m[200][39m / [2m38ms[22m
+[2m01:16:57[22m [34m[watch][39m src/phoneComponents/About_Phone.astro
+[2m01:17:05[22m [34m[200][39m / [2m2471ms[22m
+[2m01:17:05[22m [34m[200][39m / [2m2472ms[22m
+[2m01:19:00[22m [34m[watch][39m src/components/Experience.astro
+[2m01:19:02[22m [34m[200][39m / [2m993ms[22m
+[2m01:19:02[22m [34m[200][39m / [2m994ms[22m
+[2m01:19:04[22m [34m[watch][39m src/components/Footer.astro
+[2m01:19:06[22m [34m[200][39m / [2m1049ms[22m
+[2m01:19:06[22m [34m[200][39m / [2m1050ms[22m
+[2m01:19:39[22m [34m[watch][39m src/components/Experience.astro
+[2m01:19:41[22m [34m[200][39m / [2m526ms[22m
+[2m01:19:41[22m [34m[200][39m / [2m526ms[22m
+[2m01:20:17[22m [34m[200][39m / [2m25ms[22m
+[2m01:22:07[22m [34m[watch][39m src/components/Experience.astro
+[2m01:22:10[22m [34m[200][39m / [2m1040ms[22m
+[2m01:22:10[22m [34m[200][39m / [2m1042ms[22m
+[2m01:22:18[22m [34m[200][39m / [2m40ms[22m
+[2m01:23:38[22m [34m[watch][39m src/components/Experience.astro
+[2m01:23:40[22m [34m[200][39m / [2m1006ms[22m
+[2m01:23:40[22m [34m[200][39m / [2m1007ms[22m
+[2m01:23:50[22m [34m[200][39m / [2m40ms[22m
+[2m01:25:36[22m [34m[200][39m / [2m36ms[22m
+[2m01:26:40[22m [34m[200][39m / [2m142ms[22m
+[2m01:34:16[22m [34m[watch][39m src/pages/index.astro
+[2m01:34:16[22m [34m[watch][39m src/pages/index.astro
+[2m01:34:19[22m [34m[200][39m / [2m1317ms[22m
+[2m01:34:19[22m [34m[200][39m / [2m1321ms[22m
+[2m01:34:19[22m [34m[200][39m / [2m1323ms[22m
+[2m01:34:27[22m [34m[watch][39m src/components/Header.astro
+[2m01:34:36[22m [34m[200][39m / [2m3091ms[22m
+[2m01:34:36[22m [34m[200][39m / [2m3092ms[22m
+[2m01:34:36[22m [34m[200][39m / [2m3093ms[22m
+[2m01:34:47[22m [34m[watch][39m src/components/Footer.astro
+[2m01:34:53[22m [34m[200][39m / [2m2807ms[22m
+[2m01:34:53[22m [34m[200][39m / [2m2809ms[22m
+[2m01:34:53[22m [34m[200][39m / [2m2810ms[22m
+[2m01:35:05[22m [34m[watch][39m src/components/ContactUs.astro
+[2m01:35:14[22m [34m[200][39m / [2m2399ms[22m
+[2m01:35:14[22m [34m[200][39m / [2m2400ms[22m
+[2m01:35:14[22m [34m[200][39m / [2m2401ms[22m
+[2m01:35:24[22m [34m[watch][39m src/components/Experience.astro
+[2m01:35:24[22m [34m[200][39m / [2m113ms[22m
+[2m01:35:25[22m [34m[200][39m / [2m58ms[22m
+[2m01:35:25[22m [34m[200][39m / [2m96ms[22m
+[2m01:42:29[22m [34m[200][39m / [2m81ms[22m
+[2m02:38:47[22m Configuration file updated. Restarting...
+[2m02:38:48[22m [34m[watch][39m astro.config.mjs
+[2m02:38:48[22m [34m[watch][39m astro.config.mjs
+[2m02:38:48[22m [34m[@astrojs/cloudflare][39m Enabling sessions with Cloudflare KV with the "SESSION" KV binding.
+[2m02:38:48[22m [34m[@astrojs/cloudflare][39m If you see the error "Invalid binding `SESSION`" in your build output, you need to add the binding to your wrangler config file.
+[33m[1m02:38:48[22m [WARN] [adapter][39m Cloudflare does not support sharp at runtime. However, you can configure `imageService: "compile"` to optimize images with sharp on prerendered pages during build time.
+[2m02:38:51[22m [34m[build][39m Waiting for integration [1m"@astrojs/cloudflare"[22m, hook [1m"astro:server:setup"[22m...
+[2m02:38:58[22m [34m[vite][39m Re-optimizing dependencies because vite config has changed
+[2m02:39:00[22m [34m[content][39m Syncing content
+[2m02:39:00[22m [34m[content][39m Astro config changed
+[2m02:39:00[22m [34m[content][39m Clearing content store
+[2m02:39:00[22m [34m[content][39m Synced content
+[2m02:39:00[22m [34m[types][39m Generated [2m5.31s[22m
+[2m02:39:00[22m [34m[vite][39m Re-optimizing dependencies because vite config has changed
+[2m02:50:39[22m [34m[200][39m / [2m4887ms[22m
+[2m02:57:24[22m [34m[200][39m / [2m38ms[22m
+[2m02:57:26[22m [34m[200][39m / [2m43ms[22m
+[2m02:58:13[22m [34m[watch][39m src/layouts/Layout.astro
+[31m[1m02:58:14[22m [ERROR][39m [31m[ImageNotFound][39m Could not find requested image `../assets/images/ajce-logo.png`. Does it exist?
+  [1mHint:[22m
+[33m    This is often caused by a typo in the image path. Please make sure the file exists, and is spelled correctly.[39m
+  [1mError reference:[22m
+    [36m[4mhttps://docs.astro.build/en/reference/errors/image-not-found/[24m[39m
+  [1mStack trace:[22m
+[2m    at D:\ACM\acm-vit-reference-full\node_modules\.pnpm\astro@5.16.6_@types+node@24_ef0b1ef29f7fa5e3b5d5e1ea795da5af\node_modules\astro\dist\assets\vite-plugin-assets.js:201:19
+    [...] See full stack trace in the browser, or rerun with --verbose.[22m
+[31m[1m02:58:20[22m [ERROR][39m [31m[ImageNotFound][39m Could not find requested image `../assets/images/ajce-logo.png`. Does it exist?
+  [1mHint:[22m
+[33m    This is often caused by a typo in the image path. Please make sure the file exists, and is spelled correctly.[39m
+  [1mError reference:[22m
+    [36m[4mhttps://docs.astro.build/en/reference/errors/image-not-found/[24m[39m
+  [1mStack trace:[22m
+[2m    at D:\ACM\acm-vit-reference-full\node_modules\.pnpm\astro@5.16.6_@types+node@24_ef0b1ef29f7fa5e3b5d5e1ea795da5af\node_modules\astro\dist\assets\vite-plugin-assets.js:201:19
+    [...] See full stack trace in the browser, or rerun with --verbose.[22m
+[2m02:58:26[22m [34m[200][39m / [2m389ms[22m
+[2m02:58:59[22m [34m[watch][39m /src/layouts/Layout.astro?astro&type=style&index=0&lang.css
+[2m02:58:59[22m [34m[watch][39m src/layouts/Layout.astro
+[2m03:09:42[22m [34m[watch][39m src/layouts/Layout.astro
+[31m[1m03:09:43[22m [ERROR][39m [31m[ImageNotFound][39m Could not find requested image `../assets/images/acm-ajce-logo.png`. Does it exist?
+  [1mHint:[22m
+[33m    This is often caused by a typo in the image path. Please make sure the file exists, and is spelled correctly.[39m
+  [1mError reference:[22m
+    [36m[4mhttps://docs.astro.build/en/reference/errors/image-not-found/[24m[39m
+  [1mStack trace:[22m
+[2m    at D:\ACM\acm-vit-reference-full\node_modules\.pnpm\astro@5.16.6_@types+node@24_ef0b1ef29f7fa5e3b5d5e1ea795da5af\node_modules\astro\dist\assets\vite-plugin-assets.js:201:19
+    [...] See full stack trace in the browser, or rerun with --verbose.[22m
+[2m03:09:57[22m [34m[200][39m / [2m281ms[22m
+[2m03:10:41[22m [34m[watch][39m src/layouts/Layout.astro
+[2m03:10:42[22m [34m[200][39m / [2m338ms[22m
+[2m03:24:09[22m [34m[watch][39m src/layouts/Layout.astro
+[2m03:24:11[22m [34m[200][39m / [2m269ms[22m
+[2m03:24:12[22m [34m[watch][39m src/components/Header.astro
+[2m03:24:14[22m [34m[watch][39m src/components/About.astro
+[2m03:24:16[22m [34m[200][39m / [2m304ms[22m
+[2m03:24:16[22m [34m[watch][39m src/phoneComponents/About_Phone.astro
+[2m03:24:20[22m [34m[watch][39m src/components/LegendPins.astro
+[2m03:24:21[22m [34m[200][39m / [2m562ms[22m
+[2m03:27:26[22m [34m[watch][39m src/components/Header.astro
+[2m03:27:28[22m [34m[200][39m / [2m555ms[22m
+[2m03:31:40[22m [34m[watch][39m public/loader/loaded_state.json
+[2m03:31:40[22m [34m[watch][39m public/loader/loaded_state.json
+[2m03:31:40[22m [34m[watch][39m public/loader/loading_state.json
+[2m03:31:40[22m [34m[watch][39m public/loader/loading_state.json
+[2m03:31:45[22m [34m[200][39m / [2m1056ms[22m
+[2m03:50:30[22m [34m[200][39m / [2m28ms[22m
+[2m03:50:47[22m [34m[200][39m / [2m48ms[22m
