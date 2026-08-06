@@ -483,6 +483,22 @@ import MembershipLayout from "../../layouts/MembershipLayout.astro";
         fullNameInput.value = user.displayName;
       }
 
+      // Record Google Sign-In Lead User
+      try {
+        const existingLeads = JSON.parse(localStorage.getItem("acm_lead_users") || "[]");
+        if (!existingLeads.some(l => l.uid === user.uid || l.email === user.email)) {
+          existingLeads.unshift({
+            uid: user.uid,
+            name: user.displayName || "Google User",
+            email: user.email,
+            photoURL: user.photoURL || "",
+            signedInAt: new Date().toLocaleString(),
+            status: "Incomplete (Payment Pending)"
+          });
+          localStorage.setItem("acm_lead_users", JSON.stringify(existingLeads));
+        }
+      } catch (e) {}
+
       // Listen to Firestore real-time status for this logged-in user
       unsubscribeFirestore = listenToUserMembership(user.uid, (data) => {
         if (data) {

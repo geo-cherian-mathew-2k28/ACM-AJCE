@@ -41,6 +41,36 @@ html {
     scroll-behavior: smooth;
 }
 
+/* Light Mode Overrides */
+html.light-mode,
+html.light-mode body {
+    background-color: #F8FAFC !important;
+    color: #0F172A !important;
+}
+
+html.light-mode .acm-grid-surface {
+    background-image:
+        linear-gradient(rgba(15, 23, 42, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(15, 23, 42, 0.05) 1px, transparent 1px) !important;
+}
+
+html.light-mode .header-pill {
+    background: rgba(255, 255, 255, 0.88) !important;
+    border-color: rgba(15, 23, 42, 0.15) !important;
+}
+
+html.light-mode .nav-list,
+html.light-mode .nav-link {
+    color: #0F172A !important;
+}
+
+html.light-mode .about-section-phone,
+html.light-mode .gallery-phone-section,
+html.light-mode .dashboard-shell {
+    background-color: #F8FAFC !important;
+    color: #0F172A !important;
+}
+
 .page-section {
     scroll-margin-top: 84px;
 }
