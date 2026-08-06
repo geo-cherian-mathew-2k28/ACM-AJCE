@@ -50,7 +50,7 @@ import { getAssetUrl } from "../utils/cdn";
       ].map((item, idx) => (
         <div 
           class="gallery-mini-card relative aspect-[4/3] rounded-xl overflow-hidden bg-white/5 border border-white/10 cursor-pointer active:scale-95 transition-transform"
-          onclick={`window.openProofGallery(${idx})`}
+          onclick={`window.openProofGallery ? window.openProofGallery(${idx}) : null`}
           role="button"
           tabindex="0"
         >
@@ -74,7 +74,7 @@ import { getAssetUrl } from "../utils/cdn";
   <div class="px-5 mb-8">
     <button
       type="button"
-      onclick="window.openProofGallery()"
+      onclick="window.openProofGallery ? window.openProofGallery() : null"
       class="w-full py-3 px-4 rounded-xl bg-[#B8A7FF]/15 border border-[#B8A7FF]/30 text-[#FBFAFF] flex items-center justify-between text-xs font-semibold uppercase tracking-wider active:bg-[#B8A7FF]/30 transition-colors"
     >
       <span class="flex items-center gap-2">
