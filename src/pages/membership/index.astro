@@ -1,5 +1,7 @@
 ---
 import MembershipLayout from "../../layouts/MembershipLayout.astro";
+import { getAssetUrl } from "../../utils/cdn";
+const cardBgUrl = getAssetUrl("/brand/membership-card-bg.png");
 ---
 
 <MembershipLayout title="ACM AJCE Membership Portal">
@@ -216,35 +218,37 @@ import MembershipLayout from "../../layouts/MembershipLayout.astro";
               </button>
             </div>
 
-            <!-- Pixel-Perfect Digital Membership Card -->
-            <div id="membership-card-pass" class="w-full max-w-xl mx-auto rounded-3xl border-2 border-[#B8A7FF]/40 shadow-[0_20px_50px_rgba(0,0,0,0.8)] relative overflow-hidden bg-cover bg-center text-white" style="background-image: url('/brand/membership-card-bg.png'); aspect-ratio: 1.6 / 1;">
+            <!-- Pixel-Perfect Digital Membership Card Pass -->
+            <div id="membership-card-pass" class="w-full max-w-xl mx-auto rounded-3xl border-2 border-[#B8A7FF]/40 shadow-[0_25px_60px_rgba(0,0,0,0.9)] relative overflow-hidden bg-cover bg-center text-white" style={`background-image: url('${cardBgUrl}'); aspect-ratio: 1.6 / 1;`}>
               
               <!-- Card Overlay Inner Layout -->
               <div class="h-full p-5 sm:p-7 flex flex-col justify-between relative z-10">
                 
-                <!-- Top Section: Header Titles -->
-                <div>
-                  <p class="text-[9px] sm:text-[11px] font-mono font-bold text-[#B8A7FF] uppercase tracking-widest">
-                    ASSOCIATION FOR COMPUTING MACHINERY
-                  </p>
-                  <h2 class="text-base sm:text-2xl font-extrabold text-white tracking-wide uppercase font-['PolySans_Trial',sans-serif] mt-0.5">
-                    ACM AJCE STUDENT CHAPTER
-                  </h2>
+                <!-- Top Subtitle Header -->
+                <div class="flex items-center justify-between">
+                  <div>
+                    <p class="text-[9px] sm:text-[11px] font-mono font-bold text-[#B8A7FF] uppercase tracking-widest">
+                      ASSOCIATION FOR COMPUTING MACHINERY
+                    </p>
+                    <p class="text-[10px] sm:text-xs font-bold text-gray-300 uppercase tracking-wider font-mono">
+                      OFFICIAL STUDENT MEMBERSHIP PASS
+                    </p>
+                  </div>
                 </div>
 
-                <!-- Middle Section: Member Details & QR Code -->
-                <div class="grid grid-cols-12 gap-3 items-center my-auto">
-                  <!-- Member Info (8 Columns) -->
-                  <div class="col-span-8 space-y-1 sm:space-y-1.5 text-left pr-2">
-                    <h3 id="card-view-name" class="text-base sm:text-2xl font-extrabold text-white tracking-tight truncate">
+                <!-- Middle Grid: Member Details & QR Code -->
+                <div class="grid grid-cols-12 gap-3 items-center my-auto pl-3 sm:pl-5">
+                  <!-- Member Info (7 Columns) -->
+                  <div class="col-span-7 sm:col-span-7 text-left space-y-1 sm:space-y-1.5 pr-1">
+                    <h3 id="card-view-name" class="text-base sm:text-2xl font-extrabold text-white tracking-tight truncate leading-tight">
                       Admin tester
                     </h3>
                     <p id="card-view-id" class="text-xs sm:text-base font-bold font-mono text-[#00FFC2] tracking-wider">
                       ID: ACM-AJCE-1VLG5
                     </p>
 
-                    <div class="pt-1 space-y-0.5 text-[11px] sm:text-xs text-gray-200 font-sans">
-                      <p>Course: <span id="card-view-course" class="font-semibold text-white">MCA (S6)</span></p>
+                    <div class="pt-1.5 space-y-0.5 text-[11px] sm:text-xs text-gray-200 font-sans">
+                      <p class="truncate">Course: <span id="card-view-course" class="font-semibold text-white">MCA (S6)</span></p>
                       <p class="truncate">Email: <span id="card-view-email" class="font-medium text-gray-100">admintester@gmail.com</span></p>
                       <p class="font-mono text-[#B8A7FF] pt-1 text-[10px] sm:text-xs">
                         Valid: <span id="card-view-validity" class="font-bold">Aug 6, 2026 – Aug 6, 2027</span>
@@ -252,10 +256,10 @@ import MembershipLayout from "../../layouts/MembershipLayout.astro";
                     </div>
                   </div>
 
-                  <!-- QR Code (4 Columns) -->
-                  <div class="col-span-4 flex flex-col items-end justify-center">
-                    <div class="bg-white p-2 sm:p-2.5 rounded-xl sm:rounded-2xl shadow-2xl text-center border border-purple-300 inline-block">
-                      <img id="view-security-qr" src="" alt="Verification QR" class="w-16 h-16 sm:w-28 sm:h-28 object-contain mx-auto" />
+                  <!-- QR Code (5 Columns) -->
+                  <div class="col-span-5 sm:col-span-5 flex flex-col items-center justify-center">
+                    <div class="bg-white p-2 sm:p-2.5 rounded-2xl shadow-2xl text-center border-2 border-[#B8A7FF] flex flex-col items-center">
+                      <img id="view-security-qr" src="" alt="Verification QR" class="w-16 h-16 sm:w-28 sm:h-28 object-contain" />
                       <span class="text-[7px] sm:text-[9px] text-purple-950 font-mono font-bold block mt-1 uppercase tracking-widest whitespace-nowrap">
                         SCAN TO VERIFY
                       </span>
@@ -263,10 +267,10 @@ import MembershipLayout from "../../layouts/MembershipLayout.astro";
                   </div>
                 </div>
 
-                <!-- Bottom Footer Badge -->
-                <div class="pt-2 border-t border-purple-500/30 flex items-center justify-between">
-                  <span class="text-[8px] sm:text-[11px] font-mono font-bold text-[#00FFC2] uppercase tracking-widest">
-                    OFFICIAL AUTHENTICATED DIGITAL CERTIFICATE
+                <!-- Bottom Footer Tag -->
+                <div class="pl-3 sm:pl-5 pt-2 border-t border-purple-500/20 flex items-center justify-between">
+                  <span class="text-[8px] sm:text-[10px] font-mono font-bold text-[#00FFC2] uppercase tracking-widest">
+                    AUTHENTICATED DIGITAL CREDENTIAL
                   </span>
                 </div>
 
@@ -416,50 +420,76 @@ import MembershipLayout from "../../layouts/MembershipLayout.astro";
 
     // Download High-Resolution Membership Card PNG Canvas
     downloadCardBtn?.addEventListener("click", () => {
-      if (!currentMembershipData) return;
+      if (!currentMembershipData) return alert("Membership data is loading...");
+
+      const btn = downloadCardBtn;
+      btn.disabled = true;
+      const originalHtml = btn.innerHTML;
+      btn.innerHTML = `<span class="animate-pulse">Generating HD Pass PNG...</span>`;
 
       const canvas = document.createElement("canvas");
       canvas.width = 1200;
       canvas.height = 750;
       const ctx = canvas.getContext("2d");
-      if (!ctx) return;
 
-      const bgImg = new Image();
-      bgImg.crossOrigin = "anonymous";
-      bgImg.onload = () => {
-        // Draw background template image
-        ctx.drawImage(bgImg, 0, 0, 1200, 750);
+      if (!ctx) {
+        btn.disabled = false;
+        btn.innerHTML = originalHtml;
+        return;
+      }
 
-        // Header Text (Top Left)
+      const drawPassContent = (bgImg) => {
+        // Draw background template image or dark gradient fallback
+        if (bgImg) {
+          try {
+            ctx.drawImage(bgImg, 0, 0, 1200, 750);
+          } catch(e) {
+            const grad = ctx.createLinearGradient(0, 0, 1200, 750);
+            grad.addColorStop(0, "#0D0B18");
+            grad.addColorStop(0.5, "#1A182F");
+            grad.addColorStop(1, "#2A2455");
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, 1200, 750);
+          }
+        } else {
+          const grad = ctx.createLinearGradient(0, 0, 1200, 750);
+          grad.addColorStop(0, "#0D0B18");
+          grad.addColorStop(0.5, "#1A182F");
+          grad.addColorStop(1, "#2A2455");
+          ctx.fillStyle = grad;
+          ctx.fillRect(0, 0, 1200, 750);
+        }
+
+        // Header Subtitle
         ctx.fillStyle = "#B8A7FF";
         ctx.font = "bold 20px monospace";
         ctx.fillText("ASSOCIATION FOR COMPUTING MACHINERY", 70, 70);
 
-        ctx.fillStyle = "#FFFFFF";
-        ctx.font = "900 38px sans-serif";
-        ctx.fillText("ACM AJCE STUDENT CHAPTER", 70, 120);
+        ctx.fillStyle = "#E2E8F0";
+        ctx.font = "bold 22px monospace";
+        ctx.fillText("OFFICIAL STUDENT MEMBERSHIP PASS", 70, 105);
 
-        // Member Profile Details
-        const name = currentMembershipData.fullName || "Member";
+        // Dynamic Member Profile Details
+        const name = currentMembershipData.fullName || "Chapter Member";
         const memId = currentMembershipId || "ACM-AJCE-MEM";
         const course = `${currentMembershipData.course || ''} (${currentMembershipData.semester || ''})`;
         const email = currentMembershipData.email || currentUser?.email || "";
 
         ctx.fillStyle = "#FBFAFF";
         ctx.font = "900 46px sans-serif";
-        ctx.fillText(name, 70, 250);
+        ctx.fillText(name, 70, 240);
 
         ctx.fillStyle = "#00FFC2";
         ctx.font = "bold 32px monospace";
-        ctx.fillText(`ID: ${memId}`, 70, 305);
+        ctx.fillText(`ID: ${memId}`, 70, 295);
 
         ctx.fillStyle = "#E2E8F0";
         ctx.font = "600 26px sans-serif";
-        ctx.fillText(`Course: ${course}`, 70, 375);
+        ctx.fillText(`Course: ${course}`, 70, 365);
 
         ctx.fillStyle = "#CBD5E1";
         ctx.font = "500 24px sans-serif";
-        ctx.fillText(`Email: ${email}`, 70, 425);
+        ctx.fillText(`Email: ${email}`, 70, 415);
 
         const verifiedDate = currentMembershipData.verifiedAt ? new Date(currentMembershipData.verifiedAt) : new Date();
         const nextYearDate = new Date(verifiedDate);
@@ -468,37 +498,52 @@ import MembershipLayout from "../../layouts/MembershipLayout.astro";
 
         ctx.fillStyle = "#B8A7FF";
         ctx.font = "bold 24px monospace";
-        ctx.fillText(`Valid: ${formatDate(verifiedDate)} – ${formatDate(nextYearDate)}`, 70, 480);
+        ctx.fillText(`Valid: ${formatDate(verifiedDate)} – ${formatDate(nextYearDate)}`, 70, 470);
 
         // Footer Tag (Bottom Left)
         ctx.fillStyle = "#00FFC2";
         ctx.font = "bold 20px monospace";
-        ctx.fillText("OFFICIAL AUTHENTICATED DIGITAL CERTIFICATE", 70, 680);
+        ctx.fillText("AUTHENTICATED DIGITAL CREDENTIAL", 70, 680);
 
         // Draw Verification QR Code on Right
         const qrImg = document.getElementById("view-security-qr");
-        if (qrImg && qrImg.complete && qrImg.src) {
-          ctx.fillStyle = "#FFFFFF";
-          ctx.beginPath();
-          ctx.roundRect(860, 220, 270, 320, 24);
-          ctx.fill();
+        if (qrImg && qrImg.src) {
+          try {
+            ctx.fillStyle = "#FFFFFF";
+            ctx.beginPath();
+            ctx.roundRect(860, 210, 270, 320, 24);
+            ctx.fill();
 
-          ctx.drawImage(qrImg, 885, 240, 220, 220);
+            ctx.drawImage(qrImg, 885, 230, 220, 220);
 
-          ctx.fillStyle = "#3B0764";
-          ctx.font = "bold 17px monospace";
-          ctx.textAlign = "center";
-          ctx.fillText("SCAN TO VERIFY", 995, 500);
+            ctx.fillStyle = "#3B0764";
+            ctx.font = "bold 17px monospace";
+            ctx.textAlign = "center";
+            ctx.fillText("SCAN TO VERIFY", 995, 490);
+          } catch(e) {}
         }
 
-        // Trigger Download
-        const link = document.createElement("a");
-        link.download = `ACM_AJCE_Card_${currentMembershipId}.png`;
-        link.href = canvas.toDataURL("image/png");
-        link.click();
+        // Export PNG & Trigger Download
+        try {
+          const dataUrl = canvas.toDataURL("image/png");
+          const link = document.createElement("a");
+          link.download = `${memId}-Membership-Pass.png`;
+          link.href = dataUrl;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        } catch (err) {
+          console.error("Canvas export error:", err);
+        } finally {
+          btn.disabled = false;
+          btn.innerHTML = originalHtml;
+        }
       };
 
-      bgImg.src = "/brand/membership-card-bg.png";
+      const bg = new Image();
+      bg.onload = () => drawPassContent(bg);
+      bg.onerror = () => drawPassContent(null);
+      bg.src = typeof cardBgUrl !== 'undefined' ? cardBgUrl : "/brand/membership-card-bg.png";
     });
 
     // Auth State Persistent Observer
