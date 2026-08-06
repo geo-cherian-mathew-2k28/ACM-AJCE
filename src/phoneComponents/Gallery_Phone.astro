@@ -193,6 +193,13 @@ const categories = ["ALL", "WORKSHOPS", "TALKS", "3D FORGE", "COMMUNITY"];
     opacity: 1 !important;
     pointer-events: auto !important;
   }
+
+  body.phone-lightbox-active .site-header,
+  body.phone-lightbox-active .brand-logos {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    visibility: hidden !important;
+  }
 </style>
 
 <script>
@@ -237,6 +244,7 @@ const categories = ["ALL", "WORKSHOPS", "TALKS", "3D FORGE", "COMMUNITY"];
       lightbox.classList.add("phone-lightbox-open");
       lightbox.setAttribute("aria-hidden", "false");
       document.body.style.overflow = "hidden";
+      document.body.classList.add("phone-lightbox-active");
     };
 
     const closeLightbox = () => {
@@ -244,6 +252,7 @@ const categories = ["ALL", "WORKSHOPS", "TALKS", "3D FORGE", "COMMUNITY"];
       lightbox.classList.remove("phone-lightbox-open");
       lightbox.setAttribute("aria-hidden", "true");
       document.body.style.overflow = "";
+      document.body.classList.remove("phone-lightbox-active");
     };
 
     const moveIndex = (direction: number) => {
