@@ -383,8 +383,13 @@ import { getAssetUrl } from "../utils/cdn";
     updateLightbox();
   }
 
-  function openGallery() {
-    if (isOpen) return;
+  function openGallery(photoIndex?: number) {
+    if (isOpen) {
+      if (typeof photoIndex === 'number' && photoIndex >= 0) {
+        openLightbox(photoIndex);
+      }
+      return;
+    }
     isOpen = true;
 
     // Push history state to handle back button
@@ -410,6 +415,11 @@ import { getAssetUrl } from "../utils/cdn";
           stagger: 0.05,
           duration: 0.5,
           ease: "back.out(1.2)",
+          onComplete: () => {
+            if (typeof photoIndex === 'number' && photoIndex >= 0) {
+              openLightbox(photoIndex);
+            }
+          }
         },
         "-=0.1"
       );

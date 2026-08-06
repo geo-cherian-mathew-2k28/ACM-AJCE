@@ -47,10 +47,10 @@ import { getAssetUrl } from "../utils/cdn";
         { src: "/gallery/acm-ajce/session-facilitator.jpg", title: "Learning Session", cat: "Talks" },
         { src: "/gallery/acm-ajce/blender-session.jpg", title: "Blender Session", cat: "3D Forge" },
         { src: "/gallery/acm-ajce/collaborative-learning.jpg", title: "Collab Space", cat: "Community" }
-      ].map(item => (
+      ].map((item, idx) => (
         <div 
           class="gallery-mini-card relative aspect-[4/3] rounded-xl overflow-hidden bg-white/5 border border-white/10 cursor-pointer active:scale-95 transition-transform"
-          onclick="window.openProofGallery()"
+          onclick={`window.openProofGallery(${idx})`}
           role="button"
           tabindex="0"
         >
