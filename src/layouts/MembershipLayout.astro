@@ -23,6 +23,20 @@ const { title = "ACM AJCE Membership", signedIn = false } = Astro.props;
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap"
       rel="stylesheet"
     />
+    <script is:inline>
+      (() => {
+        try {
+          const storedTheme = localStorage.getItem("acm_theme");
+          if (storedTheme === "light") {
+            document.documentElement.classList.add("light-mode");
+            document.documentElement.setAttribute("data-theme", "light");
+          } else {
+            document.documentElement.classList.remove("light-mode");
+            document.documentElement.setAttribute("data-theme", "dark");
+          }
+        } catch (e) {}
+      })();
+    </script>
     <title>{title}</title>
   </head>
   <body>

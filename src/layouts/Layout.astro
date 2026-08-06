@@ -51,6 +51,20 @@ const jsonLd = {
     <link rel="icon" type="image/png" href={getAssetUrl("/favicon.png")} />
 
     <!-- Primary Meta Tags -->
+    <script is:inline>
+      (() => {
+        try {
+          const storedTheme = localStorage.getItem("acm_theme");
+          if (storedTheme === "light") {
+            document.documentElement.classList.add("light-mode");
+            document.documentElement.setAttribute("data-theme", "light");
+          } else {
+            document.documentElement.classList.remove("light-mode");
+            document.documentElement.setAttribute("data-theme", "dark");
+          }
+        } catch (e) {}
+      })();
+    </script>
     <title>{title}</title>
     <meta name="title" content={title} />
     <meta name="description" content={description} />
