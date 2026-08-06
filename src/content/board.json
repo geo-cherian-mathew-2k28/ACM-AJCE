@@ -2,8 +2,16 @@
   "items": [
     {
       "fullName": "Neenu R",
-      "position": "Faculty Coordinator",
+      "position": "Faculty In-Charge",
       "imageUrl": "/board/Neenu Miss.jpg",
+      "linkedinUrl": "https://www.linkedin.com/",
+      "isW": false
+    },
+    {
+      "title": "Dr.",
+      "fullName": "Indu John",
+      "position": "Faculty In-Charge",
+      "imageUrl": "/board/Dr Indu John.png",
       "linkedinUrl": "https://www.linkedin.com/",
       "isW": false
     },

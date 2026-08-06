@@ -31,7 +31,9 @@ const isFaculty = position.toLowerCase().includes("faculty");
 
 <div
   class={`board-member-card relative w-full aspect-[1.6] rounded-xl overflow-hidden flex items-end justify-center shadow-lg border ${
-    isW
+    isFaculty
+      ? "bg-gradient-to-br from-[#FFFBEB] to-[#FEF3C7] border-amber-300/70 shadow-amber-900/10"
+      : isW
       ? "bg-gradient-to-br from-[#FFF5F8] to-[#FCE7F0] border-pink-300/60 shadow-pink-900/10"
       : "bg-white border-purple-100/30"
   }`}
@@ -45,10 +47,12 @@ const isFaculty = position.toLowerCase().includes("faculty");
   >
   </div>
 
-  <!-- Subtle Bottom Brand Accent Line (Pink gradient for ACM-W, Purple gradient for main chapter) -->
+  <!-- Subtle Bottom Brand Accent Line (Gold for Faculty, Pink for ACM-W, Purple for main chapter) -->
   <div
     class={`absolute bottom-0 inset-x-0 h-1 z-20 ${
-      isW
+      isFaculty
+        ? "bg-gradient-to-r from-[#D97706] to-[#F59E0B]"
+        : isW
         ? "bg-gradient-to-r from-[#EC4899] to-[#F472B6]"
         : "bg-gradient-to-r from-[#6A5ACD] to-[#B8A7FF]"
     }`}
@@ -63,7 +67,11 @@ const isFaculty = position.toLowerCase().includes("faculty");
         src={imageUrl}
         alt={fullName}
         class={`h-full w-full object-cover object-top filter grayscale contrast-105 ${
-          isW ? "brightness-95 sepia-[0.15] hue-rotate-[290deg]" : "brightness-95"
+          isFaculty
+            ? "brightness-95 sepia-[0.2] hue-rotate-[15deg]"
+            : isW
+            ? "brightness-95 sepia-[0.15] hue-rotate-[290deg]"
+            : "brightness-95"
         }`}
         loading="lazy"
         decoding="async"
@@ -79,14 +87,16 @@ const isFaculty = position.toLowerCase().includes("faculty");
       <div>
         <h3
           style="font-family: 'PolySans Bold';"
-          class={`board-card-name m-0 ${isW ? "text-pink-950" : "text-gray-900"}`}
+          class={`board-card-name m-0 ${
+            isFaculty ? "text-amber-950" : isW ? "text-pink-950" : "text-gray-900"
+          }`}
         >
           {displayName}
         </h3>
         <p
           style="font-family: PolySans Slim;"
           class={`board-card-role m-0 mt-0.5 font-semibold ${
-            isW ? "text-[#DB2777]" : "text-[#7C3AED]"
+            isFaculty ? "text-[#B45309]" : isW ? "text-[#DB2777]" : "text-[#7C3AED]"
           }`}
         >
           {position}
@@ -106,7 +116,13 @@ const isFaculty = position.toLowerCase().includes("faculty");
               <img
                 src={getAssetUrl("/linkedin-orange.svg")}
                 alt="LinkedIn"
-                class={`board-card-icon ${isW ? "filter hue-rotate-[290deg] saturate-150" : ""}`}
+                class={`board-card-icon ${
+                  isFaculty
+                    ? "filter hue-rotate-[20deg] saturate-150"
+                    : isW
+                    ? "filter hue-rotate-[290deg] saturate-150"
+                    : ""
+                }`}
                 loading="lazy"
                 decoding="async"
               />
@@ -125,7 +141,13 @@ const isFaculty = position.toLowerCase().includes("faculty");
               <img
                 src={getAssetUrl("/google-scholar-orange.svg")}
                 alt="Google Scholar"
-                class={`board-card-icon ${isW ? "filter hue-rotate-[290deg] saturate-150" : ""}`}
+                class={`board-card-icon ${
+                  isFaculty
+                    ? "filter hue-rotate-[20deg] saturate-150"
+                    : isW
+                    ? "filter hue-rotate-[290deg] saturate-150"
+                    : ""
+                }`}
                 loading="lazy"
                 decoding="async"
               />
@@ -144,7 +166,13 @@ const isFaculty = position.toLowerCase().includes("faculty");
               <img
                 src={getAssetUrl("/github-orange.svg")}
                 alt="GitHub"
-                class={`board-card-icon ${isW ? "filter hue-rotate-[290deg] saturate-150" : ""}`}
+                class={`board-card-icon ${
+                  isFaculty
+                    ? "filter hue-rotate-[20deg] saturate-150"
+                    : isW
+                    ? "filter hue-rotate-[290deg] saturate-150"
+                    : ""
+                }`}
                 loading="lazy"
                 decoding="async"
               />

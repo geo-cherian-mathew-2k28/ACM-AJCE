@@ -6,7 +6,7 @@ import { getAssetUrl } from "../utils/cdn";
 const boardData = await reader.singletons.board.read();
 const boardMembers = boardData?.items ?? [];
 
-const facultyCoordinator = boardMembers.find(
+const facultyMembers = boardMembers.filter(
   (member) => member.position.toLowerCase().includes("faculty")
 );
 
@@ -29,7 +29,11 @@ const executiveLeaders = boardMembers.filter(
 );
 
 // 2. Women's Chapter
-const acmwLeaders = boardMembers.filter((member) => member.isW || member.position.toLowerCase().includes("women"));
+const acmwLeaders = boardMembers.filter(
+  (member) =>
+    !member.position.toLowerCase().includes("faculty") &&
+    (member.isW || member.position.toLowerCase().includes("women"))
+);
 
 // 3. Department Leads & Coordinators
 const departmentLeads = boardMembers.filter(
@@ -83,8 +87,14 @@ const teamMembers = boardMembers.filter(
     <!-- Category Filter Tabs -->
     <div class="flex justify-center items-center gap-2.5 mb-12 flex-wrap" id="team-tabs">
       <button
-        data-view="exec"
+        data-view="faculty"
         class="team-pill-btn active text-xs sm:text-sm font-semibold tracking-wider px-5 py-2.5 rounded-full border transition-all duration-300"
+      >
+        FACULTY IN-CHARGE
+      </button>
+      <button
+        data-view="exec"
+        class="team-pill-btn text-xs sm:text-sm font-semibold tracking-wider px-5 py-2.5 rounded-full border transition-all duration-300"
       >
         EXECUTIVE OFFICERS
       </button>
@@ -114,29 +124,30 @@ const teamMembers = boardMembers.filter(
       </button>
     </div>
 
-    <!-- 1. Executive Officers Grid -->
-    <div id="view-exec" class="team-view-section active w-full flex flex-col items-center">
-      {
-        facultyCoordinator && (
-          <div class="team-group-faculty flex flex-col items-center mb-10">
-            <span class="text-[0.65rem] uppercase tracking-widest text-[#B8A7FF] font-bold mb-3 px-4 py-1 rounded-full bg-purple-950/40 border border-purple-400/20 shadow-md">
-              Faculty Advisor
-            </span>
-            <div class="w-[85vw] sm:w-[50vw] md:w-[35vw] lg:w-[22vw] transition-all duration-300 hover:scale-105">
+    <!-- 0. Faculty In-Charge Grid -->
+    <div id="view-faculty" class="team-view-section active w-full flex flex-col items-center">
+      <div class="w-full lg:w-[75vw] flex flex-wrap justify-center gap-5 mb-8">
+        {
+          facultyMembers.map((member) => (
+            <div class="w-full sm:w-[calc(50%-0.75rem)] lg:w-[calc(33.333%-0.85rem)] transition-all duration-300 hover:scale-105 flex justify-center">
               <BoardMemberCardSingular
-                title={facultyCoordinator.title}
-                fullName={facultyCoordinator.fullName}
-                position={facultyCoordinator.position}
-                imageUrl={getAssetUrl(facultyCoordinator.imageUrl)}
-                linkedinUrl={facultyCoordinator.linkedinUrl}
-                googleScholarUrl={facultyCoordinator.googleScholarUrl}
-                githubUrl={facultyCoordinator.githubUrl}
-                isW={facultyCoordinator.isW}
+                title={member.title}
+                fullName={member.fullName}
+                position={member.position}
+                imageUrl={getAssetUrl(member.imageUrl)}
+                linkedinUrl={member.linkedinUrl}
+                googleScholarUrl={member.googleScholarUrl}
+                githubUrl={member.githubUrl}
+                isW={member.isW}
               />
             </div>
-          </div>
-        )
-      }
+          ))
+        }
+      </div>
+    </div>
+
+    <!-- 1. Executive Officers Grid -->
+    <div id="view-exec" class="team-view-section hidden w-full flex flex-col items-center">
       <div class="w-full lg:w-[75vw] flex flex-wrap justify-center gap-5 mb-8">
         {
           executiveLeaders.map((member) => (
@@ -159,27 +170,6 @@ const teamMembers = boardMembers.filter(
 
     <!-- 2. Women's Chapter Grid -->
     <div id="view-acmw" class="team-view-section hidden w-full flex flex-col items-center">
-      {
-        facultyCoordinator && (
-          <div class="team-group-faculty flex flex-col items-center mb-10">
-            <span class="text-[0.65rem] uppercase tracking-widest text-[#B8A7FF] font-bold mb-3 px-4 py-1 rounded-full bg-purple-950/40 border border-purple-400/20 shadow-md">
-              Faculty Advisor
-            </span>
-            <div class="w-[85vw] sm:w-[50vw] md:w-[35vw] lg:w-[22vw] transition-all duration-300 hover:scale-105">
-              <BoardMemberCardSingular
-                title={facultyCoordinator.title}
-                fullName={facultyCoordinator.fullName}
-                position={facultyCoordinator.position}
-                imageUrl={getAssetUrl(facultyCoordinator.imageUrl)}
-                linkedinUrl={facultyCoordinator.linkedinUrl}
-                googleScholarUrl={facultyCoordinator.googleScholarUrl}
-                githubUrl={facultyCoordinator.githubUrl}
-                isW={facultyCoordinator.isW}
-              />
-            </div>
-          </div>
-        )
-      }
       <div class="w-full lg:w-[75vw] flex flex-wrap justify-center gap-5 mb-8">
         {
           acmwLeaders.map((member) => (
@@ -246,45 +236,22 @@ const teamMembers = boardMembers.filter(
 
     <!-- 5. All Members Grid -->
     <div id="view-all" class="team-view-section hidden w-full flex flex-col items-center">
-      {
-        facultyCoordinator && (
-          <div class="team-group-faculty flex flex-col items-center mb-10">
-            <span class="text-[0.65rem] uppercase tracking-widest text-[#B8A7FF] font-bold mb-3 px-4 py-1 rounded-full bg-purple-950/40 border border-purple-400/20 shadow-md">
-              Faculty Advisor
-            </span>
-            <div class="w-[85vw] sm:w-[50vw] md:w-[35vw] lg:w-[22vw] transition-all duration-300 hover:scale-105">
-              <BoardMemberCardSingular
-                title={facultyCoordinator.title}
-                fullName={facultyCoordinator.fullName}
-                position={facultyCoordinator.position}
-                imageUrl={getAssetUrl(facultyCoordinator.imageUrl)}
-                linkedinUrl={facultyCoordinator.linkedinUrl}
-                googleScholarUrl={facultyCoordinator.googleScholarUrl}
-                githubUrl={facultyCoordinator.githubUrl}
-                isW={facultyCoordinator.isW}
-              />
-            </div>
-          </div>
-        )
-      }
       <div class="w-full lg:w-[75vw] flex flex-wrap justify-center gap-5 mb-8">
         {
-          boardMembers
-            .filter((m) => !m.position.toLowerCase().includes("faculty"))
-            .map((member) => (
-              <div class="w-full sm:w-[calc(50%-0.75rem)] lg:w-[calc(33.333%-0.85rem)] transition-all duration-300 hover:scale-105 flex justify-center">
-                <BoardMemberCardSingular
-                  title={member.title}
-                  fullName={member.fullName}
-                  position={member.position}
-                  imageUrl={getAssetUrl(member.imageUrl)}
-                  linkedinUrl={member.linkedinUrl}
-                  googleScholarUrl={member.googleScholarUrl}
-                  githubUrl={member.githubUrl}
-                  isW={member.isW}
-                />
-              </div>
-            ))
+          boardMembers.map((member) => (
+            <div class="w-full sm:w-[calc(50%-0.75rem)] lg:w-[calc(33.333%-0.85rem)] transition-all duration-300 hover:scale-105 flex justify-center">
+              <BoardMemberCardSingular
+                title={member.title}
+                fullName={member.fullName}
+                position={member.position}
+                imageUrl={getAssetUrl(member.imageUrl)}
+                linkedinUrl={member.linkedinUrl}
+                googleScholarUrl={member.googleScholarUrl}
+                githubUrl={member.githubUrl}
+                isW={member.isW}
+              />
+            </div>
+          ))
         }
       </div>
     </div>
