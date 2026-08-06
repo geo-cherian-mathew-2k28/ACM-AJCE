@@ -19,13 +19,13 @@ import {
 
 // Read Firebase config dynamically with solid fallback constants
 const firebaseConfig = {
-  apiKey: import.meta.env.PUBLIC_FIREBASE_API_KEY || "AIzaSyA9y9ykBbvWMbvRs1PvoH_ITlgaLB96IQY",
-  authDomain: import.meta.env.PUBLIC_FIREBASE_AUTH_DOMAIN || "acm-ajce-portal.firebaseapp.com",
-  projectId: import.meta.env.PUBLIC_FIREBASE_PROJECT_ID || "acm-ajce-portal",
-  storageBucket: import.meta.env.PUBLIC_FIREBASE_STORAGE_BUCKET || "acm-ajce-portal.firebasestorage.app",
-  messagingSenderId: import.meta.env.PUBLIC_FIREBASE_MESSAGING_SENDER_ID || "657659504135",
-  appId: import.meta.env.PUBLIC_FIREBASE_APP_ID || "1:657659504135:web:26bf9f20986f24ed1c6ca2",
-  measurementId: import.meta.env.PUBLIC_MEASUREMENT_ID || "G-XN58XQHMFX"
+  apiKey: import.meta.env.PUBLIC_FIREBASE_API_KEY || "",
+  authDomain: import.meta.env.PUBLIC_FIREBASE_AUTH_DOMAIN || "",
+  projectId: import.meta.env.PUBLIC_FIREBASE_PROJECT_ID || "",
+  storageBucket: import.meta.env.PUBLIC_FIREBASE_STORAGE_BUCKET || "",
+  messagingSenderId: import.meta.env.PUBLIC_FIREBASE_MESSAGING_SENDER_ID || "",
+  appId: import.meta.env.PUBLIC_FIREBASE_APP_ID || "",
+  measurementId: import.meta.env.PUBLIC_MEASUREMENT_ID || ""
 };
 
 // Singleton initialization pattern
