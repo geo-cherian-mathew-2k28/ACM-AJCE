@@ -219,48 +219,64 @@ const cardBgUrl = getAssetUrl("/brand/membership-card-bg.png");
             </div>
 
             <!-- Pixel-Perfect Digital Membership Card Pass -->
-            <div id="membership-card-pass" class="w-full max-w-xl mx-auto rounded-3xl border-2 border-[#B8A7FF]/40 shadow-[0_25px_60px_rgba(0,0,0,0.9)] relative overflow-hidden bg-cover bg-center text-white" style={`background-image: url('${cardBgUrl}'); aspect-ratio: 1.6 / 1;`}>
+            <div id="membership-card-pass" class="w-full max-w-xl mx-auto rounded-3xl border-2 border-[#B8A7FF]/50 shadow-[0_30px_70px_rgba(0,0,0,0.95)] relative overflow-hidden bg-[#0A0B14] text-white select-none" style="aspect-ratio: 1.6 / 1;">
               
-              <!-- Card Overlay Inner Layout -->
-              <div class="h-full p-5 sm:p-7 flex flex-col justify-between relative z-10">
+              <!-- 100% Guaranteed Background Template Image Layer -->
+              <img 
+                src={cardBgUrl} 
+                alt="ACM AJCE Pass Background" 
+                class="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none" 
+              />
+
+              <!-- High-Tech Ambient Dark Vignette Overlay -->
+              <div class="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-black/30 z-[1] pointer-events-none"></div>
+
+              <!-- Card Content Overlay Layer -->
+              <div class="relative z-10 h-full p-5 sm:p-7 flex flex-col justify-between">
                 
-                <!-- Top Subtitle Header -->
-                <div class="flex items-center justify-between">
-                  <div>
-                    <p class="text-[9px] sm:text-[11px] font-mono font-bold text-[#B8A7FF] uppercase tracking-widest">
-                      ASSOCIATION FOR COMPUTING MACHINERY
-                    </p>
-                    <p class="text-[10px] sm:text-xs font-bold text-gray-300 uppercase tracking-wider font-mono">
-                      OFFICIAL STUDENT MEMBERSHIP PASS
-                    </p>
+                <!-- Top Header Bar -->
+                <div class="flex items-center justify-between pl-3 sm:pl-5 pt-1">
+                  <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-[#00FFC2] animate-pulse shadow-[0_0_8px_#00FFC2]"></span>
+                    <span class="text-[9px] sm:text-[11px] font-mono font-extrabold text-[#B8A7FF] uppercase tracking-widest">
+                      ACM AJCE STUDENT CHAPTER
+                    </span>
                   </div>
+                  <!-- Note: Top Right is left clear for pre-printed ACM logo on template image -->
                 </div>
 
-                <!-- Middle Grid: Member Details & QR Code -->
-                <div class="grid grid-cols-12 gap-3 items-center my-auto pl-3 sm:pl-5">
+                <!-- Middle Content Grid -->
+                <div class="grid grid-cols-12 gap-3 items-center my-auto pl-3 sm:pl-5 pr-2 sm:pr-4">
                   <!-- Member Info (7 Columns) -->
-                  <div class="col-span-7 sm:col-span-7 text-left space-y-1 sm:space-y-1.5 pr-1">
-                    <h3 id="card-view-name" class="text-base sm:text-2xl font-extrabold text-white tracking-tight truncate leading-tight">
+                  <div class="col-span-7 sm:col-span-7 text-left space-y-1.5 pr-1">
+                    <h3 id="card-view-name" class="text-base sm:text-2xl font-black text-white tracking-tight truncate leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] font-display">
                       Admin tester
                     </h3>
-                    <p id="card-view-id" class="text-xs sm:text-base font-bold font-mono text-[#00FFC2] tracking-wider">
-                      ID: ACM-AJCE-1VLG5
-                    </p>
 
-                    <div class="pt-1.5 space-y-0.5 text-[11px] sm:text-xs text-gray-200 font-sans">
-                      <p class="truncate">Course: <span id="card-view-course" class="font-semibold text-white">MCA (S6)</span></p>
-                      <p class="truncate">Email: <span id="card-view-email" class="font-medium text-gray-100">admintester@gmail.com</span></p>
-                      <p class="font-mono text-[#B8A7FF] pt-1 text-[10px] sm:text-xs">
-                        Valid: <span id="card-view-validity" class="font-bold">Aug 6, 2026 – Aug 6, 2027</span>
+                    <div>
+                      <span id="card-view-id" class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#00FFC2]/15 border border-[#00FFC2]/40 text-[#00FFC2] font-mono font-bold text-[11px] sm:text-xs tracking-wider shadow-sm backdrop-blur-sm">
+                        ID: ACM-AJCE-1VLG5
+                      </span>
+                    </div>
+
+                    <div class="pt-1 space-y-0.5 text-[10px] sm:text-xs text-gray-200 font-sans">
+                      <p class="truncate font-medium text-gray-100">
+                        Course: <span id="card-view-course" class="font-bold text-white">MCA (S6)</span>
+                      </p>
+                      <p class="truncate font-medium text-gray-300">
+                        Email: <span id="card-view-email" class="font-mono text-gray-200">admintester@gmail.com</span>
+                      </p>
+                      <p class="font-mono text-[#B8A7FF] pt-1 text-[9px] sm:text-[11px] font-bold tracking-wider">
+                        VALID: <span id="card-view-validity" class="text-white">Aug 6, 2026 – Aug 6, 2027</span>
                       </p>
                     </div>
                   </div>
 
-                  <!-- QR Code (5 Columns) -->
+                  <!-- QR Code Container (5 Columns) -->
                   <div class="col-span-5 sm:col-span-5 flex flex-col items-center justify-center">
-                    <div class="bg-white p-2 sm:p-2.5 rounded-2xl shadow-2xl text-center border-2 border-[#B8A7FF] flex flex-col items-center">
-                      <img id="view-security-qr" src="" alt="Verification QR" class="w-16 h-16 sm:w-28 sm:h-28 object-contain" />
-                      <span class="text-[7px] sm:text-[9px] text-purple-950 font-mono font-bold block mt-1 uppercase tracking-widest whitespace-nowrap">
+                    <div class="bg-white/95 backdrop-blur-md p-2 sm:p-2.5 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.6)] text-center border-2 border-[#B8A7FF]/80 flex flex-col items-center">
+                      <img id="view-security-qr" src="" alt="Verification QR" class="w-16 h-16 sm:w-26 sm:h-26 object-contain" />
+                      <span class="text-[7px] sm:text-[9px] text-purple-950 font-mono font-extrabold block mt-1 uppercase tracking-widest whitespace-nowrap">
                         SCAN TO VERIFY
                       </span>
                     </div>
@@ -268,8 +284,8 @@ const cardBgUrl = getAssetUrl("/brand/membership-card-bg.png");
                 </div>
 
                 <!-- Bottom Footer Tag -->
-                <div class="pl-3 sm:pl-5 pt-2 border-t border-purple-500/20 flex items-center justify-between">
-                  <span class="text-[8px] sm:text-[10px] font-mono font-bold text-[#00FFC2] uppercase tracking-widest">
+                <div class="pl-3 sm:pl-5 pb-1 flex items-center justify-between border-t border-purple-500/20 pt-2">
+                  <span class="text-[8px] sm:text-[10px] font-mono font-bold text-[#00FFC2] uppercase tracking-widest drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
                     AUTHENTICATED DIGITAL CREDENTIAL
                   </span>
                 </div>
