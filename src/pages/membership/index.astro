@@ -1,7 +1,6 @@
 ---
 import MembershipLayout from "../../layouts/MembershipLayout.astro";
-import { getAssetUrl } from "../../utils/cdn";
-const cardBgUrl = getAssetUrl("/brand/membership-card-bg.png");
+import { membershipCardBgDataUri } from "../../utils/cardBg";
 ---
 
 <MembershipLayout title="ACM AJCE Membership Portal">
@@ -221,9 +220,9 @@ const cardBgUrl = getAssetUrl("/brand/membership-card-bg.png");
             <!-- Pixel-Perfect Digital Membership Card Pass -->
             <div id="membership-card-pass" class="w-full max-w-xl mx-auto rounded-3xl border-2 border-[#B8A7FF]/50 shadow-[0_30px_70px_rgba(0,0,0,0.95)] relative overflow-hidden bg-[#0A0B14] text-white select-none" style="aspect-ratio: 1.6 / 1;">
               
-              <!-- 100% Guaranteed Background Template Image Layer -->
+              <!-- 100% Guaranteed Embedded Data URI Background Template Image Layer -->
               <img 
-                src={cardBgUrl || "/brand/membership-card-bg.png"} 
+                src={membershipCardBgDataUri} 
                 alt="" 
                 class="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none" 
               />
@@ -559,7 +558,7 @@ const cardBgUrl = getAssetUrl("/brand/membership-card-bg.png");
       const bg = new Image();
       bg.onload = () => drawPassContent(bg);
       bg.onerror = () => drawPassContent(null);
-      bg.src = typeof cardBgUrl !== 'undefined' ? cardBgUrl : "/brand/membership-card-bg.png";
+      bg.src = typeof membershipCardBgDataUri !== 'undefined' ? membershipCardBgDataUri : "/brand/membership-card-bg.png";
     });
 
     // Auth State Persistent Observer
