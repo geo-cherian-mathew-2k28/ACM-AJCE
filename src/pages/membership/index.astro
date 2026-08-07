@@ -245,9 +245,9 @@ import { membershipCardBgDataUri } from "../../utils/cardBg";
                 </div>
 
                 <!-- Middle Content Grid -->
-                <div class="grid grid-cols-12 gap-3 items-center my-auto pl-7 sm:pl-12 pr-2 sm:pr-4">
-                  <!-- Member Info (7 Columns) -->
-                  <div class="col-span-7 sm:col-span-7 text-left space-y-1.5 pr-1">
+                <div class="grid grid-cols-12 gap-3 items-center my-auto pl-6 sm:pl-11 pr-2 sm:pr-4">
+                  <!-- Member Info (8 Columns for maximum text space) -->
+                  <div class="col-span-8 sm:col-span-8 text-left space-y-1.5 pr-1">
                     <h3 id="card-view-name" class="text-base sm:text-2xl font-black text-white tracking-tight truncate leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] font-display">
                       Admin tester
                     </h3>
@@ -262,8 +262,8 @@ import { membershipCardBgDataUri } from "../../utils/cardBg";
                       <p class="truncate font-medium text-gray-100">
                         Course: <span id="card-view-course" class="font-bold text-white">MCA (S6)</span>
                       </p>
-                      <p class="truncate font-medium text-gray-300">
-                        Email: <span id="card-view-email" class="font-mono text-gray-200">admintester@gmail.com</span>
+                      <p class="font-medium text-gray-300">
+                        Email: <span id="card-view-email" class="font-mono text-gray-200 text-[9px] sm:text-[11px] break-all">admintester@gmail.com</span>
                       </p>
                       <p class="font-mono text-[#B8A7FF] pt-1 text-[9px] sm:text-[11px] font-bold tracking-wider">
                         VALID: <span id="card-view-validity" class="text-white">Aug 6, 2026 – Aug 6, 2027</span>
@@ -271,11 +271,11 @@ import { membershipCardBgDataUri } from "../../utils/cardBg";
                     </div>
                   </div>
 
-                  <!-- QR Code Container (5 Columns) -->
-                  <div class="col-span-5 sm:col-span-5 flex flex-col items-center justify-center">
-                    <div class="bg-white/95 backdrop-blur-md p-2 sm:p-2.5 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.6)] text-center border-2 border-[#B8A7FF]/80 flex flex-col items-center">
-                      <img id="view-security-qr" src="" alt="Verification QR" class="w-16 h-16 sm:w-26 sm:h-26 object-contain" />
-                      <span class="text-[7px] sm:text-[9px] text-purple-950 font-mono font-extrabold block mt-1 uppercase tracking-widest whitespace-nowrap">
+                  <!-- QR Code Container (4 Columns) -->
+                  <div class="col-span-4 sm:col-span-4 flex flex-col items-center justify-center">
+                    <div class="bg-white/95 backdrop-blur-md p-1.5 sm:p-2 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.6)] text-center border-2 border-[#B8A7FF]/80 flex flex-col items-center">
+                      <img id="view-security-qr" src="" alt="Verification QR" class="w-14 h-14 sm:w-24 sm:h-24 object-contain" />
+                      <span class="text-[6px] sm:text-[8px] text-purple-950 font-mono font-extrabold block mt-1 uppercase tracking-widest whitespace-nowrap">
                         SCAN TO VERIFY
                       </span>
                     </div>
@@ -475,7 +475,7 @@ import { membershipCardBgDataUri } from "../../utils/cardBg";
           ctx.fillRect(0, 0, 1200, 750);
         }
 
-        const leftX = 140; // Clears the pre-printed vertical text on the left margin!
+        const leftX = 130; // Clears the pre-printed vertical text on the left margin!
 
         // Top Header Bar
         ctx.fillStyle = "#00FFC2";
@@ -499,43 +499,43 @@ import { membershipCardBgDataUri } from "../../utils/cardBg";
         ctx.shadowColor = "rgba(0, 0, 0, 0.85)";
         ctx.shadowBlur = 12;
         ctx.shadowOffsetY = 4;
-        ctx.font = "900 44px sans-serif";
-        ctx.fillText(name, leftX, 220);
+        ctx.font = "900 42px sans-serif";
+        ctx.fillText(name, leftX, 215);
         ctx.restore();
 
         // Sleek Metallic ID Badge Container
         const idText = `ID: ${memId}`;
-        ctx.font = "bold 26px monospace";
-        const idWidth = ctx.measureText(idText).width + 36;
+        ctx.font = "bold 24px monospace";
+        const idWidth = ctx.measureText(idText).width + 32;
         
         ctx.fillStyle = "rgba(0, 255, 194, 0.12)";
         ctx.strokeStyle = "rgba(0, 255, 194, 0.4)";
         ctx.lineWidth = 2;
         ctx.beginPath();
-        ctx.roundRect(leftX, 250, idWidth, 46, 23);
+        ctx.roundRect(leftX, 245, idWidth, 42, 21);
         ctx.fill();
         ctx.stroke();
 
         ctx.fillStyle = "#00FFC2";
-        ctx.fillText(idText, leftX + 18, 283);
+        ctx.fillText(idText, leftX + 16, 275);
 
         // Course & Branch
-        ctx.font = "600 24px sans-serif";
+        ctx.font = "600 22px sans-serif";
         ctx.fillStyle = "#A78BFA";
-        ctx.fillText("Course: ", leftX, 360);
+        ctx.fillText("Course: ", leftX, 350);
         const courseLabelWidth = ctx.measureText("Course: ").width;
         ctx.fillStyle = "#FFFFFF";
-        ctx.font = "bold 24px sans-serif";
-        ctx.fillText(course, leftX + courseLabelWidth, 360);
+        ctx.font = "bold 22px sans-serif";
+        ctx.fillText(course, leftX + courseLabelWidth, 350);
 
         // Email
-        ctx.font = "500 22px sans-serif";
+        ctx.font = "500 20px sans-serif";
         ctx.fillStyle = "#9CA3AF";
-        ctx.fillText("Email: ", leftX, 410);
+        ctx.fillText("Email: ", leftX, 400);
         const emailLabelWidth = ctx.measureText("Email: ").width;
         ctx.fillStyle = "#E2E8F0";
-        ctx.font = "bold 22px monospace";
-        ctx.fillText(email, leftX + emailLabelWidth, 410);
+        ctx.font = "bold 19px monospace";
+        ctx.fillText(email, leftX + emailLabelWidth, 400);
 
         // Validity Range
         const verifiedDate = currentMembershipData.verifiedAt ? new Date(currentMembershipData.verifiedAt) : new Date();
@@ -543,26 +543,26 @@ import { membershipCardBgDataUri } from "../../utils/cardBg";
         nextYearDate.setFullYear(verifiedDate.getFullYear() + 1);
         const formatDate = (d) => d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 
-        ctx.font = "bold 22px monospace";
+        ctx.font = "bold 20px monospace";
         ctx.fillStyle = "#C084FC";
-        ctx.fillText("VALID: ", leftX, 470);
+        ctx.fillText("VALID: ", leftX, 455);
         const validLabelWidth = ctx.measureText("VALID: ").width;
         ctx.fillStyle = "#FFFFFF";
-        ctx.fillText(`${formatDate(verifiedDate)} – ${formatDate(nextYearDate)}`, leftX + validLabelWidth, 470);
+        ctx.fillText(`${formatDate(verifiedDate)} – ${formatDate(nextYearDate)}`, leftX + validLabelWidth, 455);
 
         // Footer Tag (Bottom Left)
         ctx.fillStyle = "#00FFC2";
         ctx.font = "bold 20px monospace";
         ctx.fillText("AUTHENTICATED DIGITAL CREDENTIAL", leftX, 675);
 
-        // Draw Verification QR Code Container on Right Side
+        // Draw Verification QR Code Container on Right Side (Pushed to far-right x:910)
         const qrImg = document.getElementById("view-security-qr");
         if (qrImg && qrImg.src) {
           try {
-            const qrBoxX = 840;
-            const qrBoxY = 200;
-            const qrBoxW = 260;
-            const qrBoxH = 310;
+            const qrBoxX = 910;
+            const qrBoxY = 195;
+            const qrBoxW = 230;
+            const qrBoxH = 290;
 
             // White rounded glass container
             ctx.fillStyle = "#FFFFFF";
@@ -570,7 +570,7 @@ import { membershipCardBgDataUri } from "../../utils/cardBg";
             ctx.shadowBlur = 20;
             ctx.shadowOffsetY = 8;
             ctx.beginPath();
-            ctx.roundRect(qrBoxX, qrBoxY, qrBoxW, qrBoxH, 24);
+            ctx.roundRect(qrBoxX, qrBoxY, qrBoxW, qrBoxH, 22);
             ctx.fill();
 
             // Border outline
@@ -579,13 +579,13 @@ import { membershipCardBgDataUri } from "../../utils/cardBg";
             ctx.stroke();
 
             // Draw QR Code Image
-            ctx.drawImage(qrImg, qrBoxX + 25, qrBoxY + 25, 210, 210);
+            ctx.drawImage(qrImg, qrBoxX + 20, qrBoxY + 20, 190, 190);
 
             // Subtext under QR Code
             ctx.fillStyle = "#3B0764";
-            ctx.font = "bold 16px monospace";
+            ctx.font = "bold 15px monospace";
             ctx.textAlign = "center";
-            ctx.fillText("SCAN TO VERIFY", qrBoxX + (qrBoxW / 2), qrBoxY + 275);
+            ctx.fillText("SCAN TO VERIFY", qrBoxX + (qrBoxW / 2), qrBoxY + 255);
             ctx.textAlign = "left"; // Reset alignment
           } catch(e) {}
         }
