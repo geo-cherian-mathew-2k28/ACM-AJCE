@@ -234,7 +234,7 @@ import { membershipCardBgDataUri } from "../../utils/cardBg";
               <div class="relative z-10 h-full p-5 sm:p-7 flex flex-col justify-between">
                 
                 <!-- Top Header Bar -->
-                <div class="flex items-center justify-between pl-3 sm:pl-5 pt-1">
+                <div class="flex items-center justify-between pl-7 sm:pl-12 pt-1">
                   <div class="flex items-center gap-2">
                     <span class="w-2 h-2 rounded-full bg-[#00FFC2] animate-pulse shadow-[0_0_8px_#00FFC2]"></span>
                     <span class="text-[9px] sm:text-[11px] font-mono font-extrabold text-[#B8A7FF] uppercase tracking-widest">
@@ -245,7 +245,7 @@ import { membershipCardBgDataUri } from "../../utils/cardBg";
                 </div>
 
                 <!-- Middle Content Grid -->
-                <div class="grid grid-cols-12 gap-3 items-center my-auto pl-3 sm:pl-5 pr-2 sm:pr-4">
+                <div class="grid grid-cols-12 gap-3 items-center my-auto pl-7 sm:pl-12 pr-2 sm:pr-4">
                   <!-- Member Info (7 Columns) -->
                   <div class="col-span-7 sm:col-span-7 text-left space-y-1.5 pr-1">
                     <h3 id="card-view-name" class="text-base sm:text-2xl font-black text-white tracking-tight truncate leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] font-display">
@@ -283,7 +283,7 @@ import { membershipCardBgDataUri } from "../../utils/cardBg";
                 </div>
 
                 <!-- Bottom Footer Tag -->
-                <div class="pl-3 sm:pl-5 pb-1 flex items-center justify-between border-t border-purple-500/20 pt-2">
+                <div class="pl-7 sm:pl-12 pb-1 flex items-center justify-between border-t border-purple-500/20 pt-2">
                   <span class="text-[8px] sm:text-[10px] font-mono font-bold text-[#00FFC2] uppercase tracking-widest drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
                     AUTHENTICATED DIGITAL CREDENTIAL
                   </span>
@@ -475,14 +475,17 @@ import { membershipCardBgDataUri } from "../../utils/cardBg";
           ctx.fillRect(0, 0, 1200, 750);
         }
 
-        // Header Subtitle
-        ctx.fillStyle = "#B8A7FF";
-        ctx.font = "bold 20px monospace";
-        ctx.fillText("ASSOCIATION FOR COMPUTING MACHINERY", 70, 70);
+        const leftX = 140; // Clears the pre-printed vertical text on the left margin!
 
-        ctx.fillStyle = "#E2E8F0";
-        ctx.font = "bold 22px monospace";
-        ctx.fillText("OFFICIAL STUDENT MEMBERSHIP PASS", 70, 105);
+        // Top Header Bar
+        ctx.fillStyle = "#00FFC2";
+        ctx.beginPath();
+        ctx.arc(leftX, 100, 6, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = "#B8A7FF";
+        ctx.font = "bold 18px monospace";
+        ctx.fillText("ACM AJCE STUDENT CHAPTER", leftX + 16, 106);
 
         // Dynamic Member Profile Details
         const name = currentMembershipData.fullName || "Chapter Member";
@@ -490,51 +493,100 @@ import { membershipCardBgDataUri } from "../../utils/cardBg";
         const course = `${currentMembershipData.course || ''} (${currentMembershipData.semester || ''})`;
         const email = currentMembershipData.email || currentUser?.email || "";
 
-        ctx.fillStyle = "#FBFAFF";
-        ctx.font = "900 46px sans-serif";
-        ctx.fillText(name, 70, 240);
+        // Member Full Name
+        ctx.save();
+        ctx.fillStyle = "#FFFFFF";
+        ctx.shadowColor = "rgba(0, 0, 0, 0.85)";
+        ctx.shadowBlur = 12;
+        ctx.shadowOffsetY = 4;
+        ctx.font = "900 44px sans-serif";
+        ctx.fillText(name, leftX, 220);
+        ctx.restore();
+
+        // Sleek Metallic ID Badge Container
+        const idText = `ID: ${memId}`;
+        ctx.font = "bold 26px monospace";
+        const idWidth = ctx.measureText(idText).width + 36;
+        
+        ctx.fillStyle = "rgba(0, 255, 194, 0.12)";
+        ctx.strokeStyle = "rgba(0, 255, 194, 0.4)";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.roundRect(leftX, 250, idWidth, 46, 23);
+        ctx.fill();
+        ctx.stroke();
 
         ctx.fillStyle = "#00FFC2";
-        ctx.font = "bold 32px monospace";
-        ctx.fillText(`ID: ${memId}`, 70, 295);
+        ctx.fillText(idText, leftX + 18, 283);
 
+        // Course & Branch
+        ctx.font = "600 24px sans-serif";
+        ctx.fillStyle = "#A78BFA";
+        ctx.fillText("Course: ", leftX, 360);
+        const courseLabelWidth = ctx.measureText("Course: ").width;
+        ctx.fillStyle = "#FFFFFF";
+        ctx.font = "bold 24px sans-serif";
+        ctx.fillText(course, leftX + courseLabelWidth, 360);
+
+        // Email
+        ctx.font = "500 22px sans-serif";
+        ctx.fillStyle = "#9CA3AF";
+        ctx.fillText("Email: ", leftX, 410);
+        const emailLabelWidth = ctx.measureText("Email: ").width;
         ctx.fillStyle = "#E2E8F0";
-        ctx.font = "600 26px sans-serif";
-        ctx.fillText(`Course: ${course}`, 70, 365);
+        ctx.font = "bold 22px monospace";
+        ctx.fillText(email, leftX + emailLabelWidth, 410);
 
-        ctx.fillStyle = "#CBD5E1";
-        ctx.font = "500 24px sans-serif";
-        ctx.fillText(`Email: ${email}`, 70, 415);
-
+        // Validity Range
         const verifiedDate = currentMembershipData.verifiedAt ? new Date(currentMembershipData.verifiedAt) : new Date();
         const nextYearDate = new Date(verifiedDate);
         nextYearDate.setFullYear(verifiedDate.getFullYear() + 1);
         const formatDate = (d) => d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 
-        ctx.fillStyle = "#B8A7FF";
-        ctx.font = "bold 24px monospace";
-        ctx.fillText(`Valid: ${formatDate(verifiedDate)} – ${formatDate(nextYearDate)}`, 70, 470);
+        ctx.font = "bold 22px monospace";
+        ctx.fillStyle = "#C084FC";
+        ctx.fillText("VALID: ", leftX, 470);
+        const validLabelWidth = ctx.measureText("VALID: ").width;
+        ctx.fillStyle = "#FFFFFF";
+        ctx.fillText(`${formatDate(verifiedDate)} – ${formatDate(nextYearDate)}`, leftX + validLabelWidth, 470);
 
         // Footer Tag (Bottom Left)
         ctx.fillStyle = "#00FFC2";
         ctx.font = "bold 20px monospace";
-        ctx.fillText("AUTHENTICATED DIGITAL CREDENTIAL", 70, 680);
+        ctx.fillText("AUTHENTICATED DIGITAL CREDENTIAL", leftX, 675);
 
-        // Draw Verification QR Code on Right
+        // Draw Verification QR Code Container on Right Side
         const qrImg = document.getElementById("view-security-qr");
         if (qrImg && qrImg.src) {
           try {
+            const qrBoxX = 840;
+            const qrBoxY = 200;
+            const qrBoxW = 260;
+            const qrBoxH = 310;
+
+            // White rounded glass container
             ctx.fillStyle = "#FFFFFF";
+            ctx.shadowColor = "rgba(0, 0, 0, 0.7)";
+            ctx.shadowBlur = 20;
+            ctx.shadowOffsetY = 8;
             ctx.beginPath();
-            ctx.roundRect(860, 210, 270, 320, 24);
+            ctx.roundRect(qrBoxX, qrBoxY, qrBoxW, qrBoxH, 24);
             ctx.fill();
 
-            ctx.drawImage(qrImg, 885, 230, 220, 220);
+            // Border outline
+            ctx.strokeStyle = "rgba(184, 167, 255, 0.8)";
+            ctx.lineWidth = 3;
+            ctx.stroke();
 
+            // Draw QR Code Image
+            ctx.drawImage(qrImg, qrBoxX + 25, qrBoxY + 25, 210, 210);
+
+            // Subtext under QR Code
             ctx.fillStyle = "#3B0764";
-            ctx.font = "bold 17px monospace";
+            ctx.font = "bold 16px monospace";
             ctx.textAlign = "center";
-            ctx.fillText("SCAN TO VERIFY", 995, 490);
+            ctx.fillText("SCAN TO VERIFY", qrBoxX + (qrBoxW / 2), qrBoxY + 275);
+            ctx.textAlign = "left"; // Reset alignment
           } catch(e) {}
         }
 
