@@ -1,8 +1,7 @@
 ---
 import MembershipLayout from "../../layouts/MembershipLayout.astro";
 import { getAssetUrl } from "../../utils/cdn";
-import cardBgImage from "../../assets/membership-card-bg.png";
-const cardBgUrl = cardBgImage.src;
+const cardBgUrl = getAssetUrl("/brand/membership-card-bg.png");
 ---
 
 <MembershipLayout title="ACM AJCE Membership Portal">
@@ -224,7 +223,7 @@ const cardBgUrl = cardBgImage.src;
               
               <!-- 100% Guaranteed Background Template Image Layer -->
               <img 
-                src={cardBgImage.src} 
+                src={cardBgUrl || "/brand/membership-card-bg.png"} 
                 alt="" 
                 class="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none" 
               />
