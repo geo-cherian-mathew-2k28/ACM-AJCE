@@ -78,7 +78,7 @@ import { getAssetUrl } from "../utils/cdn";
           ].map((item, i) => {
             return (
             <div
-              class="gallery-item group relative w-full aspect-[1.6] rounded-lg bg-white overflow-hidden flex items-center justify-center transition-transform duration-300 hover:scale-[1.02] cursor-pointer"
+              class="gallery-item group relative w-full aspect-[1.6] rounded-xl border border-white/20 bg-white/5 p-1 overflow-hidden flex items-center justify-center transition-all duration-300 hover:scale-[1.02] hover:border-white/50 cursor-pointer shadow-lg"
               data-gallery-src={getAssetUrl(item.src)}
               data-gallery-title={item.title}
               data-gallery-category={item.category}
@@ -86,49 +86,15 @@ import { getAssetUrl } from "../utils/cdn";
               tabindex="0"
               aria-label={`View ${item.title}`}
             >
-              
-              <!-- Background Pattern -->
-              <div
-                class="absolute inset-0 pointer-events-none opacity-50 z-0"
-                style={`background-image: url('${getAssetUrl("/noise.webp")}'); background-size: cover;`}
-              >
-              </div>
-
               <!-- Full Frame Image -->
-              <div class="absolute inset-0 z-10 p-[2%]">
+              <div class="relative w-full h-full overflow-hidden rounded-lg">
                  <img 
                     src={getAssetUrl(item.src)} 
                     alt={item.title} 
-                    class="w-full h-full object-cover rounded-sm transition-transform duration-700 group-hover:scale-110"
+                    class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     loading="lazy"
                     decoding="async"
                   />
-              </div>
-
-              <!-- Cassette Overlay -->
-              <div
-                class="w-[97%] h-[96.5%] flex justify-center items-center absolute z-20 pointer-events-none"
-              >
-                <img
-                  src={getAssetUrl("/casette-layout-orange.svg")}
-                  alt="Cassette Frame"
-                  class="absolute w-full h-full object-cover"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </div>
-
-              <!-- ACM Logo at Bottom -->
-              <div
-                class="w-full flex justify-center items-center z-30 h-[20%] pb-1 absolute bottom-0 pointer-events-none"
-              >
-                <img
-                  src={getAssetUrl("/acm-logo-black.webp")}
-                  alt="ACM AJCE Logo"
-                  class="h-full object-cover"
-                  loading="lazy"
-                  decoding="async"
-                />
               </div>
 
               <!-- Hover Overlay Content -->
@@ -141,12 +107,12 @@ import { getAssetUrl } from "../utils/cdn";
                   </h3>
                   <p
                     style="font-family: 'PolySans Slim';"
-                  class="text-sm md:text-base text-primary-orange m-0 uppercase mt-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-75"
+                  class="text-sm md:text-base text-[#B8A7FF] m-0 uppercase mt-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-75"
                   >
                     {item.category}
                   </p>
                   <div class="mt-4 translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-100">
-                     <span class="text-xs text-white/80 font-['PolySans_Trial'] uppercase border-b border-white/50 pb-0.5">View Details</span>
+                     <span class="text-xs text-white/90 font-['PolySans_Trial'] uppercase border-b border-white/50 pb-0.5">View Full Image</span>
                   </div>
               </div>
             </div>
