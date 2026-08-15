@@ -54,6 +54,7 @@ export default config({
             linkedinUrl: fields.text({ label: 'LinkedIn URL' }),
             googleScholarUrl: fields.text({ label: 'Google Scholar URL' }),
             githubUrl: fields.text({ label: 'GitHub URL' }),
+            portfolioUrl: fields.text({ label: 'Portfolio URL' }),
             isW: fields.checkbox({ label: 'ACM-W Member', defaultValue: false }),
           }),
           {
