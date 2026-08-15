@@ -252,6 +252,14 @@ const membershipHref = "/membership/";
 
 
 <style>
+  :global(body.modal-open-active) .site-header,
+  :global(body.modal-open-active) .membership-cta-hero {
+    display: none !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    visibility: hidden !important;
+  }
+
   .membership-cta-hero {
     display: inline-flex;
     align-items: center;

@@ -228,10 +228,12 @@ import { getAssetUrl } from "../utils/cdn";
     z-index: 20;
   }
 
-  :global(body.modal-open-active .site-header) {
+  :global(body.modal-open-active) .site-header,
+  :global(body.modal-open-active) .membership-cta-hero {
+    display: none !important;
     opacity: 0 !important;
     pointer-events: none !important;
-    transition: opacity 0.3s ease !important;
+    visibility: hidden !important;
   }
 
   .gallery-lightbox-close:hover,
