@@ -4,7 +4,6 @@
       "fullName": "Neenu R",
       "position": "Faculty In-Charge",
       "imageUrl": "/board/Neenu Miss.jpg",
-      "linkedinUrl": "https://www.linkedin.com/",
       "isW": false
     },
     {
@@ -12,15 +11,16 @@
       "fullName": "Indu John",
       "position": "Faculty In-Charge",
       "imageUrl": "/board/Dr Indu John.png",
-      "linkedinUrl": "https://www.linkedin.com/",
       "isW": false
     },
     {
       "fullName": "Tom Ison",
       "position": "Chairman",
       "imageUrl": "/board/Tom Ison , Chair.PNG",
-      "linkedinUrl": "https://www.linkedin.com/",
-      "isW": false
+      "linkedinUrl": "https://www.linkedin.com/in/tom-ison/",
+      "isW": false,
+      "githubUrl": "https://github.com/tomison20",
+      "portfolioUrl": "https://tom-ison.me/"
     },
     {
       "fullName": "Layel K Manoj",
@@ -34,7 +34,6 @@
       "fullName": "Sebin Shaji",
       "position": "Treasurer",
       "imageUrl": "/board/Sebin_Shaji_Treasurer_.jpg",
-      "linkedinUrl": "https://www.linkedin.com/",
       "isW": false
     },
     {
@@ -91,7 +90,6 @@
       "fullName": "Nandana Vinod",
       "position": "Women's Chapter Content Writer",
       "imageUrl": "/board/Nandana Vinod - Content Writer - Women_s Chapter.jpg",
-      "linkedinUrl": "https://www.linkedin.com/",
       "isW": true
     },
     {
@@ -114,7 +112,6 @@
       "fullName": "Kevin Kanniyakonil Biju",
       "position": "Event Coordinator",
       "imageUrl": "/board/Kevin K Biju (Event Coordinator).jpg",
-      "linkedinUrl": "https://www.linkedin.com/",
       "isW": false
     },
     {
@@ -129,7 +126,6 @@
       "fullName": "Abhijith Saju",
       "position": "Membership Development Coordinator",
       "imageUrl": "/board/Abhijith Saju- Membership Development Coordinator.jpg",
-      "linkedinUrl": "https://www.linkedin.com/",
       "isW": false
     },
     {
@@ -151,7 +147,6 @@
       "fullName": "Elkin Wilson George",
       "position": "Media Lead",
       "imageUrl": "/board/Elkin Wilson George(Media Lead).jpg",
-      "linkedinUrl": "https://www.linkedin.com/",
       "isW": false
     },
     {
@@ -172,7 +167,6 @@
       "fullName": "Savan Kurian",
       "position": "Media Team Member",
       "imageUrl": "/board/Savan Kurian (Social media lead).jpg",
-      "linkedinUrl": "https://www.linkedin.com/",
       "isW": false
     },
     {
@@ -202,7 +196,6 @@
       "fullName": "Nancy Sunil",
       "position": "Content Writer",
       "imageUrl": "/board/Nancy Sunil - ACM Content Writer .jpg",
-      "linkedinUrl": "https://www.linkedin.com/",
       "isW": false
     }
   ]

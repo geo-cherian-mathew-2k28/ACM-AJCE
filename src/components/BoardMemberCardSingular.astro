@@ -186,24 +186,22 @@ const isFaculty = position.toLowerCase().includes("faculty");
               href={portfolioUrl}
               target="_blank"
               rel="noopener noreferrer"
-              class="hover:cursor-pointer transition-transform hover:scale-110 flex items-center justify-center"
+              class="hover:cursor-pointer transition-transform hover:scale-110"
               title="Portfolio Website"
             >
-              <svg 
-                class={`w-5 h-5 ${
+              <img
+                src={getAssetUrl("/portfolio-orange.svg")}
+                alt="Portfolio"
+                class={`board-card-icon ${
                   isFaculty
-                    ? "text-[#D97706]"
+                    ? "filter hue-rotate-[20deg] saturate-150"
                     : isW
-                    ? "text-[#EC4899]"
-                    : "text-[#8B5CF6]"
-                }`} 
-                fill="none" 
-                stroke="currentColor" 
-                stroke-width="2" 
-                viewBox="0 0 24 24"
-              >
-                <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m-9 9a9 9 0 019-9"></path>
-              </svg>
+                    ? "filter hue-rotate-[290deg] saturate-150"
+                    : ""
+                }`}
+                loading="lazy"
+                decoding="async"
+              />
             </a>
           )
         }
