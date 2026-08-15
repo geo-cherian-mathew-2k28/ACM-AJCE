@@ -145,7 +145,7 @@
   const section = document.querySelector(".laptop-section");
 
   const frameCount = 125;
-  const frames: HTMLImageElement[] = new Array(frameCount);
+  const frames: (HTMLImageElement | ImageBitmap)[] = new Array(frameCount);
   const prefersReducedMotion = window.matchMedia(
     "(prefers-reduced-motion: reduce)"
   ).matches;
@@ -183,7 +183,7 @@
       );
       if (targetIndex === lastFrameRendered) return;
       const img = frames[targetIndex];
-      if (img && img.complete) {
+      if (img) {
         context.clearRect(0, 0, canvas.width, canvas.height);
         context.drawImage(img, 0, 0, canvas.width, canvas.height);
         lastFrameRendered = targetIndex;
@@ -191,25 +191,53 @@
     });
   };
 
-  const preloadAllFrames = async () => {
-    const promises = [];
-    for (let i = 0; i < frameCount; i++) {
+  const loadFrame = (index: number): Promise<void> => {
+    return new Promise((resolve) => {
+      if (frames[index]) {
+        resolve();
+        return;
+      }
       const img = new Image();
       img.decoding = "async";
-      img.src = currentFrame(i);
-      frames[i] = img;
-      promises.push(
-        new Promise((resolve) => {
-          if (img.complete) {
-            resolve(null);
-            return;
+      img.src = currentFrame(index);
+      img.onload = async () => {
+        if ("createImageBitmap" in window) {
+          try {
+            const bitmap = await createImageBitmap(img);
+            frames[index] = bitmap;
+          } catch {
+            frames[index] = img;
           }
-          img.onload = () => resolve(null);
-          img.onerror = () => resolve(null);
-        })
-      );
+        } else {
+          frames[index] = img;
+        }
+        if (index === 0) render();
+        resolve();
+      };
+      img.onerror = () => {
+        resolve();
+      };
+    });
+  };
+
+  const preloadAllFrames = async () => {
+    // Priority 1: Instant load first 15 frames for 0ms initial scroll responsiveness
+    const priorityPromises = [];
+    for (let i = 0; i < 15; i++) {
+      priorityPromises.push(loadFrame(i));
     }
-    await Promise.all(promises);
+    await Promise.all(priorityPromises);
+    render();
+
+    // Priority 2: Preload remaining frames in small non-blocking GPU-buffered batches
+    const batchSize = 10;
+    for (let i = 15; i < frameCount; i += batchSize) {
+      const batch = [];
+      for (let j = i; j < Math.min(frameCount, i + batchSize); j++) {
+        batch.push(loadFrame(j));
+      }
+      await Promise.all(batch);
+    }
   };
 
   const initSequence = async () => {

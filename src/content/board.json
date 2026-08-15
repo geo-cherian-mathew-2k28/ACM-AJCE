@@ -4,14 +4,16 @@
       "fullName": "Neenu R",
       "position": "Faculty In-Charge",
       "imageUrl": "/board/Neenu Miss.jpg",
-      "isW": false
+      "isW": false,
+      "linkedinUrl": "https://www.linkedin.com/in/neenu-r-b9810064/"
     },
     {
       "title": "Dr.",
       "fullName": "Indu John",
       "position": "Faculty In-Charge",
       "imageUrl": "/board/Dr Indu John.png",
-      "isW": false
+      "isW": false,
+      "portfolioUrl": "https://sites.google.com/view/indu-john/home"
     },
     {
       "fullName": "Tom Ison",
