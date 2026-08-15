@@ -228,6 +228,12 @@ import { getAssetUrl } from "../utils/cdn";
     z-index: 20;
   }
 
+  :global(body.modal-open-active .site-header) {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transition: opacity 0.3s ease !important;
+  }
+
   .gallery-lightbox-close:hover,
   .gallery-lightbox-control:hover {
     background: #6a5acd;
@@ -236,8 +242,13 @@ import { getAssetUrl } from "../utils/cdn";
   }
 
   .gallery-lightbox-close {
-    right: 1.5rem;
-    top: 1.5rem;
+    right: 2rem;
+    top: 2rem;
+    z-index: 130;
+    background: rgba(10, 11, 20, 0.85);
+    border: 1px solid rgba(184, 167, 255, 0.4);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
   }
 
   .gallery-lightbox-control {
@@ -333,6 +344,7 @@ import { getAssetUrl } from "../utils/cdn";
     updateLightbox();
     lightbox.classList.add("gallery-lightbox-open");
     lightbox.setAttribute("aria-hidden", "false");
+    document.body.classList.add("modal-open-active");
     lightboxClose?.focus();
   }
 
@@ -341,6 +353,9 @@ import { getAssetUrl } from "../utils/cdn";
     isLightboxOpen = false;
     lightbox.classList.remove("gallery-lightbox-open");
     lightbox.setAttribute("aria-hidden", "true");
+    if (!isOpen) {
+      document.body.classList.remove("modal-open-active");
+    }
   }
 
   function moveLightbox(offset: number) {
@@ -360,6 +375,7 @@ import { getAssetUrl } from "../utils/cdn";
 
     // Push history state to handle back button
     history.pushState({ galleryOpen: true }, "", "#gallery-view");
+    document.body.classList.add("modal-open-active");
 
     // Make visible
     if (modal) {
@@ -399,6 +415,7 @@ import { getAssetUrl } from "../utils/cdn";
     if (!isOpen) return;
     isOpen = false;
     closeLightbox();
+    document.body.classList.remove("modal-open-active");
 
     if (modal) {
       // Animate exit
