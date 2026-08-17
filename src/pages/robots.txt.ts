@@ -4,7 +4,7 @@ export const GET: APIRoute = async () => {
   const robots = `User-agent: *
 Allow: /
 
-Sitemap: https://acm-ajce-website.vercel.app/sitemap.xml
+Sitemap: https://ajce.acm.org/sitemap.xml
 `;
 
   return new Response(robots, {

@@ -7,7 +7,7 @@ import keystatic from '@keystatic/astro';
 const cdnUrl = process.env.PUBLIC_CDN_URL?.replace(/\/$/, "");
 
 export default defineConfig({
-    site: 'https://www.ajce.in',
+    site: 'https://ajce.acm.org',
     output: 'server',
     adapter: vercel({
         runtime: 'nodejs20.x'
