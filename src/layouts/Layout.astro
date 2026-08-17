@@ -53,11 +53,17 @@ const jsonLd = {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
-    <!-- Google SERP & Device Favicons -->
-    <link rel="icon" type="image/png" sizes="48x48" href={getAssetUrl("/favicon-48x48.png")} />
-    <link rel="icon" type="image/png" sizes="32x32" href={getAssetUrl("/favicon.png")} />
-    <link rel="icon" type="image/x-icon" href={getAssetUrl("/favicon.ico")} />
-    <link rel="apple-touch-icon" sizes="180x180" href={getAssetUrl("/apple-touch-icon.png")} />
+    <!-- Web App Manifest (helps Google identify subdomain favicon independently) -->
+    <link rel="manifest" href="/manifest.webmanifest" />
+
+    <!-- Google SERP & Device Favicons (absolute URLs for subdomain favicon resolution) -->
+    <link rel="icon" type="image/png" sizes="48x48" href="https://ajce.acm.org/favicon-48x48.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="https://ajce.acm.org/icon-192.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="https://ajce.acm.org/favicon.png" />
+    <link rel="shortcut icon" href="https://ajce.acm.org/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="https://ajce.acm.org/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="https://ajce.acm.org/apple-touch-icon.png" />
+
 
     <!-- Primary Meta Tags -->
     <script is:inline>
