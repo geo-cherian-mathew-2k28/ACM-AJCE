@@ -883,13 +883,16 @@ const worksHeightMobile = works.length * 45 * EVENT_SECTION_SCROLL_MULTIPLIER;
         letter.left = bounding.left;
         letter.freq = 1 + Math.random();
 
-        const multiplier = safeWidth > 767 ? 1.6 : 0.75;
+        const multiplier = safeWidth > 767 ? 1.6 : 1.1;
 
-        if (reduceMotion || this.isTouchDevice || safeWidth < 768) {
+        if (reduceMotion) {
           letter.total = 0;
         } else {
           letter.total =
             Math.round((this.bounding.width / letter.width) * multiplier) + 2;
+          if (safeWidth < 768) {
+            letter.total = Math.max(5, Math.min(letter.total, 8));
+          }
         }
 
         for (let i = 0; i < letter.total; i++) {
@@ -1196,7 +1199,7 @@ const worksHeightMobile = works.length * 45 * EVENT_SECTION_SCROLL_MULTIPLIER;
     };
 
     moveLetters() {
-      if (this.reducedMotion || this.reducedData || this.isTouchDevice) return;
+      if (this.reducedMotion || this.reducedData) return;
       const { speed, letters, animationProgress } = this;
       letters.forEach((letter, i) => {
         if (!letter.ghosts.length) return;
@@ -1393,15 +1396,6 @@ const worksHeightMobile = works.length * 45 * EVENT_SECTION_SCROLL_MULTIPLIER;
       }
     }
 
-    @media only screen and (max-width: 767px) and (orientation: landscape),
-      only screen and (max-width: 576px) {
-      background: var(--color-secondary);
-
-      .s__mask-outer {
-        left: -150vw;
-      }
-    }
-
     .s__mask {
       position: absolute;
       top: 0;
@@ -1505,6 +1499,10 @@ const worksHeightMobile = works.length * 45 * EVENT_SECTION_SCROLL_MULTIPLIER;
       font: 700 min(12.5rem, 16svh) / 1 var(--font-family-bigger);
       text-align: center;
       text-transform: uppercase;
+
+      @media only screen and (max-width: 768px) {
+        font: 700 min(7.5rem, 15svh) / 1 var(--font-family-bigger);
+      }
     }
 
     .s__title__inner,
