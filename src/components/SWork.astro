@@ -91,12 +91,6 @@ const worksHeightMobile = works.length * 45 * EVENT_SECTION_SCROLL_MULTIPLIER;
       <div class="s__scene js-scene">
         {
           works.map((work, index) => {
-            const key =
-              Math.random().toString(36).slice(2, 6) +
-              "-" +
-              String(index).padStart(4, "0") +
-              "/" +
-              String(works.length).padStart(2, "0");
             return (
               <a-work
                 class="s__scene__work s__scene__work--video js-work"
@@ -108,8 +102,8 @@ const worksHeightMobile = works.length * 45 * EVENT_SECTION_SCROLL_MULTIPLIER;
                     <img
                       src={work.src}
                       class="a__video js-video"
-                      width="1082"
-                      height="636"
+                      width="576"
+                      height="353"
                       alt={work.caption}
                       loading="lazy"
                       decoding="async"
@@ -117,7 +111,6 @@ const worksHeightMobile = works.length * 45 * EVENT_SECTION_SCROLL_MULTIPLIER;
 
                     <div class="a__caption">
                       <div class="a__caption__text">{work.caption}</div>
-                      <div class="a__caption__key">#{key}</div>
                     </div>
                   </div>
                 </div>
@@ -589,10 +582,11 @@ const worksHeightMobile = works.length * 45 * EVENT_SECTION_SCROLL_MULTIPLIER;
       this.touchSectionHeight = this.el.offsetHeight;
     }
 
-    isTouchSectionActive() {
-      const rect = this.el.getBoundingClientRect();
+    isTouchSectionActive(scrollY = this.getCurrentScrollY()) {
       const viewportHeight = this.getViewportHeight();
-      return rect.bottom >= -viewportHeight && rect.top <= viewportHeight * 2;
+      const top = this.touchSectionTop - scrollY;
+      const bottom = top + this.touchSectionHeight;
+      return bottom >= -viewportHeight && top <= viewportHeight * 2;
     }
 
     getTouchTimelineProgress(scrollY = this.getCurrentScrollY()) {
@@ -891,14 +885,11 @@ const worksHeightMobile = works.length * 45 * EVENT_SECTION_SCROLL_MULTIPLIER;
 
         const multiplier = safeWidth > 767 ? 1.6 : 0.75;
 
-        if (reduceMotion) {
+        if (reduceMotion || this.isTouchDevice || safeWidth < 768) {
           letter.total = 0;
         } else {
           letter.total =
             Math.round((this.bounding.width / letter.width) * multiplier) + 2;
-          if (safeWidth < 768) {
-            letter.total = Math.max(3, Math.min(letter.total, 10));
-          }
         }
 
         for (let i = 0; i < letter.total; i++) {
@@ -943,11 +934,12 @@ const worksHeightMobile = works.length * 45 * EVENT_SECTION_SCROLL_MULTIPLIER;
       const { works } = this;
       works.forEach((work, i) => {
         const el = work.el;
-        // Increase minimum size and range (0.8 to 1.2 instead of 0.5 to 1.0)
-        el.style.setProperty("--size", String(0.8 + Math.random() * 0.4));
+        // Fixed size for all cards — no randomness
+        el.style.setProperty("--size", "1");
+        // Gentle alternating Y offset for visual rhythm, no randomness
         el.style.setProperty(
           "--y",
-          String((0.5 + Math.random() * 0.5) * (i % 2 ? -1 : 1))
+          String(0.25 * (i % 2 ? -1 : 1))
         );
       });
     }
@@ -1204,9 +1196,10 @@ const worksHeightMobile = works.length * 45 * EVENT_SECTION_SCROLL_MULTIPLIER;
     };
 
     moveLetters() {
-      if (this.reducedMotion || this.reducedData) return;
+      if (this.reducedMotion || this.reducedData || this.isTouchDevice) return;
       const { speed, letters, animationProgress } = this;
       letters.forEach((letter, i) => {
+        if (!letter.ghosts.length) return;
         const letterSpeed = speed * letter.freq;
         letter.ghosts.forEach((ghost: Ghost, index: number) => {
           let progress =
@@ -1657,17 +1650,18 @@ const worksHeightMobile = works.length * 45 * EVENT_SECTION_SCROLL_MULTIPLIER;
     display: block;
     margin: 0;
     padding: 0.5rem 0.5rem 0;
-    margin: 0;
-    padding: 0.5rem 0.5rem 0;
     border-radius: 1.5rem;
     background: var(--color-secondary);
-    /* content-visibility: hidden; -- REMOVED to prevent interactivity issues */
     transform-style: preserve-3d;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
     will-change: transform;
+    contain: paint layout;
 
     @media only screen and (max-width: 767px) and (orientation: landscape),
       only screen and (max-width: 576px) {
       padding: 0.25rem;
+      border-radius: 1rem;
     }
 
     .a__link {
@@ -1687,15 +1681,26 @@ const worksHeightMobile = works.length * 45 * EVENT_SECTION_SCROLL_MULTIPLIER;
 
     .a__video {
       display: block;
-      width: auto;
-      max-width: 80vw;
+      /* Fixed landscape card — same ratio as original cassette SVG (576×353) */
+      width: clamp(280px, 38vw, 520px);
+      aspect-ratio: 576 / 353;
       height: auto;
-      max-height: 80vh;
+      object-fit: cover;
+      object-position: center top;
+      border-radius: 1rem;
+      /* Prevent any overflow beyond the card */
+      max-width: 80vw;
+      flex-shrink: 0;
+
+      @media only screen and (max-width: 987px) {
+        width: clamp(240px, 44vw, 420px);
+      }
 
       @media only screen and (max-width: 767px) and (orientation: landscape),
         only screen and (max-width: 576px) {
-        max-width: 80vw;
-        max-height: 80vh;
+        width: clamp(200px, 76vw, 300px);
+        max-width: 76vw;
+        border-radius: 0.75rem;
       }
     }
 
@@ -1703,22 +1708,20 @@ const worksHeightMobile = works.length * 45 * EVENT_SECTION_SCROLL_MULTIPLIER;
       display: flex;
       flex-direction: row;
       align-items: center;
-      justify-content: space-between;
-      padding: 0.5rem 0.5rem;
+      justify-content: flex-start;
+      padding: 0.4rem 0.25rem 0.3rem;
       color: var(--color-primary);
-      font: 700 11px / 1 var(--font-family-fraktion);
-      letter-spacing: 0.15em;
-      text-align: right;
+      font: 700 10px / 1 var(--font-family-fraktion);
+      letter-spacing: 0.12em;
       text-transform: uppercase;
 
       @media only screen and (max-width: 767px) and (orientation: landscape),
         only screen and (max-width: 576px) {
-        display: none;
+        padding: 0.25rem 0.2rem 0.2rem;
+        font-size: 8px;
+        letter-spacing: 0.08em;
       }
     }
-
-    /* &.is-inview {
-      content-visibility: visible;
-    } */
   }
 </style>
+

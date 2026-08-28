@@ -36,10 +36,8 @@ h1, h2, h3, .font-display, .hero-line-1, .hero-line-2 {
     }
 }
 
-/* Global smooth scrolling */
-html {
-    scroll-behavior: smooth;
-}
+/* Scroll handling aligned with GSAP ScrollTrigger */
+
 
 /* Light Mode Overrides */
 html.light-mode,

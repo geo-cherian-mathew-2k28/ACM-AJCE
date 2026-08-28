@@ -1,15 +1,13 @@
 export const cassetteImages = [
-  "/events/apptitude-cassette.svg",
-  "/events/c2c-cassette.svg",
-  "/events/codart-cassette.svg",
-  "/events/code-plusplus-cassette.svg",
-  "/events/codex-cryptum-cassette.svg",
-  "/events/cryptic-hunt-cassette.svg",
-  "/events/forktober-cassette.svg",
-  "/events/inspiher-cassette.svg",
-  "/events/neural-hack-cassette.svg",
-  "/events/reverse-coding-cassette.svg",
-  "/events/the-tiny-hack-cassette.svg",
+  "/events/invicta.jpg",
+  "/events/valorant.jpg",
+  "/events/game-workshop.jpg",
+  "/events/ai-freedom-quizz.jpg",
+  "/events/uiux-workshop.jpg",
+  "/events/uxplore.jpg",
+  "/events/flutter.jpg",
+  "/events/quizz.jpg",
+  "/events/cyber1.jpg",
 ];
 
 export const info = {
@@ -19,69 +17,57 @@ export const info = {
     description: "A showcase of creative code snippets and experiments.",
   },
   Event1: {
-    title: "Apptitude",
-    site: "https://wodniack.dev",
+    title: "Invicta",
+    site: "https://ajce.acm.org",
     description:
-      "An app development hackathon where ideas transform into reality through code and design.",
+      "A premier tech symposium and competition showcasing innovation, talent, and technical prowess.",
   },
   Event2: {
-    title: "Code2Create",
-    site: "https://wodniack.dev",
+    title: "Valorant Tournament",
+    site: "https://ajce.acm.org",
     description:
-      "Our flagship hackathon bringing together creative minds to solve real-world problems.",
+      "An exciting gaming tournament bringing together competitive Valorant players for an intense showdown.",
   },
   Event3: {
-    title: "Codart",
-    site: "https://wodniack.dev",
+    title: "Game Workshop",
+    site: "https://ajce.acm.org",
     description:
-      "A unique blend of coding and art, challenging participants to create visual masterpieces with code.",
+      "A hands-on game development workshop exploring the fundamentals of building interactive experiences.",
   },
   Event4: {
-    title: "Code Plus Plus",
-    site: "https://wodniack.dev",
+    title: "AI Freedom Quiz",
+    site: "https://ajce.acm.org",
     description:
-      "An introductory coding event designed to help beginners take their first steps in programming.",
+      "A thought-provoking quiz exploring the ethics, opportunities, and challenges of Artificial Intelligence.",
   },
   Event5: {
-    title: "Codex Cryptum",
-    site: "https://wodniack.dev",
+    title: "UI/UX Workshop",
+    site: "https://ajce.acm.org",
     description:
-      "A mystery-solving coding event where cryptography meets algorithmic challenges.",
+      "A practical workshop on designing user-friendly interfaces and creating seamless digital experiences.",
   },
   Event6: {
-    title: "Cryptic Hunt",
-    site: "https://wodniack.dev",
+    title: "UXplore",
+    site: "https://ajce.acm.org",
     description:
-      "An online treasure hunt that tests your logic, lateral thinking, and decoding skills.",
+      "An immersive event diving deep into UX research, design thinking, and prototyping techniques.",
   },
   Event7: {
-    title: "Forktober Fest",
-    site: "https://wodniack.dev",
+    title: "Flutter Workshop",
+    site: "https://ajce.acm.org",
     description:
-      "A month-long celebration of open source, encouraging contributions and community collaboration.",
+      "Build beautiful cross-platform apps with Flutter — a beginner-friendly hands-on coding workshop.",
   },
   Event8: {
-    title: "inspiHer",
-    site: "https://wodniack.dev",
+    title: "Quiz",
+    site: "https://ajce.acm.org",
     description:
-      "An event dedicated to empowering women in technology through talks, workshops, and mentorship.",
+      "A fast-paced technical quiz covering computer science fundamentals, programming, and general tech.",
   },
   Event9: {
-    title: "The Neural Hack",
-    site: "https://wodniack.dev",
+    title: "Cyber Security",
+    site: "https://ajce.acm.org",
     description:
-      "A deep dive into AI and Machine Learning, challenging participants to build intelligent solutions.",
-  },
-  Event10: {
-    title: "Reverse Coding",
-    site: "https://wodniack.dev",
-    description:
-      "A competitive coding event where you figure out the logic from test cases and write the code.",
-  },
-  Event11: {
-    title: "The Tiny Hack",
-    site: "https://wodniack.dev",
-    description:
-      "A fast-paced mini hackathon focusing on quick prototyping and efficient problem solving.",
+      "An awareness and challenge event exploring real-world cybersecurity threats, tools, and defenses.",
   },
 };

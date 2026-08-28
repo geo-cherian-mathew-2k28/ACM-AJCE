@@ -34,10 +34,29 @@ const { title = "ACM AJCE Membership", signedIn = false } = Astro.props;
             document.documentElement.classList.remove("light-mode");
             document.documentElement.setAttribute("data-theme", "dark");
           }
-        } catch (e) {}
-      })();
-    </script>
     <title>{title}</title>
+    <meta name="title" content={title} />
+    <meta name="description" content="Official ACM AJCE Local Chapter Membership Portal at Amal Jyothi College of Engineering." />
+    
+    <!-- Open Graph / WhatsApp / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="ACM AJCE" />
+    <meta property="og:url" content="https://ajce.acm.org/membership" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content="Official ACM AJCE Local Chapter Membership Portal at Amal Jyothi College of Engineering." />
+    <meta property="og:image" content="https://ajce.acm.org/og-image.png" />
+    <meta property="og:image:secure_url" content="https://ajce.acm.org/og-image.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="ACM AJCE" />
+
+    <!-- Twitter Social Cards -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://ajce.acm.org/membership" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content="Official ACM AJCE Local Chapter Membership Portal at Amal Jyothi College of Engineering." />
+    <meta name="twitter:image" content="https://ajce.acm.org/og-image.png" />
   </head>
   <body>
     <div class="portal-grid" aria-hidden="true"></div>

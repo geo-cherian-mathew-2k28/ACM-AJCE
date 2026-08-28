@@ -148,12 +148,14 @@
 
         let width = (canvas.width = window.innerWidth);
         let height = (canvas.height = window.innerHeight);
+        let isHeroVisible = true;
+        let rafId: number = 0;
 
         window.addEventListener("resize", () => {
           if (!canvas) return;
           width = canvas.width = window.innerWidth;
           height = canvas.height = window.innerHeight;
-        });
+        }, { passive: true });
 
         interface Particle {
           x: number;
@@ -166,7 +168,8 @@
           color: string;
         }
 
-        const particleCount = Math.min(Math.floor(width / 14), 90);
+        const isMobile = window.innerWidth < 768;
+        const particleCount = isMobile ? 22 : Math.min(Math.floor(width / 18), 65);
         const particles: Particle[] = [];
         const colors = ["#ffffff", "#E2D9FF", "#B8A7FF", "#6A5ACD"];
 
@@ -177,9 +180,9 @@
           particles.push({
             x,
             y,
-            size: Math.random() * 2 + 0.8,
-            vx: (Math.random() - 0.5) * 0.3,
-            vy: (Math.random() - 0.5) * 0.3,
+            size: Math.random() * 1.8 + 0.8,
+            vx: (Math.random() - 0.5) * 0.25,
+            vy: (Math.random() - 0.5) * 0.25,
             alpha,
             baseAlpha: alpha,
             color: colors[Math.floor(Math.random() * colors.length)],
@@ -188,27 +191,36 @@
 
         let mouseX = width / 2;
         let mouseY = height / 2;
-        window.addEventListener("mousemove", (e) => {
-          mouseX = e.clientX;
-          mouseY = e.clientY;
-        });
+        if (!isMobile) {
+          window.addEventListener("mousemove", (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+          }, { passive: true });
+        }
 
         const animate = () => {
+          if (!isHeroVisible) {
+            rafId = 0;
+            return;
+          }
+
           ctx.clearRect(0, 0, width, height);
 
-          // Draw subtle connections
-          for (let a = 0; a < particles.length; a++) {
-            for (let b = a + 1; b < particles.length; b++) {
-              const dx = particles[a].x - particles[b].x;
-              const dy = particles[a].y - particles[b].y;
-              const dist = Math.sqrt(dx * dx + dy * dy);
-              if (dist < 120) {
-                ctx.beginPath();
-                ctx.strokeStyle = `rgba(184, 167, 255, ${0.14 * (1 - dist / 120)})`;
-                ctx.lineWidth = 0.5;
-                ctx.moveTo(particles[a].x, particles[a].y);
-                ctx.lineTo(particles[b].x, particles[b].y);
-                ctx.stroke();
+          // Draw subtle connections only on desktop
+          if (!isMobile) {
+            for (let a = 0; a < particles.length; a++) {
+              for (let b = a + 1; b < particles.length; b++) {
+                const dx = particles[a].x - particles[b].x;
+                const dy = particles[a].y - particles[b].y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < 110) {
+                  ctx.beginPath();
+                  ctx.strokeStyle = `rgba(184, 167, 255, ${0.12 * (1 - dist / 110)})`;
+                  ctx.lineWidth = 0.5;
+                  ctx.moveTo(particles[a].x, particles[a].y);
+                  ctx.lineTo(particles[b].x, particles[b].y);
+                  ctx.stroke();
+                }
               }
             }
           }
@@ -220,14 +232,15 @@
             if (p.x < 0 || p.x > width) p.vx *= -1;
             if (p.y < 0 || p.y > height) p.vy *= -1;
 
-            // Gentle mouse attraction/repulsion
-            const dx = mouseX - p.x;
-            const dy = mouseY - p.y;
-            const dist = Math.sqrt(dx * dx + dy * dy);
-            if (dist < 140) {
-              const force = (140 - dist) / 140;
-              p.x -= (dx / dist) * force * 1.2;
-              p.y -= (dy / dist) * force * 1.2;
+            if (!isMobile) {
+              const dx = mouseX - p.x;
+              const dy = mouseY - p.y;
+              const dist = Math.sqrt(dx * dx + dy * dy);
+              if (dist < 120) {
+                const force = (120 - dist) / 120;
+                p.x -= (dx / dist) * force * 1.0;
+                p.y -= (dy / dist) * force * 1.0;
+              }
             }
 
             ctx.beginPath();
@@ -237,10 +250,23 @@
             ctx.fill();
           });
 
-          requestAnimationFrame(animate);
+          rafId = requestAnimationFrame(animate);
         };
 
-        animate();
+        const heroSection = canvas.closest(".hero-section");
+        if (heroSection && "IntersectionObserver" in window) {
+          const heroObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+              isHeroVisible = entry.isIntersecting;
+              if (isHeroVisible && !rafId) {
+                rafId = requestAnimationFrame(animate);
+              }
+            });
+          }, { threshold: 0.05 });
+          heroObserver.observe(heroSection);
+        } else {
+          rafId = requestAnimationFrame(animate);
+        }
       };
 
       const initScramble = () => {
