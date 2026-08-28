@@ -34,9 +34,22 @@ const { title = "ACM AJCE Membership", signedIn = false } = Astro.props;
             document.documentElement.classList.remove("light-mode");
             document.documentElement.setAttribute("data-theme", "dark");
           }
+        } catch (_) {}
+      })();
+    </script>
     <title>{title}</title>
     <meta name="title" content={title} />
     <meta name="description" content="Official ACM AJCE Local Chapter Membership Portal at Amal Jyothi College of Engineering." />
+
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="https://ajce.acm.org/manifest.webmanifest" />
+
+    <!-- Google SERP & Device Favicons -->
+    <link rel="icon" type="image/png" sizes="48x48" href="https://ajce.acm.org/favicon-48x48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="https://ajce.acm.org/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="https://ajce.acm.org/favicon.png" />
+    <link rel="shortcut icon" href="https://ajce.acm.org/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="https://ajce.acm.org/favicon.ico" />
     
     <!-- Open Graph / WhatsApp / Facebook -->
     <meta property="og:type" content="website" />
