@@ -784,24 +784,22 @@ const worksHeightMobile = works.length * 45 * EVENT_SECTION_SCROLL_MULTIPLIER;
 
     setMask() {
       const { mask } = this;
-      const safeWidth = window.safeWidth || window.innerWidth;
-      const safeHeight = window.safeHeight || window.innerHeight;
-      const width = Math.max(mask.el.clientWidth, safeWidth);
-      const height = Math.max(mask.el.clientHeight, safeHeight, window.innerHeight || 0);
+      const width = mask.el.clientWidth;
+      const height = mask.el.clientHeight;
 
       mask.width = width;
       mask.height = height;
-      mask.svg.style.width = width + "px";
-      mask.svg.style.height = height + "px";
+      mask.svg.style.width = mask.width + "px";
+      mask.svg.style.height = mask.height + "px";
 
-      const maskBounding = mask.el.getBoundingClientRect();
+      const elBounding = this.el.getBoundingClientRect();
       const rulerBounding = this.ruler.getBoundingClientRect();
       const rulerWidth = rulerBounding.width;
       const rulerHeight = rulerBounding.height;
-      const offsetX = rulerBounding.left - maskBounding.left;
-      const offsetY = rulerBounding.top - maskBounding.top;
+      const offsetX = rulerBounding.left - elBounding.left;
+      const offsetY = rulerBounding.top - elBounding.top;
 
-      const dOuter = `M -20 -20 L ${width + 40} -20 L ${width + 40} ${height + 60} L -20 ${height + 60} Z`;
+      const dOuter = `M -1 0 L ${width + 2} 0 L ${width + 2} ${height} L -1 ${height} Z`;
 
       const corners = {
         tl: { x: offsetX, y: offsetY },
@@ -811,6 +809,8 @@ const worksHeightMobile = works.length * 45 * EVENT_SECTION_SCROLL_MULTIPLIER;
       };
 
       let size = (corners.tr.x - corners.tl.x) / 2;
+      const safeWidth = window.safeWidth || window.innerWidth;
+      const safeHeight = window.safeHeight || window.innerHeight || height;
       const expandMargin = safeWidth > 767 ? 96 : 40;
       const horizontalScale =
         (safeWidth + rulerWidth + expandMargin * 2) /
@@ -869,7 +869,6 @@ const worksHeightMobile = works.length * 45 * EVENT_SECTION_SCROLL_MULTIPLIER;
       const { letters, scene } = this;
       const safeWidth = window.safeWidth || window.innerWidth;
       const reduceMotion = this.reducedMotion || this.reducedData;
-      const containerBounding = this.container.getBoundingClientRect();
 
       letters.forEach((letter, j) => {
         letter.ghosts.forEach((ghost: Ghost) => {
@@ -880,20 +879,17 @@ const worksHeightMobile = works.length * 45 * EVENT_SECTION_SCROLL_MULTIPLIER;
         const bounding = letter.el.getBoundingClientRect();
         letter.width = bounding.width;
         letter.height = bounding.height;
-        letter.top = bounding.top - containerBounding.top;
-        letter.left = bounding.left - containerBounding.left;
+        letter.top = bounding.top - this.bounding.top;
+        letter.left = bounding.left;
         letter.freq = 1 + Math.random();
 
-        const multiplier = safeWidth > 767 ? 1.6 : 1.1;
+        const multiplier = safeWidth > 767 ? 1.6 : 0.75;
 
-        if (reduceMotion) {
+        if (reduceMotion || this.isTouchDevice || safeWidth < 768) {
           letter.total = 0;
         } else {
           letter.total =
             Math.round((this.bounding.width / letter.width) * multiplier) + 2;
-          if (safeWidth < 768) {
-            letter.total = Math.max(5, Math.min(letter.total, 8));
-          }
         }
 
         for (let i = 0; i < letter.total; i++) {
@@ -1200,7 +1196,7 @@ const worksHeightMobile = works.length * 45 * EVENT_SECTION_SCROLL_MULTIPLIER;
     };
 
     moveLetters() {
-      if (this.reducedMotion || this.reducedData) return;
+      if (this.reducedMotion || this.reducedData || this.isTouchDevice) return;
       const { speed, letters, animationProgress } = this;
       letters.forEach((letter, i) => {
         if (!letter.ghosts.length) return;
@@ -1369,7 +1365,7 @@ const worksHeightMobile = works.length * 45 * EVENT_SECTION_SCROLL_MULTIPLIER;
     position: relative;
     z-index: 2;
     height: var(--height);
-    background: var(--color-secondary);
+    background: #B8A7FF;
     /* pointer-events: none; REMOVED - this might break scrolling/child interactions unpredictably */
 
     &:before {
@@ -1388,13 +1384,21 @@ const worksHeightMobile = works.length * 45 * EVENT_SECTION_SCROLL_MULTIPLIER;
       top: 0;
       left: 0;
       width: 100%;
-      height: 100vh;
-      height: 100dvh;
+      height: 100svh;
       overflow: hidden;
       pointer-events: none !important;
       z-index: 10; /* Ensure it's above but click-through */
       * {
         pointer-events: none !important;
+      }
+    }
+
+    @media only screen and (max-width: 767px) and (orientation: landscape),
+      only screen and (max-width: 576px) {
+      background: var(--color-secondary);
+
+      .s__mask-outer {
+        left: -150vw;
       }
     }
 
@@ -1464,8 +1468,7 @@ const worksHeightMobile = works.length * 45 * EVENT_SECTION_SCROLL_MULTIPLIER;
       top: 0;
       left: 0;
       width: 100%;
-      height: 100vh;
-      height: 100dvh;
+      height: 100svh;
       background: var(--color-secondary);
       transform: translate3d(0, calc(var(--scroll-progress) * -15%), 0);
       color: white;
@@ -1502,10 +1505,6 @@ const worksHeightMobile = works.length * 45 * EVENT_SECTION_SCROLL_MULTIPLIER;
       font: 700 min(12.5rem, 16svh) / 1 var(--font-family-bigger);
       text-align: center;
       text-transform: uppercase;
-
-      @media only screen and (max-width: 768px) {
-        font: 700 min(7.5rem, 15svh) / 1 var(--font-family-bigger);
-      }
     }
 
     .s__title__inner,
@@ -1548,7 +1547,7 @@ const worksHeightMobile = works.length * 45 * EVENT_SECTION_SCROLL_MULTIPLIER;
     .s__scene {
       --shadow: var(--color-shadow);
       --progress: 0.5;
-      --state: 1;
+      --state: 0;
       position: absolute;
       top: 0;
       left: 0;
