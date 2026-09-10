@@ -101,11 +101,11 @@ import { membershipCardBgDataUri } from "../../utils/cardBg";
             <div class="grid sm:grid-cols-2 gap-4">
               <div>
                 <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-1.5">Department *</label>
-                <input type="text" id="input-department" name="department" required class="portal-input w-full" placeholder="Computer Science & Engineering" />
+                <input type="text" id="input-department" name="department" required class="portal-input w-full" placeholder="Enter your department (e.g. CSE, ECE, MCA)" />
               </div>
               <div>
                 <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-1.5">Phone No. (WhatsApp) *</label>
-                <input type="tel" id="input-phone" name="phone" required class="portal-input w-full" placeholder="9876543210" pattern="[0-9]{10}" title="Please enter a valid 10-digit mobile number" />
+                <input type="tel" id="input-phone" name="phone" required class="portal-input w-full" placeholder="Enter 10-digit mobile number" pattern="[0-9]{10}" title="Please enter a valid 10-digit mobile number" />
               </div>
             </div>
 
@@ -119,7 +119,7 @@ import { membershipCardBgDataUri } from "../../utils/cardBg";
               <div class="grid sm:grid-cols-2 gap-4 mb-4">
                 <div>
                   <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-1.5">Transaction ID / UPI Ref *</label>
-                  <input type="text" id="input-txnId" name="txnId" required class="portal-input w-full" placeholder="e.g. 423589123456" />
+                  <input type="text" id="input-txnId" name="txnId" required class="portal-input w-full" placeholder="Enter 12-digit UPI reference / UTR number" />
                 </div>
                 <div>
                   <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-1.5">Payment Screenshot *</label>
@@ -138,30 +138,40 @@ import { membershipCardBgDataUri } from "../../utils/cardBg";
 
         <!-- Payment Sidebar -->
         <div class="portal-panel p-6 flex flex-col items-center text-center justify-between">
-          <div>
+          <div class="w-full flex flex-col items-center">
             <span class="inline-block text-[#B8A7FF] font-mono text-[11px] uppercase tracking-wider font-bold mb-1">Annual Chapter Fee</span>
             <h3 class="text-3xl font-extrabold text-white mb-2">₹200 <span class="text-xs text-gray-400 font-normal">/ 1 year</span></h3>
-            <p class="text-xs text-gray-300 mb-4 leading-relaxed">Scan the QR code below using any UPI App (GPay, PhonePe, Paytm) to complete payment.</p>
+            <p class="text-xs text-gray-300 mb-4 leading-relaxed">Scan the QR code using any UPI App (GPay, PhonePe, Paytm) or click the Pay button below.</p>
 
-            <!-- QR Code -->
-            <div class="bg-white p-3 rounded-xl shadow-md inline-block mb-4">
-              <img src="/payment-qr.png" alt="ACM AJCE Payment QR" class="w-40 h-40 object-contain mx-auto rounded-lg" />
-              <p class="text-[10px] text-gray-600 font-mono mt-1 font-semibold select-all">UPI ID: sebinshaji295-1@oksbi</p>
+            <!-- QR Code Card -->
+            <div class="bg-white p-3 rounded-2xl shadow-xl inline-block mb-3 border border-gray-100 max-w-full">
+              <img src="/payment-qr.png" alt="ACM AJCE Payment QR" class="w-44 h-44 object-contain mx-auto rounded-lg" />
+              <div class="mt-2 pt-2 border-t border-gray-200 flex items-center justify-between gap-1 px-1">
+                <span class="text-[11px] text-gray-700 font-mono font-bold select-all tracking-tight" id="display-upi-id">sebinshaji295-1@oksbi</span>
+                <button type="button" id="copy-upi-btn" class="text-[10px] bg-gray-100 hover:bg-gray-200 active:scale-95 text-gray-800 font-bold px-2 py-0.5 rounded transition-all cursor-pointer flex items-center gap-1" title="Copy UPI ID">
+                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+                  <span id="copy-upi-text">Copy</span>
+                </button>
+              </div>
             </div>
 
             <div class="w-full space-y-2 mb-4">
-              <a href="upi://pay?pa=sebinshaji295-1@oksbi&pn=ACM%20AJCE%20Chapter&am=200.00&cu=INR" class="w-full py-2.5 px-4 rounded-lg bg-white hover:bg-gray-100 text-gray-900 font-bold text-xs flex items-center justify-center gap-2 transition-all shadow-sm">
-                Pay ₹200 via GPay / PhonePe
-              </a>
+              <button id="direct-upi-pay-btn" type="button" class="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-bold text-xs flex items-center justify-center gap-2 transition-all shadow-lg active:scale-98 cursor-pointer">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                <span>Pay ₹200 via UPI (GPay / PhonePe / Paytm)</span>
+              </button>
+              <div id="payment-toast" class="hidden text-[11px] p-2 rounded-lg text-center font-medium"></div>
             </div>
           </div>
 
-          <div class="text-[11px] text-gray-400 bg-[#131124] p-3 rounded-lg border border-[#2A2455] w-full text-left">
-            <p class="font-semibold text-white mb-1">📌 Instructions:</p>
-            <ol class="list-decimal list-inside space-y-1">
-              <li>Pay ₹200 via UPI.</li>
-              <li>Copy the 12-digit UTR/Txn ID.</li>
-              <li>Attach screenshot & submit.</li>
+          <div class="text-[11px] text-gray-400 bg-[#131124] p-3.5 rounded-xl border border-[#2A2455] w-full text-left">
+            <p class="font-semibold text-white mb-1.5 flex items-center gap-1.5">
+              <span>📌</span> Quick Steps:
+            </p>
+            <ol class="list-decimal list-inside space-y-1 text-gray-300">
+              <li>Scan QR or click Pay button to transfer ₹200.</li>
+              <li>Copy the 12-digit UTR / UPI Reference ID.</li>
+              <li>Attach payment screenshot & submit.</li>
             </ol>
           </div>
         </div>
@@ -408,6 +418,73 @@ import { membershipCardBgDataUri } from "../../utils/cardBg";
 
     signoutBtn?.addEventListener("click", handleSignOut);
     signoutStatusBtn?.addEventListener("click", handleSignOut);
+
+    // UPI Payment & Copy Handlers
+    const copyUpiBtn = document.getElementById("copy-upi-btn");
+    const copyUpiText = document.getElementById("copy-upi-text");
+    const directUpiPayBtn = document.getElementById("direct-upi-pay-btn");
+    const paymentToast = document.getElementById("payment-toast");
+    const upiId = "sebinshaji295-1@oksbi";
+    const upiPayUri = `upi://pay?pa=${encodeURIComponent(upiId)}&pn=${encodeURIComponent("ACM AJCE Chapter")}&am=200.00&cu=INR&tn=${encodeURIComponent("ACM AJCE Membership")}`;
+
+    const showPaymentToast = (msg, isSuccess = true) => {
+      if (paymentToast) {
+        paymentToast.textContent = msg;
+        paymentToast.className = `text-[11px] p-2 rounded-lg text-center font-medium mt-2 transition-all ${
+          isSuccess 
+            ? "text-emerald-300 bg-emerald-500/20 border border-emerald-500/40" 
+            : "text-amber-300 bg-amber-500/20 border border-amber-500/40"
+        }`;
+        paymentToast.classList.remove("hidden");
+        setTimeout(() => {
+          paymentToast.classList.add("hidden");
+        }, 6000);
+      }
+    };
+
+    const copyUpiToClipboard = async () => {
+      try {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(upiId);
+        } else {
+          const textArea = document.createElement("textarea");
+          textArea.value = upiId;
+          textArea.style.position = "fixed";
+          textArea.style.opacity = "0";
+          document.body.appendChild(textArea);
+          textArea.focus();
+          textArea.select();
+          document.execCommand("copy");
+          document.body.removeChild(textArea);
+        }
+        if (copyUpiText) copyUpiText.textContent = "Copied!";
+        setTimeout(() => {
+          if (copyUpiText) copyUpiText.textContent = "Copy";
+        }, 2000);
+        return true;
+      } catch (e) {
+        return false;
+      }
+    };
+
+    copyUpiBtn?.addEventListener("click", async () => {
+      await copyUpiToClipboard();
+      showPaymentToast("UPI ID (sebinshaji295-1@oksbi) copied to clipboard!");
+    });
+
+    directUpiPayBtn?.addEventListener("click", async () => {
+      await copyUpiToClipboard();
+      showPaymentToast("UPI ID copied! Opening your UPI payment app...");
+      
+      // Attempt triggering UPI Intent protocol
+      const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+      if (isMobile) {
+        window.location.href = upiPayUri;
+      } else {
+        // On desktop, guide user to scan QR or use copied UPI ID
+        showPaymentToast("UPI ID copied! Open GPay / PhonePe on your phone or scan the QR code.", false);
+      }
+    });
 
     // Copy Membership ID Handler
     copyMemIdBtn?.addEventListener("click", () => {

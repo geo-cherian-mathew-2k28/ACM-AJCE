@@ -7,42 +7,58 @@ const siteUrl = "https://ajce.acm.org";
 const canonicalUrl = new URL(Astro.url.pathname, siteUrl).toString();
 const ogImageUrl = `${siteUrl}/og-image.png`;
 
-const title = "ACM AJCE";
+const title = "ACM AJCE | Official Student Chapter at Amal Jyothi College of Engineering";
 const description = "Official ACM Student Chapter at Amal Jyothi College of Engineering (AJCE). Empowering students in computer science, software engineering, hackathons, and research under ACM India.";
-const keywords = "ACM AJCE, ACM, ACM India, AJCE, ACM Student Chapter, Amal Jyothi College of Engineering, ACM Local Chapter, Computing Community, Tech Events, Software Engineering";
+const keywords = "ACM AJCE, ACM, ACM India, AJCE, ACM Student Chapter, Amal Jyothi College of Engineering, ACM Local Chapter, Computing Community, Tech Events, Software Engineering, AJCE ACM";
 
 const jsonLd = {
   "@context": "https://schema.org",
-  "@type": "EducationalOrganization",
-  "name": "ACM AJCE",
-  "alternateName": ["ACM AJCE Student Chapter", "Association for Computing Machinery AJCE", "ACM India AJCE Chapter"],
-  "url": siteUrl,
-  "logo": `${siteUrl}/brand/acm-ajce-light.png`,
-  "image": ogImageUrl,
-  "description": description,
-  "parentOrganization": {
-    "@type": "Organization",
-    "name": "ACM India",
-    "url": "https://india.acm.org"
-  },
-  "subOrganization": {
-    "@type": "CollegeOrUniversity",
-    "name": "Amal Jyothi College of Engineering",
-    "url": "https://www.ajce.in"
-  },
-  "address": {
-    "@type": "PostalAddress",
-    "addressLocality": "Kanjirappally",
-    "addressRegion": "Kerala",
-    "addressCountry": "India"
-  },
-  "sameAs": [
-    "https://www.instagram.com/acm_ajce/",
-    "https://x.com/ACM_AJCE",
-    "https://www.linkedin.com/in/acm-ajce/",
-    "https://whatsapp.com/channel/0029Vb8J5wk7T8bNyuSQ2a3z",
-    "https://www.ajce.in",
-    "https://india.acm.org"
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": `${siteUrl}/#website`,
+      "url": siteUrl,
+      "name": "ACM AJCE",
+      "alternateName": "ACM Amal Jyothi College of Engineering",
+      "description": description,
+      "publisher": {
+        "@id": `${siteUrl}/#organization`
+      }
+    },
+    {
+      "@type": "EducationalOrganization",
+      "@id": `${siteUrl}/#organization`,
+      "name": "ACM AJCE",
+      "alternateName": ["ACM AJCE Student Chapter", "Association for Computing Machinery AJCE", "ACM India AJCE Chapter", "Amal Jyothi ACM"],
+      "url": siteUrl,
+      "logo": `${siteUrl}/brand/acm-ajce-light.png`,
+      "image": ogImageUrl,
+      "description": description,
+      "parentOrganization": {
+        "@type": "Organization",
+        "name": "ACM India",
+        "url": "https://india.acm.org"
+      },
+      "subOrganization": {
+        "@type": "CollegeOrUniversity",
+        "name": "Amal Jyothi College of Engineering",
+        "url": "https://www.ajce.in"
+      },
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Kanjirappally",
+        "addressRegion": "Kerala",
+        "addressCountry": "India"
+      },
+      "sameAs": [
+        "https://www.instagram.com/acm_ajce/",
+        "https://x.com/ACM_AJCE",
+        "https://www.linkedin.com/in/acm-ajce/",
+        "https://whatsapp.com/channel/0029Vb8J5wk7T8bNyuSQ2a3z",
+        "https://www.ajce.in",
+        "https://india.acm.org"
+      ]
+    }
   ]
 };
 ---
@@ -86,7 +102,10 @@ const jsonLd = {
     <meta name="keywords" content={keywords} />
     <meta name="author" content="ACM AJCE" />
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
     <meta name="google-site-verification" content="googleb4ab39526a015599" />
+    <meta name="google-site-verification" content="googleb4ab39526a015599.html" />
     <link rel="canonical" href={canonicalUrl} />
 
     <!-- Open Graph / Facebook / WhatsApp Social Cards -->

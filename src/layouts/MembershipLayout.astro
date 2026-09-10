@@ -40,12 +40,21 @@ const { title = "ACM AJCE Membership", signedIn = false } = Astro.props;
     <title>{title}</title>
     <meta name="title" content={title} />
     <meta name="description" content="Official ACM AJCE Local Chapter Membership Portal at Amal Jyothi College of Engineering." />
+    <meta name="keywords" content="ACM AJCE Membership, ACM Student Chapter, Amal Jyothi College of Engineering, ACM Portal, ACM Registration" />
+    <meta name="author" content="ACM AJCE" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <meta name="google-site-verification" content="googleb4ab39526a015599" />
+    <meta name="google-site-verification" content="googleb4ab39526a015599.html" />
+    <link rel="canonical" href={new URL(Astro.url.pathname, "https://ajce.acm.org").toString()} />
 
     <!-- Web App Manifest -->
     <link rel="manifest" href="https://ajce.acm.org/manifest.webmanifest" />
 
     <!-- Google SERP & Device Favicons -->
     <link rel="icon" type="image/png" sizes="48x48" href="https://ajce.acm.org/favicon-48x48.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="https://ajce.acm.org/icon-192.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="https://ajce.acm.org/apple-touch-icon.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="https://ajce.acm.org/favicon.png" />
     <link rel="shortcut icon" href="https://ajce.acm.org/favicon.ico" />
@@ -54,7 +63,7 @@ const { title = "ACM AJCE Membership", signedIn = false } = Astro.props;
     <!-- Open Graph / WhatsApp / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="ACM AJCE" />
-    <meta property="og:url" content="https://ajce.acm.org/membership" />
+    <meta property="og:url" content={new URL(Astro.url.pathname, "https://ajce.acm.org").toString()} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content="Official ACM AJCE Local Chapter Membership Portal at Amal Jyothi College of Engineering." />
     <meta property="og:image" content="https://ajce.acm.org/og-image.png" />
