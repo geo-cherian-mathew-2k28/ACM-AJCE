@@ -179,7 +179,27 @@ const { title = "ACM AJCE Membership", signedIn = false } = Astro.props;
     outline: none;
   }
 
-  .portal-main { width: min(1180px, calc(100% - 40px)); margin: 0 auto; padding: 58px 0 72px; }
+  .portal-main { width: min(1180px, calc(100% - 40px)); margin: 0 auto; padding: 48px 0 72px; }
+
+  @media (max-width: 640px) {
+    .portal-header {
+      width: calc(100% - 24px);
+      min-height: 60px;
+      gap: 10px;
+    }
+    .portal-brand img {
+      width: 78px;
+      max-height: 32px;
+    }
+    .portal-brand span {
+      font-size: 0.62rem;
+      padding-left: 8px;
+    }
+    .portal-main {
+      width: 100%;
+      padding: 16px 8px 40px;
+    }
+  }
 
   .portal-eyebrow { margin: 0 0 14px; color: #b8a7ff; font: 700 0.72rem/1 "Space Mono", monospace; letter-spacing: 0.11em; text-transform: uppercase; }
   .portal-title { max-width: 760px; margin: 0; color: #fbfaff; font-size: clamp(2rem, 4.7vw, 4.6rem); line-height: 0.98; letter-spacing: 0; }
