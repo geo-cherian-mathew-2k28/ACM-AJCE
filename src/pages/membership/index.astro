@@ -141,7 +141,7 @@ import { membershipCardBgDataUri } from "../../utils/cardBg";
           <div class="w-full flex flex-col items-center">
             <span class="inline-block text-[#B8A7FF] font-mono text-[11px] uppercase tracking-wider font-bold mb-1">Annual Chapter Fee</span>
             <h3 class="text-3xl font-extrabold text-white mb-2">₹200 <span class="text-xs text-gray-400 font-normal">/ 1 year</span></h3>
-            <p class="text-xs text-gray-300 mb-4 leading-relaxed">Scan the QR code using any UPI App (GPay, PhonePe, Paytm) or click the Pay button below.</p>
+            <p class="text-xs text-gray-300 mb-4 leading-relaxed">Scan the QR code using any UPI App (GPay, PhonePe, Paytm) or copy the UPI ID below.</p>
 
             <!-- QR Code Card -->
             <div class="bg-white p-3 rounded-2xl shadow-xl inline-block mb-3 border border-gray-100 max-w-full">
@@ -155,13 +155,7 @@ import { membershipCardBgDataUri } from "../../utils/cardBg";
               </div>
             </div>
 
-            <div class="w-full space-y-2 mb-4">
-              <button id="direct-upi-pay-btn" type="button" class="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-bold text-xs flex items-center justify-center gap-2 transition-all shadow-lg active:scale-98 cursor-pointer">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
-                <span>Pay ₹200 via UPI (GPay / PhonePe / Paytm)</span>
-              </button>
-              <div id="payment-toast" class="hidden text-[11px] p-2 rounded-lg text-center font-medium"></div>
-            </div>
+            <div id="payment-toast" class="hidden text-[11px] p-2 rounded-lg text-center font-medium w-full mb-3"></div>
           </div>
 
           <div class="text-[11px] text-gray-400 bg-[#131124] p-3.5 rounded-xl border border-[#2A2455] w-full text-left">
@@ -169,7 +163,7 @@ import { membershipCardBgDataUri } from "../../utils/cardBg";
               <span>📌</span> Quick Steps:
             </p>
             <ol class="list-decimal list-inside space-y-1 text-gray-300">
-              <li>Scan QR or click Pay button to transfer ₹200.</li>
+              <li>Scan QR code or pay ₹200 to UPI ID.</li>
               <li>Copy the 12-digit UTR / UPI Reference ID.</li>
               <li>Attach payment screenshot & submit.</li>
             </ol>
@@ -419,13 +413,11 @@ import { membershipCardBgDataUri } from "../../utils/cardBg";
     signoutBtn?.addEventListener("click", handleSignOut);
     signoutStatusBtn?.addEventListener("click", handleSignOut);
 
-    // UPI Payment & Copy Handlers
+    // UPI Copy Handler
     const copyUpiBtn = document.getElementById("copy-upi-btn");
     const copyUpiText = document.getElementById("copy-upi-text");
-    const directUpiPayBtn = document.getElementById("direct-upi-pay-btn");
     const paymentToast = document.getElementById("payment-toast");
     const upiId = "sebinshaji295-1@oksbi";
-    const upiPayUri = `upi://pay?pa=${encodeURIComponent(upiId)}&pn=${encodeURIComponent("ACM AJCE Chapter")}&am=200.00&cu=INR&tn=${encodeURIComponent("ACM AJCE Membership")}`;
 
     const showPaymentToast = (msg, isSuccess = true) => {
       if (paymentToast) {
@@ -438,7 +430,7 @@ import { membershipCardBgDataUri } from "../../utils/cardBg";
         paymentToast.classList.remove("hidden");
         setTimeout(() => {
           paymentToast.classList.add("hidden");
-        }, 6000);
+        }, 5000);
       }
     };
 
@@ -470,20 +462,6 @@ import { membershipCardBgDataUri } from "../../utils/cardBg";
     copyUpiBtn?.addEventListener("click", async () => {
       await copyUpiToClipboard();
       showPaymentToast("UPI ID (sebinshaji295-1@oksbi) copied to clipboard!");
-    });
-
-    directUpiPayBtn?.addEventListener("click", async () => {
-      await copyUpiToClipboard();
-      showPaymentToast("UPI ID copied! Opening your UPI payment app...");
-      
-      // Attempt triggering UPI Intent protocol
-      const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-      if (isMobile) {
-        window.location.href = upiPayUri;
-      } else {
-        // On desktop, guide user to scan QR or use copied UPI ID
-        showPaymentToast("UPI ID copied! Open GPay / PhonePe on your phone or scan the QR code.", false);
-      }
     });
 
     // Copy Membership ID Handler
