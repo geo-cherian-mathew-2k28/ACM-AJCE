@@ -222,73 +222,36 @@ import { membershipCardBgDataUri } from "../../utils/cardBg";
             </div>
 
             <!-- Pixel-Perfect Digital Membership Card Pass -->
-            <div id="membership-card-pass" class="w-full max-w-xl mx-auto rounded-2xl sm:rounded-3xl border border-[#B8A7FF]/40 sm:border-2 sm:border-[#B8A7FF]/50 shadow-[0_20px_50px_rgba(0,0,0,0.9)] relative overflow-hidden bg-[#0A0B14] text-white select-none min-h-[220px] sm:min-h-[280px]" style="aspect-ratio: 1.6 / 1;">
+            <div id="membership-card-pass" class="w-full max-w-xl mx-auto rounded-xl sm:rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.9)] relative overflow-hidden bg-[#0A0B14] select-none" style="aspect-ratio: 1024 / 657;">
               
               <!-- 100% Guaranteed Embedded Data URI Background Template Image Layer -->
               <img 
                 src={membershipCardBgDataUri} 
-                alt="" 
+                alt="ACM AJCE Membership Card" 
                 class="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none" 
               />
 
-              <!-- High-Tech Ambient Dark Vignette Overlay -->
-              <div class="absolute inset-0 bg-gradient-to-r from-black/50 via-transparent to-black/40 z-[1] pointer-events-none"></div>
-
-              <!-- Card Content Overlay Layer -->
-              <div class="relative z-10 h-full p-3 sm:p-7 flex flex-col justify-between">
+              <!-- Positioned Dynamic Card Details Layer -->
+              <div class="absolute inset-0 z-10 pointer-events-none">
                 
-                <!-- Top Header Bar -->
-                <div class="flex items-center justify-between pl-3 sm:pl-12 pt-0.5 sm:pt-1">
-                  <div class="flex items-center gap-1.5 sm:gap-2">
-                    <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-[#00FFC2] animate-pulse shadow-[0_0_8px_#00FFC2]"></span>
-                    <span class="text-[8px] sm:text-[11px] font-mono font-extrabold text-[#B8A7FF] uppercase tracking-wider sm:tracking-widest">
-                      ACM AJCE STUDENT CHAPTER
-                    </span>
-                  </div>
+                <!-- Membership ID (Bottom Left above Local Chapter Membership ID) -->
+                <div class="absolute left-[5.8%] top-[64.5%] -translate-y-1/2 text-left">
+                  <span id="card-view-id" class="font-black text-[#0A0B14] text-[13px] sm:text-[22px] md:text-[26px] tracking-tight font-sans select-all">
+                    ACM-AJCE-XXXXX
+                  </span>
                 </div>
 
-                <!-- Middle Content Grid -->
-                <div class="grid grid-cols-12 gap-1.5 sm:gap-3 items-center my-auto pl-3 sm:pl-11 pr-1 sm:pr-4">
-                  <!-- Member Info (8 Columns for maximum text space) -->
-                  <div class="col-span-8 text-left space-y-0.5 sm:space-y-1.5 pr-1 min-w-0">
-                    <h3 id="card-view-name" class="text-sm sm:text-2xl font-black text-white tracking-tight truncate leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] font-display">
-                      Member Name
-                    </h3>
-
-                    <div>
-                      <span id="card-view-id" class="inline-flex items-center gap-1 px-1.5 sm:px-2.5 py-0.5 rounded-full bg-[#00FFC2]/15 border border-[#00FFC2]/40 text-[#00FFC2] font-mono font-bold text-[9px] sm:text-xs tracking-wider shadow-sm backdrop-blur-sm truncate max-w-full">
-                        ID: ACM-AJCE-XXXXX
-                      </span>
-                    </div>
-
-                    <div class="pt-0.5 sm:pt-1 space-y-0.5 text-[8px] sm:text-xs text-gray-200 font-sans">
-                      <p class="truncate font-medium text-gray-100">
-                        Course: <span id="card-view-course" class="font-bold text-white">B.Tech</span>
-                      </p>
-                      <p class="font-medium text-gray-300 truncate">
-                        Email: <span id="card-view-email" class="font-mono text-gray-200 text-[8px] sm:text-[11px]">email@ajce.in</span>
-                      </p>
-                      <p class="font-mono text-[#B8A7FF] pt-0.5 sm:pt-1 text-[8px] sm:text-[11px] font-bold tracking-wider truncate">
-                        VALID: <span id="card-view-validity" class="text-white">1 Year</span>
-                      </p>
-                    </div>
-                  </div>
-
-                  <!-- QR Code Container (4 Columns) -->
-                  <div class="col-span-4 flex flex-col items-center justify-center">
-                    <div class="bg-white/95 backdrop-blur-md p-1 sm:p-2 rounded-xl sm:rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.6)] text-center border sm:border-2 border-[#B8A7FF]/80 flex flex-col items-center max-w-full">
-                      <img id="view-security-qr" src="" alt="Verification QR" class="w-12 h-12 sm:w-24 sm:h-24 object-contain" />
-                      <span class="text-[5px] sm:text-[8px] text-purple-950 font-mono font-extrabold block mt-0.5 sm:mt-1 uppercase tracking-widest whitespace-nowrap">
-                        SCAN TO VERIFY
-                      </span>
-                    </div>
-                  </div>
+                <!-- Member Name (Right Upper Royal Blue Area) -->
+                <div class="absolute right-[5.2%] top-[48.2%] -translate-y-1/2 text-right max-w-[62%]">
+                  <h3 id="card-view-name" class="font-black text-white text-[15px] sm:text-[25px] md:text-[30px] tracking-tight uppercase leading-tight font-sans truncate drop-shadow-sm">
+                    MEMBER NAME
+                  </h3>
                 </div>
 
-                <!-- Bottom Footer Tag -->
-                <div class="pl-3 sm:pl-12 pb-0.5 sm:pb-1 flex items-center justify-between border-t border-purple-500/20 pt-1 sm:pt-2">
-                  <span class="text-[7px] sm:text-[10px] font-mono font-bold text-[#00FFC2] uppercase tracking-wider sm:tracking-widest drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
-                    AUTHENTICATED DIGITAL CREDENTIAL
+                <!-- Member Since Year (Right Lower Bar under Student Member) -->
+                <div class="absolute right-[5.2%] top-[67%] -translate-y-1/2 text-right">
+                  <span id="card-view-year" class="font-extrabold text-[#0A0B14] text-[10px] sm:text-[16px] md:text-[19px] tracking-tight font-sans">
+                    Member Since 2026
                   </span>
                 </div>
 
@@ -298,7 +261,7 @@ import { membershipCardBgDataUri } from "../../utils/cardBg";
             <!-- Download Card Button -->
             <button id="download-card-btn" type="button" class="w-full py-3 px-4 sm:px-5 rounded-xl sm:rounded-2xl bg-gradient-to-r from-[#6A5ACD] to-[#2A2455] hover:from-[#7B6AD8] hover:to-[#362E69] text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-xl transition-all cursor-pointer border border-[#B8A7FF]/40">
               <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-              Download Official Membership Pass (PNG)
+              Download Official Membership Card (PNG)
             </button>
           </div>
         </div>
@@ -497,8 +460,8 @@ import { membershipCardBgDataUri } from "../../utils/cardBg";
       btn.innerHTML = `<span class="animate-pulse">Generating HD Pass PNG...</span>`;
 
       const canvas = document.createElement("canvas");
-      canvas.width = 1200;
-      canvas.height = 750;
+      canvas.width = 1024;
+      canvas.height = 657;
       const ctx = canvas.getContext("2d");
 
       if (!ctx) {
@@ -508,147 +471,62 @@ import { membershipCardBgDataUri } from "../../utils/cardBg";
       }
 
       const drawPassContent = (bgImg) => {
-        // Draw background template image or dark gradient fallback
+        // 1. Draw template background image
         if (bgImg) {
           try {
-            ctx.drawImage(bgImg, 0, 0, 1200, 750);
+            ctx.drawImage(bgImg, 0, 0, 1024, 657);
           } catch(e) {
-            const grad = ctx.createLinearGradient(0, 0, 1200, 750);
-            grad.addColorStop(0, "#0D0B18");
-            grad.addColorStop(0.5, "#1A182F");
-            grad.addColorStop(1, "#2A2455");
-            ctx.fillStyle = grad;
-            ctx.fillRect(0, 0, 1200, 750);
+            ctx.fillStyle = "#0D0B18";
+            ctx.fillRect(0, 0, 1024, 657);
           }
         } else {
-          const grad = ctx.createLinearGradient(0, 0, 1200, 750);
-          grad.addColorStop(0, "#0D0B18");
-          grad.addColorStop(0.5, "#1A182F");
-          grad.addColorStop(1, "#2A2455");
-          ctx.fillStyle = grad;
-          ctx.fillRect(0, 0, 1200, 750);
+          ctx.fillStyle = "#0D0B18";
+          ctx.fillRect(0, 0, 1024, 657);
         }
 
-        const leftX = 130; // Clears the pre-printed vertical text on the left margin!
-
-        // Top Header Bar
-        ctx.fillStyle = "#00FFC2";
-        ctx.beginPath();
-        ctx.arc(leftX, 100, 6, 0, Math.PI * 2);
-        ctx.fill();
-
-        ctx.fillStyle = "#B8A7FF";
-        ctx.font = "bold 18px monospace";
-        ctx.fillText("ACM AJCE STUDENT CHAPTER", leftX + 16, 106);
-
-        // Dynamic Member Profile Details
-        const name = currentMembershipData.fullName || "Chapter Member";
         const memId = currentMembershipId || "ACM-AJCE-MEM";
-        const course = `${currentMembershipData.course || ''} (${currentMembershipData.semester || ''})`;
-        const email = currentMembershipData.email || currentUser?.email || "";
+        const name = (currentMembershipData.fullName || "Chapter Member").toUpperCase();
+        const verifiedDate = currentMembershipData.verifiedAt ? new Date(currentMembershipData.verifiedAt) : (currentMembershipData.submittedAt ? new Date(currentMembershipData.submittedAt) : new Date());
+        const memberSinceYear = verifiedDate.getFullYear() || new Date().getFullYear();
 
-        // Member Full Name
+        // 2. Membership ID (Bottom Left above "Local Chapter Membership ID")
         ctx.save();
-        ctx.fillStyle = "#FFFFFF";
-        ctx.shadowColor = "rgba(0, 0, 0, 0.85)";
-        ctx.shadowBlur = 12;
-        ctx.shadowOffsetY = 4;
-        ctx.font = "900 42px sans-serif";
-        ctx.fillText(name, leftX, 215);
+        ctx.fillStyle = "#0A0B14";
+        ctx.font = "900 32px 'Inter', system-ui, -apple-system, sans-serif";
+        ctx.textAlign = "left";
+        ctx.textBaseline = "alphabetic";
+        ctx.fillText(memId, 59, 442);
         ctx.restore();
 
-        // Sleek Metallic ID Badge Container
-        const idText = `ID: ${memId}`;
-        ctx.font = "bold 24px monospace";
-        const idWidth = ctx.measureText(idText).width + 32;
-        
-        ctx.fillStyle = "rgba(0, 255, 194, 0.12)";
-        ctx.strokeStyle = "rgba(0, 255, 194, 0.4)";
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.roundRect(leftX, 245, idWidth, 42, 21);
-        ctx.fill();
-        ctx.stroke();
-
-        ctx.fillStyle = "#00FFC2";
-        ctx.fillText(idText, leftX + 16, 275);
-
-        // Course & Branch
-        ctx.font = "600 22px sans-serif";
-        ctx.fillStyle = "#A78BFA";
-        ctx.fillText("Course: ", leftX, 350);
-        const courseLabelWidth = ctx.measureText("Course: ").width;
+        // 3. Member Full Name (Right Royal Blue area, Bold White Uppercase)
+        ctx.save();
         ctx.fillStyle = "#FFFFFF";
-        ctx.font = "bold 22px sans-serif";
-        ctx.fillText(course, leftX + courseLabelWidth, 350);
+        ctx.textAlign = "right";
+        ctx.textBaseline = "middle";
 
-        // Email
-        ctx.font = "500 20px sans-serif";
-        ctx.fillStyle = "#9CA3AF";
-        ctx.fillText("Email: ", leftX, 400);
-        const emailLabelWidth = ctx.measureText("Email: ").width;
-        ctx.fillStyle = "#E2E8F0";
-        ctx.font = "bold 19px monospace";
-        ctx.fillText(email, leftX + emailLabelWidth, 400);
-
-        // Validity Range
-        const verifiedDate = currentMembershipData.verifiedAt ? new Date(currentMembershipData.verifiedAt) : new Date();
-        const nextYearDate = new Date(verifiedDate);
-        nextYearDate.setFullYear(verifiedDate.getFullYear() + 1);
-        const formatDate = (d) => d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
-
-        ctx.font = "bold 20px monospace";
-        ctx.fillStyle = "#C084FC";
-        ctx.fillText("VALID: ", leftX, 455);
-        const validLabelWidth = ctx.measureText("VALID: ").width;
-        ctx.fillStyle = "#FFFFFF";
-        ctx.fillText(`${formatDate(verifiedDate)} – ${formatDate(nextYearDate)}`, leftX + validLabelWidth, 455);
-
-        // Footer Tag (Bottom Left)
-        ctx.fillStyle = "#00FFC2";
-        ctx.font = "bold 20px monospace";
-        ctx.fillText("AUTHENTICATED DIGITAL CREDENTIAL", leftX, 675);
-
-        // Draw Verification QR Code Container on Right Side (Pushed to far-right x:910)
-        const qrImg = document.getElementById("view-security-qr");
-        if (qrImg && qrImg.src) {
-          try {
-            const qrBoxX = 910;
-            const qrBoxY = 195;
-            const qrBoxW = 230;
-            const qrBoxH = 290;
-
-            // White rounded glass container
-            ctx.fillStyle = "#FFFFFF";
-            ctx.shadowColor = "rgba(0, 0, 0, 0.7)";
-            ctx.shadowBlur = 20;
-            ctx.shadowOffsetY = 8;
-            ctx.beginPath();
-            ctx.roundRect(qrBoxX, qrBoxY, qrBoxW, qrBoxH, 22);
-            ctx.fill();
-
-            // Border outline
-            ctx.strokeStyle = "rgba(184, 167, 255, 0.8)";
-            ctx.lineWidth = 3;
-            ctx.stroke();
-
-            // Draw QR Code Image
-            ctx.drawImage(qrImg, qrBoxX + 20, qrBoxY + 20, 190, 190);
-
-            // Subtext under QR Code
-            ctx.fillStyle = "#3B0764";
-            ctx.font = "bold 15px monospace";
-            ctx.textAlign = "center";
-            ctx.fillText("SCAN TO VERIFY", qrBoxX + (qrBoxW / 2), qrBoxY + 255);
-            ctx.textAlign = "left"; // Reset alignment
-          } catch(e) {}
+        let nameFontSize = 38;
+        ctx.font = `900 ${nameFontSize}px 'Inter', system-ui, -apple-system, sans-serif`;
+        while (ctx.measureText(name).width > 480 && nameFontSize > 20) {
+          nameFontSize -= 2;
+          ctx.font = `900 ${nameFontSize}px 'Inter', system-ui, -apple-system, sans-serif`;
         }
+        ctx.fillText(name, 972, 320);
+        ctx.restore();
+
+        // 4. Member Since Year (Right light blue bar under "Student Member")
+        ctx.save();
+        ctx.fillStyle = "#0A0B14";
+        ctx.font = "800 24px 'Inter', system-ui, -apple-system, sans-serif";
+        ctx.textAlign = "right";
+        ctx.textBaseline = "alphabetic";
+        ctx.fillText(`Member Since ${memberSinceYear}`, 972, 452);
+        ctx.restore();
 
         // Export PNG & Trigger Download
         try {
           const dataUrl = canvas.toDataURL("image/png");
           const link = document.createElement("a");
-          link.download = `${memId}-Membership-Pass.png`;
+          link.download = `${memId}-Membership-Card.png`;
           link.href = dataUrl;
           document.body.appendChild(link);
           link.click();
@@ -736,7 +614,7 @@ import { membershipCardBgDataUri } from "../../utils/cardBg";
       });
     });
 
-    // Render Status Screen with Dynamic Dates & Security QR
+    // Render Status Screen with Dynamic Dates & Card Details
     function renderStatusView(data) {
       currentMembershipData = data;
       document.getElementById("view-name").textContent = data.fullName || "-";
@@ -750,22 +628,12 @@ import { membershipCardBgDataUri } from "../../utils/cardBg";
       const statusDesc = document.getElementById("status-desc");
       const viewStatus = document.getElementById("view-status");
       const verifiedCard = document.getElementById("verified-card");
-      const viewMemId = document.getElementById("view-mem-id");
-      const viewValidity = document.getElementById("view-validity");
-      const viewMemberBadge = document.getElementById("view-member-badge");
-      const viewSecurityQr = document.getElementById("view-security-qr");
 
       const memId = data.membershipId || `ACM-AJCE-${(data.uid || currentUser?.uid || '').slice(0, 5).toUpperCase()}`;
       currentMembershipId = memId;
 
-      // Dynamic 1-Year Validity Calculation
       const verifiedDate = data.verifiedAt ? new Date(data.verifiedAt) : (data.submittedAt ? new Date(data.submittedAt) : new Date());
-      const nextYearDate = new Date(verifiedDate);
-      nextYearDate.setFullYear(verifiedDate.getFullYear() + 1);
-
-      const formatDate = (d) => d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
-      const validityStr = `${formatDate(verifiedDate)} – ${formatDate(nextYearDate)}`;
-      const activeYears = `${verifiedDate.getFullYear()}-${nextYearDate.getFullYear()}`;
+      const memberSinceYear = verifiedDate.getFullYear() || new Date().getFullYear();
 
       if (data.status === "Verified") {
         statusBadge.className = "inline-flex items-center justify-center w-20 h-20 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 mb-6 shadow-xl";
@@ -778,24 +646,11 @@ import { membershipCardBgDataUri } from "../../utils/cardBg";
         
         const cardNameEl = document.getElementById("card-view-name");
         const cardIdEl = document.getElementById("card-view-id");
-        const cardCourseEl = document.getElementById("card-view-course");
-        const cardEmailEl = document.getElementById("card-view-email");
-        const cardValidityEl = document.getElementById("card-view-validity");
+        const cardYearEl = document.getElementById("card-view-year");
 
-        if (cardNameEl) cardNameEl.textContent = data.fullName || "Member";
-        if (cardIdEl) cardIdEl.textContent = `ID: ${memId}`;
-        if (cardCourseEl) cardCourseEl.textContent = `${data.course || ''} (${data.semester || ''})`;
-        if (cardEmailEl) cardEmailEl.textContent = data.email || currentUser?.email || "-";
-        if (cardValidityEl) cardValidityEl.textContent = validityStr;
-
-        if (viewMemId) viewMemId.textContent = memId;
-        if (viewValidity) viewValidity.textContent = validityStr;
-        if (viewMemberBadge) viewMemberBadge.textContent = `Active Chapter Member (${activeYears})`;
-
-        // Load Security QR Code API Endpoint
-        if (viewSecurityQr) {
-          viewSecurityQr.src = `/api/verify-qr.png?uid=${encodeURIComponent(data.uid || currentUser?.uid || '')}`;
-        }
+        if (cardNameEl) cardNameEl.textContent = (data.fullName || "Member").toUpperCase();
+        if (cardIdEl) cardIdEl.textContent = memId;
+        if (cardYearEl) cardYearEl.textContent = `Member Since ${memberSinceYear}`;
       } else if (data.status === "Rejected") {
         statusBadge.className = "inline-flex items-center justify-center w-20 h-20 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/40 mb-6 shadow-xl";
         statusIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>`;
