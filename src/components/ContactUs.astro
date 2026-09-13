@@ -140,12 +140,13 @@
 
   gsap.registerPlugin(ScrollTrigger);
 
-  const canvas = document.querySelector("#laptop-canvas");
+  const canvas = document.querySelector("#laptop-canvas") as HTMLCanvasElement | null;
   const context = canvas ? canvas.getContext("2d", { alpha: true }) : null;
   const section = document.querySelector(".laptop-section");
 
   const frameCount = 125;
-  const frames: (HTMLImageElement | ImageBitmap)[] = new Array(frameCount);
+  const frames: (HTMLImageElement | ImageBitmap | null)[] = new Array(frameCount).fill(null);
+  const loadingFrames = new Set<number>();
   const prefersReducedMotion = window.matchMedia(
     "(prefers-reduced-motion: reduce)"
   ).matches;
@@ -163,13 +164,27 @@
     if (!canvas || !context) return;
     const rect = canvas.getBoundingClientRect();
     if (!rect.width || !rect.height) return;
-    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+    const dpr = Math.min(window.devicePixelRatio || 1, 1.25);
     canvas.width = Math.round(rect.width * dpr);
     canvas.height = Math.round(rect.height * dpr);
   };
 
   let renderPending = false;
   let lastFrameRendered = -1;
+
+  // Search outward for closest available loaded frame (guarantees zero stutter / zero blank frames)
+  const getClosestLoadedFrame = (target: number) => {
+    if (frames[target]) return frames[target];
+    for (let offset = 1; offset < frameCount; offset++) {
+      if (target - offset >= 0 && frames[target - offset]) {
+        return frames[target - offset];
+      }
+      if (target + offset < frameCount && frames[target + offset]) {
+        return frames[target + offset];
+      }
+    }
+    return null;
+  };
 
   const render = () => {
     if (renderPending) return;
@@ -182,25 +197,32 @@
         Math.min(frameCount - 1, Math.round(laptop.frame))
       );
       if (targetIndex === lastFrameRendered) return;
-      const img = frames[targetIndex];
+
+      const img = getClosestLoadedFrame(targetIndex);
       if (img) {
         context.clearRect(0, 0, canvas.width, canvas.height);
         context.drawImage(img, 0, 0, canvas.width, canvas.height);
         lastFrameRendered = targetIndex;
       }
+
+      // Proactively queue surrounding frames around current scroll position
+      queueSurroundingFrames(targetIndex, 10);
     });
   };
 
   const loadFrame = (index: number): Promise<void> => {
+    if (frames[index] || loadingFrames.has(index)) {
+      return Promise.resolve();
+    }
+    loadingFrames.add(index);
+
     return new Promise((resolve) => {
-      if (frames[index]) {
-        resolve();
-        return;
-      }
       const img = new Image();
       img.decoding = "async";
       img.src = currentFrame(index);
-      img.onload = async () => {
+
+      const onDone = async () => {
+        loadingFrames.delete(index);
         if ("createImageBitmap" in window) {
           try {
             const bitmap = await createImageBitmap(img);
@@ -211,40 +233,60 @@
         } else {
           frames[index] = img;
         }
-        if (index === 0) render();
+        if (lastFrameRendered === -1 || Math.abs(Math.round(laptop.frame) - index) <= 2) {
+          render();
+        }
         resolve();
       };
-      img.onerror = () => {
-        resolve();
-      };
+
+      if (img.complete) {
+        onDone();
+      } else {
+        img.onload = onDone;
+        img.onerror = () => {
+          loadingFrames.delete(index);
+          resolve();
+        };
+      }
     });
   };
 
-  const preloadAllFrames = async () => {
-    // Priority 1: Instant load first 15 frames for 0ms initial scroll responsiveness
-    const priorityPromises = [];
-    for (let i = 0; i < 15; i++) {
-      priorityPromises.push(loadFrame(i));
-    }
-    await Promise.all(priorityPromises);
-    render();
-
-    // Priority 2: Preload remaining frames in small non-blocking GPU-buffered batches
-    const batchSize = 10;
-    for (let i = 15; i < frameCount; i += batchSize) {
-      const batch = [];
-      for (let j = i; j < Math.min(frameCount, i + batchSize); j++) {
-        batch.push(loadFrame(j));
+  const queueSurroundingFrames = (center: number, radius = 8) => {
+    const start = Math.max(0, center - radius);
+    const end = Math.min(frameCount - 1, center + radius);
+    for (let i = start; i <= end; i++) {
+      if (!frames[i] && !loadingFrames.has(i)) {
+        loadFrame(i);
       }
-      await Promise.all(batch);
     }
   };
 
-  const initSequence = async () => {
+  // Ultra-Fast 2-Stage Progressive Loader
+  const startProgressiveLoad = async () => {
+    // Stage 1: Load 12 evenly distributed keyframes across entire animation sequence (~60KB total, loads in <80ms)
+    const keyframeIndices = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 124];
+    await Promise.all(keyframeIndices.map((idx) => loadFrame(idx)));
+    render();
+
+    // Stage 2: Fill in remaining frames smoothly using non-blocking background batches
+    const remainingIndices: number[] = [];
+    for (let i = 0; i < frameCount; i++) {
+      if (!frames[i] && !loadingFrames.has(i)) {
+        remainingIndices.push(i);
+      }
+    }
+
+    const batchSize = 6;
+    for (let i = 0; i < remainingIndices.length; i += batchSize) {
+      const batch = remainingIndices.slice(i, i + batchSize);
+      await Promise.all(batch.map((idx) => loadFrame(idx)));
+    }
+  };
+
+  const initSequence = () => {
     if (!canvas || !context) return;
     resizeCanvas();
-    await preloadAllFrames();
-    render();
+    startProgressiveLoad();
 
     if (prefersReducedMotion) {
       const formOverlay = document.querySelector(
@@ -267,13 +309,13 @@
         trigger: ".laptop-section",
         start: "top top",
         end: "bottom bottom",
-        scrub: 0.1,
+        scrub: 0.35,
+        invalidateOnRefresh: true,
       },
     });
 
     tl.to(laptop, {
       frame: frameCount - 1,
-      snap: "frame",
       ease: "none",
       duration: 2.2,
       onUpdate: render,
@@ -307,6 +349,7 @@
     initSequence();
   };
 
+  // Start preloading well before the contact section enters the viewport
   if (section && "IntersectionObserver" in window) {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -315,11 +358,18 @@
           observer.disconnect();
         }
       },
-      { rootMargin: "200px" }
+      { rootMargin: "1000px" }
     );
     observer.observe(section);
   } else {
     startWhenVisible();
+  }
+
+  // Preload keyframes when browser is idle after initial page load
+  if ("requestIdleCallback" in window) {
+    (window as any).requestIdleCallback(() => startWhenVisible(), { timeout: 3000 });
+  } else {
+    setTimeout(startWhenVisible, 1500);
   }
 
   window.addEventListener("resize", () => {

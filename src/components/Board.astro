@@ -140,6 +140,7 @@ const teamMembers = boardMembers.filter(
                 githubUrl={member.githubUrl}
                 portfolioUrl={member.portfolioUrl}
                 isW={member.isW}
+                priority={true}
               />
             </div>
           ))
@@ -318,12 +319,30 @@ const teamMembers = boardMembers.filter(
     }
   }
 
+  // --- Fast Team Image Pre-Caching Engine ---
+  const prefetchImagesInSection = (section: Element | null) => {
+    if (!section) return;
+    const imgs = section.querySelectorAll<HTMLImageElement>("img");
+    imgs.forEach((img) => {
+      if (img.src && !img.complete) {
+        const p = new Image();
+        p.src = img.src;
+      }
+    });
+  };
+
   // --- Category Tab Switcher ---
   const setupTeamTabSwitching = () => {
     const tabBtns = document.querySelectorAll(".team-pill-btn");
     const viewSections = document.querySelectorAll(".team-view-section");
 
+    // Pre-cache all team images when mouse hovers over any tab
     tabBtns.forEach((btn) => {
+      btn.addEventListener("mouseenter", () => {
+        const targetView = btn.getAttribute("data-view");
+        prefetchImagesInSection(document.getElementById(`view-${targetView}`));
+      }, { passive: true });
+
       btn.addEventListener("click", () => {
         const targetView = btn.getAttribute("data-view");
 
@@ -334,6 +353,7 @@ const teamMembers = boardMembers.filter(
           if (sec.id === `view-${targetView}`) {
             sec.classList.remove("hidden");
             sec.classList.add("active");
+            prefetchImagesInSection(sec);
           } else {
             sec.classList.add("hidden");
             sec.classList.remove("active");
@@ -341,6 +361,26 @@ const teamMembers = boardMembers.filter(
         });
       });
     });
+
+    // Proactively pre-warm all team photos 800px before user scrolls to Team section
+    const teamSection = document.getElementById("team");
+    if (teamSection && "IntersectionObserver" in window) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          if (entries.some((e) => e.isIntersecting)) {
+            document.querySelectorAll<HTMLImageElement>(".board-member-card img").forEach((img) => {
+              if (img.src) {
+                const p = new Image();
+                p.src = img.src;
+              }
+            });
+            observer.disconnect();
+          }
+        },
+        { rootMargin: "800px" }
+      );
+      observer.observe(teamSection);
+    }
   };
 
   if (document.readyState === "loading") {
