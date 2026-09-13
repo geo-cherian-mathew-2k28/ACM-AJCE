@@ -224,38 +224,54 @@ import { membershipCardBgDataUri } from "../../utils/cardBg";
             <!-- Pixel-Perfect Digital Membership Card Pass -->
             <div id="membership-card-pass" class="w-full max-w-xl mx-auto rounded-xl sm:rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.9)] relative overflow-hidden bg-[#0A0B14] select-none" style="aspect-ratio: 1024 / 657;">
               
-              <!-- 100% Guaranteed Embedded Data URI Background Template Image Layer -->
+              <!-- 100% Embedded Data URI Background Template Image Layer -->
               <img 
                 src={membershipCardBgDataUri} 
                 alt="ACM AJCE Membership Card" 
                 class="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none" 
               />
 
-              <!-- Positioned Dynamic Card Details Layer -->
-              <div class="absolute inset-0 z-10 pointer-events-none">
-                
-                <!-- Membership ID (Bottom Left above Local Chapter Membership ID) -->
-                <div class="absolute left-[5.8%] top-[64.5%] -translate-y-1/2 text-left">
-                  <span id="card-view-id" class="font-black text-[#0A0B14] text-[13px] sm:text-[22px] md:text-[26px] tracking-tight font-sans select-all">
-                    ACM-AJCE-XXXXX
-                  </span>
-                </div>
+              <!-- Mathematical 1:1 Proportional Scaled SVG Overlay (Zero CSS overlap bugs on any screen size) -->
+              <svg viewBox="0 0 1024 657" class="absolute inset-0 w-full h-full pointer-events-none select-none z-10" xmlns="http://www.w3.org/2000/svg">
+                <!-- 1. Membership ID: Left-aligned above 'Local Chapter Membership ID' -->
+                <text 
+                  id="card-view-id" 
+                  x="60" 
+                  y="446" 
+                  text-anchor="start" 
+                  fill="#0A0B14" 
+                  font-family="'Inter', system-ui, -apple-system, sans-serif" 
+                  font-weight="900" 
+                  font-size="30" 
+                  letter-spacing="-0.5"
+                >ACM-AJCE-XXXXX</text>
 
-                <!-- Member Name (Right Upper Royal Blue Area) -->
-                <div class="absolute right-[5.2%] top-[48.2%] -translate-y-1/2 text-right max-w-[62%]">
-                  <h3 id="card-view-name" class="font-black text-white text-[15px] sm:text-[25px] md:text-[30px] tracking-tight uppercase leading-tight font-sans truncate drop-shadow-sm">
-                    MEMBER NAME
-                  </h3>
-                </div>
+                <!-- 2. Member Full Name: Right-aligned in Upper Blue Region -->
+                <text 
+                  id="card-view-name" 
+                  x="972" 
+                  y="346" 
+                  text-anchor="end" 
+                  fill="#FFFFFF" 
+                  font-family="'Inter', system-ui, -apple-system, sans-serif" 
+                  font-weight="900" 
+                  font-size="40" 
+                  letter-spacing="0.5"
+                >MEMBER NAME</text>
 
-                <!-- Member Since Year (Right Lower Bar under Student Member) -->
-                <div class="absolute right-[5.2%] top-[67%] -translate-y-1/2 text-right">
-                  <span id="card-view-year" class="font-extrabold text-[#0A0B14] text-[10px] sm:text-[16px] md:text-[19px] tracking-tight font-sans">
-                    Member Since 2026
-                  </span>
-                </div>
-
-              </div>
+                <!-- 3. Member Since Year: Right-aligned directly below 'Student Member' -->
+                <text 
+                  id="card-view-year" 
+                  x="972" 
+                  y="446" 
+                  text-anchor="end" 
+                  fill="#0A0B14" 
+                  font-family="'Inter', system-ui, -apple-system, sans-serif" 
+                  font-weight="800" 
+                  font-size="24" 
+                  letter-spacing="0"
+                >Member Since 2026</text>
+              </svg>
             </div>
 
             <!-- Download Card Button -->
@@ -489,37 +505,37 @@ import { membershipCardBgDataUri } from "../../utils/cardBg";
         const verifiedDate = currentMembershipData.verifiedAt ? new Date(currentMembershipData.verifiedAt) : (currentMembershipData.submittedAt ? new Date(currentMembershipData.submittedAt) : new Date());
         const memberSinceYear = verifiedDate.getFullYear() || new Date().getFullYear();
 
-        // 2. Membership ID (Bottom Left above "Local Chapter Membership ID")
+        // 2. Membership ID (Bottom Left directly above "Local Chapter Membership ID")
         ctx.save();
         ctx.fillStyle = "#0A0B14";
-        ctx.font = "900 32px 'Inter', system-ui, -apple-system, sans-serif";
+        ctx.font = "900 30px 'Inter', system-ui, -apple-system, sans-serif";
         ctx.textAlign = "left";
         ctx.textBaseline = "alphabetic";
-        ctx.fillText(memId, 59, 442);
+        ctx.fillText(memId, 60, 446);
         ctx.restore();
 
         // 3. Member Full Name (Right Royal Blue area, Bold White Uppercase)
         ctx.save();
         ctx.fillStyle = "#FFFFFF";
         ctx.textAlign = "right";
-        ctx.textBaseline = "middle";
+        ctx.textBaseline = "alphabetic";
 
-        let nameFontSize = 38;
+        let nameFontSize = 40;
         ctx.font = `900 ${nameFontSize}px 'Inter', system-ui, -apple-system, sans-serif`;
-        while (ctx.measureText(name).width > 480 && nameFontSize > 20) {
+        while (ctx.measureText(name).width > 440 && nameFontSize > 22) {
           nameFontSize -= 2;
           ctx.font = `900 ${nameFontSize}px 'Inter', system-ui, -apple-system, sans-serif`;
         }
-        ctx.fillText(name, 972, 320);
+        ctx.fillText(name, 972, 346);
         ctx.restore();
 
-        // 4. Member Since Year (Right light blue bar under "Student Member")
+        // 4. Member Since Year (Right light blue bar directly under "Student Member")
         ctx.save();
         ctx.fillStyle = "#0A0B14";
         ctx.font = "800 24px 'Inter', system-ui, -apple-system, sans-serif";
         ctx.textAlign = "right";
         ctx.textBaseline = "alphabetic";
-        ctx.fillText(`Member Since ${memberSinceYear}`, 972, 452);
+        ctx.fillText(`Member Since ${memberSinceYear}`, 972, 446);
         ctx.restore();
 
         // Export PNG & Trigger Download
@@ -648,7 +664,17 @@ import { membershipCardBgDataUri } from "../../utils/cardBg";
         const cardIdEl = document.getElementById("card-view-id");
         const cardYearEl = document.getElementById("card-view-year");
 
-        if (cardNameEl) cardNameEl.textContent = (data.fullName || "Member").toUpperCase();
+        const upperName = (data.fullName || "Member").toUpperCase();
+        if (cardNameEl) {
+          cardNameEl.textContent = upperName;
+          if (upperName.length > 24) {
+            cardNameEl.setAttribute("font-size", "28");
+          } else if (upperName.length > 18) {
+            cardNameEl.setAttribute("font-size", "34");
+          } else {
+            cardNameEl.setAttribute("font-size", "40");
+          }
+        }
         if (cardIdEl) cardIdEl.textContent = memId;
         if (cardYearEl) cardYearEl.textContent = `Member Since ${memberSinceYear}`;
       } else if (data.status === "Rejected") {
