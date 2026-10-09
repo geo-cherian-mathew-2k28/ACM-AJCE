@@ -89,9 +89,9 @@ export async function submitMembershipToFirestore(user, submissionData) {
 /**
  * Determine Execom Officer Role & Access Permissions
  */
-export function getExecomRole(user) {
+export function getExecomRole(user, adminDocData = null) {
   if (!user || !user.email) return null;
-  const email = user.email.toLowerCase();
+  const email = user.email.toLowerCase().trim();
   
   // 1. Webmaster (Ultimate Admin with full edit/delete/approve powers)
   if (
@@ -115,15 +115,29 @@ export function getExecomRole(user) {
     email === "sebinshaji295@gmail.com" ||
     email.includes("sebinshaji") ||
     email === "treasurer@ajce.acm.org" ||
-    email.startsWith("sebin")
+    email.startsWith("sebin") ||
+    (adminDocData && adminDocData.role === 'treasurer')
   ) {
     return {
       role: "treasurer",
-      label: "Treasurer (Approval Access Only)",
+      label: "Treasurer",
       canEdit: false,
       canDelete: false,
       canApprove: true,
-      name: user.displayName || "Sebin Shaji"
+      name: user.displayName || (adminDocData && adminDocData.name) || "Sebin Shaji"
+    };
+  }
+
+  // 3. Registered Admins / Execom from Firestore
+  if (adminDocData) {
+    const hasApproval = adminDocData.canApprove === true || adminDocData.role === 'treasurer' || adminDocData.role === 'webmaster';
+    return {
+      role: adminDocData.role || 'member',
+      label: adminDocData.roleTitle || (hasApproval ? 'Approval Officer' : 'Execom Member'),
+      canEdit: adminDocData.role === 'webmaster',
+      canDelete: adminDocData.role === 'webmaster',
+      canApprove: hasApproval,
+      name: user.displayName || adminDocData.name || email.split('@')[0]
     };
   }
 

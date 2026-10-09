@@ -549,6 +549,7 @@ import MembershipLayout from "../../layouts/MembershipLayout.astro";
       }
 
       const isWebmaster = currentRole?.role === "webmaster";
+      const canApprove = currentRole?.canApprove === true;
 
       recordsContainer.innerHTML = filtered.map((m) => {
         const isVerified = m.status === "Verified";
@@ -658,62 +659,71 @@ import MembershipLayout from "../../layouts/MembershipLayout.astro";
                 </div>
               `}
 
-              <!-- Status Action Buttons (Accessible to both Webmaster & Treasurer) -->
+              <!-- Status Action Controls (Only for Webmaster, Treasurer, or granted Officers) -->
               <div class="flex flex-col gap-1.5 min-w-[140px]">
-                ${!isVerified ? `
-                  <button 
-                    data-action="verify" 
-                    data-uid="${m.id}" 
-                    type="button" 
-                    class="action-btn py-1.5 px-3 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-all shadow-md cursor-pointer flex items-center justify-center gap-1"
-                  >
-                    <span>✓</span> Approve & Verify
-                  </button>
+                ${canApprove ? `
+                  ${!isVerified ? `
+                    <button 
+                      data-action="verify" 
+                      data-uid="${m.id}" 
+                      type="button" 
+                      class="action-btn py-1.5 px-3 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-all shadow-md cursor-pointer flex items-center justify-center gap-1"
+                    >
+                      <span>✓</span> Approve & Verify
+                    </button>
+                  ` : `
+                    <button 
+                      data-action="pending" 
+                      data-uid="${m.id}" 
+                      type="button" 
+                      class="action-btn py-1 px-3 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-semibold transition-all cursor-pointer flex items-center justify-center gap-1"
+                    >
+                      <span>↺</span> Mark Pending
+                    </button>
+                  `}
+
+                  ${!isRejected ? `
+                    <button 
+                      data-action="reject" 
+                      data-uid="${m.id}" 
+                      type="button" 
+                      class="action-btn py-1 px-3 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-400 border border-rose-500/40 text-xs font-semibold transition-all cursor-pointer flex items-center justify-center gap-1"
+                    >
+                      <span>✕</span> Reject Request
+                    </button>
+                  ` : ""}
+
+                  <!-- Webmaster Only Buttons -->
+                  ${isWebmaster ? `
+                    <div class="flex items-center gap-1.5 pt-1">
+                      <button 
+                        data-edit-id="${m.id}" 
+                        type="button" 
+                        class="edit-btn flex-1 py-1 px-2 rounded bg-[#2A2455] hover:bg-[#3D3575] text-purple-300 text-[11px] font-semibold transition-colors cursor-pointer text-center"
+                      >
+                        ✎ Edit
+                      </button>
+                      <button 
+                        data-delete-id="${m.id}" 
+                        type="button" 
+                        class="delete-btn py-1 px-2 rounded bg-rose-950/40 hover:bg-rose-900/60 text-rose-400 text-[11px] font-semibold transition-colors cursor-pointer text-center border border-rose-500/30"
+                        title="Delete registration (Webmaster only)"
+                      >
+                        🗑
+                      </button>
+                    </div>
+                  ` : `
+                    <span class="text-[10px] text-emerald-400/80 text-center font-mono pt-1">
+                      Approval Officer
+                    </span>
+                  `}
                 ` : `
-                  <button 
-                    data-action="pending" 
-                    data-uid="${m.id}" 
-                    type="button" 
-                    class="action-btn py-1 px-3 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-semibold transition-all cursor-pointer flex items-center justify-center gap-1"
-                  >
-                    <span>↺</span> Mark Pending
-                  </button>
-                `}
-
-                ${!isRejected ? `
-                  <button 
-                    data-action="reject" 
-                    data-uid="${m.id}" 
-                    type="button" 
-                    class="action-btn py-1 px-3 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/40 text-xs font-semibold transition-all cursor-pointer flex items-center justify-center gap-1"
-                  >
-                    <span>✕</span> Reject Request
-                  </button>
-                ` : ""}
-
-                <!-- Webmaster Only Buttons -->
-                ${isWebmaster ? `
-                  <div class="flex items-center gap-1.5 pt-1">
-                    <button 
-                      data-edit-id="${m.id}" 
-                      type="button" 
-                      class="edit-btn flex-1 py-1 px-2 rounded bg-[#2A2455] hover:bg-[#3D3575] text-purple-300 text-[11px] font-semibold transition-colors cursor-pointer text-center"
-                    >
-                      ✎ Edit
-                    </button>
-                    <button 
-                      data-delete-id="${m.id}" 
-                      type="button" 
-                      class="delete-btn py-1 px-2 rounded bg-rose-950/40 hover:bg-rose-900/60 text-rose-400 text-[11px] font-semibold transition-colors cursor-pointer text-center border border-rose-500/30"
-                      title="Delete registration (Webmaster only)"
-                    >
-                      🗑
-                    </button>
+                  <div class="p-2 rounded-lg bg-[#0A0B14] border border-[#2A2455] text-center">
+                    <span class="text-[10px] text-gray-500 font-mono block">
+                      👁️ View Only
+                    </span>
+                    <span class="text-[9px] text-gray-600 block">No approval rights</span>
                   </div>
-                ` : `
-                  <span class="text-[10px] text-gray-500 text-center font-mono pt-1">
-                    Treasurer: Approval Access
-                  </span>
                 `}
               </div>
 
