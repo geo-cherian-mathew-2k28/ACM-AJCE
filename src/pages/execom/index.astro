@@ -1,0 +1,934 @@
+---
+import MembershipLayout from "../../layouts/MembershipLayout.astro";
+---
+
+<MembershipLayout title="ACM AJCE Execom Dashboard | Executive Management">
+  <div class="w-full max-w-7xl mx-auto py-4 sm:py-8 px-2 sm:px-6">
+    
+    <!-- State 0: Execom Authentication Gate -->
+    <div id="auth-gate-view" class="portal-panel w-full max-w-md mx-auto p-6 sm:p-10 text-center space-y-6">
+      <div class="w-16 h-16 rounded-full bg-[#2A2455] border border-[#4D4770] flex items-center justify-center mx-auto text-[#B8A7FF] shadow-lg">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+        </svg>
+      </div>
+
+      <div>
+        <span class="text-[#B8A7FF] font-mono text-[11px] uppercase tracking-widest font-bold block mb-1">Executive Portal</span>
+        <h1 class="text-2xl sm:text-3xl font-extrabold text-white mb-2 font-display">ACM AJCE Execom</h1>
+        <p class="text-xs text-gray-300 leading-relaxed">
+          Sign in with your authorized Executive Google account (Webmaster or Treasurer) to access membership verification.
+        </p>
+      </div>
+
+      <div id="auth-error-banner" class="hidden p-3 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs font-semibold text-left"></div>
+
+      <button id="google-login-btn" type="button" class="w-full py-3.5 px-5 rounded-xl bg-white hover:bg-gray-100 text-gray-900 font-bold text-sm flex items-center justify-center gap-3 transition-all shadow-lg cursor-pointer">
+        <svg class="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24">
+          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+        </svg>
+        Sign in with Executive Google
+      </button>
+
+      <div class="text-[11px] text-gray-400 bg-[#131124] p-3 rounded-xl border border-[#2A2455] text-left">
+        <p class="font-semibold text-white mb-1">🔐 Role Access Level:</p>
+        <ul class="space-y-1 text-gray-300">
+          <li>• <strong class="text-purple-300">Webmaster</strong>: Full Admin (Edit, Delete, Approve, Export).</li>
+          <li>• <strong class="text-emerald-300">Treasurer</strong>: Approval Officer (Verify, Pending, Reject).</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- State 1: Access Denied View (Non-Execom Google Account) -->
+    <div id="unauthorized-view" class="hidden portal-panel w-full max-w-md mx-auto p-6 sm:p-8 text-center space-y-5">
+      <div class="w-16 h-16 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/40 flex items-center justify-center mx-auto">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+        </svg>
+      </div>
+
+      <div>
+        <h2 class="text-xl font-bold text-white mb-1">Access Restricted</h2>
+        <p class="text-xs text-gray-300 leading-relaxed">
+          You are signed in as <span id="unauth-email" class="font-semibold text-rose-300">user@ajce.in</span>. This dashboard is restricted to ACM AJCE Executive Committee Officers (Webmaster & Treasurer).
+        </p>
+      </div>
+
+      <button id="unauth-signout-btn" type="button" class="w-full py-2.5 px-4 rounded-xl bg-[#2A2455] hover:bg-[#3D3575] text-[#B8A7FF] font-semibold text-xs transition-all cursor-pointer">
+        Sign Out and Switch Account
+      </button>
+    </div>
+
+    <!-- State 2: Main Authorized Execom Dashboard -->
+    <div id="dashboard-view" class="hidden space-y-6">
+      
+      <!-- Top Execom Officer Header Banner -->
+      <div class="bg-[#131124] border border-[#2A2455] rounded-2xl p-4 sm:p-6 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 shadow-xl">
+        <div class="flex items-center gap-3.5 min-w-0">
+          <img id="officer-photo" src="" alt="Officer Avatar" class="w-12 h-12 rounded-full border-2 border-[#6A5ACD] flex-shrink-0 hidden object-cover" />
+          <div id="officer-fallback" class="w-12 h-12 rounded-full bg-[#2A2455] border-2 border-[#6A5ACD] flex-shrink-0 flex items-center justify-center text-white font-bold text-lg">A</div>
+          
+          <div class="min-w-0">
+            <div class="flex items-center gap-2 flex-wrap">
+              <h1 class="text-white font-bold text-base sm:text-lg truncate" id="officer-name">Executive Officer</h1>
+              <span id="officer-role-badge" class="px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold uppercase tracking-wider bg-purple-500/20 text-purple-300 border border-purple-500/40">
+                Webmaster
+              </span>
+            </div>
+            <p class="text-xs text-gray-400 font-mono truncate" id="officer-email">officer@ajce.acm.org</p>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between md:justify-end gap-3 pt-3 md:pt-0 border-t md:border-t-0 border-[#2A2455]">
+          <div id="webmaster-tools" class="hidden flex items-center gap-2">
+            <button id="export-csv-btn" type="button" class="py-2 px-3 rounded-lg bg-[#2A2455] hover:bg-[#3D3575] text-[#B8A7FF] text-xs font-semibold flex items-center gap-1.5 border border-[#4D4770] transition-all cursor-pointer">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+              Export CSV
+            </button>
+          </div>
+
+          <button id="signout-dashboard-btn" type="button" class="py-2 px-3 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/30 text-xs font-semibold transition-colors cursor-pointer">
+            Sign Out
+          </button>
+        </div>
+      </div>
+
+      <!-- Live Statistics Cards -->
+      <div class="grid grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4">
+        <div class="portal-panel p-4 flex flex-col justify-between">
+          <span class="text-[11px] font-mono text-gray-400 uppercase tracking-wider font-semibold">Total Registrations</span>
+          <p class="text-2xl sm:text-3xl font-black text-white mt-1" id="stat-total">0</p>
+        </div>
+
+        <div class="portal-panel p-4 flex flex-col justify-between border-emerald-500/30 bg-emerald-950/10">
+          <span class="text-[11px] font-mono text-emerald-400 uppercase tracking-wider font-semibold">Verified Active</span>
+          <p class="text-2xl sm:text-3xl font-black text-emerald-400 mt-1" id="stat-verified">0</p>
+        </div>
+
+        <div class="portal-panel p-4 flex flex-col justify-between border-amber-500/30 bg-amber-950/10">
+          <span class="text-[11px] font-mono text-amber-400 uppercase tracking-wider font-semibold">Pending Review</span>
+          <p class="text-2xl sm:text-3xl font-black text-amber-400 mt-1" id="stat-pending">0</p>
+        </div>
+
+        <div class="portal-panel p-4 flex flex-col justify-between border-rose-500/30 bg-rose-950/10">
+          <span class="text-[11px] font-mono text-rose-400 uppercase tracking-wider font-semibold">Rejected</span>
+          <p class="text-2xl sm:text-3xl font-black text-rose-400 mt-1" id="stat-rejected">0</p>
+        </div>
+
+        <div class="portal-panel p-4 flex flex-col justify-between col-span-2 lg:col-span-1 border-purple-500/30 bg-purple-950/10">
+          <span class="text-[11px] font-mono text-[#B8A7FF] uppercase tracking-wider font-semibold">Revenue (₹200/ea)</span>
+          <p class="text-2xl sm:text-3xl font-black text-[#00FFC2] mt-1" id="stat-revenue">₹0</p>
+        </div>
+      </div>
+
+      <!-- Filter Tabs & Search Bar -->
+      <div class="portal-panel p-4 sm:p-5 space-y-4">
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+          
+          <!-- Category Tabs -->
+          <div class="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0" id="filter-tabs">
+            <button data-filter="all" class="filter-tab-btn active text-xs font-semibold px-3.5 py-1.5 rounded-lg border transition-all cursor-pointer whitespace-nowrap">
+              All (<span id="tab-count-all">0</span>)
+            </button>
+            <button data-filter="pending" class="filter-tab-btn text-xs font-semibold px-3.5 py-1.5 rounded-lg border transition-all cursor-pointer whitespace-nowrap text-amber-300">
+              Pending (<span id="tab-count-pending">0</span>)
+            </button>
+            <button data-filter="verified" class="filter-tab-btn text-xs font-semibold px-3.5 py-1.5 rounded-lg border transition-all cursor-pointer whitespace-nowrap text-emerald-300">
+              Verified (<span id="tab-count-verified">0</span>)
+            </button>
+            <button data-filter="rejected" class="filter-tab-btn text-xs font-semibold px-3.5 py-1.5 rounded-lg border transition-all cursor-pointer whitespace-nowrap text-rose-300">
+              Rejected (<span id="tab-count-rejected">0</span>)
+            </button>
+          </div>
+
+          <!-- Live Search Input -->
+          <div class="relative w-full sm:w-72">
+            <input 
+              type="text" 
+              id="search-input" 
+              placeholder="Search by name, email, UTR, course..." 
+              class="w-full bg-[#131124] border border-[#2A2455] rounded-xl py-2 pl-9 pr-3 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#6A5ACD] transition-colors"
+            />
+            <svg class="w-4 h-4 text-gray-400 absolute left-3 top-2.5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            </svg>
+          </div>
+
+        </div>
+
+        <!-- Membership Records List -->
+        <div id="records-container" class="space-y-3 pt-2">
+          <div class="p-8 text-center text-gray-400 text-xs animate-pulse">
+            Loading real-time registrations from Firestore DB...
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Screenshot Modal Preview -->
+    <div id="screenshot-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+      <div class="bg-[#0D0B18] border border-[#2A2455] rounded-2xl max-w-2xl w-full p-4 sm:p-6 max-h-[90vh] flex flex-col justify-between shadow-2xl relative">
+        <div class="flex items-center justify-between pb-3 border-b border-[#2A2455]">
+          <div>
+            <h3 class="text-sm sm:text-base font-bold text-white" id="modal-student-name">Payment Proof</h3>
+            <p class="text-xs text-gray-400 font-mono" id="modal-utr">UTR: -</p>
+          </div>
+          <button id="close-modal-btn" type="button" class="text-gray-400 hover:text-white p-1 rounded-lg hover:bg-white/10 cursor-pointer">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+          </button>
+        </div>
+
+        <div class="my-4 overflow-auto max-h-[60vh] flex items-center justify-center bg-black/40 rounded-xl p-2">
+          <img id="modal-img" src="" alt="Payment Screenshot" class="max-h-[55vh] object-contain rounded-lg" />
+        </div>
+
+        <div class="flex items-center justify-end gap-3 pt-3 border-t border-[#2A2455]">
+          <a id="modal-open-link" href="" target="_blank" class="py-2 px-4 rounded-xl bg-[#2A2455] hover:bg-[#3D3575] text-[#B8A7FF] text-xs font-semibold cursor-pointer">
+            Open Full Size ↗
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Audit History Modal -->
+    <div id="history-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+      <div class="bg-[#0D0B18] border border-[#2A2455] rounded-2xl max-w-lg w-full p-4 sm:p-6 max-h-[90vh] flex flex-col justify-between shadow-2xl relative">
+        <div class="flex items-center justify-between pb-3 border-b border-[#2A2455]">
+          <div>
+            <h3 class="text-sm sm:text-base font-bold text-white">Audit Trail & Status History</h3>
+            <p class="text-xs text-gray-400" id="history-student-name">-</p>
+          </div>
+          <button id="close-history-modal-btn" type="button" class="text-gray-400 hover:text-white p-1 rounded-lg hover:bg-white/10 cursor-pointer">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+          </button>
+        </div>
+
+        <div class="my-4 overflow-y-auto max-h-[50vh] space-y-2 pr-1" id="history-list">
+          <!-- Populated by JS -->
+        </div>
+
+        <div class="flex items-center justify-end pt-3 border-t border-[#2A2455]">
+          <button id="close-history-btn2" type="button" class="py-2 px-4 rounded-xl bg-[#2A2455] hover:bg-[#3D3575] text-white text-xs font-semibold cursor-pointer">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit Student Details Modal (Webmaster Only) -->
+    <div id="edit-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+      <div class="bg-[#0D0B18] border border-[#2A2455] rounded-2xl max-w-lg w-full p-4 sm:p-6 shadow-2xl relative">
+        <div class="flex items-center justify-between pb-3 border-b border-[#2A2455] mb-4">
+          <div>
+            <h3 class="text-base font-bold text-white">Edit Student Details</h3>
+            <p class="text-xs text-purple-300">Webmaster Super Admin Action</p>
+          </div>
+          <button id="close-edit-modal-btn" type="button" class="text-gray-400 hover:text-white p-1 rounded-lg hover:bg-white/10 cursor-pointer">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+          </button>
+        </div>
+
+        <form id="edit-form" class="space-y-3 text-xs">
+          <input type="hidden" id="edit-uid" />
+          
+          <div>
+            <label class="block text-gray-300 font-semibold mb-1">Full Name</label>
+            <input type="text" id="edit-fullName" required class="portal-input w-full" />
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-gray-300 font-semibold mb-1">Course</label>
+              <input type="text" id="edit-course" required class="portal-input w-full" />
+            </div>
+            <div>
+              <label class="block text-gray-300 font-semibold mb-1">Semester</label>
+              <input type="text" id="edit-semester" required class="portal-input w-full" />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-gray-300 font-semibold mb-1">Department</label>
+              <input type="text" id="edit-department" required class="portal-input w-full" />
+            </div>
+            <div>
+              <label class="block text-gray-300 font-semibold mb-1">Phone</label>
+              <input type="text" id="edit-phone" required class="portal-input w-full" />
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-gray-300 font-semibold mb-1">Transaction ID / UTR</label>
+            <input type="text" id="edit-txnId" required class="portal-input w-full font-mono" />
+          </div>
+
+          <div class="flex items-center justify-end gap-3 pt-4 border-t border-[#2A2455]">
+            <button id="cancel-edit-btn" type="button" class="py-2 px-4 rounded-xl bg-gray-800 text-gray-300 hover:bg-gray-700 font-semibold cursor-pointer">
+              Cancel
+            </button>
+            <button type="submit" class="py-2 px-5 rounded-xl bg-gradient-to-r from-[#6A5ACD] to-[#8A2BE2] text-white font-bold cursor-pointer">
+              Save Changes
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</MembershipLayout>
+
+<style>
+  .portal-panel {
+    background: #0D0B18;
+    border: 1px solid #2A2455;
+    border-radius: 1.25rem;
+    box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+  }
+
+  .portal-input {
+    background: #131124;
+    border: 1.5px solid #2A2455;
+    border-radius: 0.6rem;
+    padding: 0.65rem 0.85rem;
+    font-size: 0.85rem;
+    color: #FBFAFF;
+    outline: none;
+    transition: all 0.2s ease;
+  }
+
+  .portal-input:focus {
+    border-color: #6A5ACD;
+    box-shadow: 0 0 0 3px rgba(106, 90, 205, 0.2);
+  }
+
+  .filter-tab-btn {
+    background: rgba(42, 36, 85, 0.4);
+    border-color: #2A2455;
+    color: rgba(255, 255, 255, 0.7);
+  }
+  .filter-tab-btn.active {
+    background: #6A5ACD;
+    border-color: #B8A7FF;
+    color: #ffffff;
+    box-shadow: 0 0 15px rgba(106, 90, 205, 0.4);
+  }
+</style>
+
+<script>
+  // @ts-nocheck
+  import { 
+    auth, 
+    loginWithCollegeGoogle, 
+    getExecomRole, 
+    listenToAllMemberships, 
+    updateMembershipStatus, 
+    updateMembershipDetails, 
+    deleteMembershipRecord 
+  } from "../../lib/firebase.js";
+  import { onAuthStateChanged, signOut } from "firebase/auth";
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const authGateView = document.getElementById("auth-gate-view");
+    const unauthorizedView = document.getElementById("unauthorized-view");
+    const dashboardView = document.getElementById("dashboard-view");
+    
+    const googleLoginBtn = document.getElementById("google-login-btn");
+    const authErrorBanner = document.getElementById("auth-error-banner");
+    const signoutDashboardBtn = document.getElementById("signout-dashboard-btn");
+    const unauthSignoutBtn = document.getElementById("unauth-signout-btn");
+    
+    const officerName = document.getElementById("officer-name");
+    const officerEmail = document.getElementById("officer-email");
+    const officerRoleBadge = document.getElementById("officer-role-badge");
+    const officerPhoto = document.getElementById("officer-photo");
+    const officerFallback = document.getElementById("officer-fallback");
+    const webmasterTools = document.getElementById("webmaster-tools");
+
+    const statTotal = document.getElementById("stat-total");
+    const statVerified = document.getElementById("stat-verified");
+    const statPending = document.getElementById("stat-pending");
+    const statRejected = document.getElementById("stat-rejected");
+    const statRevenue = document.getElementById("stat-revenue");
+
+    const tabCountAll = document.getElementById("tab-count-all");
+    const tabCountPending = document.getElementById("tab-count-pending");
+    const tabCountVerified = document.getElementById("tab-count-verified");
+    const tabCountRejected = document.getElementById("tab-count-rejected");
+
+    const searchInput = document.getElementById("search-input");
+    const filterTabs = document.querySelectorAll(".filter-tab-btn");
+    const recordsContainer = document.getElementById("records-container");
+
+    const screenshotModal = document.getElementById("screenshot-modal");
+    const modalImg = document.getElementById("modal-img");
+    const modalStudentName = document.getElementById("modal-student-name");
+    const modalUtr = document.getElementById("modal-utr");
+    const modalOpenLink = document.getElementById("modal-open-link");
+    const closeModalBtn = document.getElementById("close-modal-btn");
+
+    const historyModal = document.getElementById("history-modal");
+    const historyStudentName = document.getElementById("history-student-name");
+    const historyList = document.getElementById("history-list");
+    const closeHistoryModalBtn = document.getElementById("close-history-modal-btn");
+    const closeHistoryBtn2 = document.getElementById("close-history-btn2");
+
+    const editModal = document.getElementById("edit-modal");
+    const editForm = document.getElementById("edit-form");
+    const closeEditModalBtn = document.getElementById("close-edit-modal-btn");
+    const cancelEditBtn = document.getElementById("cancel-edit-btn");
+    const exportCsvBtn = document.getElementById("export-csv-btn");
+
+    let currentUser = null;
+    let currentRole = null;
+    let allMemberships = [];
+    let currentFilter = "all";
+    let searchQuery = "";
+    let unsubscribeAll = null;
+
+    // Google Login Handler
+    googleLoginBtn?.addEventListener("click", async () => {
+      try {
+        if (authErrorBanner) authErrorBanner.classList.add("hidden");
+        await loginWithCollegeGoogle();
+      } catch (err) {
+        if (authErrorBanner) {
+          authErrorBanner.textContent = "⚠️ " + (err.message || "Login failed");
+          authErrorBanner.classList.remove("hidden");
+        }
+      }
+    });
+
+    const handleSignOut = async () => {
+      if (unsubscribeAll) unsubscribeAll();
+      await signOut(auth);
+    };
+
+    signoutDashboardBtn?.addEventListener("click", handleSignOut);
+    unauthSignoutBtn?.addEventListener("click", handleSignOut);
+
+    // Auth State Persistent Observer
+    onAuthStateChanged(auth, (user) => {
+      currentUser = user;
+      if (unsubscribeAll) {
+        unsubscribeAll();
+        unsubscribeAll = null;
+      }
+
+      if (!user) {
+        authGateView?.classList.remove("hidden");
+        unauthorizedView?.classList.add("hidden");
+        dashboardView?.classList.add("hidden");
+        return;
+      }
+
+      const roleInfo = getExecomRole(user);
+      currentRole = roleInfo;
+
+      if (!roleInfo) {
+        // Unauthorized
+        const unauthEmail = document.getElementById("unauth-email");
+        if (unauthEmail) unauthEmail.textContent = user.email;
+        authGateView?.classList.add("hidden");
+        unauthorizedView?.classList.remove("hidden");
+        dashboardView?.classList.add("hidden");
+        return;
+      }
+
+      // Authorized Execom Officer (Webmaster or Treasurer)
+      authGateView?.classList.add("hidden");
+      unauthorizedView?.classList.add("hidden");
+      dashboardView?.classList.remove("hidden");
+
+      if (officerName) officerName.textContent = user.displayName || roleInfo.name;
+      if (officerEmail) officerEmail.textContent = user.email;
+      if (officerRoleBadge) {
+        officerRoleBadge.textContent = roleInfo.label;
+        if (roleInfo.role === "treasurer") {
+          officerRoleBadge.className = "px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/40";
+        } else {
+          officerRoleBadge.className = "px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold uppercase tracking-wider bg-purple-500/20 text-purple-300 border border-purple-500/40";
+        }
+      }
+
+      if (user.photoURL && officerPhoto) {
+        officerPhoto.src = user.photoURL;
+        officerPhoto.classList.remove("hidden");
+        if (officerFallback) officerFallback.classList.add("hidden");
+      } else if (officerFallback) {
+        officerFallback.textContent = (user.displayName || user.email).charAt(0).toUpperCase();
+      }
+
+      if (roleInfo.role === "webmaster") {
+        webmasterTools?.classList.remove("hidden");
+      } else {
+        webmasterTools?.classList.add("hidden");
+      }
+
+      // Listen in real-time to all registrations
+      unsubscribeAll = listenToAllMemberships((memberships) => {
+        allMemberships = memberships;
+        updateStatistics();
+        renderRecordsList();
+      });
+    });
+
+    // Update Live Statistics Counter
+    function updateStatistics() {
+      const total = allMemberships.length;
+      const verified = allMemberships.filter(m => m.status === "Verified").length;
+      const pending = allMemberships.filter(m => !m.status || m.status === "Pending Verification").length;
+      const rejected = allMemberships.filter(m => m.status === "Rejected").length;
+      const revenue = verified * 200;
+
+      if (statTotal) statTotal.textContent = total;
+      if (statVerified) statVerified.textContent = verified;
+      if (statPending) statPending.textContent = pending;
+      if (statRejected) statRejected.textContent = rejected;
+      if (statRevenue) statRevenue.textContent = `₹${revenue.toLocaleString("en-IN")}`;
+
+      if (tabCountAll) tabCountAll.textContent = total;
+      if (tabCountPending) tabCountPending.textContent = pending;
+      if (tabCountVerified) tabCountVerified.textContent = verified;
+      if (tabCountRejected) tabCountRejected.textContent = rejected;
+    }
+
+    // Filter Tabs Handler
+    filterTabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        filterTabs.forEach(t => t.classList.remove("active"));
+        tab.classList.add("active");
+        currentFilter = tab.getAttribute("data-filter") || "all";
+        renderRecordsList();
+      });
+    });
+
+    // Search Input Handler
+    searchInput?.addEventListener("input", (e) => {
+      searchQuery = e.target.value.toLowerCase().trim();
+      renderRecordsList();
+    });
+
+    // Render Records List
+    function renderRecordsList() {
+      if (!recordsContainer) return;
+
+      let filtered = allMemberships.filter((m) => {
+        if (currentFilter === "verified") return m.status === "Verified";
+        if (currentFilter === "pending") return !m.status || m.status === "Pending Verification";
+        if (currentFilter === "rejected") return m.status === "Rejected";
+        return true;
+      });
+
+      if (searchQuery) {
+        filtered = filtered.filter((m) => {
+          return (
+            (m.fullName || "").toLowerCase().includes(searchQuery) ||
+            (m.email || "").toLowerCase().includes(searchQuery) ||
+            (m.phone || "").toLowerCase().includes(searchQuery) ||
+            (m.txnId || "").toLowerCase().includes(searchQuery) ||
+            (m.course || "").toLowerCase().includes(searchQuery) ||
+            (m.department || "").toLowerCase().includes(searchQuery) ||
+            (m.membershipId || "").toLowerCase().includes(searchQuery)
+          );
+        });
+      }
+
+      if (filtered.length === 0) {
+        recordsContainer.innerHTML = `
+          <div class="p-8 text-center text-gray-400 text-xs bg-[#131124] rounded-xl border border-[#2A2455]">
+            No registration records found matching the active filter or search query.
+          </div>
+        `;
+        return;
+      }
+
+      const isWebmaster = currentRole?.role === "webmaster";
+
+      recordsContainer.innerHTML = filtered.map((m) => {
+        const isVerified = m.status === "Verified";
+        const isRejected = m.status === "Rejected";
+        const isPending = !isVerified && !isRejected;
+
+        let statusBadgeClass = "bg-amber-500/15 text-amber-300 border-amber-500/40";
+        let statusText = "Pending Verification";
+        if (isVerified) {
+          statusBadgeClass = "bg-emerald-500/15 text-emerald-400 border-emerald-500/40";
+          statusText = "Verified Active";
+        } else if (isRejected) {
+          statusBadgeClass = "bg-rose-500/15 text-rose-400 border-rose-500/40";
+          statusText = "Rejected";
+        }
+
+        const dateStr = m.submittedAt ? new Date(m.submittedAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", hour: "2-digit", minute: "2-digit" }) : "-";
+        
+        // Audit information
+        let auditBadge = "";
+        if (m.lastUpdatedBy) {
+          const roleColor = m.lastUpdatedByRole === "Treasurer" ? "text-emerald-400" : "text-purple-400";
+          auditBadge = `
+            <div class="mt-2 text-[11px] bg-[#0A0B14] p-2 rounded-lg border border-[#2A2455] flex items-center justify-between gap-2 flex-wrap">
+              <span class="text-gray-400 truncate">
+                Status updated by: <strong class="${roleColor}">${m.lastUpdatedBy} (${m.lastUpdatedByRole || 'Execom'})</strong>
+              </span>
+              <button data-history-id="${m.id}" class="view-history-btn text-[10px] text-[#B8A7FF] hover:text-white underline cursor-pointer">
+                View Log (${(m.statusHistory || []).length})
+              </button>
+            </div>
+          `;
+        }
+
+        const memId = m.membershipId || (isVerified ? `ACM-AJCE-${m.id.slice(0, 5).toUpperCase()}` : "");
+
+        return `
+          <div class="bg-[#131124] border border-[#2A2455] rounded-xl p-4 sm:p-5 transition-all hover:border-[#4D4770] flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+            
+            <!-- Left Info Block -->
+            <div class="space-y-2 min-w-0 flex-1">
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider border ${statusBadgeClass}">
+                  ${statusText}
+                </span>
+
+                ${memId ? `
+                  <span class="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold text-[#00FFC2] bg-[#00FFC2]/10 border border-[#00FFC2]/30">
+                    ID: ${memId}
+                  </span>
+                ` : ""}
+
+                <span class="text-[11px] text-gray-400 font-mono">
+                  Submitted: ${dateStr}
+                </span>
+              </div>
+
+              <div>
+                <h3 class="text-base font-bold text-white truncate">${m.fullName || "Unnamed Student"}</h3>
+                <p class="text-xs text-gray-300 font-mono flex items-center gap-2 flex-wrap mt-0.5">
+                  <span>${m.email || "-"}</span>
+                  <span>•</span>
+                  <span>${m.course || ""} ${m.semester || ""} (${m.department || ""})</span>
+                </p>
+              </div>
+
+              <div class="flex items-center gap-4 text-xs text-gray-300 flex-wrap pt-1">
+                <div class="flex items-center gap-1.5 font-mono">
+                  <span class="text-gray-400">Phone:</span>
+                  <a href="https://wa.me/91${m.phone}" target="_blank" class="text-emerald-400 hover:underline font-semibold flex items-center gap-1">
+                    ${m.phone || "-"} 💬
+                  </a>
+                </div>
+
+                <div class="flex items-center gap-1.5 font-mono">
+                  <span class="text-gray-400">UTR / Ref:</span>
+                  <span class="text-amber-300 font-bold bg-[#0A0B14] px-1.5 py-0.5 rounded border border-[#2A2455] select-all">
+                    ${m.txnId || "-"}
+                  </span>
+                </div>
+              </div>
+
+              ${auditBadge}
+            </div>
+
+            <!-- Right Screenshot & Action Controls -->
+            <div class="flex flex-col sm:flex-row md:flex-col lg:flex-row items-stretch sm:items-center md:items-stretch lg:items-center gap-3 pt-3 md:pt-0 border-t md:border-t-0 border-[#2A2455]">
+              
+              <!-- Screenshot Thumbnail -->
+              ${m.screenshotUrl ? `
+                <button 
+                  data-screenshot="${m.screenshotUrl}" 
+                  data-name="${m.fullName || ''}" 
+                  data-utr="${m.txnId || ''}" 
+                  type="button" 
+                  class="preview-screenshot-btn flex-shrink-0 w-16 h-16 rounded-lg bg-[#0A0B14] border border-[#2A2455] hover:border-[#6A5ACD] overflow-hidden group cursor-pointer relative"
+                  title="Click to view payment proof screenshot"
+                >
+                  <img src="${m.screenshotUrl}" alt="Proof" class="w-full h-full object-cover group-hover:scale-110 transition-transform" />
+                  <span class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-[10px] text-white font-bold">
+                    View
+                  </span>
+                </button>
+              ` : `
+                <div class="w-16 h-16 rounded-lg bg-[#0A0B14] border border-dashed border-gray-600 flex items-center justify-center text-[10px] text-gray-500 text-center p-1">
+                  No Proof
+                </div>
+              `}
+
+              <!-- Status Action Buttons (Accessible to both Webmaster & Treasurer) -->
+              <div class="flex flex-col gap-1.5 min-w-[140px]">
+                ${!isVerified ? `
+                  <button 
+                    data-action="verify" 
+                    data-uid="${m.id}" 
+                    type="button" 
+                    class="action-btn py-1.5 px-3 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-all shadow-md cursor-pointer flex items-center justify-center gap-1"
+                  >
+                    <span>✓</span> Approve & Verify
+                  </button>
+                ` : `
+                  <button 
+                    data-action="pending" 
+                    data-uid="${m.id}" 
+                    type="button" 
+                    class="action-btn py-1 px-3 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-semibold transition-all cursor-pointer flex items-center justify-center gap-1"
+                  >
+                    <span>↺</span> Mark Pending
+                  </button>
+                `}
+
+                ${!isRejected ? `
+                  <button 
+                    data-action="reject" 
+                    data-uid="${m.id}" 
+                    type="button" 
+                    class="action-btn py-1 px-3 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/40 text-xs font-semibold transition-all cursor-pointer flex items-center justify-center gap-1"
+                  >
+                    <span>✕</span> Reject Request
+                  </button>
+                ` : ""}
+
+                <!-- Webmaster Only Buttons -->
+                ${isWebmaster ? `
+                  <div class="flex items-center gap-1.5 pt-1">
+                    <button 
+                      data-edit-id="${m.id}" 
+                      type="button" 
+                      class="edit-btn flex-1 py-1 px-2 rounded bg-[#2A2455] hover:bg-[#3D3575] text-purple-300 text-[11px] font-semibold transition-colors cursor-pointer text-center"
+                    >
+                      ✎ Edit
+                    </button>
+                    <button 
+                      data-delete-id="${m.id}" 
+                      type="button" 
+                      class="delete-btn py-1 px-2 rounded bg-rose-950/40 hover:bg-rose-900/60 text-rose-400 text-[11px] font-semibold transition-colors cursor-pointer text-center border border-rose-500/30"
+                      title="Delete registration (Webmaster only)"
+                    >
+                      🗑
+                    </button>
+                  </div>
+                ` : `
+                  <span class="text-[10px] text-gray-500 text-center font-mono pt-1">
+                    Treasurer: Approval Access
+                  </span>
+                `}
+              </div>
+
+            </div>
+
+          </div>
+        `;
+      }).join("");
+
+      attachEventListeners();
+    }
+
+    // Attach Event Listeners to dynamic action buttons
+    function attachEventListeners() {
+      // 1. Screenshot Preview Buttons
+      document.querySelectorAll(".preview-screenshot-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const url = btn.getAttribute("data-screenshot");
+          const name = btn.getAttribute("data-name");
+          const utr = btn.getAttribute("data-utr");
+
+          if (modalImg) modalImg.src = url;
+          if (modalStudentName) modalStudentName.textContent = name;
+          if (modalUtr) modalUtr.textContent = `UTR: ${utr}`;
+          if (modalOpenLink) modalOpenLink.href = url;
+          screenshotModal?.classList.remove("hidden");
+        });
+      });
+
+      // 2. Status Action Buttons (Approve / Reject / Mark Pending)
+      document.querySelectorAll(".action-btn").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+          const action = btn.getAttribute("data-action");
+          const uid = btn.getAttribute("data-uid");
+          if (!uid || !currentRole) return;
+
+          btn.disabled = true;
+          const originalText = btn.innerHTML;
+          btn.innerHTML = `<span class="animate-pulse">Updating...</span>`;
+
+          try {
+            if (action === "verify") {
+              await updateMembershipStatus(uid, "Verified", {
+                name: currentUser.displayName || currentRole.name,
+                email: currentUser.email,
+                role: currentRole.role
+              }, "Approved via Execom Dashboard");
+            } else if (action === "reject") {
+              const reason = prompt("Enter reason for rejection (optional):", "Payment transaction could not be verified.") || "";
+              await updateMembershipStatus(uid, "Rejected", {
+                name: currentUser.displayName || currentRole.name,
+                email: currentUser.email,
+                role: currentRole.role
+              }, reason);
+            } else if (action === "pending") {
+              await updateMembershipStatus(uid, "Pending Verification", {
+                name: currentUser.displayName || currentRole.name,
+                email: currentUser.email,
+                role: currentRole.role
+              }, "Status reverted to Pending");
+            }
+          } catch (err) {
+            alert("Failed to update status: " + err.message);
+            btn.disabled = false;
+            btn.innerHTML = originalText;
+          }
+        });
+      });
+
+      // 3. View Audit History Buttons
+      document.querySelectorAll(".view-history-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-history-id");
+          const record = allMemberships.find(m => m.id === id);
+          if (!record || !historyModal) return;
+
+          if (historyStudentName) historyStudentName.textContent = `${record.fullName} (${record.email || ''})`;
+
+          const history = Array.isArray(record.statusHistory) ? record.statusHistory : [];
+          if (history.length === 0) {
+            historyList.innerHTML = `<p class="text-xs text-gray-400 p-4 text-center">No previous status history records recorded yet.</p>`;
+          } else {
+            historyList.innerHTML = history.slice().reverse().map((h) => {
+              const dt = h.timestamp ? new Date(h.timestamp).toLocaleString() : "-";
+              const roleColor = h.updatedByRole === "Treasurer" ? "text-emerald-300" : "text-purple-300";
+              return `
+                <div class="p-3 bg-[#131124] rounded-xl border border-[#2A2455] text-xs space-y-1">
+                  <div class="flex items-center justify-between gap-2">
+                    <span class="font-bold text-white">Status: <span class="font-mono text-amber-300">${h.status}</span></span>
+                    <span class="text-[10px] text-gray-400 font-mono">${dt}</span>
+                  </div>
+                  <p class="text-gray-300 text-[11px]">
+                    Action by: <strong class="${roleColor}">${h.updatedBy || 'Execom'} (${h.updatedByRole || 'Officer'})</strong>
+                  </p>
+                  ${h.note ? `<p class="text-gray-400 text-[11px] italic">Note: "${h.note}"</p>` : ""}
+                </div>
+              `;
+            }).join("");
+          }
+
+          historyModal.classList.remove("hidden");
+        });
+      });
+
+      // 4. Webmaster Edit Button
+      document.querySelectorAll(".edit-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-edit-id");
+          const record = allMemberships.find(m => m.id === id);
+          if (!record || !editModal) return;
+
+          document.getElementById("edit-uid").value = id;
+          document.getElementById("edit-fullName").value = record.fullName || "";
+          document.getElementById("edit-course").value = record.course || "";
+          document.getElementById("edit-semester").value = record.semester || "";
+          document.getElementById("edit-department").value = record.department || "";
+          document.getElementById("edit-phone").value = record.phone || "";
+          document.getElementById("edit-txnId").value = record.txnId || "";
+
+          editModal.classList.remove("hidden");
+        });
+      });
+
+      // 5. Webmaster Delete Button
+      document.querySelectorAll(".delete-btn").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+          const id = btn.getAttribute("data-delete-id");
+          const record = allMemberships.find(m => m.id === id);
+          if (!record) return;
+
+          if (confirm(`Are you sure you want to PERMANENTLY DELETE the membership registration for "${record.fullName}" (${record.email})?\n\nThis cannot be undone.`)) {
+            try {
+              await deleteMembershipRecord(id, currentRole);
+            } catch (err) {
+              alert("Delete error: " + err.message);
+            }
+          }
+        });
+      });
+    }
+
+    // Modal Close Listeners
+    closeModalBtn?.addEventListener("click", () => screenshotModal?.classList.add("hidden"));
+    screenshotModal?.addEventListener("click", (e) => {
+      if (e.target === screenshotModal) screenshotModal.classList.add("hidden");
+    });
+
+    closeHistoryModalBtn?.addEventListener("click", () => historyModal?.classList.add("hidden"));
+    closeHistoryBtn2?.addEventListener("click", () => historyModal?.classList.add("hidden"));
+    historyModal?.addEventListener("click", (e) => {
+      if (e.target === historyModal) historyModal.classList.add("hidden");
+    });
+
+    closeEditModalBtn?.addEventListener("click", () => editModal?.classList.add("hidden"));
+    cancelEditBtn?.addEventListener("click", () => editModal?.classList.add("hidden"));
+
+    // Edit Form Submit (Webmaster Only)
+    editForm?.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (!currentRole || currentRole.role !== "webmaster") return alert("Unauthorized.");
+
+      const uid = document.getElementById("edit-uid").value;
+      const fullName = document.getElementById("edit-fullName").value.trim();
+      const course = document.getElementById("edit-course").value.trim();
+      const semester = document.getElementById("edit-semester").value.trim();
+      const department = document.getElementById("edit-department").value.trim();
+      const phone = document.getElementById("edit-phone").value.trim();
+      const txnId = document.getElementById("edit-txnId").value.trim();
+
+      try {
+        await updateMembershipDetails(uid, {
+          fullName,
+          course,
+          semester,
+          department,
+          phone,
+          txnId
+        }, currentRole);
+        editModal?.classList.add("hidden");
+      } catch (err) {
+        alert("Failed to save changes: " + err.message);
+      }
+    });
+
+    // Webmaster CSV Export
+    exportCsvBtn?.addEventListener("click", () => {
+      if (allMemberships.length === 0) return alert("No membership data to export.");
+
+      const headers = ["Full Name", "Email", "Course", "Semester", "Department", "Phone", "Transaction ID / UTR", "Status", "Membership ID", "Submitted At", "Verified At", "Last Updated By", "Last Updated Role"];
+      
+      const rows = allMemberships.map(m => [
+        `"${(m.fullName || '').replace(/"/g, '""')}"`,
+        `"${(m.email || '').replace(/"/g, '""')}"`,
+        `"${(m.course || '').replace(/"/g, '""')}"`,
+        `"${(m.semester || '').replace(/"/g, '""')}"`,
+        `"${(m.department || '').replace(/"/g, '""')}"`,
+        `"${(m.phone || '').replace(/"/g, '""')}"`,
+        `"${(m.txnId || '').replace(/"/g, '""')}"`,
+        `"${(m.status || 'Pending Verification').replace(/"/g, '""')}"`,
+        `"${(m.membershipId || '').replace(/"/g, '""')}"`,
+        `"${(m.submittedAt || '').replace(/"/g, '""')}"`,
+        `"${(m.verifiedAt || '').replace(/"/g, '""')}"`,
+        `"${(m.lastUpdatedBy || '').replace(/"/g, '""')}"`,
+        `"${(m.lastUpdatedByRole || '').replace(/"/g, '""')}"`
+      ]);
+
+      const csvContent = "data:text/csv;charset=utf-8," + [headers.join(","), ...rows.map(r => r.join(","))].join("\n");
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", `ACM_AJCE_Memberships_${new Date().toISOString().slice(0, 10)}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+
+  });
+</script>

@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
+Disallow: /execom
+Disallow: /admin
+Disallow: /api/
 
 Sitemap: https://ajce.acm.org/sitemap.xml
