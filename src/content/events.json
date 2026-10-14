@@ -8,7 +8,10 @@
     "/events/uxplore.jpg",
     "/events/flutter.jpg",
     "/events/quizz.jpg",
-    "/events/cyber1.jpg"
+    "/events/cyber1.jpg",
+    "/events/Militia-Mayhem-Tournament.png",
+    "/events/GitStarted_ Git & GitHub Workshop.png",
+    "/events/INFERA-Blender-&-3D-Workshop.png"
   ],
   "info": [
     { "key": "Pen", "title": "CodePen", "site": "https://codepen.io/wodniack", "description": "A showcase of creative code snippets and experiments." },
@@ -20,6 +23,9 @@
     { "key": "Event6", "title": "UXplore", "site": "https://ajce.acm.org", "description": "An immersive event diving deep into UX research, design thinking, and prototyping techniques." },
     { "key": "Event7", "title": "Flutter Workshop", "site": "https://ajce.acm.org", "description": "Build beautiful cross-platform apps with Flutter — a beginner-friendly hands-on coding workshop." },
     { "key": "Event8", "title": "Quiz", "site": "https://ajce.acm.org", "description": "A fast-paced technical quiz covering computer science fundamentals, programming, and general tech." },
-    { "key": "Event9", "title": "Cyber Security", "site": "https://ajce.acm.org", "description": "An awareness and challenge event exploring real-world cybersecurity threats, tools, and defenses." }
+    { "key": "Event9", "title": "Cyber Security", "site": "https://ajce.acm.org", "description": "An awareness and challenge event exploring real-world cybersecurity threats, tools, and defenses." },
+    { "key": "Event10", "title": "Militia Mayhem Tournament", "site": "https://ajce.acm.org", "description": "An intense competitive gaming tournament — Militia Mayhem brings together the best players for an epic battle of skill and strategy." },
+    { "key": "Event11", "title": "GitStarted: Git & GitHub Workshop", "site": "https://ajce.acm.org", "description": "A beginner-friendly hands-on workshop covering Git version control and GitHub collaboration workflows for modern software development." },
+    { "key": "Event12", "title": "INFERA: Blender & 3D Workshop", "site": "https://e.ajce.in/hbybf4", "description": "Dive into the world of 3D design and animation with Blender — a comprehensive workshop for aspiring 3D artists and designers." }
   ]
 }

@@ -91,11 +91,13 @@ const worksHeightMobile = works.length * 45 * EVENT_SECTION_SCROLL_MULTIPLIER;
       <div class="s__scene js-scene">
         {
           works.map((work, index) => {
+            const hasExternalLink = work.site && work.site !== 'https://ajce.acm.org';
             return (
               <a-work
-                class="s__scene__work s__scene__work--video js-work"
+                class={`s__scene__work s__scene__work--video js-work${hasExternalLink ? ' has-link' : ''}`}
                 progress="1"
                 style="--progress: 1;"
+                data-site={hasExternalLink ? work.site : undefined}
               >
                 <div class="a__inner">
                   <div class="a__link">
@@ -111,6 +113,9 @@ const worksHeightMobile = works.length * 45 * EVENT_SECTION_SCROLL_MULTIPLIER;
 
                     <div class="a__caption">
                       <div class="a__caption__text">{work.caption}</div>
+                      {hasExternalLink && (
+                        <div class="a__caption__cta">Register →</div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -241,6 +246,14 @@ const worksHeightMobile = works.length * 45 * EVENT_SECTION_SCROLL_MULTIPLIER;
     connectedCallback() {
       this.video = this.querySelector(".js-video")!;
       this.isPlaying = false;
+      // Open external registration link when card is clicked
+      const site = this.dataset.site;
+      if (site) {
+        this.addEventListener("click", () => {
+          window.open(site, "_blank", "noopener,noreferrer");
+        });
+        this.style.cursor = "pointer";
+      }
     }
 
     attributeChangedCallback(
@@ -1708,6 +1721,7 @@ const worksHeightMobile = works.length * 45 * EVENT_SECTION_SCROLL_MULTIPLIER;
       flex-direction: row;
       align-items: center;
       justify-content: flex-start;
+      gap: 0.5rem;
       padding: 0.4rem 0.25rem 0.3rem;
       color: var(--color-primary);
       font: 700 10px / 1 var(--font-family-fraktion);
@@ -1719,6 +1733,24 @@ const worksHeightMobile = works.length * 45 * EVENT_SECTION_SCROLL_MULTIPLIER;
         padding: 0.25rem 0.2rem 0.2rem;
         font-size: 8px;
         letter-spacing: 0.08em;
+      }
+
+      .a__caption__cta {
+        margin-left: auto;
+        padding: 0.2rem 0.5rem;
+        border: 1px solid var(--color-primary);
+        border-radius: 0.25rem;
+        font: 700 9px / 1 var(--font-family-fraktion);
+        letter-spacing: 0.1em;
+        color: var(--color-primary);
+        opacity: 0.85;
+        white-space: nowrap;
+
+        @media only screen and (max-width: 767px) and (orientation: landscape),
+          only screen and (max-width: 576px) {
+          font-size: 7px;
+          padding: 0.15rem 0.35rem;
+        }
       }
     }
   }
