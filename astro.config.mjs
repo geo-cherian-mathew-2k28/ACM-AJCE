@@ -8,6 +8,7 @@ const cdnUrl = process.env.PUBLIC_CDN_URL?.replace(/\/$/, "");
 
 export default defineConfig({
     site: 'https://ajce.acm.org',
+    trailingSlash: 'never',
     output: 'server',
     adapter: vercel({
         runtime: 'nodejs20.x'

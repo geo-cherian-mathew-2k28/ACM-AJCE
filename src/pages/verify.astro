@@ -5,18 +5,84 @@ import { getAssetUrl } from "../utils/cdn";
 
 <MembershipLayout title="ACM AJCE Official Verification Portal">
   <div class="min-h-[85vh] flex items-center justify-center py-10 px-4">
-    <div class="w-full max-w-lg mx-auto relative">
+    <div class="w-full max-w-xl mx-auto relative">
       <!-- Ambient Glow Behind Card -->
       <div class="absolute -top-10 -left-10 w-72 h-72 bg-[#B8A7FF]/15 rounded-full blur-3xl pointer-events-none"></div>
       <div class="absolute -bottom-10 -right-10 w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
-      <!-- Loading State -->
-      <div id="loading-state" class="relative z-10 rounded-3xl bg-[#0A0B14] border border-white/10 p-10 text-center space-y-4 shadow-2xl">
+      <!-- State 0: Default Portal Information (Shown when crawling or visiting directly) -->
+      <div id="portal-info-state" class="relative z-10 rounded-3xl bg-gradient-to-b from-[#131528] via-[#0A0B14] to-[#05060B] border border-[#B8A7FF]/30 p-6 sm:p-8 text-center space-y-6 shadow-[0_20px_50px_rgba(0,0,0,0.8)] backdrop-blur-xl">
+        <div class="flex flex-col items-center gap-3">
+          <div class="w-16 h-16 rounded-2xl bg-[#B8A7FF]/15 border border-[#B8A7FF]/40 text-[#B8A7FF] flex items-center justify-center shadow-[0_0_25px_rgba(184,167,255,0.25)]">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+            </svg>
+          </div>
+
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#B8A7FF]/10 border border-[#B8A7FF]/30 text-[10px] uppercase font-mono font-bold tracking-widest text-[#B8A7FF]">
+            OFFICIAL SECURITY INFRASTRUCTURE
+          </span>
+
+          <div class="mt-1">
+            <h1 class="text-2xl sm:text-3xl font-extrabold text-white uppercase tracking-tight font-['PolySans_Trial']">
+              Credential Verification
+            </h1>
+            <p class="text-xs text-gray-300 mt-2 max-w-md mx-auto leading-relaxed">
+              Verify the digital authenticity of ACM AJCE Student Chapter membership cards, executive appointments, and official event certificates.
+            </p>
+          </div>
+        </div>
+
+        <!-- Verification Guidance Grid -->
+        <div class="rounded-2xl bg-[#070810]/90 border border-white/10 p-5 text-left space-y-4 font-sans text-xs text-gray-300">
+          <div class="flex items-start gap-3">
+            <span class="w-6 h-6 rounded-full bg-[#B8A7FF]/20 text-[#B8A7FF] flex items-center justify-center font-bold text-xs flex-shrink-0">1</span>
+            <div>
+              <p class="font-semibold text-white">QR Code Scan</p>
+              <p class="text-gray-400 text-[11px] mt-0.5">Scan the QR code on any digital member pass or printed certificate to verify authenticity in real time.</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3">
+            <span class="w-6 h-6 rounded-full bg-[#B8A7FF]/20 text-[#B8A7FF] flex items-center justify-center font-bold text-xs flex-shrink-0">2</span>
+            <div>
+              <p class="font-semibold text-white">Cryptographic HMAC Protection</p>
+              <p class="text-gray-400 text-[11px] mt-0.5">Every credential carries a tamper-proof SHA-256 digital signature validated against the chapter registry.</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3">
+            <span class="w-6 h-6 rounded-full bg-[#B8A7FF]/20 text-[#B8A7FF] flex items-center justify-center font-bold text-xs flex-shrink-0">3</span>
+            <div>
+              <p class="font-semibold text-white">Authoritative Issuance</p>
+              <p class="text-gray-400 text-[11px] mt-0.5">Credentials are exclusively issued to active members of ACM AJCE under ACM India and Amal Jyothi College of Engineering.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+          <a
+            href="/membership"
+            class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-[#B8A7FF] hover:bg-white text-[#0A0B14] font-bold text-xs tracking-wide transition-all shadow-lg"
+          >
+            Access Membership Portal
+          </a>
+          <a
+            href="/"
+            class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/15 text-white font-medium text-xs tracking-wide transition-all"
+          >
+            Return to Chapter Home
+          </a>
+        </div>
+      </div>
+
+      <!-- State 1: Loading State (Shown only when UID & Token are provided in URL) -->
+      <div id="loading-state" class="hidden relative z-10 rounded-3xl bg-[#0A0B14] border border-white/10 p-10 text-center space-y-4 shadow-2xl">
         <div class="w-12 h-12 border-3 border-[#B8A7FF] border-t-transparent rounded-full animate-spin mx-auto"></div>
         <p class="text-xs text-gray-300 font-mono tracking-wider uppercase">Authenticating Digital Security Certificate...</p>
       </div>
 
-      <!-- Verified Valid Membership Certificate State -->
+      <!-- State 2: Verified Valid Membership Certificate State -->
       <div id="valid-state" class="hidden relative z-10 rounded-3xl bg-gradient-to-b from-[#131528] via-[#0A0B14] to-[#05060B] border border-[#B8A7FF]/30 p-6 sm:p-8 text-center space-y-6 shadow-[0_20px_50px_rgba(0,0,0,0.8)] backdrop-blur-xl">
         
         <!-- Header Shield & Status Badge -->
@@ -44,7 +110,6 @@ import { getAssetUrl } from "../utils/cdn";
 
         <!-- Credential Details Grid -->
         <div class="rounded-2xl bg-[#070810]/90 border border-white/10 p-4 sm:p-5 text-left divide-y divide-white/10 space-y-3 font-sans">
-          
           <!-- Member Name -->
           <div class="pt-1 pb-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
             <span class="text-[10px] font-mono uppercase tracking-widest text-gray-400">Member Name</span>
@@ -93,7 +158,7 @@ import { getAssetUrl } from "../utils/cdn";
         </div>
       </div>
 
-      <!-- Invalid / Forged State -->
+      <!-- State 3: Invalid / Forged State -->
       <div id="invalid-state" class="hidden relative z-10 rounded-3xl bg-gradient-to-b from-[#1E0B12] via-[#0A0B14] to-[#05060B] border border-rose-500/30 p-8 text-center space-y-6 shadow-2xl">
         <div class="w-16 h-16 rounded-2xl bg-rose-500/15 border border-rose-500/40 text-rose-400 flex items-center justify-center mx-auto shadow-[0_0_25px_rgba(244,63,94,0.25)]">
           <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
@@ -125,6 +190,7 @@ import { getAssetUrl } from "../utils/cdn";
   import { doc, getDoc } from "firebase/firestore";
 
   document.addEventListener("DOMContentLoaded", async () => {
+    const portalInfoState = document.getElementById("portal-info-state");
     const loadingState = document.getElementById("loading-state");
     const validState = document.getElementById("valid-state");
     const invalidState = document.getElementById("invalid-state");
@@ -134,10 +200,17 @@ import { getAssetUrl } from "../utils/cdn";
     const token = urlParams.get("token");
 
     if (!uid || !token) {
+      // Direct visit or search engine crawler: keep rich info state visible
+      portalInfoState?.classList.remove("hidden");
       loadingState?.classList.add("hidden");
-      invalidState?.classList.remove("hidden");
+      validState?.classList.add("hidden");
+      invalidState?.classList.add("hidden");
       return;
     }
+
+    // A specific credential was submitted: hide info state and show loader
+    portalInfoState?.classList.add("hidden");
+    loadingState?.classList.remove("hidden");
 
     // Verify SHA-256 HMAC Signature
     const secretKey = "ACM_AJCE_EXECUTIVE_SECRET_KEY_2026";
@@ -163,18 +236,12 @@ import { getAssetUrl } from "../utils/cdn";
       if (snap.exists() && snap.data().status === "Verified") {
         const data = snap.data();
 
-        document.getElementById("v-name").textContent = data.fullName || "Chapter Member";
-        document.getElementById("v-memid").textContent = data.membershipId || `ACM-AJCE-${uid.slice(0, 5).toUpperCase()}`;
+        document.getElementById("v-name").textContent = data.name || "Member";
+        document.getElementById("v-memid").textContent = data.membershipId || uid;
         document.getElementById("v-email").textContent = data.email || "-";
-        document.getElementById("v-course").textContent = `${data.course || ''} (${data.semester || ''})`;
-
-        const verifiedDate = data.verifiedAt ? new Date(data.verifiedAt) : (data.submittedAt ? new Date(data.submittedAt) : new Date());
-        const nextYearDate = new Date(verifiedDate);
-        nextYearDate.setFullYear(verifiedDate.getFullYear() + 1);
-
-        const formatDate = (d) => d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
-        document.getElementById("v-validity").textContent = `${formatDate(verifiedDate)} – ${formatDate(nextYearDate)}`;
-        document.getElementById("v-signature").textContent = `SIG-2026-${token}`;
+        document.getElementById("v-course").textContent = `${data.department || ""} ${data.semester || ""}`.trim() || "-";
+        document.getElementById("v-validity").textContent = (data.validTill || "2026-2027") + " (Active)";
+        document.getElementById("v-signature").textContent = token;
 
         loadingState?.classList.add("hidden");
         validState?.classList.remove("hidden");
@@ -183,7 +250,7 @@ import { getAssetUrl } from "../utils/cdn";
         invalidState?.classList.remove("hidden");
       }
     } catch (err) {
-      console.error("Verification query error:", err);
+      console.error("Verification error:", err);
       loadingState?.classList.add("hidden");
       invalidState?.classList.remove("hidden");
     }

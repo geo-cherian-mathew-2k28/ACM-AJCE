@@ -7,6 +7,10 @@ type Props = {
 };
 
 const { title = "ACM AJCE Membership", signedIn = false } = Astro.props;
+
+const siteUrl = "https://ajce.acm.org";
+const rawPath = Astro.url.pathname.replace(/\/index\.html$/, "").replace(/\/+$/, "");
+const canonicalUrl = rawPath ? `${siteUrl}${rawPath}` : `${siteUrl}/`;
 ---
 
 <!doctype html>
@@ -46,8 +50,7 @@ const { title = "ACM AJCE Membership", signedIn = false } = Astro.props;
     <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
     <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
     <meta name="google-site-verification" content="googleb4ab39526a015599" />
-    <meta name="google-site-verification" content="googleb4ab39526a015599.html" />
-    <link rel="canonical" href={new URL(Astro.url.pathname, "https://ajce.acm.org").toString()} />
+    <link rel="canonical" href={canonicalUrl} />
 
     <!-- Web App Manifest -->
     <link rel="manifest" href="https://ajce.acm.org/manifest.webmanifest" />
@@ -63,7 +66,7 @@ const { title = "ACM AJCE Membership", signedIn = false } = Astro.props;
     <!-- Open Graph / WhatsApp / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="ACM AJCE" />
-    <meta property="og:url" content={new URL(Astro.url.pathname, "https://ajce.acm.org").toString()} />
+    <meta property="og:url" content={canonicalUrl} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content="Official ACM AJCE Local Chapter Membership Portal at Amal Jyothi College of Engineering." />
     <meta property="og:image" content="https://ajce.acm.org/og-image.png" />

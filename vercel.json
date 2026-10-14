@@ -1,11 +1,144 @@
 {
+  "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/index.html",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/home",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/about",
+      "destination": "/#about",
+      "permanent": true
+    },
+    {
+      "source": "/events",
+      "destination": "/#events",
+      "permanent": true
+    },
+    {
+      "source": "/gallery",
+      "destination": "/#gallery",
+      "permanent": true
+    },
+    {
+      "source": "/contact",
+      "destination": "/#contact",
+      "permanent": true
+    },
+    {
+      "source": "/contact-us",
+      "destination": "/#contact",
+      "permanent": true
+    },
+    {
+      "source": "/contactus",
+      "destination": "/#contact",
+      "permanent": true
+    },
+    {
+      "source": "/team",
+      "destination": "/#team",
+      "permanent": true
+    },
+    {
+      "source": "/board",
+      "destination": "/#team",
+      "permanent": true
+    },
+    {
+      "source": "/acmw",
+      "destination": "/#acm-w",
+      "permanent": true
+    },
+    {
+      "source": "/acm-w",
+      "destination": "/#acm-w",
+      "permanent": true
+    },
+    {
+      "source": "/projects",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/projects/:path*",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/blogs",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/blogs/:path*",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/dashboard",
+      "destination": "/membership",
+      "permanent": true
+    },
+    {
+      "source": "/dashboard/:path*",
+      "destination": "/membership",
+      "permanent": true
+    },
+    {
+      "source": "/membership/admin",
+      "destination": "/membership",
+      "permanent": true
+    },
+    {
+      "source": "/membership/card",
+      "destination": "/membership",
+      "permanent": true
+    },
+    {
+      "source": "/members",
+      "destination": "/membership",
+      "permanent": true
+    },
+    {
+      "source": "/members/:path*",
+      "destination": "/membership",
+      "permanent": true
+    },
+    {
+      "source": "/code-of-conduct",
+      "destination": "/#conduct",
+      "permanent": true
+    },
+    {
+      "source": "/conduct",
+      "destination": "/#conduct",
+      "permanent": true
+    },
+    {
+      "source": "/partners",
+      "destination": "/#partners",
+      "permanent": true
+    },
+    {
+      "source": "/sponsors",
+      "destination": "/#partners",
+      "permanent": true
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",
       "headers": [
         {
           "key": "X-Robots-Tag",
-          "value": "all, index, follow"
+          "value": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
         },
         {
           "key": "X-Content-Type-Options",
