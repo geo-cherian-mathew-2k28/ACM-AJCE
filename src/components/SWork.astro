@@ -107,7 +107,7 @@ const worksHeightMobile = works.length * 45 * EVENT_SECTION_SCROLL_MULTIPLIER;
                       width="576"
                       height="353"
                       alt={work.caption}
-                      loading="lazy"
+                      loading={index < 4 ? "eager" : "lazy"}
                       decoding="async"
                     />
 
@@ -1624,6 +1624,16 @@ const worksHeightMobile = works.length * 45 * EVENT_SECTION_SCROLL_MULTIPLIER;
           z-index: 9;
           opacity: 1;
           pointer-events: none;
+
+          &.has-link {
+            pointer-events: auto;
+            cursor: pointer;
+
+            .a__link {
+              pointer-events: auto;
+              cursor: pointer;
+            }
+          }
         }
 
         @media only screen and (max-width: 987px) {
