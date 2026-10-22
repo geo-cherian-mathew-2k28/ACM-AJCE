@@ -3,6 +3,7 @@ export const cassetteImages = [
   "/events/GitStarted_ Git & GitHub Workshop.png",
   "/events/INFERA-Blender-&-3D-Workshop.png",
   "/events/game-development-workshop.png",
+  "/events/Neon-UI_UX-Workshop-Banner.png",
   "/events/invicta.jpg",
   "/events/valorant.jpg",
   "/events/game-workshop.jpg",
@@ -45,54 +46,60 @@ export const info = {
       "A hands-on game development workshop exploring the fundamentals of building interactive experiences, game mechanics, and digital design.",
   },
   Event5: {
+    title: "UI/UX Workshop: Design. Think. Create.",
+    site: "https://ajce.acm.org",
+    description:
+      "A hands-on 3-day workshop diving into user research, wireframing, design thinking, and modern interactive prototyping.",
+  },
+  Event6: {
     title: "Invicta",
     site: "https://ajce.acm.org",
     description:
       "A premier tech symposium and competition showcasing innovation, talent, and technical prowess.",
   },
-  Event6: {
+  Event7: {
     title: "Valorant Tournament",
     site: "https://ajce.acm.org",
     description:
       "An exciting gaming tournament bringing together competitive Valorant players for an intense showdown.",
   },
-  Event7: {
+  Event8: {
     title: "Game Workshop",
     site: "https://ajce.acm.org",
     description:
       "A hands-on game development workshop exploring the fundamentals of building interactive experiences.",
   },
-  Event8: {
+  Event9: {
     title: "AI Freedom Quiz",
     site: "https://ajce.acm.org",
     description:
       "A thought-provoking quiz exploring the ethics, opportunities, and challenges of Artificial Intelligence.",
   },
-  Event9: {
+  Event10: {
     title: "UI/UX Workshop",
     site: "https://ajce.acm.org",
     description:
       "A practical workshop on designing user-friendly interfaces and creating seamless digital experiences.",
   },
-  Event10: {
+  Event11: {
     title: "UXplore",
     site: "https://ajce.acm.org",
     description:
       "An immersive event diving deep into UX research, design thinking, and prototyping techniques.",
   },
-  Event11: {
+  Event12: {
     title: "Flutter Workshop",
     site: "https://ajce.acm.org",
     description:
       "Build beautiful cross-platform apps with Flutter — a beginner-friendly hands-on coding workshop.",
   },
-  Event12: {
+  Event13: {
     title: "Quiz",
     site: "https://ajce.acm.org",
     description:
       "A fast-paced technical quiz covering computer science fundamentals, programming, and general tech.",
   },
-  Event13: {
+  Event14: {
     title: "Cyber Security",
     site: "https://ajce.acm.org",
     description:
