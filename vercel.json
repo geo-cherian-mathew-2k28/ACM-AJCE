@@ -2,6 +2,17 @@
   "trailingSlash": false,
   "redirects": [
     {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "acm-ajce-website.vercel.app"
+        }
+      ],
+      "destination": "https://ajce.acm.org/$1",
+      "permanent": true
+    },
+    {
       "source": "/index.html",
       "destination": "/",
       "permanent": true
