@@ -3,6 +3,16 @@
 import { getAssetUrl } from "../utils/cdn";
 
 const galleryItems = [
+  // Glimpses of Workshop at Aithra Tech Fest 2026
+  { src: "/gallery/acm-ajce/Blender-workshop-1.JPG", title: "Blender 3D Lab", category: "3D Forge Workshops Aithra '26", tag: "Aithra '26" },
+  { src: "/gallery/acm-ajce/Blender-workshop-2.JPG", title: "Modeling Workspace", category: "3D Forge Workshops Aithra '26", tag: "Aithra '26" },
+  { src: "/gallery/acm-ajce/Blender-workshop-3.JPG", title: "INFERA 3D Session", category: "3D Forge Workshops Aithra '26", tag: "Aithra '26" },
+  { src: "/gallery/acm-ajce/Blender-workshop-4.JPG", title: "Interactive Guidance", category: "3D Forge Workshops Aithra '26", tag: "Aithra '26" },
+  { src: "/gallery/acm-ajce/Blender-workshop-5.JPG", title: "Active Participants", category: "3D Forge Workshops Aithra '26", tag: "Aithra '26" },
+  { src: "/gallery/acm-ajce/Blender-workshop-6.JPG", title: "3D Render Lab", category: "3D Forge Workshops Aithra '26", tag: "Aithra '26" },
+  { src: "/gallery/acm-ajce/github-workshop-1.jpg", title: "GitStarted Lab", category: "Workshops Aithra '26", tag: "Aithra '26" },
+  { src: "/gallery/acm-ajce/github-workshop-2.jpg", title: "GitHub Collab Session", category: "Workshops Aithra '26", tag: "Aithra '26" },
+  // Chapter Highlights
   { src: "/gallery/acm-ajce/workshop-lab.png", title: "Workshop Lab", category: "Workshops", tag: "Hands-on" },
   { src: "/gallery/acm-ajce/session-facilitator.jpg", title: "Learning Session", category: "Talks", tag: "Expert Talks" },
   { src: "/gallery/acm-ajce/workshop-audience.jpg", title: "Workshop Audience", category: "Workshops", tag: "Community" },
@@ -15,7 +25,7 @@ const galleryItems = [
   { src: "/gallery/acm-ajce/blender-forge.jpg", title: "Blender Forge", category: "3D Forge", tag: "Render" },
 ];
 
-const categories = ["ALL", "WORKSHOPS", "TALKS", "3D FORGE", "COMMUNITY"];
+const categories = ["ALL", "AITHRA '26", "WORKSHOPS", "3D FORGE", "TALKS", "COMMUNITY"];
 ---
 
 <section class="gallery-phone-section relative w-full overflow-hidden py-8 px-4 bg-[#05060B]">
@@ -90,7 +100,7 @@ const categories = ["ALL", "WORKSHOPS", "TALKS", "3D FORGE", "COMMUNITY"];
   <div class="rounded-2xl bg-gradient-to-r from-[#131525] via-[#0A0B14] to-[#131525] border border-[#B8A7FF]/20 p-4 flex items-center justify-between">
     <div class="flex flex-col">
       <span class="text-[10px] uppercase font-mono tracking-widest text-[#B8A7FF]">Total Captures</span>
-      <span class="text-lg font-bold text-[#FBFAFF] font-['PolySans_Trial']">10+ Event Memories</span>
+      <span class="text-lg font-bold text-[#FBFAFF] font-['PolySans_Trial']">{galleryItems.length}+ Event Memories</span>
     </div>
     <button
       type="button"
@@ -116,7 +126,7 @@ const categories = ["ALL", "WORKSHOPS", "TALKS", "3D FORGE", "COMMUNITY"];
   <div class="flex items-center justify-between w-full pt-2 px-1 relative z-20">
     <div class="flex flex-col">
       <span id="phone-lightbox-counter" class="text-[11px] font-mono uppercase tracking-widest text-[#B8A7FF]">
-        1 / 10
+        1 / {galleryItems.length}
       </span>
       <span id="phone-lightbox-cat" class="text-xs text-white/60 font-semibold uppercase tracking-wider">
         Workshops
