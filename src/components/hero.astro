@@ -16,9 +16,17 @@
     <canvas id="hero-particles" class="absolute inset-0 w-full h-full pointer-events-none z-0"></canvas>
     
     <div
-      class="max-w-[900px] text-white relative z-10 flex flex-col items-center justify-center mx-auto"
+      class="max-w-[950px] text-white relative z-10 flex flex-col items-center justify-center mx-auto"
       style="text-shadow: 0 4px 24px rgba(0, 0, 0, 0.85);"
     >
+      <!-- SEO & Brand Entity Badge -->
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/20 mb-3 backdrop-blur-md">
+        <span class="w-2 h-2 rounded-full bg-[#B8A7FF] animate-pulse"></span>
+        <span class="text-[11px] sm:text-xs uppercase tracking-widest text-[#B8A7FF] font-mono font-bold">
+          ACM AJCE • Amal Jyothi College of Engineering
+        </span>
+      </div>
+
       <h1
         class="hero-text-wrap w-full flex flex-col justify-center items-center text-center m-0 p-0 font-normal"
         aria-label="ACM AJCE - Association for Computing Machinery Student Chapter at Amal Jyothi College of Engineering"
@@ -36,7 +44,9 @@
           association for<br />computing machinery
         </span>
       </h1>
-      <p class="sr-only">ACM AJCE is the official ACM Student Chapter at Amal Jyothi College of Engineering (AJCE), Kanjirappally, Kerala under ACM India.</p>
+      <p class="text-xs sm:text-sm text-gray-300/90 mt-3 max-w-xl text-center font-sans">
+        Official ACM Student Chapter at Amal Jyothi College of Engineering (AJCE), Kanjirappally under ACM India.
+      </p>
     </div>
 
     <style>

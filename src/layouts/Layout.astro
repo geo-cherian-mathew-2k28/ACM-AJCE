@@ -9,8 +9,8 @@ const canonicalUrl = rawPath ? `${siteUrl}${rawPath}` : `${siteUrl}/`;
 const ogImageUrl = `${siteUrl}/og-image.png`;
 
 const title = "ACM AJCE | Official Student Chapter at Amal Jyothi College of Engineering";
-const description = "Official ACM Student Chapter at Amal Jyothi College of Engineering (AJCE). Empowering students in computer science, software engineering, hackathons, and research under ACM India.";
-const keywords = "ACM AJCE, ACM, ACM India, AJCE, ACM Student Chapter, Amal Jyothi College of Engineering, ACM Local Chapter, Computing Community, Tech Events, Software Engineering, AJCE ACM";
+const description = "Official ACM Student Chapter at Amal Jyothi College of Engineering (AJCE), Chapter ID: 136497. Empowering students in computer science, software engineering, hackathons, and research under ACM India.";
+const keywords = "ACM AJCE, AJCE ACM, ACM, ACM Chapter AJCE, Webmaster ACM AJCE, Amal Jyothi ACM, ACM Student Chapter AJCE, Geo Cherian Mathew, Amal Jyothi College of Engineering, ACM India, Tech Events, Software Engineering, Hackathons, Kanjirappally, Kerala";
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -20,22 +20,46 @@ const jsonLd = {
       "@id": `${siteUrl}/#website`,
       "url": `${siteUrl}/`,
       "name": "ACM AJCE",
-      "alternateName": "ACM Amal Jyothi College of Engineering",
+      "alternateName": [
+        "AJCE ACM",
+        "Amal Jyothi ACM",
+        "ACM Chapter AJCE",
+        "ACM Student Chapter AJCE",
+        "ACM Amal Jyothi College of Engineering"
+      ],
       "description": description,
       "publisher": {
         "@id": `${siteUrl}/#organization`
-      }
+      },
+      "inLanguage": "en-US"
     },
     {
       "@type": "EducationalOrganization",
       "@id": `${siteUrl}/#organization`,
       "name": "ACM AJCE",
-      "alternateName": ["ACM AJCE Student Chapter", "Association for Computing Machinery AJCE", "ACM India AJCE Chapter", "Amal Jyothi ACM"],
+      "alternateName": [
+        "ACM AJCE Student Chapter",
+        "AJCE ACM",
+        "ACM Chapter AJCE",
+        "Amal Jyothi ACM",
+        "ACM Student Chapter AJCE",
+        "Association for Computing Machinery AJCE",
+        "ACM India AJCE Chapter",
+        "Amal Jyothi College of Engineering ACM Chapter"
+      ],
       "url": `${siteUrl}/`,
       "logo": `${siteUrl}/brand/acm-ajce-light.png`,
       "image": ogImageUrl,
       "description": description,
+      "identifier": "136497",
+      "foundingDate": "2015-08-24",
       "parentOrganization": [
+        {
+          "@type": "Organization",
+          "name": "Association for Computing Machinery",
+          "alternateName": "ACM",
+          "url": "https://www.acm.org"
+        },
         {
           "@type": "Organization",
           "name": "ACM India",
@@ -44,13 +68,24 @@ const jsonLd = {
         {
           "@type": "CollegeOrUniversity",
           "name": "Amal Jyothi College of Engineering",
+          "alternateName": "AJCE",
           "url": "https://www.ajce.in"
+        }
+      ],
+      "subOrganization": [
+        {
+          "@type": "EducationalOrganization",
+          "name": "Amal Jyothi ACM-W Student Chapter",
+          "identifier": "184558",
+          "description": "ACM's Women in Computing student chapter at Amal Jyothi College of Engineering."
         }
       ],
       "address": {
         "@type": "PostalAddress",
+        "streetAddress": "Amal Jyothi College of Engineering, Koovappally P.O.",
         "addressLocality": "Kanjirappally",
         "addressRegion": "Kerala",
+        "postalCode": "686518",
         "addressCountry": "India"
       },
       "sameAs": [
@@ -60,6 +95,96 @@ const jsonLd = {
         "https://whatsapp.com/channel/0029Vb8J5wk7T8bNyuSQ2a3z",
         "https://www.ajce.in",
         "https://india.acm.org"
+      ],
+      "member": [
+        {
+          "@type": "Person",
+          "name": "Geo Cherian Mathew",
+          "jobTitle": "Webmaster",
+          "url": "https://geocherianmathew.in",
+          "sameAs": [
+            "https://geocherianmathew.in",
+            "https://linkedin.com/in/geo-cherian-mathew",
+            "https://github.com/geo-cherian-mathew-2k28"
+          ]
+        },
+        {
+          "@type": "Person",
+          "name": "Tom Ison",
+          "jobTitle": "Chairman",
+          "sameAs": [
+            "https://tom-ison.me/",
+            "https://www.linkedin.com/in/tom-ison/"
+          ]
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": `${siteUrl}/#faq`,
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is ACM AJCE?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "ACM AJCE is the official Student Chapter of the Association for Computing Machinery (ACM Chapter ID: 136497) at Amal Jyothi College of Engineering (AJCE), Kanjirappally, Kerala. Chartered in August 2015 under ACM India, the chapter organizes computing workshops, hackathons, coding contests, and tech symposiums."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Who is the Webmaster of ACM AJCE?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Geo Cherian Mathew is the Webmaster of ACM AJCE, responsible for the development, digital credentials, and technology infrastructure of the ACM Student Chapter at Amal Jyothi College of Engineering."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How to join the ACM Student Chapter at Amal Jyothi College of Engineering?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Students of Amal Jyothi College of Engineering can join ACM AJCE through the official membership portal at https://ajce.acm.org/membership to access workshops, digital membership cards, and international ACM resources."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What events does ACM AJCE organize?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "ACM AJCE hosts flagship technical events including GitStarted (Git & GitHub workshop), INFERA (3D Blender workshop), Militia Mayhem tournament, UXplore (UI/UX design workshop), and Invicta tech symposium."
+          }
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": `${siteUrl}/#breadcrumb`,
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": `${siteUrl}/`
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Membership",
+          "item": `${siteUrl}/membership`
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Verify",
+          "item": `${siteUrl}/verify`
+        },
+        {
+          "@type": "ListItem",
+          "position": 4,
+          "name": "GREP Magazine",
+          "item": `${siteUrl}/grep`
+        }
       ]
     }
   ]
